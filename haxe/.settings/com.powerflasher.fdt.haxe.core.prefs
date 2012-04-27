@@ -1,0 +1,5 @@
+#Sat Apr 14 11:39:40 PDT 2012
+eclipse.preferences.version=1
+hxmlPath=project.hxml
+sdkPath=/usr/lib/haxe
+sdkPathOverride=false
