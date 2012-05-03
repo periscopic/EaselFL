@@ -689,6 +689,57 @@ var p = DisplayObject.prototype;
 	}
 	
 	
+	//-- TODO : move these to properties section
+	p._flX = 0;
+	p._flY = 0;
+	p._flScaleX = 1;
+	p._flScaleY = 1;
+	p._flRotation = 0;
+	p._flSkewX = 0;
+	p._flSkewY = 0;
+	p._flRegX = 0;
+	p._flRegY = 0;
+	
+	//-- Static
+	DisplayObject._flTempMtx = new Matrix2D();
+	
+	/**
+	 * @method _flSyncProps
+	 * @protected
+	 **/
+	p._flSyncProps = function() {
+		
+		//-- SynchronizeTranform
+		if(	this.x !== this._flX ||
+				this.y !== this._flY ||
+				this.scaleX !== this._flScaleX ||
+				this.scaleY !== this._flScaleY ||
+				this.rotation !== this._flRotation ||
+				this.skewX !== this._flSkewX ||
+				this.skewY !== this._flSkewY ||
+				this.regX !== this._flRegX ||
+				this.regY !== this._flRegY ) {
+			
+			this._flX = this.x;
+			this._flY = this.y;
+			this._flScaleX = this.scaleX;
+			this._flScaleY = this.scaleY;
+			this._flRotation = this.rotation;
+			this._flSkewX = this.skewX;
+			this._flSkewY = this.skewY;
+			this._flRegX = this.regX;
+			this._flRegY = this.regY;
+			
+			var mtx = DisplayObject._flTempMtx;
+			mtx.identity(); //reset
+			mtx.prependTransform( this.x, this.y, this.scaleX, this.scaleY, this.rotation, this.skewX, this.skewY, this.regX, this.regY);
+			
+			//TODO : push to changes command queue
+			//[mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty]]);
+		}
+	}
+
+	
 	/**
 	 * @method _tick
 	 * @protected
