@@ -4,6 +4,8 @@ import flash.display.Sprite;
 import flash.display.DisplayObjectContainer;
 import flash.display.DisplayObject;
 
+import flash.geom.Matrix;
+
 class DisplayObjectFl{
 	
 	/**

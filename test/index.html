@@ -1,0 +1,89 @@
+<html>
+<head>
+
+<script type="text/javascript" src="../js/easelfl/geom/Matrix2D.js"></script>
+<script type="text/javascript" src="../js/easelfl/geom/Point.js"></script>
+<script type="text/javascript" src="../js/easelfl/geom/Rectangle.js"></script>	
+<script type="text/javascript" src="../js/easelfl/utils/UID.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/DisplayObject.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Container.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Stage.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Graphics.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Shape.js"></script>
+<script type="text/javascript" src="../js/easelfl/events/MouseEvent.js"></script>
+<script type="text/javascript" src="../js/easelfl/utils/Ticker.js"></script>
+
+<script type="text/javascript">
+
+//-- Start it up!
+window.onload = function(){
+	
+	Stage.FL_URL = '../haxe/bin/EaselFl.swf';
+	Stage.FL_ELEMENT_ID = 'testContainer';
+	
+	var myStage = new Stage();
+	
+	myStage._flCommandQueues.create =
+			[
+				//-- create a shape
+				['shp', '001'],
+				['gfx', '002'],
+				
+				//-- create an image
+				['bmp','003'],
+				['img','004'],
+
+				//-- create a container
+				['cnt', '005']
+			];
+		
+		
+	myStage._flCommandQueues.change =	
+			[
+				//-- draw something in the shape
+				['001', 'gfx', '002'],
+				['002', 'f', 'rgba(200, 100, 0, 0.7)'],
+				['002', 'dr', [0, 0, 50, 50]],
+				
+				//-- set source of bitmap
+				['004', 'src', 'img/testImage.png'],
+				['003', 'img', '004'],
+		    	
+		    	//-- add shape and bitmap to container
+				['005', 'ac', '001'],
+				['005', 'ac', '003'],	
+				['005', 'rt', 0],
+				
+				//-- add container to stage
+				['stage', 'ac', '005']
+				
+			];
+}
+
+
+</script>
+
+<style type="text/css">
+ body {
+	margin: 0;
+	background: #EEE;
+ }
+ 
+ h1 {
+	color: #FFF;
+ }
+ 
+ #testContainer {
+	position: absolute;
+	top: 0;
+	left: 0;
+ }
+ 
+</style>
+</head>
+<body>
+<h1>The EaselFl Stage is transparent by default</h1>
+<div id="testContainer"></div>	
+	
+</body>
+</html>

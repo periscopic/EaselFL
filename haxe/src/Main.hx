@@ -58,14 +58,13 @@ class Main {
 		//-- Setup interface classes
 		Control.init();
 		
-		
 		//-- Add JS  method
 		ExternalInterface.addCallback('create', Control.createItems);
 		ExternalInterface.addCallback('change', Control.changeItems);
 		ExternalInterface.addCallback('invokeOn', Control.invokeOn);	
 		 		
 		//-- Notify JS the module is ready
-		var shake = 'Stage.stages.'+id+'.ready';
+		var shake = 'Stage._flHooks.'+id;
 		ExternalInterface.call(shake);
 	}
 }
