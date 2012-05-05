@@ -397,6 +397,7 @@ var p = DisplayObject.prototype;
 	 * into itself).
 	 **/
 	p.draw = function(ctx, ignoreCache) {
+		this._flSyncProps();
 		//-- TODO : verify that this call can be ignored in EaselFl
 		//-- or used as a hook for the update function
 		/*if (ignoreCache || !this.cacheCanvas) { return false; }
@@ -700,6 +701,9 @@ var p = DisplayObject.prototype;
 	p._flRegX = 0;
 	p._flRegY = 0;
 	
+	p._flVisible = true;
+	p._flAlpha = 1;
+	
 	//-- Static
 	DisplayObject._flTempMtx = new Matrix2D();
 	
@@ -709,7 +713,7 @@ var p = DisplayObject.prototype;
 	 **/
 	p._flSyncProps = function() {
 		
-		//-- SynchronizeTranform
+		//-- Synchronize tranform
 		if(	this.x !== this._flX ||
 				this.y !== this._flY ||
 				this.scaleX !== this._flScaleX ||
@@ -734,8 +738,19 @@ var p = DisplayObject.prototype;
 			mtx.identity(); //reset
 			mtx.prependTransform( this.x, this.y, this.scaleX, this.scaleY, this.rotation, this.skewX, this.skewY, this.regX, this.regY);
 			
-			//TODO : push to changes command queue
-			//[mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty]]);
+			Stage._flPushChange(this, 'mtx', [mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty]);
+		}
+		
+		//-- Synchronize Visibility
+		if( this.visible !== this._flVisible) {			
+			this._flVisible = this.visible;
+			Stage._flPushChange(this, 'vs', this.visible);
+		}
+		
+		//-- Synchronize Alpha
+		if( this.alpha !== this._flAlpha) {
+			this._flAlpha = this.alpha;
+			Stage._flPushChange(this, 'op', this.alpha);
 		}
 	}
 

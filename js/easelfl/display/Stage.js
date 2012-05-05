@@ -39,8 +39,11 @@
 var Stage = function(canvas) {
   this.initialize(canvas);
 }
-var p = Stage.prototype = new Container();
 
+/** Hack to allow prototyping when superclasses reference Stage **/
+window.Stage = {_flPushCreate:function(){}};
+
+var p = Stage.prototype = new Container();
 // static properties:
 	/**
 	 * @property _snapToPixelEnabled
@@ -226,11 +229,15 @@ var p = Stage.prototype = new Container();
 	 * @protected
 	 **/
 	p.initialize = function(canvas) {
+		//-- TODO : allow multiple stages, currently only one allowed due to problem of deciding to which stage changes should be pushed
+		Stage._flOneStage = this;
 		
-		this.Container_initialize();
+		
 		
 		//-- Begin EaselFl specific setup
 		var myID, self = this;
+		
+		
 		
 		//-- Setup flush data staging queues
 		this._flCommandQueues = {
@@ -248,7 +255,13 @@ var p = Stage.prototype = new Container();
 		Stage._flLoadInstance(myID, Stage.FL_WIDTH, Stage.FL_HEIGHT, Stage.FL_ELEMENT_ID);
 		
 		//-- End EaselFl specific setup
+		
+		this.Container_initialize();
+		
 		this._enableMouseEvents(true);
+		
+		//-- Set this container as Stage in flash
+		Stage._flPushCreate('stg', this);
 	}
 
 // public methods:
@@ -268,7 +281,7 @@ var p = Stage.prototype = new Container();
 		if(!this.flReady) { return; }
 		
 		if(this.autoClear === false) { this._flBlit() };
-		
+	
 		Stage._snapToPixelEnabled = this.snapToPixelEnabled;
 		
 		if(this.tickOnUpdate) {
@@ -280,6 +293,8 @@ var p = Stage.prototype = new Container();
 		
 		//-- send commands to Flash movie
 		this._flFlush();
+		
+		
 	}
 
 	/**
@@ -509,6 +524,7 @@ var p = Stage.prototype = new Container();
 		throw 'EaselFl::Stage._flBlit is not implemented';
 	}
 	
+	//Stage._flFlushCount = 0;
 	/**
 	 * @method _flFlush
 	 * @protected
@@ -516,20 +532,29 @@ var p = Stage.prototype = new Container();
 	p._flFlush = function() {
 		//-- TODO : pass values to Flash movie
 		
+	//	if(Stage._flFlushCount<3){
+			
+	//	console.log('flush:' + Stage._flFlushCount++);
+		
 		var inst = this._flInstance,
 		queues = this._flCommandQueues;
 		
 		//-- Create Flash counterparts of EaselJS and asset classes
 		if(queues.create.length){
 			inst.create(queues.create);
-			queues.create.length = 0;
+			queues.create = [];
 		}
+		
 		
 		//-- Adjust state of Flash counterparts 
 		if(queues.change.length){
+			console.log(queues.change);
 			inst.change(queues.change);
-			queues.change.length = 0;
+			queues.change = [];
+			console.log('success');
 		}
+		
+	//	}
 	}
 	
 	/**
@@ -595,18 +620,34 @@ var p = Stage.prototype = new Container();
 	Stage.FL_HEIGHT = 400;
 	Stage.FL_ELEMENT_ID = null;
 	Stage.FL_TRANSPARENT = true;
+	
 
 	//-- Object on which 'ready' callback is exposed to Flash Movie
 	Stage._flHooks = {};
 	Stage._flStageCount = 0;
+	
+	//-- Singleton stage instance, currenlty necessary for pushing create / change commands
+	//TODO : find a clean & fast way to handle multiple stages
 
+	Stage._flOneStage = null;
+
+	Stage._flPushChange = function( target, command, params) {
+		console.log('change', target.id, command, params);
+		Stage._flOneStage._flCommandQueues.change.push([target.id, command, params]);
+	}
+	
+	Stage._flPushCreate = function( type, target) {
+		console.log('create', type, target.id);
+		Stage._flOneStage._flCommandQueues.create.push([type, target.id]);
+	}
+	
 	/**
 	 * @method _flLoadInstance
 	 * @protected
 	 **/
 	//-- TODO : verify cross-browser compatability, specifically regarding 'user focus' issue.
 	//-- TODO : use the dom container, dimensions, margins, etc of the canvas passed - instead of the elementId of the container
-	Stage._flLoadInstance = function(id, width, height, elementId){
+	Stage._flLoadInstance = function(id, width, height, elementId) {
 	
 		var element, html;
 		

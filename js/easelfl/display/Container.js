@@ -72,6 +72,8 @@ var p = Container.prototype = new DisplayObject();
 	p.initialize = function() {
 		this.DisplayObject_initialize();
 		this.children = [];
+		
+		Stage._flPushCreate('cnt', this);
 	}
 
 // public methods:
@@ -120,7 +122,7 @@ var p = Container.prototype = new DisplayObject();
 			mtx.appendTransform(child.x, child.y, child.scaleX, child.scaleY, child.rotation, child.skewX, child.skewY,
 									child.regX, child.regY);
 			mtx.appendProperties(child.alpha, child.shadow, child.compositeOperation);
-
+			/*
 			if (!(child instanceof Container && child.cacheCanvas == null)) {
 				if (snap && child.snapToPixel && mtx.a == 1 && mtx.b == 0 && mtx.c == 0 && mtx.d == 1) {
 					ctx.setTransform(mtx.a,  mtx.b, mtx.c, mtx.d, mtx.tx+0.5|0, mtx.ty+0.5|0);
@@ -129,10 +131,11 @@ var p = Container.prototype = new DisplayObject();
 				}
 				ctx.globalAlpha = mtx.alpha;
 				ctx.globalCompositeOperation = mtx.compositeOperation || "source-over";
+				
 				if (shadow = mtx.shadow) { this.applyShadow(ctx, shadow); }
-			}
+			}*/
 			child.draw(ctx, false, mtx);
-			if (shadow) { this.applyShadow(ctx); }
+			/*if (shadow) { this.applyShadow(ctx); }*/ //-- TODO : make sure shadow gets applied
 		}
 		return true;
 	}
@@ -154,6 +157,9 @@ var p = Container.prototype = new DisplayObject();
 		if (child.parent) { child.parent.removeChild(child); }
 		child.parent = this;
 		this.children.push(child);
+		
+		Stage._flPushChange(this, 'ac', child.id);
+		
 		return child;
 	}
 
@@ -178,6 +184,9 @@ var p = Container.prototype = new DisplayObject();
 		if (child.parent) { child.parent.removeChild(child); }
 		child.parent = this;
 		this.children.splice(index, 0, child);
+		
+		Stage._flPushChange(this, 'aca', [child.id, index]);
+		
 		return child;
 	}
 
@@ -196,6 +205,7 @@ var p = Container.prototype = new DisplayObject();
 			for (var i=0; i<l; i++) { good = good && this.removeChild(arguments[i]); }
 			return good;
 		}
+		
 		return this.removeChildAt(this.children.indexOf(child));
 	}
 
@@ -220,6 +230,9 @@ var p = Container.prototype = new DisplayObject();
 		var child = this.children[index];
 		if (child != null) { child.parent = null; }
 		this.children.splice(index, 1);
+		
+		Stage._flPushChange(this, 'rca', index);
+		
 		return true;
 	}
 
@@ -230,6 +243,8 @@ var p = Container.prototype = new DisplayObject();
 	p.removeAllChildren = function() {
 		var kids = this.children;
 		while (kids.length) { kids.pop().parent = null; }
+		
+		Stage._flPushChange(this, 'rac');
 	}
 
 	/**
@@ -250,6 +265,7 @@ var p = Container.prototype = new DisplayObject();
 	 **/
 	p.sortChildren = function(sortFunction) {
 		this.children.sort(sortFunction);
+		throw 'EaselFl:Container.sortChildren not yet implemented';
 	}
 
 	/**
@@ -312,6 +328,8 @@ var p = Container.prototype = new DisplayObject();
 	 * @method setChildIndex
 	 **/
 	p.setChildIndex = function(child, index) {
+		throw 'EaselFl:Container.setChildIndex not yet implemented';
+	
 		var kids = this.children;
 		for (var i=0,l=kids.length;i<l;i++) {
 			if (kids[i] == child) { break; }
@@ -348,6 +366,7 @@ var p = Container.prototype = new DisplayObject();
 	 * coordinates.
 	 **/
 	p.hitTest = function(x, y) {
+		throw 'EaselFl:Container.hitTest not yet implemented';
 		// TODO: optimize to use the fast cache check where possible.
 		return (this.getObjectUnderPoint(x, y) != null);
 	}

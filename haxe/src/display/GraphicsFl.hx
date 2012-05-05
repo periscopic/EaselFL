@@ -29,7 +29,7 @@ class GraphicsFl implements IExec{
 	//TODO : clearPath
 	//TODO : begin linearGradientFill, radialGradientFill, bitmapFill
 	//TODO : setStrokeStyle
-	//TODO : beginStroke, beginLinearGradientStrok, beginRadialGradientStroke, beginBitmapStroke
+	//TODO : beginStroke, beginLinearGradientStroke, beginRadialGradientStroke, beginBitmapStroke
 	//TODO : endStroke
 	//TODO : drawPolystar
 
@@ -39,7 +39,7 @@ class GraphicsFl implements IExec{
 		target.beginFill(col.color, col.alpha);
 	}
 	
-	inline static private function endFill(target:Graphics):Void{
+	inline static private function endFill(target:Graphics, ?nada:Dynamic):Void{
 		target.endFill();
 	}
 	

@@ -1,5 +1,5 @@
 -swf9 bin/EaselFl.swf
--swf-header 400:400:40:EEEEEE
+-swf-header 400:400:60:EEEEEE
 -main Main
 -cp src
 -D debug

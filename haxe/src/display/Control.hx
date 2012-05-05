@@ -6,13 +6,17 @@ import flash.Lib;
 class Control {
 	
 	static public var items:Hash<IExec>;
+	static public var containers:Hash<ContainerFl>;
 	static public var displays:Hash<IDisplayable>;
 	static public var bitmapDatas:Hash<IBitmapData>;
 	static public var graphicsList:Hash<GraphicsFl>;
 	static public var makers:Hash<String->Void>;
+	static private var stageFl:ContainerFl;
+	
 	
 	static public function init(){
 		items = new Hash<IExec>();
+		containers = new Hash<ContainerFl>();
 		displays = new Hash<IDisplayable>();
 		bitmapDatas = new Hash<IBitmapData>();
 		graphicsList = new Hash<GraphicsFl>();
@@ -23,6 +27,7 @@ class Control {
 		makers.set('shp', shape);
 		makers.set('gfx', graphics);
 		makers.set('cnt', container);
+		makers.set('stg', stage);
 		
 		ImageFl.init();
 		BitmapFl.init();
@@ -32,8 +37,9 @@ class Control {
 		
 		//-- Define stage
 		// TODO : make sure stage doesn't have issues arising from transforms being applied to it
-		var stg:ContainerFl = new ContainerFl( Lib.current.stage );
-		items.set('stage', stg);
+		//stageFl = new ContainerFl( Lib.current.stage );
+		//items.set('stage', stageFl);
+		//displays.set('stage', stageFl);
 	}
 	
 	/*
@@ -93,7 +99,21 @@ class Control {
 	
 	inline static private function container(id:String):Void{
 		var cnt:ContainerFl = new ContainerFl();
+		containers.set(id, cnt);
 		displays.set(id, cnt);
 		items.set(id, cnt);
 	}	
+	
+	inline static private function stage(id:String):Void{
+		//-- Alias stage as another ID
+		//-- by assigning to an already created ContainerFl
+		var cnt = containers.get(id);
+		
+		cnt.display = cnt.container = Lib.current.stage;
+		
+		containers.set('stage', cnt);
+		items.set('stage', cnt);
+		displays.set('stage', cnt);
+	}	
+	
 }

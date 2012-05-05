@@ -66,6 +66,9 @@ var p = Shape.prototype = new DisplayObject();
 	p.initialize = function(graphics) {
 		this.DisplayObject_initialize();
 		this.graphics = graphics ? graphics : new Graphics();
+		
+		Stage._flPushCreate('shp', this);
+		Stage._flPushChange(this, 'gfx', [this.graphics.id]) //-- link the graphics
 	}
 
 	/**

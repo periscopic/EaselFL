@@ -20,9 +20,32 @@ window.onload = function(){
 	
 	Stage.FL_URL = '../haxe/bin/EaselFl.swf';
 	Stage.FL_ELEMENT_ID = 'testContainer';
-	
+	console.log('onload');
 	var myStage = new Stage();
+	Ticker.addListener(myStage);
 	
+	var shp = new Shape();
+	myStage.addChild(shp);
+	var g = shp.graphics;
+	g.beginFill('#FF0000');
+	g.drawRect(0, 0, 100, 100);
+	g.endFill();
+	shp.regX = 50;
+	shp.regY = 50;
+	shp.x = 50;
+	shp.y = 50;
+		
+	Ticker.addListener(
+		{
+			tick : function(){
+				shp.rotation+=1;
+			}
+		}
+	)
+	
+	
+	
+	/*
 	myStage._flCommandQueues.create =
 			[
 				//-- create a shape
@@ -55,9 +78,12 @@ window.onload = function(){
 				['005', 'rt', 0],
 				
 				//-- add container to stage
-				['stage', 'ac', '005']
+				['stage', 'ac', '005'],
+				
+				['001', 'mtx', [1, 0, 0, 1, 50, 0]]
 				
 			];
+	*/
 }
 
 

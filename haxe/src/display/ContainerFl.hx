@@ -20,6 +20,8 @@ class ContainerFl extends DisplayObjectFl, implements IExec, implements IDisplay
 		execs.set('rc', removeChild );
 		execs.set('rca', removeChild );
 		execs.set('rac', removeAllChildren);
+		execs.set('sc', swapChildren);
+		execs.set('sca', swapChildrenAt);
 	}
 	
 	inline static private function addChild(target:ContainerFl, id:String):Void{
@@ -48,16 +50,19 @@ class ContainerFl extends DisplayObjectFl, implements IExec, implements IDisplay
 		}
 	}
 	
-	private var container:DisplayObjectContainer;
+	inline static private function swapChildren(target:ContainerFl, props:Array<Dynamic>):Void{
+		target.container.swapChildren(Control.displays.get(props[0]).display,Control.displays.get(props[1]).display);
+	}
 	
-	public function new( ?container:DisplayObjectContainer){
+	inline static private function swapChildrenAt(target:ContainerFl, props:Array<Int>):Void{
+		target.container.swapChildrenAt(props[0], props[1]);
+	}
+	
+	public var container:DisplayObjectContainer;
+	
+	public function new(){
 		super();
-		
-		if(container!=null){
-			display = this.container = container;				
-		}else{
-			display = this.container =  new Sprite();
-		}
+		display = this.container =  new Sprite();
 	}
 	
 	inline public function exec(method:String, ?arguments:Dynamic=null):Dynamic{
@@ -69,7 +74,7 @@ class ContainerFl extends DisplayObjectFl, implements IExec, implements IDisplay
 		
 		#if debug
 			} else {
-				throw 'no method command mapped to "'+method+'" in GraphicsFl';	
+				throw 'no command mapped to "'+method+'" in ContainerFl';	
 			}
 		#end
 	}

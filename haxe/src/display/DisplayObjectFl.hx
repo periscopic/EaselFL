@@ -19,6 +19,7 @@ class DisplayObjectFl{
 		execs.set('rt',rotation);
 		execs.set('op',opacity);
 		execs.set('vs',visible);
+		execs.set('mtx', setMatrix);
 		
 		//-- has callback
 		execs.set('htp',hitTestPoint);
@@ -51,6 +52,18 @@ class DisplayObjectFl{
 	
 	inline static private function visible(target:IDisplayable, val:Bool):Void{
 		target.display.visible = val;
+	}
+	
+	inline static private function setMatrix(target:IDisplayable, vals:Array<Float>):Void{
+		var trn = target.display.transform;
+		var mtx = trn.matrix;
+		mtx.a = vals[0];
+		mtx.b = vals[1];
+		mtx.c = vals[2];
+		mtx.d = vals[3];
+		mtx.tx = vals[4];
+		mtx.ty = vals[5];
+		trn.matrix = mtx;
 	}
 	
 	//-- Note: this does not test against opacity values as Easel does
