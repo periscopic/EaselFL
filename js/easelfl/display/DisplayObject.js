@@ -712,7 +712,7 @@ var p = DisplayObject.prototype;
 	 * @protected
 	 **/
 	p._flSyncProps = function() {
-		
+
 		//-- Synchronize tranform
 		if(	this.x !== this._flX ||
 				this.y !== this._flY ||

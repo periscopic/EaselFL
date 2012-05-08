@@ -116,7 +116,6 @@ var p = Container.prototype = new DisplayObject();
 		for (var i=0; i<l; i++) {
 			var child = list[i];
 			if (!child.isVisible()) { continue; }
-
 			var shadow = false;
 			var mtx = child._matrix.reinitialize(_mtx.a,_mtx.b,_mtx.c,_mtx.d,_mtx.tx,_mtx.ty,_mtx.alpha,_mtx.shadow,_mtx.compositeOperation);
 			mtx.appendTransform(child.x, child.y, child.scaleX, child.scaleY, child.rotation, child.skewX, child.skewY,

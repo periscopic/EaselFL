@@ -80,12 +80,16 @@ var p = Bitmap.prototype = new DisplayObject();
 	 **/
 	p.initialize = function(imageOrUri) {
 		this.DisplayObject_initialize();
+		
 		if (typeof imageOrUri == "string") {
-			this.image = new Image();
+			this.image = new ImageFl();//new Image();
 			this.image.src = imageOrUri;
 		} else {
 			this.image = imageOrUri;
 		}
+
+		Stage._flPushCreate('bmp', this);
+		Stage._flPushChange(this, 'img', this.image.id);
 	}
 	
 // public methods:
@@ -120,12 +124,12 @@ var p = Bitmap.prototype = new DisplayObject();
 	 **/
 	p.draw = function(ctx, ignoreCache) {
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
-		var rect = this.sourceRect;
+		/*var rect = this.sourceRect;
 		if (rect) {
 			ctx.drawImage(this.image, rect.x, rect.y, rect.width, rect.height, 0, 0, rect.width, rect.height);
 		} else {
 			ctx.drawImage(this.image, 0, 0);
-		}
+		}*/
 		return true;
 	}
 	

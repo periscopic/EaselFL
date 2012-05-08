@@ -10,6 +10,8 @@
 <script type="text/javascript" src="../js/easelfl/display/Stage.js"></script>
 <script type="text/javascript" src="../js/easelfl/display/Graphics.js"></script>
 <script type="text/javascript" src="../js/easelfl/display/Shape.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/ImageFl.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Bitmap.js"></script>
 <script type="text/javascript" src="../js/easelfl/events/MouseEvent.js"></script>
 <script type="text/javascript" src="../js/easelfl/utils/Ticker.js"></script>
 
@@ -21,11 +23,16 @@ window.onload = function(){
 	Stage.FL_URL = '../haxe/bin/EaselFl.swf';
 	Stage.FL_ELEMENT_ID = 'testContainer';
 	console.log('onload');
+	
 	var myStage = new Stage();
 	Ticker.addListener(myStage);
 	
+	var container = new Container();
+	myStage.addChild(container);
+	container.alpha = 0.5;
+	
 	var shp = new Shape();
-	myStage.addChild(shp);
+	container.addChild(shp);
 	var g = shp.graphics;
 	g.beginFill('#FF0000');
 	g.drawRect(0, 0, 100, 100);
@@ -34,14 +41,21 @@ window.onload = function(){
 	shp.regY = 50;
 	shp.x = 50;
 	shp.y = 50;
+	
+	var bmp = new Bitmap('img/testImage.png');
+	container.addChild(bmp);
+	bmp.x = 100;
+	bmp.y = 50;
+	
+	
 		
-	Ticker.addListener(
+	/*Ticker.addListener(
 		{
 			tick : function(){
 				shp.rotation+=1;
 			}
 		}
-	)
+	)*/
 	
 	
 	
