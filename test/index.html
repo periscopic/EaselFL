@@ -1,6 +1,8 @@
 <html>
 <head>
 
+<script type="text/javascript" src="js/Stats.js"></script>
+
 <script type="text/javascript" src="../js/easelfl/geom/Matrix2D.js"></script>
 <script type="text/javascript" src="../js/easelfl/geom/Point.js"></script>
 <script type="text/javascript" src="../js/easelfl/geom/Rectangle.js"></script>	
@@ -20,9 +22,14 @@
 //-- Start it up!
 window.onload = function(){
 	
+	var stats = new Stats();
+	document.getElementById('stats').appendChild(stats.domElement);
+	setInterval(function(){stats.update();}, 1000/60)
+	
+	
 	Stage.FL_URL = '../haxe/bin/EaselFl.swf';
 	Stage.FL_ELEMENT_ID = 'testContainer';
-	console.log('onload');
+	Stage.FL_WIDTH = 600;
 	
 	var myStage = new Stage();
 	Ticker.addListener(myStage);
@@ -30,35 +37,56 @@ window.onload = function(){
 	var container = new Container();
 	myStage.addChild(container);
 	container.alpha = 0.5;
+	container.rotation = 5;
+	container.x = 100;
+
 	
-	var shp = new Shape();
-	container.addChild(shp);
-	var g = shp.graphics;
-	g.beginFill('#FF0000');
-	g.drawRect(0, 0, 100, 100);
-	g.endFill();
-	shp.regX = 50;
-	shp.regY = 50;
-	shp.x = 50;
-	shp.y = 50;
+	var shp, g, shapes = [];
+	
+	for(var i=0; i<100; ++i){
+		shp = new Shape();
+		g = shp.graphics;
+		g.beginFill('#FF0000');
+		g.drawRect(0, 0, 20, 20);
+		g.endFill();
+		
+		shp.regX = 10;
+		shp.regY = 10;
+		shp.x = (i%10) * 40;
+		shp.y = Math.floor(i/10) * 40;
+		
+		container.addChild(shp);
+		shapes.push(shp);
+	}
+	
+	
+	
+	
 	
 	var bmp = new Bitmap('img/testImage.png');
 	container.addChild(bmp);
 	bmp.x = 100;
 	bmp.y = 50;
-	
-	
-		
-	/*Ticker.addListener(
+
+	setTimeout(function(){
+		console.log('...');
+		container.visible = false;
+	},
+		2000
+	);
+	/*
+	Ticker.addListener(
 		{
 			tick : function(){
-				shp.rotation+=1;
+				for(var i=0, l=shapes.length; i<l; ++i){
+					shapes[i].rotation+=1;
+				}
+				
+				
 			}
 		}
 	)*/
-	
-	
-	
+
 	/*
 	myStage._flCommandQueues.create =
 			[
@@ -119,9 +147,16 @@ window.onload = function(){
 	left: 0;
  }
  
+ #stats {
+	position: absolute;
+	top: 0;
+	right: 0;
+ }
+ 
 </style>
 </head>
 <body>
+<div id="stats"></div>
 <h1>The EaselFl Stage is transparent by default</h1>
 <div id="testContainer"></div>	
 	

@@ -713,6 +713,25 @@ var p = DisplayObject.prototype;
 	 **/
 	p._flSyncProps = function() {
 
+	  
+		//-- Synchronize Visibility		
+		if( this.visible !== this._flVisible) {			
+			this._flVisible = this.visible;
+			Stage._flPushChange(this, 'vs', this.visible);
+		}
+		
+		//don't sync anything else if not visible
+		if(!this.visible) {
+		  return;
+		}		
+		
+		//-- Synchronize Alpha
+		if( this.alpha !== this._flAlpha) {
+			this._flAlpha = this.alpha;
+			Stage._flPushChange(this, 'op', this.alpha);
+		}
+
+
 		//-- Synchronize tranform
 		if(	this.x !== this._flX ||
 				this.y !== this._flY ||
@@ -741,20 +760,9 @@ var p = DisplayObject.prototype;
 			Stage._flPushChange(this, 'mtx', [mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty]);
 		}
 		
-		//-- Synchronize Visibility
-		if( this.visible !== this._flVisible) {			
-			this._flVisible = this.visible;
-			Stage._flPushChange(this, 'vs', this.visible);
-		}
 		
-		//-- Synchronize Alpha
-		if( this.alpha !== this._flAlpha) {
-			this._flAlpha = this.alpha;
-			Stage._flPushChange(this, 'op', this.alpha);
-		}
 	}
 
-	
 	/**
 	 * @method _tick
 	 * @protected

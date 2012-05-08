@@ -548,10 +548,8 @@ var p = Stage.prototype = new Container();
 		
 		//-- Adjust state of Flash counterparts 
 		if(queues.change.length){
-			console.log(queues.change);
 			inst.change(queues.change);
 			queues.change = [];
-			console.log('success');
 		}
 		
 	//	}
@@ -637,7 +635,7 @@ var p = Stage.prototype = new Container();
 	}
 	
 	Stage._flPushCreate = function( type, target) {
-		console.log('create', type, target.id);
+		//console.log('create', type, target.id);
 		Stage._flOneStage._flCommandQueues.create.push([type, target.id]);
 	}
 	
