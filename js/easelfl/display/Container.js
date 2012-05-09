@@ -106,16 +106,20 @@ var p = Container.prototype = new DisplayObject();
 	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
 	 * into itself).
 	 **/
-	p.draw = function(ctx, ignoreCache, _mtx) {
+	p.draw = function(ctx, ignoreCache, _mtx) {	  
 		var snap = Stage._snapToPixelEnabled;
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
 		_mtx = _mtx || this._matrix.reinitialize(1,0,0,1,0,0,this.alpha, this.shadow, this.compositeOperation);
+		
+		//don't sync children if not visible
+		if (!this.isVisible()) { return true;}
+		
 		var l = this.children.length;
 		// this ensures we don't have issues with display list changes that occur during a draw:
 		var list = this.children.slice(0);
 		for (var i=0; i<l; i++) {
 			var child = list[i];
-			if (!child.isVisible()) { continue; }
+			//if (!child.isVisible()) { continue; }
 			var shadow = false;
 			var mtx = child._matrix.reinitialize(_mtx.a,_mtx.b,_mtx.c,_mtx.d,_mtx.tx,_mtx.ty,_mtx.alpha,_mtx.shadow,_mtx.compositeOperation);
 			mtx.appendTransform(child.x, child.y, child.scaleX, child.scaleY, child.rotation, child.skewX, child.skewY,
