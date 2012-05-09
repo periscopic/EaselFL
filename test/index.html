@@ -29,12 +29,14 @@ window.onload = function(){
 	
 	var container = new Container();
 	myStage.addChild(container);
-	container.alpha = 0.5;
+	//container.alpha = 0.5;
 	
 	var shp = new Shape();
 	container.addChild(shp);
 	var g = shp.graphics;
-	g.beginFill('#FF0000');
+	//g.beginFill('rgba(0,255,255,1)');//'#FF0000');
+	g.beginFill('rgba(0%,100%,100%,1)');//'#FF0000');
+
 	g.drawRect(0, 0, 100, 100);
 	g.endFill();
 	shp.regX = 50;

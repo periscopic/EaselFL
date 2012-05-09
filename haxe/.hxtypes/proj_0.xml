@@ -1439,15 +1439,15 @@
 	<c path="String"/>
 	<t path="display.AlphaColor"/>
 </f></parse>
-		<rgb2hex set="method" line="283" static="1"><f a="rgb">
+		<rgb2hex set="method" line="286" static="1"><f a="rgb">
 	<c path="Array"><c path="String"/></c>
 	<c path="Int"/>
 </f></rgb2hex>
-		<hsl2hex set="method" line="304" static="1"><f a="hsl">
+		<hsl2hex set="method" line="308" static="1"><f a="hsl">
 	<c path="Array"><c path="String"/></c>
 	<c path="Int"/>
 </f></hsl2hex>
-		<hue2rgb set="method" line="325" static="1"><f a="m1:m2:h">
+		<hue2rgb set="method" line="329" static="1"><f a="m1:m2:h">
 	<c path="Float"/>
 	<c path="Float"/>
 	<c path="Float"/>

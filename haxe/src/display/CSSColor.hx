@@ -205,8 +205,12 @@ package display;
 
         static public function parse(str:String) : AlphaColor
         {
+        	
             //str = str.toLowerCase().replace(~/^\s*/, "").replace(~/\s*$/, "");
 			str = (~/\s*$/).replace((~/^\s*/).replace(str.toLowerCase(),''), '');
+			
+
+			
 				
             // #F00
             if (hex3.match(str))
@@ -236,6 +240,7 @@ package display;
             // rgba(255,0,0,1), rgba(100%,0%,0%,1)
             else if (rgba1.match(str) || rgba2.match(str))
             {
+            					
                 //var rgba:Array<String> = str.slice(5, -1).split(",");
                 var rgba:Array<String> = str.substr(5, str.length-6).split(",");
                 return { color: rgb2hex(rgba), alpha : Std.parseFloat(rgba[3]) };                
@@ -268,9 +273,7 @@ package display;
             // transparent
             else if (str == "transparent")
             {
-                //_color = 0x000000;
-                //_alpha = 0.0;
-                return { color: 0x000000, alpha : 0.0 };                
+            	return { color: 0x000000, alpha : 0.0 };                
             }
 
             // invalid color
@@ -285,17 +288,18 @@ package display;
             var str:String;
             var num:Int;
             var val:Int = 0;
-
+			
             for (i in 0...3)
             {
                 str = rgb[i];
-                if (str.indexOf("%") == -1)
+                if (str.indexOf("%") == -1){
                     num = Std.parseInt(str);
-                else
+                }else{
                     num = Math.round(2.55 * Std.parseFloat(str));
+                }
 
-                // These values should be in the range [0, 255].                
-                val = val | ((num < 0 ? 0 : (num > 255) ? 255 : num) << (i*8));
+                // These values should be in the range [0, 255]. 
+                val = val | ((num < 0 ? 0 : (num > 255) ? 255 : num) << ((2-i)*8));
             }
 
             return val;
