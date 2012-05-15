@@ -35,6 +35,10 @@ class Main {
 	
 	private function addedToStage(?evt:Event=null):Void{
 		
+	
+		
+		
+		
 		//-- Wait to init util stage initialized
 		if(Std.is(Lib.current.stage.stageWidth , Int )){
 			init();
@@ -44,6 +48,8 @@ class Main {
 	}
 	
 	private function init(?evt:Event=null):Void{
+		
+		Lib.current.stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
 		
 		//-- Can anything be done but fail silently?
 		//-- Perhaps flash without external interface can
@@ -62,10 +68,10 @@ class Main {
 		ExternalInterface.addCallback('create', Control.createItems);
 		ExternalInterface.addCallback('change', Control.changeItems);
 		ExternalInterface.addCallback('invokeOn', Control.invokeOn);	
-		 		
 		//-- Notify JS the module is ready
-		var shake = 'Stage._flHooks.'+id;
+		var shake = 'CanvasFl._flHooks.'+id;
 		ExternalInterface.call(shake);
+		
 	}
 }
 

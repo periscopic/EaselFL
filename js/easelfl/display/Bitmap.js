@@ -36,9 +36,15 @@
 * @param {Image | HTMLCanvasElement | HTMLVideoElement | String} imageOrUri The source object or URI to an image to display. This can be either an Image, Canvas, or Video object, or a string URI to an image file to load and use. If it is a URI, a new Image object will be constructed and assigned to the .image property.
 **/
 var Bitmap = function(imageOrUri) {
+	if(!imageOrUri.draw){
+		console.log('no draw method');
+	}
   this.initialize(imageOrUri);
 }
 var p = Bitmap.prototype = new DisplayObject();
+
+	p._flCtx = null;
+	p._flImg = null;
 
 // public properties:
 	/**
@@ -87,9 +93,6 @@ var p = Bitmap.prototype = new DisplayObject();
 		} else {
 			this.image = imageOrUri;
 		}
-
-		Stage._flPushCreate('bmp', this);
-		Stage._flPushChange(this, 'img', this.image.id);
 	}
 	
 // public methods:
@@ -123,7 +126,26 @@ var p = Bitmap.prototype = new DisplayObject();
 	 * into itself).
 	 **/
 	p.draw = function(ctx, ignoreCache) {
+		if(!this._flCtx){
+			this._flCtx = ctx;
+			ctx._flCreate.push(['bmp', this.id]);
+		}
+		
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
+		
+		
+		//currently not handling
+		if(this.image!==this._flImg && this.image){
+		}
+
+		if(this.image) {
+			if(this.image!==this._flImg){
+				this._flImg = this.image;
+				ctx._flChange.push([this.id, 'img', this.image.id]);
+			}
+				this.image.draw(ctx);
+		}
+		
 		/*var rect = this.sourceRect;
 		if (rect) {
 			ctx.drawImage(this.image, rect.x, rect.y, rect.width, rect.height, 0, 0, rect.width, rect.height);

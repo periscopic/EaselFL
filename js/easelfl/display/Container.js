@@ -45,6 +45,8 @@ var Container = function() {
 }
 var p = Container.prototype = new DisplayObject();
 
+	p._flCtx = null;
+
 // public properties:
 	/**
 	 * The array of children in the display list. You should usually use the child management methods,
@@ -72,8 +74,6 @@ var p = Container.prototype = new DisplayObject();
 	p.initialize = function() {
 		this.DisplayObject_initialize();
 		this.children = [];
-		
-		Stage._flPushCreate('cnt', this);
 	}
 
 // public methods:
@@ -106,7 +106,12 @@ var p = Container.prototype = new DisplayObject();
 	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
 	 * into itself).
 	 **/
-	p.draw = function(ctx, ignoreCache, _mtx) {	  
+	p.draw = function(ctx, ignoreCache, _mtx) {
+		if(!this._flCtx){
+			this._flCtx=ctx;
+			ctx._flCreate.push(['cnt', this.id]);
+		}
+		
 		var snap = Stage._snapToPixelEnabled;
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
 		_mtx = _mtx || this._matrix.reinitialize(1,0,0,1,0,0,this.alpha, this.shadow, this.compositeOperation);
@@ -161,7 +166,9 @@ var p = Container.prototype = new DisplayObject();
 		child.parent = this;
 		this.children.push(child);
 		
-		Stage._flPushChange(this, 'ac', child.id);
+		//Stage._flPushChange(this, 'ac', child.id);
+		this._flChange.push([this.id, 'ac', child.id]);
+		
 		
 		return child;
 	}
@@ -188,7 +195,7 @@ var p = Container.prototype = new DisplayObject();
 		child.parent = this;
 		this.children.splice(index, 0, child);
 		
-		Stage._flPushChange(this, 'aca', [child.id, index]);
+		this._flChange.push([this.id, 'aca', [child.id, index]]);
 		
 		return child;
 	}
@@ -234,7 +241,7 @@ var p = Container.prototype = new DisplayObject();
 		if (child != null) { child.parent = null; }
 		this.children.splice(index, 1);
 		
-		Stage._flPushChange(this, 'rca', index);
+		this._flChange.push([this.id, 'rca', index]);
 		
 		return true;
 	}
@@ -247,7 +254,7 @@ var p = Container.prototype = new DisplayObject();
 		var kids = this.children;
 		while (kids.length) { kids.pop().parent = null; }
 		
-		Stage._flPushChange(this, 'rac');
+		this._flChange.push([this.id, 'rac']);
 	}
 
 	/**

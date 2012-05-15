@@ -77,14 +77,14 @@ var p = Stage.prototype = new Container();
 	 * @event flOnReady
 	 * @param Stage The stage instance which is ready.
 	 **/
-	p.flOnReady = null;
+	//p.flOnReady = null;
 
 	/**
 	 * READ-ONLY Indicates whether the Flash Movie is ready.
 	 * @property
 	 * @type Boolean
 	 **/
-	p.flReady = false;
+	//p.flReady = false;
 
 	/**
 	 * READ-ONLY. The current mouse X position on the canvas. If the mouse leaves the canvas, this will indicate the most recent
@@ -170,21 +170,21 @@ var p = Stage.prototype = new Container();
 	 * @protected
 	 * @type Object
 	 **/
-	p._flCommandQueues = null;
+	//p._flCommandQueues = null;
 	
 	/**
 	 * @property _flInstance
 	 * @protected
 	 * @type Flash Movie
 	 **/
-	p._flInstance = null;	
+	//p._flInstance = null;	
 
 	/**
 	 * @property _flInstanceID
 	 * @protected
 	 * @type String
 	 **/
-	p._flInstanceID = null;
+	//p._flInstanceID = null;
 
 	/**
 	 * @property _mouseOverIntervalID
@@ -229,15 +229,14 @@ var p = Stage.prototype = new Container();
 	 * @protected
 	 **/
 	p.initialize = function(canvas) {
-		//-- TODO : allow multiple stages, currently only one allowed due to problem of deciding to which stage changes should be pushed
-		Stage._flOneStage = this;
+		this.canvas = canvas;
 		
 		
 		
 		//-- Begin EaselFl specific setup
 		var myID, self = this;
 		
-		
+		/*
 		
 		//-- Setup flush data staging queues
 		this._flCommandQueues = {
@@ -255,13 +254,21 @@ var p = Stage.prototype = new Container();
 		Stage._flLoadInstance(myID, Stage.FL_WIDTH, Stage.FL_HEIGHT, Stage.FL_ELEMENT_ID);
 		
 		//-- End EaselFl specific setup
-		
+		*/
 		this.Container_initialize();
 		
 		this._enableMouseEvents(true);
 		
 		//-- Set this container as Stage in flash
-		Stage._flPushCreate('stg', this);
+		//Stage._flPushCreate('stg', this);
+		var ctx = canvas.getContext('2d');
+		
+		
+		//create container in flash
+		this._flCtx=ctx;
+		ctx._flCreate.push(['cnt', this.id]);
+		//set as stage in flash
+		ctx._flCreate.push(['stg', this.id]);
 	}
 
 // public methods:
@@ -277,8 +284,7 @@ var p = Stage.prototype = new Container();
 	 * @method update
 	 **/
 	p.update = function(data) {
-		
-		if(!this.flReady) { return; }
+		if(!(this.canvas && this.canvas._ctx && this.canvas._ctx.flReady)) { return; }
 		
 		if(this.autoClear === false) { this._flBlit() };
 	
@@ -289,12 +295,11 @@ var p = Stage.prototype = new Container();
 		}
 		
 		//-- Should anything be passed in place of the canvas, the first parameter?
-		this.draw( null, false, this.getConcatenatedMatrix(this._matrix));
+		this.draw( this.canvas._ctx, false, this.getConcatenatedMatrix(this._matrix));
 		
 		//-- send commands to Flash movie
-		this._flFlush();
-		
-		
+		this.canvas._ctx._flFlush();
+
 	}
 
 	/**
@@ -423,13 +428,13 @@ var p = Stage.prototype = new Container();
 	 * @param {Boolean} enabled
 	 **/
 	p._enableMouseEvents = function() {
-		var o = this;
+		/*var o = this;
 		var evtTarget = window.addEventListener ? window : document;
 		evtTarget.addEventListener("mouseup", function(e) { o._handleMouseUp(e); }, false);
 		evtTarget.addEventListener("mousemove", function(e) { o._handleMouseMove(e); }, false);
 		evtTarget.addEventListener("dblclick", function(e) { o._handleDoubleClick(e); }, false);
 		// this is to facilitate extending Stage:
-		if (this.canvas) { this.canvas.addEventListener("mousedown", function(e) { o._handleMouseDown(e); }, false); }
+		if (this.canvas) { this.canvas.addEventListener("mousedown", function(e) { o._handleMouseDown(e); }, false); }*/
 	}
 
 	/**
@@ -529,6 +534,7 @@ var p = Stage.prototype = new Container();
 	 * @method _flFlush
 	 * @protected
 	 **/
+	/*
 	p._flFlush = function() {
 		//-- TODO : pass values to Flash movie
 		
@@ -553,21 +559,21 @@ var p = Stage.prototype = new Container();
 		}
 		
 	//	}
-	}
+	}*/
 	
 	/**
 	 * Triggered when associated Flash Movie is ready for interaction
 	 * @method _flOnReady
 	 * @protected
 	 **/
-	p._flOnReady = function() {
+	/*p._flOnReady = function() {
 		this._flInstance = Stage._flGetInstance( this._flInstanceID );
 		this.flReady = true;
 		this._flFlush();
 		if( this.flOnReady ){
 				this.flOnReady(this);
 		}
-	}
+	}*/
 
 	/**
 	 * @method _testMouseOver
@@ -613,21 +619,21 @@ var p = Stage.prototype = new Container();
 	//-- Static
 	
 	//-- Defaults
-	Stage.FL_URL = 'EaselFl.swf';
+	/*Stage.FL_URL = 'EaselFl.swf';
 	Stage.FL_WIDTH = 400;
 	Stage.FL_HEIGHT = 400;
 	Stage.FL_ELEMENT_ID = null;
 	Stage.FL_TRANSPARENT = true;
-	
+	*/
 
 	//-- Object on which 'ready' callback is exposed to Flash Movie
-	Stage._flHooks = {};
-	Stage._flStageCount = 0;
+	//Stage._flHooks = {};
+	//Stage._flStageCount = 0;
 	
 	//-- Singleton stage instance, currenlty necessary for pushing create / change commands
 	//TODO : find a clean & fast way to handle multiple stages
 
-	Stage._flOneStage = null;
+/*	Stage._flOneStage = null;
 
 	Stage._flPushChange = function( target, command, params) {
 		console.log('change', target.id, command, params);
@@ -635,9 +641,9 @@ var p = Stage.prototype = new Container();
 	}
 	
 	Stage._flPushCreate = function( type, target) {
-		//console.log('create', type, target.id);
+		console.log('create', type, target.id);
 		Stage._flOneStage._flCommandQueues.create.push([type, target.id]);
-	}
+	}*/
 	
 	/**
 	 * @method _flLoadInstance
@@ -645,7 +651,7 @@ var p = Stage.prototype = new Container();
 	 **/
 	//-- TODO : verify cross-browser compatability, specifically regarding 'user focus' issue.
 	//-- TODO : use the dom container, dimensions, margins, etc of the canvas passed - instead of the elementId of the container
-	Stage._flLoadInstance = function(id, width, height, elementId) {
+	/*Stage._flLoadInstance = function(id, width, height, elementId) {
 	
 		var element, html;
 		
@@ -676,7 +682,7 @@ var p = Stage.prototype = new Container();
 			} else {
 				return document[id];
 		}
-	}
+	}*/
 
 window.Stage = Stage;
 }(window));

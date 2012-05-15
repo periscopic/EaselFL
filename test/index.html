@@ -7,6 +7,7 @@
 <script type="text/javascript" src="../js/easelfl/geom/Point.js"></script>
 <script type="text/javascript" src="../js/easelfl/geom/Rectangle.js"></script>	
 <script type="text/javascript" src="../js/easelfl/utils/UID.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/CanvasFl.js"></script>
 <script type="text/javascript" src="../js/easelfl/display/DisplayObject.js"></script>
 <script type="text/javascript" src="../js/easelfl/display/Container.js"></script>
 <script type="text/javascript" src="../js/easelfl/display/Stage.js"></script>
@@ -27,11 +28,11 @@ window.onload = function(){
 	setInterval(function(){stats.update();}, 1000/60)
 	
 	
-	Stage.FL_URL = '../haxe/bin/EaselFl.swf';
-	Stage.FL_ELEMENT_ID = 'testContainer';
-	Stage.FL_WIDTH = 600;
+	CanvasFl.FL_URL = '../haxe/bin/EaselFl.swf';
+	CanvasFl.FL_ELEMENT_ID = 'testContainer';
+	CanvasFl.FL_WIDTH = 600;
 	
-	var myStage = new Stage();
+	var myStage = new Stage(new CanvasFl());
 	Ticker.addListener(myStage);
 	
 	var container = new Container();

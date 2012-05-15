@@ -110,6 +110,7 @@
  * @param data
  **/
 var SpriteSheet = function(data) {
+	throw 'EaselFl:SpriteSheet currently not implemented';
   this.initialize(data);
 }
 var p = SpriteSheet.prototype;

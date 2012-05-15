@@ -77,6 +77,9 @@ var Graphics = function() {
 }
 var p = Graphics.prototype;
 
+	p._flCtx = null;
+	p._flChange = null;
+
 // static public methods:
 	
 	
@@ -273,7 +276,8 @@ var p = Graphics.prototype;
 	 **/
 	p.initialize = function() {
 		this.id = UID.get();
-		Stage._flPushCreate('gfx', this);
+		this._flChange = [];
+		//Stage._flPushCreate('gfx', this);
 		/*this.clear();
 		this._ctx = Graphics._ctx;*/
 	}
@@ -286,6 +290,18 @@ var p = Graphics.prototype;
 	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
 	 **/
 	p.draw = function(ctx) {
+		if(!this._flCtx){
+			this._flCtx = ctx;
+			ctx._flCreate.push(['gfx', this.id]);
+		}
+		
+		if(this._flChange.length){
+			for(var i=0, l=this._flChange.length; i<l; ++i) {
+				ctx._flChange.push(this._flChange[i]);
+			}
+			this._flChange = [];
+		}
+		
 		/*if (this._dirty) {
 			this._updateInstructions();
 		}
@@ -305,7 +321,7 @@ var p = Graphics.prototype;
 	 **/
 	p.moveTo = function(x, y) {
 		//this._activeInstructions.push(new Command(this._ctx.moveTo, [x, y]));
-		Stage._flPushChange(this, 'mt', [x, y]);
+		this._flChange.push([this.id, 'mt', [x, y]]);
 		return this;
 	}
 	
@@ -322,7 +338,7 @@ var p = Graphics.prototype;
 	p.lineTo = function(x, y) {
 		//this._dirty = this._active = true;
 		//this._activeInstructions.push(new Command(this._ctx.lineTo, [x, y]));
-		Stage._flPushChange(this, 'lt', [x, y]);
+		this._flChange.push([this.id, 'lt', [x, y]]);
 		return this;
 	}
 	
@@ -342,7 +358,7 @@ var p = Graphics.prototype;
 		//this._dirty = this._active = true;
 		//this._activeInstructions.push(new Command(this._ctx.arcTo, [x1, y1, x2, y2, radius]));
 		throw 'EaselFl:Graphics.arcTo currently not implemented'; 
-		Stage._flPushChange(this, 'art', [x1, y1, x2, y2, radius]); //-- need implementation Flash side
+		this._flChange.push([this.id, 'art', [x1, y1, x2, y2, radius]]); //-- need implementation Flash side
 		
 		return this;
 	}
@@ -366,7 +382,7 @@ var p = Graphics.prototype;
 		if (anticlockwise == null) { anticlockwise = false; }
 		//this._activeInstructions.push(new Command(this._ctx.arc, [x, y, radius, startAngle, endAngle, anticlockwise]));
 		throw 'EaselFl:Graphics.arc currently not implemented'; 
-		Stage._flPushChange(this, 'arc', [x, y, radius, startAngle, endAngle, anticlockwise]); //-- need implementation Flash side
+		this._flChange.push([this.id, 'arc', [x, y, radius, startAngle, endAngle, anticlockwise]]); //-- need implementation Flash side
 		return this;
 	}
 	
@@ -384,7 +400,7 @@ var p = Graphics.prototype;
 	p.quadraticCurveTo = function(cpx, cpy, x, y) {
 		//this._dirty = this._active = true;
 		//this._activeInstructions.push(new Command(this._ctx.quadraticCurveTo, [cpx, cpy, x, y]));
-		Stage._flPushChange(this, 'qt', [cpx, cpy, x, y]);
+		this._flChange.push([this.id, 'qt', [cpx, cpy, x, y]]);
 		return this;
 	}
 	
@@ -406,7 +422,7 @@ var p = Graphics.prototype;
 		//this._dirty = this._active = true;
 		//this._activeInstructions.push(new Command(this._ctx.bezierCurveTo, [cp1x, cp1y, cp2x, cp2y, x, y]));
 		throw 'EaselFl:Graphics.bezierCurveTo currently not implemented'; 
-		Stage._flPushChange(this, 'bt', [cp1x, cp1y, cp2x, cp2y, x, y]); //-- need implementation Flash side
+		this._flChange.push([this.id, 'bt', [cp1x, cp1y, cp2x, cp2y, x, y]]); //-- need implementation Flash side
 		return this;
 	}
 	
@@ -425,7 +441,7 @@ var p = Graphics.prototype;
 	p.rect = function(x, y, w, h) {
 		//this._dirty = this._active = true;
 		//this._activeInstructions.push(new Command(this._ctx.rect, [x, y, w, h]));
-		Stage._flPushChange(this, 'dr', [x, y, w, h]);
+		this._flChange.push([this.id, 'dr', [x, y, w, h]]);
 		return this;
 	}
 	
@@ -440,7 +456,7 @@ var p = Graphics.prototype;
 		//	this._dirty = true;
 			//this._activeInstructions.push(new Command(this._ctx.closePath, []));
 			throw 'EaselFl:Graphics.closePath currently not implemented'; 
-			Stage._flPushChange(this, 'cp'); //--need implementation Flash side
+			this._flChange.push([this.id, 'cp']); //--need implementation Flash side
 		//}
 		return this;
 	}
@@ -458,7 +474,7 @@ var p = Graphics.prototype;
 		this._activeInstructions = [];
 		this._strokeStyleInstructions = this._strokeInstructions = this._fillInstructions = null;*/
 		//this._active = this._dirty = false;
-		Stage._flPushChange(this, 'c');
+		this._flChange.push([this.id, 'c']);
 		return this;
 	}
 	
@@ -472,7 +488,7 @@ var p = Graphics.prototype;
 	p.beginFill = function(color) {
 		//if (this._active) { this._newPath(); }
 		//this._fillInstructions = color ? [new Command(this._setProp, ["fillStyle", color])] : null;
-		Stage._flPushChange(this, 'f', [color]);
+		this._flChange.push([this.id, 'f', [color]]);
 		return this;
 	}
 	
@@ -500,7 +516,7 @@ var p = Graphics.prototype;
 		this._fillInstructions = [new Command(this._setProp, ["fillStyle", o])];
 		*/
 		throw 'EaselFl:Graphics.beginLinearGradientFill currently not implemented';
-		Stage._flPushChange(this, 'lgf', [colors, ratios, x0, y0, x1, y1]); //-- needs implementation on Flash side
+		this._flChange.push([this.id, 'lgf', [colors, ratios, x0, y0, x1, y1]]); //-- needs implementation on Flash side
 		return this;
 	}
 	
@@ -529,7 +545,7 @@ var p = Graphics.prototype;
 		}
 		this._fillInstructions = [new Command(this._setProp, ["fillStyle", o])];*/
 		throw 'EaselFl:Graphics.beginRadialGradientFill currently not implemented';
-		Stage._flPushChange(this, 'rgf', [colors, ratios, x0, y0, r0, x1, y1, r1]); //-- needs implementation on Flash side
+		this._flChange.push([this.id, 'rgf', [colors, ratios, x0, y0, r0, x1, y1, r1]]); //-- needs implementation on Flash side
 		return this;
 	}
 	
@@ -557,7 +573,7 @@ var p = Graphics.prototype;
 	 **/
 	p.endFill = function() {
 		/*this.beginFill();*/
-		Stage._flPushChange(this, 'ef');
+		this._flChange.push([this.id, 'ef']);
 		return this;
 	}
 	
@@ -572,7 +588,9 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.setStrokeStyle = function(thickness, caps, joints, miterLimit) {
-		throw 'EaselFl:Graphics.setStrokeStyle currently not implemented';
+		//console.log('EaselFl:Graphics.setStrokeStyle currently not implemented');
+		this._flChange.push([this.id, 'ss',[thickness, caps, joints, miterLimit]]);
+		
 		/*if (this._active) { this._newPath(); }
 		this._strokeStyleInstructions = [
 			new Command(this._setProp, ["lineWidth", (thickness == null ? "1" : thickness)]),
@@ -589,9 +607,9 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.beginStroke = function(color) {
-		throw 'EaselFl:Graphics.beginStroke currently not implemented';
-		if (this._active) { this._newPath(); }
-		this._strokeInstructions = color ? [new Command(this._setProp, ["strokeStyle", color])] : null;
+		this._flChange.push([this.id, 'bs', color]);
+		/*if (this._active) { this._newPath(); }
+		this._strokeInstructions = color ? [new Command(this._setProp, ["strokeStyle", color])] : null;*/
 		return this;
 	}
 	
@@ -665,8 +683,9 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.endStroke = function() {
-		throw 'EaselFl:Graphics.endStroke currently not implemented';
-		this.beginStroke();
+		this._flChange.push([this.id, 'es']);
+		//throw 'EaselFl:Graphics.endStroke currently not implemented';
+		//this.beginStroke();
 		return this;
 	}
 	

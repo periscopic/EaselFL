@@ -41,6 +41,8 @@ var Shape = function(graphics) {
 }
 var p = Shape.prototype = new DisplayObject();
 
+	p._flCtx = null;
+
 // public properties:
 	/**
 	 * The graphics instance to display.
@@ -67,8 +69,8 @@ var p = Shape.prototype = new DisplayObject();
 		this.DisplayObject_initialize();
 		this.graphics = graphics ? graphics : new Graphics();
 		
-		Stage._flPushCreate('shp', this);
-		Stage._flPushChange(this, 'gfx', [this.graphics.id]) //-- link the graphics
+		//Stage._flPushCreate('shp', this);
+		//Stage._flPushChange(this, 'gfx', [this.graphics.id]) //-- link the graphics
 	}
 
 	/**
@@ -100,6 +102,12 @@ var p = Shape.prototype = new DisplayObject();
 	 * into itself).
 	 **/
 	p.draw = function(ctx, ignoreCache) {
+		if(!this._flCtx){
+			this._flCtx=ctx;
+			ctx._flCreate.push(['shp', this.id]);
+			ctx._flChange.push([this.id, 'gfx', [this.graphics.id]]) //-- link the graphics
+		}
+		
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
 		this.graphics.draw(ctx);
 		return true;

@@ -47,6 +47,8 @@ var DisplayObject = function() {
 }
 var p = DisplayObject.prototype;
 
+	p._flChange = null;
+
 	/**
 	 * Suppresses errors generated when using features like hitTest, onPress/onClick, and getObjectsUnderPoint with cross
 	 * domain content
@@ -372,6 +374,7 @@ var p = DisplayObject.prototype;
 	p.initialize = function() {
 		this.id = UID.get();
 		this._matrix = new Matrix2D();
+		this._flChange = [];
 	}
 
 // public methods:
@@ -398,6 +401,14 @@ var p = DisplayObject.prototype;
 	 **/
 	p.draw = function(ctx, ignoreCache) {
 		this._flSyncProps();
+		
+		if(this._flChange.length){
+			for(var i=0, l=this._flChange.length; i<l; ++i) {
+				ctx._flChange.push(this._flChange[i]);
+			}
+			this._flChange = [];
+		}
+		
 		//-- TODO : verify that this call can be ignored in EaselFl
 		//-- or used as a hook for the update function
 		/*if (ignoreCache || !this.cacheCanvas) { return false; }
@@ -717,7 +728,7 @@ var p = DisplayObject.prototype;
 		//-- Synchronize Visibility		
 		if( this.visible !== this._flVisible) {			
 			this._flVisible = this.visible;
-			Stage._flPushChange(this, 'vs', this.visible);
+			this._flChange.push([this.id, 'vs', this.visible]);
 		}
 		
 		//don't sync anything else if not visible
@@ -728,7 +739,7 @@ var p = DisplayObject.prototype;
 		//-- Synchronize Alpha
 		if( this.alpha !== this._flAlpha) {
 			this._flAlpha = this.alpha;
-			Stage._flPushChange(this, 'op', this.alpha);
+			this._flChange.push([this.id, 'op', this.alpha]);
 		}
 
 
@@ -757,7 +768,7 @@ var p = DisplayObject.prototype;
 			mtx.identity(); //reset
 			mtx.prependTransform( this.x, this.y, this.scaleX, this.scaleY, this.rotation, this.skewX, this.skewY, this.regX, this.regY);
 			
-			Stage._flPushChange(this, 'mtx', [mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty]);
+			this._flChange.push([this.id, 'mtx', [mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty]]);
 		}
 		
 		
