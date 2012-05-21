@@ -432,7 +432,7 @@ var p = DisplayObject.prototype;
 	 * @param {Number} height The height of the cache region.
 	 **/
 	p.cache = function(x, y, width, height) {
-		throw "EaselFl::DisplayObject.cache not yet implemented";
+		console.log("EaselFl::DisplayObject.cache not yet implemented");
 		/*
 		// draw to canvas.
 		var cacheCanvas = this.cacheCanvas;
@@ -479,7 +479,7 @@ var p = DisplayObject.prototype;
 	 * @method uncache
 	 **/
 	p.uncache = function() {
-		throw "EaselFl::DisplayObject.uncache not yet implemented";
+		console.log("EaselFl::DisplayObject.uncache not yet implemented");
 		//--this._cacheDataURL = this.cacheCanvas = null;
 		//--this.cacheID = this._cacheOffsetX = this._cacheOffsetY = 0;
 	}

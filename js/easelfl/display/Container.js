@@ -166,9 +166,7 @@ var p = Container.prototype = new DisplayObject();
 		child.parent = this;
 		this.children.push(child);
 		
-		//Stage._flPushChange(this, 'ac', child.id);
 		this._flChange.push([this.id, 'ac', child.id]);
-		
 		
 		return child;
 	}

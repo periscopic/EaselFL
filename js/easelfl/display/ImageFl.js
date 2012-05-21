@@ -15,13 +15,6 @@
     p._flOnload = null;
     p.onload = null;
     
-   /* p.tick = function() {
-        if(this._flSrc!==this.src){
-            this._flSrc = this.src;
-            Stage._flPushChange(this, 'src', this.src);
-        }
-    }*/
-    
     p.draw = function( ctx ){
         if(!this._flCtx){
             this._flCtx = ctx;

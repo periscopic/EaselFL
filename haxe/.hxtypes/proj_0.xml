@@ -2685,90 +2685,112 @@
 	</class>
 	<class path="display.GraphicsFl" params="" file="src/display/GraphicsFl.hx">
 		<implements path="display.IExec"/>
+		<QUART_PI get="inline" set="null" line="10" static="1"><c path="Float"/></QUART_PI>
 		<execs static="1"><c path="Hash"><d/></c></execs>
-		<init public="1" set="method" line="11" static="1"><f a=""><e path="Void"/></f></init>
-		<beginFill get="inline" set="null" line="40" static="1"><f a="target:color">
+		<init public="1" set="method" line="14" static="1"><f a=""><e path="Void"/></f></init>
+		<beginFill get="inline" set="null" line="44" static="1"><f a="target:color">
 	<c path="display.GraphicsFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></beginFill>
-		<setStrokeStyle get="inline" set="null" line="47" static="1"><f a="target:args">
+		<setStrokeStyle get="inline" set="null" line="49" static="1"><f a="target:args">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></setStrokeStyle>
-		<beginStroke get="inline" set="null" line="52" static="1"><f a="target:color">
+		<beginStroke get="inline" set="null" line="54" static="1"><f a="target:color">
 	<c path="display.GraphicsFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></beginStroke>
-		<endStroke get="inline" set="null" line="57" static="1"><f a="target:?nada">
+		<beginBitmapStroke get="inline" set="null" line="59" static="1"><f a="target:args">
+	<c path="display.GraphicsFl"/>
+	<c path="Array"><d/></c>
+	<e path="Void"/>
+</f></beginBitmapStroke>
+		<endStroke get="inline" set="null" line="65" static="1"><f a="target:?nada">
 	<c path="display.GraphicsFl"/>
 	<d/>
 	<e path="Void"/>
 </f></endStroke>
-		<endFill get="inline" set="null" line="61" static="1"><f a="target:?nada">
+		<endFill get="inline" set="null" line="69" static="1"><f a="target:?nada">
 	<c path="display.GraphicsFl"/>
 	<d/>
 	<e path="Void"/>
 </f></endFill>
-		<moveTo get="inline" set="null" line="65" static="1"><f a="target:xy">
+		<moveTo get="inline" set="null" line="73" static="1"><f a="target:xy">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></moveTo>
-		<lineTo get="inline" set="null" line="69" static="1"><f a="target:xy">
+		<lineTo get="inline" set="null" line="77" static="1"><f a="target:xy">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></lineTo>
-		<quadraticCurveTo get="inline" set="null" line="77" static="1"><f a="target:pts">
+		<quadraticCurveTo get="inline" set="null" line="85" static="1"><f a="target:pts">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></quadraticCurveTo>
-		<drawRect get="inline" set="null" line="81" static="1"><f a="target:rct">
+		<drawRect get="inline" set="null" line="89" static="1"><f a="target:rct">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></drawRect>
-		<clear get="inline" set="null" line="85" static="1"><f a="target:?nada">
+		<clear get="inline" set="null" line="93" static="1"><f a="target:?nada">
 	<c path="display.GraphicsFl"/>
 	<d/>
 	<e path="Void"/>
 </f></clear>
-		<drawRoundRect get="inline" set="null" line="89" static="1"><f a="target:rect">
+		<drawRoundRect get="inline" set="null" line="97" static="1"><f a="target:rect">
 	<c path="display.GraphicsFl"/>
 	<d/>
 	<e path="Void"/>
 </f></drawRoundRect>
-		<drawRoundRectComplex get="inline" set="null" line="92" static="1"><f a="target:rect">
+		<drawRoundRectComplex get="inline" set="null" line="100" static="1"><f a="target:rect">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></drawRoundRectComplex>
-		<drawCircle get="inline" set="null" line="96" static="1"><f a="target:circ">
+		<drawCircle get="inline" set="null" line="104" static="1"><f a="target:circ">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></drawCircle>
-		<drawEllipse get="inline" set="null" line="100" static="1"><f a="target:ell">
+		<drawEllipse get="inline" set="null" line="108" static="1"><f a="target:ell">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></drawEllipse>
+		<drawArc get="inline" set="null" line="112" static="1"><f a="target:args">
+	<c path="display.GraphicsFl"/>
+	<c path="Array"><d/></c>
+	<e path="Void"/>
+</f></drawArc>
+		<intersectLines set="method" line="191" static="1"><f a="x1:y1:x2:y2:x3:y3:x4:y4">
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<d/>
+</f></intersectLines>
 		<graphics><c path="flash.display.Graphics"/></graphics>
 		<strokeThickness><c path="Float"/></strokeThickness>
-		<link public="1" get="inline" set="null" line="109"><f a="g">
+		<link public="1" get="inline" set="null" line="171"><f a="g">
 	<c path="flash.display.Graphics"/>
 	<e path="Void"/>
 </f></link>
-		<exec public="1" get="inline" set="null" line="114"><f a="method:?arguments">
+		<exec public="1" get="inline" set="null" line="176"><f a="method:?arguments">
 	<c path="String"/>
 	<d/>
 	<d/>
 </f></exec>
-		<new public="1" set="method" line="107"><f a=""><e path="Void"/></f></new>
+		<new public="1" set="method" line="169"><f a=""><e path="Void"/></f></new>
 	</class>
 	<enum path="flash.display3D.Context3DCompareMode" params="" file="/usr/lib/haxe/std/flash9/display3D/Context3DCompareMode.hx">
 		<NOT_EQUAL/>

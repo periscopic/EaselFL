@@ -79,6 +79,7 @@ var p = Graphics.prototype;
 
 	p._flCtx = null;
 	p._flChange = null;
+	p._flChildImages = null;
 
 // static public methods:
 	
@@ -277,6 +278,7 @@ var p = Graphics.prototype;
 	p.initialize = function() {
 		this.id = UID.get();
 		this._flChange = [];
+		this._flChildImages = [];
 		//Stage._flPushCreate('gfx', this);
 		/*this.clear();
 		this._ctx = Graphics._ctx;*/
@@ -295,20 +297,18 @@ var p = Graphics.prototype;
 			ctx._flCreate.push(['gfx', this.id]);
 		}
 		
+		//--make sure images drawn (e.g. using bitmapBitmapStroke) are added to Flash 
+		while(this._flChildImages.length){
+			this._flChildImages.pop().draw(ctx);
+		}
+	
+		//-- these are order dependent, so use FIFO
 		if(this._flChange.length){
 			for(var i=0, l=this._flChange.length; i<l; ++i) {
 				ctx._flChange.push(this._flChange[i]);
 			}
 			this._flChange = [];
 		}
-		
-		/*if (this._dirty) {
-			this._updateInstructions();
-		}
-		var instr = this._instructions;
-		for (var i=0, l=instr.length; i<l; i++) {
-			instr[i].exec(ctx);
-		}*/
 	}
 	
 // public methods that map directly to context 2D calls:
@@ -381,7 +381,7 @@ var p = Graphics.prototype;
 		//this._dirty = this._active = true;
 		if (anticlockwise == null) { anticlockwise = false; }
 		//this._activeInstructions.push(new Command(this._ctx.arc, [x, y, radius, startAngle, endAngle, anticlockwise]));
-		throw 'EaselFl:Graphics.arc currently not implemented'; 
+		//throw 'EaselFl:Graphics.arc currently not implemented'; 
 		this._flChange.push([this.id, 'arc', [x, y, radius, startAngle, endAngle, anticlockwise]]); //-- need implementation Flash side
 		return this;
 	}
@@ -668,14 +668,15 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)	
 	 **/
 	p.beginBitmapStroke = function(image, repetition) {
-		throw 'EaselFl:Graphics.beginBitmapStroke currently not implemented';
-		if (this._active) { this._newPath(); }
+		//throw 'EaselFl:Graphics.beginBitmapStroke currently not implemented';
+		this._flChildImages.push(image);
+		this._flChange.push([this.id, 'bbs', [image.id, repetition]]);
+		/*if (this._active) { this._newPath(); }
 		repetition = repetition || "";
 		var o = this._ctx.createPattern(image, repetition);
-		this._strokeInstructions = [new Command(this._setProp, ["strokeStyle", o])];
+		this._strokeInstructions = [new Command(this._setProp, ["strokeStyle", o])];*/
 		return this;
 	}
-	
 	
 	/**
 	 * Ends the current subpath, and begins a new one with no stroke. Functionally identical to beginStroke(null).
@@ -781,8 +782,8 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.drawCircle = function(x, y, radius) {
-		throw 'EaselFl:Graphics.drawCircle currently not implemented';
-		this.arc(x, y, radius, 0, Math.PI*2);
+		//throw 'EaselFl:Graphics.drawCircle currently not implemented';
+		this._flChange.push([this.id, 'dc', [x, y, radius]]);
 		return this;
 	}
 	

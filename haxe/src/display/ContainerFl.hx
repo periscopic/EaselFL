@@ -18,7 +18,7 @@ class ContainerFl extends DisplayObjectFl, implements IExec, implements IDisplay
 		execs.set('ac', addChild );
 		execs.set('aca', addChildAt );
 		execs.set('rc', removeChild );
-		execs.set('rca', removeChild );
+		execs.set('rca', removeChildAt );
 		execs.set('rac', removeAllChildren);
 		execs.set('sc', swapChildren);
 		execs.set('sca', swapChildrenAt);
