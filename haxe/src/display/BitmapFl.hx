@@ -24,9 +24,11 @@ class BitmapFl extends DisplayObjectFl, implements IExec, implements IDisplayabl
 	public var loaded(default, null):Bool;
 	private var _img:IBitmapData;
 	
-	public function new(){
-		super();
-		display = bmp = new Bitmap();		
+	public function new(id:String){
+		super(id);
+		display = new flash.display.Sprite();
+		bmp = new Bitmap();		
+		display.addChild(bmp);
 	}
 	
 	function swapImage( image : IBitmapData):Void{

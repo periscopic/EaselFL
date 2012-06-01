@@ -715,6 +715,10 @@ var p = DisplayObject.prototype;
 	p._flVisible = true;
 	p._flAlpha = 1;
 	
+	p._flMouseOver =
+	p._flMouseOut =
+	p._flClick = null;
+	
 	//-- Static
 	DisplayObject._flTempMtx = new Matrix2D();
 	
@@ -735,6 +739,44 @@ var p = DisplayObject.prototype;
 		if(!this.visible) {
 		  return;
 		}		
+		
+		
+		//synchronize mouse events
+		if(this.mouseEnabled!==this._flMouseEnabled){
+			this._flMouseEnabled = this.mouseEnabled;
+/*
+			if(!this.mouseEnabled){
+				//mouseover mouseout mouseclick doubleclick
+				if(this._flMouseOver){
+					this._flChange.push([this.id, 'rmov']);
+					this._flMouseOver = null;
+				}
+				if(this._flMouseOut){
+					this._flChange.push([this.id, 'rmot']);
+					this._flMouseOut = null;
+				}
+				if(this._flClick){
+					this._flChange.push([this.id, 'rmck']);
+					this._flClick = null;
+				}
+			}
+*/
+		}
+		
+		if(this.mouseEnabled) {
+			if(this.onMouseOver!==this._flMouseOver) {
+				this._flMouseOver = this.onMouseOver;
+				this._flChange.push([this.id, 'amov']);
+			}
+			if(this.onMouseOut!==this._flMouseOut) {
+				this._flMouseOut = this.onMouseOut;
+				this._flChange.push([this.id, 'amot']);
+			}
+			if(this.onClick!==this._flClick) {
+				this._flClick = this.onClick;
+				this._flChange.push([this.id, 'amck']);
+			}
+		}
 		
 		//-- Synchronize Alpha
 		if( this.alpha !== this._flAlpha) {

@@ -19,6 +19,7 @@ class Main {
 	
 	static inline var DEFAULT_ID:String='EaselFl_001';
 
+	static private var callbackMethod:String;
 	
 	public static function main() {		
 		new Main();
@@ -47,6 +48,10 @@ class Main {
 		}	
 	}
 	
+	static public function dispatch(evt:Dynamic):Void{
+		ExternalInterface.call(callbackMethod, evt);
+	}
+	
 	private function init(?evt:Event=null):Void{
 		
 		Lib.current.stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
@@ -57,6 +62,14 @@ class Main {
 		if (ExternalInterface.available == false) {
             return;
         }
+       /* var shp = new flash.display.Shape();
+        shp.graphics.beginFill(0xFF0000);
+        shp.graphics.drawRect(0,0,10,10);
+        shp.graphics.endFill();
+        Lib.current.stage.addChild(shp);*/
+        
+        //trace('fresh');
+        
 		
 		var flashVars:Dynamic = Lib.current.loaderInfo.parameters;
 		var id:String = Reflect.hasField( flashVars, 'id') ? Reflect.field( flashVars, 'id') : DEFAULT_ID;
@@ -69,9 +82,8 @@ class Main {
 		ExternalInterface.addCallback('change', Control.changeItems);
 		ExternalInterface.addCallback('invokeOn', Control.invokeOn);	
 		//-- Notify JS the module is ready
-		var shake = 'CanvasFl._flHooks.'+id;
-		ExternalInterface.call(shake);
-		
+		callbackMethod = 'CanvasFl._flHooks.'+id;
+		ExternalInterface.call(callbackMethod);		
 	}
 }
 

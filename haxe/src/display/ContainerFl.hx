@@ -60,9 +60,9 @@ class ContainerFl extends DisplayObjectFl, implements IExec, implements IDisplay
 	
 	public var container:DisplayObjectContainer;
 	
-	public function new(){
-		super();
-		display = this.container =  new Sprite();
+	public function new(id:String){
+		super(id);
+		this.container = display = new Sprite();
 	}
 	
 	inline public function exec(method:String, ?arguments:Dynamic=null):Dynamic{

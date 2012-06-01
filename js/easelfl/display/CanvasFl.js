@@ -1,3 +1,13 @@
+/**
+ * Current known shortcomings:
+ * -Garbage collection will not remove EaselFl objects either from
+ * Flash or JS due to stage level index of items.
+ * -Event handlers are not applied in Flash synchronously
+ * -MouseOver, MouseOut, MouseClick tested using shape of
+ * display object, not alpha of pixel as in EaselJS
+ * -Assets (eg images) must be created using an EaselFl
+ * function so that they will be loaded in Flash.
+ **/
 
 (function(window) {
 
@@ -5,7 +15,6 @@
        this.initialize(); 
     }
     var p = ContextFl.prototype;
-    
     
     /** 
      * The flOnReady callback is called when the Flash Movie has loaded, all existing commands have been flushed
@@ -46,51 +55,42 @@
     
     p._flChange = null;
     p._flCreate = null;
-    
-    
-   /* 
+    p._flItemIndex = null;
 
-    p._flPushChange = function( target, command, params) {
-       // console.log('change', target.id, command, params);
-        this._flCommandQueues.change.push([target.id, command, params]);
-    }
-    
-    p._flPushCreate = function( type, target) {
-        console.log('create', type, target.id);
-        this._flCommandQueues.create.push([type, target.id]);
-    }
-   */
-    p._flFlush = function() {
-		//-- TODO : pass values to Flash movie
-		
-	//	if(Stage._flFlushCount<3){
-			
-	//	console.log('flush:' + Stage._flFlushCount++);
-		
-    if(this.flReady){
-      
-      
-      var inst = this._flInstance;
-		
-      //-- Create Flash counterparts of EaselJS and asset classes
-      if(this._flCreate.length){
-        inst.create(this._flCreate);
-        console.log(this._flCreate);
-        this._flCreate = [];
+    p._flFlush = function() {		
+      if(this.flReady){
+         var inst = this._flInstance;
+       
+         //-- Create Flash counterparts of EaselJS and asset classes
+         if(this._flCreate.length){
+            
+            //step through items, replacing actual items with id, and recording in index
+            var creates = this._flCreate, item, index = this._flItemIndex;
+            for(var i=0, l=creates.length; i<l; ++i) {
+               item = creates[i][1];         
+               creates[i][1] = item.id;
+               index[item.id] = item;      
+            }
+            
+            //-- notify flash to create these
+            inst.create(this._flCreate);
+            //-- clean create queue
+            this._flCreate = [];
+         }
+         
+         
+         //-- Adjust state of Flash counterparts 
+         if(this._flChange.length){
+            for(var i = 0, l=this._flChange.length; i<l; ++i) {
+               if(this._flChange[i][1]==='amck'){
+                  console.log(this._flChange[i]);
+               }
+            }
+           inst.change(this._flChange);
+           this._flChange = [];
+         }
       }
-      
-      
-      //-- Adjust state of Flash counterparts 
-      if(this._flChange.length){
-         console.log(this._flChange);
-        inst.change(this._flChange);
-        this._flChange = [];
-      }
-    }
-		
-		
-	//	}
-	}
+   }
     
    /**
 	 * Triggered when associated Flash Movie is ready for interaction
@@ -98,38 +98,56 @@
 	 * @protected
 	 **/
 	p._flOnReady = function() {
-   console.log('on ready');
 		this._flInstance = ContextFl._flGetInstance( this._flInstanceID );
 		this.flReady = true;
 		this._flFlush();
 		
-    if( this.flOnReady ){
-				this.flOnReady(this);
-		}
-	}
-    
+      if( this.flOnReady ){
+         this.flOnReady(this);
+      }
+   }
     
     p.initialize = function(){
-        var myID, self = this;
+
+      function handleEvents(obj) {
+         //-- Handle dispatches from Flash
+         
+         if(obj.type==='onClick' || obj.type==='onMouseOver' || obj.type==='onMouseOut'){
+            //-- Mouse events
+            var item = self._flItemIndex[obj.id];
+            if(item && item[obj.type]){
+               item[obj.type](new MouseEvent(obj.type, obj.stageX, obj.stageY, item, null));  
+            }
+         }
+      }
+         
+         
+      var myID, self = this;
         
-         //-- Setup flush data staging queues
-       this._flCreate = [];
-       this._flChange = [];
+      //-- Setup flush data staging queues
+      this._flCreate = [];
+      this._flChange = [];
+       
+      //-- Index of created items for distributing events dispatched in Flash
+      this._flItemIndex = {};
+       
+      //-- Assign unique ID to this EaseFl canvasFl
+      this._flInstanceID = myID = 'EaselFl_'+ContextFl._flCount++;
         
-        //-- Assign unique ID to this EaseFl canvasFl
-        this._flInstanceID = myID = 'EaselFl_'+ContextFl._flCount++;
+         
         
-        //-- Create proxy of function to be called when Flash Movie is ready
-        CanvasFl._flHooks[myID] = function(){ self._flOnReady(); }
-        
-        //-- Embed and initial loading of Flash Movie
-        ContextFl._flLoadInstance(myID, CanvasFl.FL_WIDTH, CanvasFl.FL_HEIGHT, CanvasFl.FL_ELEMENT_ID);
-        
-        //-- End EaselFl specific setup
-    }
+      //-- Create proxy of function to be called when Flash Movie is ready
+      CanvasFl._flHooks[myID] = function(){
+         //reassign hook to receive calls from Flash
+         CanvasFl._flHooks[myID] = handleEvents;
+         self._flOnReady();
+      }
+     
+      //-- Embed and initial loading of Flash Movie
+      ContextFl._flLoadInstance(myID, CanvasFl.FL_WIDTH, CanvasFl.FL_HEIGHT, CanvasFl.FL_ELEMENT_ID);
+   }
     
-    
-    ContextFl._flCount = 0;
+   ContextFl._flCount = 0;
   
 /**
 	 * @method _flLoadInstance
@@ -185,9 +203,6 @@
         }
         return null;
     }
-    
-
-
 
 	//-- Static
 	

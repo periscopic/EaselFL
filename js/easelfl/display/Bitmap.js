@@ -128,7 +128,7 @@ var p = Bitmap.prototype = new DisplayObject();
 	p.draw = function(ctx, ignoreCache) {
 		if(!this._flCtx){
 			this._flCtx = ctx;
-			ctx._flCreate.push(['bmp', this.id]);
+			ctx._flCreate.push(['bmp', this]);
 		}
 		
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }

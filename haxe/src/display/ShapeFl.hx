@@ -1,6 +1,6 @@
 package display;
 
-import flash.display.Shape;
+import flash.display.Sprite;
 import flash.display.DisplayObject;
 
 class ShapeFl extends DisplayObjectFl, implements IExec, implements IDisplayable{
@@ -18,11 +18,12 @@ class ShapeFl extends DisplayObjectFl, implements IExec, implements IDisplayable
 		Control.graphicsList.get(id).link(target.shape.graphics);
 	}
 
-	private var shape:Shape;
+	//Shapes are mapped to Sprite in order to have mouse events
+	private var shape:Sprite;
 	
-	public function new(){
-		super();		
-		display = shape = new Shape();
+	public function new(id:String){
+		super(id);		
+		display = shape = new Sprite();
 	}
 	
 	inline public function exec(method:String, ?arguments:Dynamic=null):Dynamic{

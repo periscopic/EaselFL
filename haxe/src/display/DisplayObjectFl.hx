@@ -1,8 +1,9 @@
-package display;
+/* TEST */package display;
 
 import flash.display.Sprite;
 import flash.display.DisplayObjectContainer;
 import flash.display.DisplayObject;
+import flash.events.MouseEvent;
 
 import flash.geom.Matrix;
 
@@ -21,10 +22,13 @@ class DisplayObjectFl{
 		execs.set('vs',visible);
 		execs.set('mtx', setMatrix);
 		
+		execs.set('amck', addClickHandler);
+		execs.set('amot', addOutHandler);
+		execs.set('amov', addOverHandler);
+		
 		//-- has callback
 		execs.set('htp',hitTestPoint);
 	}
-	
 
 	inline static private function x(target:IDisplayable, val:Float):Void{
 		target.display.x = val;
@@ -72,9 +76,39 @@ class DisplayObjectFl{
 		return target.display.hitTestPoint(xy[0], xy[1], true);
 	}
 	
+	//inline 
+	static private function addClickHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{
+		target.display.addEventListener(MouseEvent.CLICK, target.handleClick, false, 0, true);
+	}
 	
-	public var display:DisplayObject;
+	inline static private function addOverHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{
+		target.display.addEventListener(MouseEvent.MOUSE_OVER, target.handleOver, false, 0, true);
+	}
 	
-	public function new( ){	}
+	inline static private function addOutHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{
+		target.display.addEventListener(MouseEvent.MOUSE_OUT, target.handleOut, false, 0, true);
+	}
+	
+	
+	public var display:DisplayObjectContainer;
+	public var id:String;
+	
+	public function new( id:String ){ this.id = id;}
+	
+	public function handleClick(e:MouseEvent):Void{
+		//var evt:Dynamic = e;
+		var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'onClick', id:this.id};
+		Main.dispatch(evt);
+	}
+	
+	public function handleOver(e:MouseEvent):Void{
+		var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'onMouseOver', id:this.id};
+		Main.dispatch(evt);	
+	}
+	
+	public function handleOut(e:MouseEvent):Void{
+		var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'onMouseOut', id:this.id};
+		Main.dispatch(evt);	
+	}
 	
 }

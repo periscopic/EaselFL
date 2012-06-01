@@ -294,7 +294,7 @@ var p = Graphics.prototype;
 	p.draw = function(ctx) {
 		if(!this._flCtx){
 			this._flCtx = ctx;
-			ctx._flCreate.push(['gfx', this.id]);
+			ctx._flCreate.push(['gfx', this]);
 		}
 		
 		//--make sure images drawn (e.g. using bitmapBitmapStroke) are added to Flash 

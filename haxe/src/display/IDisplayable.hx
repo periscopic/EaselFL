@@ -1,7 +1,7 @@
 package display;
 
-import flash.display.DisplayObject;
+import flash.display.DisplayObjectContainer;
 
 interface IDisplayable {
-		var display:DisplayObject;
+		var display:DisplayObjectContainer;
 }

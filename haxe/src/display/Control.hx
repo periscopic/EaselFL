@@ -58,10 +58,8 @@ class Control {
 	 */
 	inline static public function changeItems(a:Array<Array<Dynamic>>):Void{
 		for(cmd in a){
-			if(cmd.length==3){
 				//-- Get item by id and delegate execution to it
-				items.get(cmd[0]).exec(cmd[1], cmd[2]);
-			}			
+			items.get(cmd[0]).exec(cmd[1], cmd[2]);			
 		}
 	}
 	
@@ -80,13 +78,13 @@ class Control {
 	}
 	
 	inline static private function bitmap(id:String):Void{
-		var bmp:BitmapFl = new BitmapFl();
+		var bmp:BitmapFl = new BitmapFl(id);
 		items.set(id, bmp);
 		displays.set(id, bmp);
 	}
 	
 	inline static private function shape(id:String):Void{
-		var shp:ShapeFl = new ShapeFl();
+		var shp:ShapeFl = new ShapeFl(id);
 		items.set(id, shp);
 		displays.set(id, shp);
 	}
@@ -98,7 +96,7 @@ class Control {
 	}
 	
 	inline static private function container(id:String):Void{
-		var cnt:ContainerFl = new ContainerFl();
+		var cnt:ContainerFl = new ContainerFl(id);
 		containers.set(id, cnt);
 		displays.set(id, cnt);
 		items.set(id, cnt);
@@ -107,8 +105,7 @@ class Control {
 	inline static private function stage(id:String):Void{
 		//-- Alias stage as another ID
 		//-- by assigning to an already created ContainerFl
-		var cnt = containers.get(id);
-		
+		var cnt = containers.get(id);		
 		cnt.display = cnt.container = Lib.current.stage;
 		
 		containers.set('stage', cnt);

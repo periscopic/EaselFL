@@ -1526,7 +1526,7 @@
 </f></as>
 	</class>
 	<class path="display.DisplayObjectFl" params="" file="src/display/DisplayObjectFl.hx">
-		<init public="1" set="method" line="14" static="1">
+		<init public="1" set="method" line="15" static="1">
 			<f a="execs">
 				<c path="Hash"><d/></c>
 				<e path="Void"/>
@@ -1535,55 +1535,86 @@
 	 * TODO: add registrationX, registrationY, skewX, skewY, mouseEnabled
 	 </haxe_doc>
 		</init>
-		<x get="inline" set="null" line="29" static="1"><f a="target:val">
+		<x get="inline" set="null" line="33" static="1"><f a="target:val">
 	<c path="display.IDisplayable"/>
 	<c path="Float"/>
 	<e path="Void"/>
 </f></x>
-		<y get="inline" set="null" line="33" static="1"><f a="target:val">
+		<y get="inline" set="null" line="37" static="1"><f a="target:val">
 	<c path="display.IDisplayable"/>
 	<c path="Float"/>
 	<e path="Void"/>
 </f></y>
-		<scaleX get="inline" set="null" line="37" static="1"><f a="target:val">
+		<scaleX get="inline" set="null" line="41" static="1"><f a="target:val">
 	<c path="display.IDisplayable"/>
 	<c path="Float"/>
 	<e path="Void"/>
 </f></scaleX>
-		<scaleY get="inline" set="null" line="41" static="1"><f a="target:val">
+		<scaleY get="inline" set="null" line="45" static="1"><f a="target:val">
 	<c path="display.IDisplayable"/>
 	<c path="Float"/>
 	<e path="Void"/>
 </f></scaleY>
-		<rotation get="inline" set="null" line="45" static="1"><f a="target:val">
+		<rotation get="inline" set="null" line="49" static="1"><f a="target:val">
 	<c path="display.IDisplayable"/>
 	<c path="Float"/>
 	<e path="Void"/>
 </f></rotation>
-		<opacity get="inline" set="null" line="49" static="1"><f a="target:val">
+		<opacity get="inline" set="null" line="53" static="1"><f a="target:val">
 	<c path="display.IDisplayable"/>
 	<c path="Float"/>
 	<e path="Void"/>
 </f></opacity>
-		<visible get="inline" set="null" line="53" static="1"><f a="target:val">
+		<visible get="inline" set="null" line="57" static="1"><f a="target:val">
 	<c path="display.IDisplayable"/>
 	<e path="Bool"/>
 	<e path="Void"/>
 </f></visible>
-		<setMatrix get="inline" set="null" line="57" static="1"><f a="target:vals">
+		<setMatrix get="inline" set="null" line="61" static="1"><f a="target:vals">
 	<c path="display.IDisplayable"/>
 	<c path="Array"><c path="Float"/></c>
 	<e path="Void"/>
 </f></setMatrix>
-		<hitTestPoint get="inline" set="null" line="71" static="1"><f a="target:xy">
+		<hitTestPoint get="inline" set="null" line="75" static="1"><f a="target:xy">
 	<c path="display.IDisplayable"/>
 	<c path="Array"><c path="Float"/></c>
 	<e path="Bool"/>
 </f></hitTestPoint>
-		<display public="1"><c path="flash.display.DisplayObject"/></display>
-		<new public="1" set="method" line="78"><f a=""><e path="Void"/></f></new>
+		<addClickHandler set="method" line="80" static="1"><f a="target:?nada">
+	<c path="display.DisplayObjectFl"/>
+	<d/>
+	<e path="Void"/>
+</f></addClickHandler>
+		<addOverHandler get="inline" set="null" line="84" static="1"><f a="target:?nada">
+	<c path="display.DisplayObjectFl"/>
+	<d/>
+	<e path="Void"/>
+</f></addOverHandler>
+		<addOutHandler get="inline" set="null" line="88" static="1"><f a="target:?nada">
+	<c path="display.DisplayObjectFl"/>
+	<d/>
+	<e path="Void"/>
+</f></addOutHandler>
+		<display public="1"><c path="flash.display.DisplayObjectContainer"/></display>
+		<id public="1"><c path="String"/></id>
+		<handleClick public="1" set="method" line="98"><f a="e">
+	<c path="flash.events.MouseEvent"/>
+	<e path="Void"/>
+</f></handleClick>
+		<handleOver public="1" set="method" line="104"><f a="e">
+	<c path="flash.events.MouseEvent"/>
+	<e path="Void"/>
+</f></handleOver>
+		<handleOut public="1" set="method" line="109"><f a="e">
+	<c path="flash.events.MouseEvent"/>
+	<e path="Void"/>
+</f></handleOut>
+		<new public="1" set="method" line="96"><f a="id">
+	<c path="String"/>
+	<e path="Void"/>
+</f></new>
 	</class>
-	<class path="display.IDisplayable" params="" file="src/display/IDisplayable.hx" interface="1"><display public="1"><c path="flash.display.DisplayObject"/></display></class>
+	<class path="display.IDisplayable" params="" file="src/display/IDisplayable.hx" interface="1"><display public="1"><c path="flash.display.DisplayObjectContainer"/></display></class>
 	<class path="display.BitmapFl" params="" file="src/display/BitmapFl.hx">
 		<extends path="display.DisplayObjectFl"/>
 		<implements path="display.IDisplayable"/>
@@ -1598,20 +1629,23 @@
 		<bmp><c path="flash.display.Bitmap"/></bmp>
 		<loaded public="1" set="null"><e path="Bool"/></loaded>
 		<_img><c path="display.IBitmapData"/></_img>
-		<swapImage set="method" line="32"><f a="image">
+		<swapImage set="method" line="34"><f a="image">
 	<c path="display.IBitmapData"/>
 	<e path="Void"/>
 </f></swapImage>
-		<updateBitmap set="method" line="58"><f a="?e">
+		<updateBitmap set="method" line="60"><f a="?e">
 	<c path="flash.events.Event"/>
 	<e path="Void"/>
 </f></updateBitmap>
-		<exec public="1" get="inline" set="null" line="64"><f a="method:?arguments">
+		<exec public="1" get="inline" set="null" line="66"><f a="method:?arguments">
 	<c path="String"/>
 	<d/>
 	<d/>
 </f></exec>
-		<new public="1" set="method" line="27"><f a=""><e path="Void"/></f></new>
+		<new public="1" set="method" line="27"><f a="id">
+	<c path="String"/>
+	<e path="Void"/>
+</f></new>
 	</class>
 	<class path="flash.accessibility.AccessibilityProperties" params="" file="/usr/lib/haxe/std/flash9/accessibility/AccessibilityProperties.hx" extern="1">
 		<description public="1"><c path="String"/></description>
@@ -1968,31 +2002,31 @@
 	<c path="Array"><c path="Array"><d/></c></c>
 	<e path="Void"/>
 </f></changeItems>
-		<invokeOn public="1" get="inline" set="null" line="72" static="1"><f a="cmd">
+		<invokeOn public="1" get="inline" set="null" line="70" static="1"><f a="cmd">
 	<c path="Array"><d/></c>
 	<d/>
 </f></invokeOn>
-		<image get="inline" set="null" line="76" static="1"><f a="id">
+		<image get="inline" set="null" line="74" static="1"><f a="id">
 	<c path="String"/>
 	<e path="Void"/>
 </f></image>
-		<bitmap get="inline" set="null" line="82" static="1"><f a="id">
+		<bitmap get="inline" set="null" line="80" static="1"><f a="id">
 	<c path="String"/>
 	<e path="Void"/>
 </f></bitmap>
-		<shape get="inline" set="null" line="88" static="1"><f a="id">
+		<shape get="inline" set="null" line="86" static="1"><f a="id">
 	<c path="String"/>
 	<e path="Void"/>
 </f></shape>
-		<graphics get="inline" set="null" line="94" static="1"><f a="id">
+		<graphics get="inline" set="null" line="92" static="1"><f a="id">
 	<c path="String"/>
 	<e path="Void"/>
 </f></graphics>
-		<container get="inline" set="null" line="100" static="1"><f a="id">
+		<container get="inline" set="null" line="98" static="1"><f a="id">
 	<c path="String"/>
 	<e path="Void"/>
 </f></container>
-		<stage get="inline" set="null" line="107" static="1"><f a="id">
+		<stage get="inline" set="null" line="105" static="1"><f a="id">
 	<c path="String"/>
 	<e path="Void"/>
 </f></stage>
@@ -2820,16 +2854,21 @@
 </f></new></class>
 	<class path="Main" params="" file="src/Main.hx">
 		<DEFAULT_ID get="inline" set="null" line="20" static="1"><c path="String"/></DEFAULT_ID>
-		<main public="1" set="method" line="23" static="1"><f a=""><e path="Void"/></f></main>
-		<addedToStage set="method" line="36"><f a="?evt">
+		<callbackMethod static="1"><c path="String"/></callbackMethod>
+		<main public="1" set="method" line="24" static="1"><f a=""><e path="Void"/></f></main>
+		<dispatch public="1" set="method" line="51" static="1"><f a="evt">
+	<d/>
+	<e path="Void"/>
+</f></dispatch>
+		<addedToStage set="method" line="37"><f a="?evt">
 	<c path="flash.events.Event"/>
 	<e path="Void"/>
 </f></addedToStage>
-		<init set="method" line="50"><f a="?evt">
+		<init set="method" line="55"><f a="?evt">
 	<c path="flash.events.Event"/>
 	<e path="Void"/>
 </f></init>
-		<new public="1" set="method" line="27"><f a=""><e path="Void"/></f></new>
+		<new public="1" set="method" line="28"><f a=""><e path="Void"/></f></new>
 		<haxe_doc>
  * TODO : 
  * - hitTestPoint : problematic if drawing commands haven't been flushed to Flash
@@ -3193,25 +3232,6 @@
 		<DECREMENT_WRAP/>
 		<DECREMENT_SATURATE/>
 	</enum>
-	<class path="display.ShapeFl" params="" file="src/display/ShapeFl.hx">
-		<extends path="display.DisplayObjectFl"/>
-		<implements path="display.IDisplayable"/>
-		<implements path="display.IExec"/>
-		<execs static="1"><c path="Hash"><d/></c></execs>
-		<init public="1" set="method" line="11" static="1"><f a=""><e path="Void"/></f></init>
-		<linkGraphics get="inline" set="null" line="17" static="1"><f a="target:id">
-	<c path="display.ShapeFl"/>
-	<c path="String"/>
-	<e path="Void"/>
-</f></linkGraphics>
-		<shape><c path="flash.display.Shape"/></shape>
-		<exec public="1" get="inline" set="null" line="28"><f a="method:?arguments">
-	<c path="String"/>
-	<d/>
-	<d/>
-</f></exec>
-		<new public="1" set="method" line="23"><f a=""><e path="Void"/></f></new>
-	</class>
 	<class path="flash.events.Event" params="" file="/usr/lib/haxe/std/flash9/events/Event.hx" extern="1">
 		<ACTIVATE public="1" static="1"><c path="String"/></ACTIVATE>
 		<ADDED public="1" static="1"><c path="String"/></ADDED>
@@ -3273,6 +3293,67 @@
 	<c path="String"/>
 	<e path="Bool"/>
 	<e path="Bool"/>
+	<e path="Void"/>
+</f></new>
+	</class>
+	<class path="flash.events.MouseEvent" params="" file="/usr/lib/haxe/std/flash9/events/MouseEvent.hx" extern="1">
+		<extends path="flash.events.Event"/>
+		<CLICK public="1" static="1"><c path="String"/></CLICK>
+		<DOUBLE_CLICK public="1" static="1"><c path="String"/></DOUBLE_CLICK>
+		<MOUSE_DOWN public="1" static="1"><c path="String"/></MOUSE_DOWN>
+		<MOUSE_MOVE public="1" static="1"><c path="String"/></MOUSE_MOVE>
+		<MOUSE_OUT public="1" static="1"><c path="String"/></MOUSE_OUT>
+		<MOUSE_OVER public="1" static="1"><c path="String"/></MOUSE_OVER>
+		<MOUSE_UP public="1" static="1"><c path="String"/></MOUSE_UP>
+		<MOUSE_WHEEL public="1" static="1"><c path="String"/></MOUSE_WHEEL>
+		<ROLL_OUT public="1" static="1"><c path="String"/></ROLL_OUT>
+		<ROLL_OVER public="1" static="1"><c path="String"/></ROLL_OVER>
+		<altKey public="1"><e path="Bool"/></altKey>
+		<buttonDown public="1"><e path="Bool"/></buttonDown>
+		<ctrlKey public="1"><e path="Bool"/></ctrlKey>
+		<delta public="1"><c path="Int"/></delta>
+		<isRelatedObjectInaccessible public="1"><e path="Bool"/></isRelatedObjectInaccessible>
+		<localX public="1"><c path="Float"/></localX>
+		<localY public="1"><c path="Float"/></localY>
+		<relatedObject public="1"><c path="flash.display.InteractiveObject"/></relatedObject>
+		<shiftKey public="1"><e path="Bool"/></shiftKey>
+		<stageX public="1" set="null"><c path="Float"/></stageX>
+		<stageY public="1" set="null"><c path="Float"/></stageY>
+		<updateAfterEvent public="1" set="method"><f a=""><e path="Void"/></f></updateAfterEvent>
+		<new public="1" set="method"><f a="type:?bubbles:?cancelable:?localX:?localY:?relatedObject:?ctrlKey:?altKey:?shiftKey:?buttonDown:?delta">
+	<c path="String"/>
+	<e path="Bool"/>
+	<e path="Bool"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="flash.display.InteractiveObject"/>
+	<e path="Bool"/>
+	<e path="Bool"/>
+	<e path="Bool"/>
+	<e path="Bool"/>
+	<c path="Int"/>
+	<e path="Void"/>
+</f></new>
+	</class>
+	<class path="display.ShapeFl" params="" file="src/display/ShapeFl.hx">
+		<extends path="display.DisplayObjectFl"/>
+		<implements path="display.IDisplayable"/>
+		<implements path="display.IExec"/>
+		<execs static="1"><c path="Hash"><d/></c></execs>
+		<init public="1" set="method" line="11" static="1"><f a=""><e path="Void"/></f></init>
+		<linkGraphics get="inline" set="null" line="17" static="1"><f a="target:id">
+	<c path="display.ShapeFl"/>
+	<c path="String"/>
+	<e path="Void"/>
+</f></linkGraphics>
+		<shape><c path="flash.display.Sprite"/></shape>
+		<exec public="1" get="inline" set="null" line="29"><f a="method:?arguments">
+	<c path="String"/>
+	<d/>
+	<d/>
+</f></exec>
+		<new public="1" set="method" line="24"><f a="id">
+	<c path="String"/>
 	<e path="Void"/>
 </f></new>
 	</class>
@@ -3715,7 +3796,10 @@
 	<d/>
 	<d/>
 </f></exec>
-		<new public="1" set="method" line="63"><f a=""><e path="Void"/></f></new>
+		<new public="1" set="method" line="63"><f a="id">
+	<c path="String"/>
+	<e path="Void"/>
+</f></new>
 	</class>
 	<class path="flash.text.TextField" params="" file="/usr/lib/haxe/std/flash9/text/TextField.hx" extern="1">
 		<extends path="flash.display.InteractiveObject"/>

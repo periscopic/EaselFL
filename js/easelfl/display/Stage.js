@@ -266,9 +266,9 @@ var p = Stage.prototype = new Container();
 		
 		//create container in flash
 		this._flCtx=ctx;
-		ctx._flCreate.push(['cnt', this.id]);
+		ctx._flCreate.push(['cnt', this]);
 		//set as stage in flash
-		ctx._flCreate.push(['stg', this.id]);
+		ctx._flCreate.push(['stg', this]);
 	}
 
 // public methods:

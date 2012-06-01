@@ -18,7 +18,7 @@
     p.draw = function( ctx ){
         if(!this._flCtx){
             this._flCtx = ctx;
-            ctx._flCreate.push(['img', this.id]);
+            ctx._flCreate.push(['img', this]);
         }
         
         if(this._flSrc!==this.src){

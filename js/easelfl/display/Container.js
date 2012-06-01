@@ -109,7 +109,7 @@ var p = Container.prototype = new DisplayObject();
 	p.draw = function(ctx, ignoreCache, _mtx) {
 		if(!this._flCtx){
 			this._flCtx=ctx;
-			ctx._flCreate.push(['cnt', this.id]);
+			ctx._flCreate.push(['cnt', this]);
 		}
 		
 		var snap = Stage._snapToPixelEnabled;

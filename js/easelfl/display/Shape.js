@@ -104,7 +104,7 @@ var p = Shape.prototype = new DisplayObject();
 	p.draw = function(ctx, ignoreCache) {
 		if(!this._flCtx){
 			this._flCtx=ctx;
-			ctx._flCreate.push(['shp', this.id]);
+			ctx._flCreate.push(['shp', this]);
 			ctx._flChange.push([this.id, 'gfx', [this.graphics.id]]) //-- link the graphics
 		}
 		
