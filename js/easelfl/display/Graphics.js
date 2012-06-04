@@ -77,7 +77,6 @@ var Graphics = function() {
 }
 var p = Graphics.prototype;
 
-	p._flCtx = null;
 	p._flChange = null;
 	p._flChildImages = null;
 
@@ -292,11 +291,6 @@ var p = Graphics.prototype;
 	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
 	 **/
 	p.draw = function(ctx) {
-		if(!this._flCtx){
-			this._flCtx = ctx;
-			ctx._flCreate.push(['gfx', this]);
-		}
-		
 		//--make sure images drawn (e.g. using bitmapBitmapStroke) are added to Flash 
 		while(this._flChildImages.length){
 			this._flChildImages.pop().draw(ctx);

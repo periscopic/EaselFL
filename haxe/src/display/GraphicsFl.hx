@@ -3,6 +3,7 @@ package display;
 import flash.display.Graphics;
 import flash.display.DisplayObject;
 import flash.display.BitmapData;
+import flash.display.LineScaleMode;
 import display.Control;
 
 class GraphicsFl implements IExec{
@@ -53,7 +54,7 @@ class GraphicsFl implements IExec{
 	
 	inline static private function beginStroke(target:GraphicsFl, color:String):Void{
 		var col = CSSColor.parse(color);
-		target.graphics.lineStyle(target.strokeThickness, col.color, col.alpha);//, pixelHinting, scaleMode, caps, joints, miterLimit)
+		target.graphics.lineStyle(target.strokeThickness, col.color, col.alpha, false, LineScaleMode.NONE);//, pixelHinting, scaleMode, caps, joints, miterLimit)
 	}
 	
 	inline static private function beginBitmapStroke(target:GraphicsFl, args:Array<Dynamic>):Void{
@@ -123,34 +124,28 @@ class GraphicsFl implements IExec{
 		var a2y:Float;
 		var ctrl:Dynamic;
 		var g:flash.display.Graphics = target.graphics;
+		var dir:Int = 1;
+		
+		sAng = args[3];
+		eAng = args[4];
 		
 		
 		if(args.length>5 && args[5]){
-			sAng = args[4];
-			eAng = args[3];
-		} else {
-			sAng = args[3];
-			eAng = args[4];
+			dir = -1;
 		}
 		
-		if(eAng<sAng) {
-			eAng+=Math.PI*2;
-		}
-		
-		//-- render using quadratic beziers
-		
+		//-- render using quadratic beziers		
 		a2x = Math.cos(sAng) * rad;
-		a2y = Math.sin(sAng) * rad;	
-		target.graphics.moveTo(a2x + cx, a2y + cy);
+		a2y = Math.sin(sAng) * rad;				
 		
-		//target.graphics.lineStyle(1, 0xFF0000, 1);
+		target.graphics.lineTo(a2x + cx, a2y + cy);	
 		
-		while(eAng>sAng) {
+		while(eAng*dir>sAng*dir) {
 			a1x = a2x;
 			a1y = a2y;
 			
 			//step forward by max 1/8th of a circle
-			sAng +=  Math.min(QUART_PI, eAng - sAng);
+			sAng +=  Math.min(QUART_PI, Math.abs(eAng - sAng)) * dir;
 			
 			//-- next anchor point			
 			a2x = Math.cos(sAng) * rad;
@@ -159,8 +154,7 @@ class GraphicsFl implements IExec{
 			//find intersection between tangents
 			ctrl = intersectLines(a1x, a1y, a1x-a1y, a1y+a1x, a2x, a2y, a2x-a2y, a2y+a2x);
 			g.curveTo(ctrl.x + cx, ctrl.y + cy, a2x + cx, a2y + cy);
-		}
-		
+		}		
 	}
 
 	private var graphics:Graphics;

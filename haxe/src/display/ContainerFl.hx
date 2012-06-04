@@ -24,7 +24,7 @@ class ContainerFl extends DisplayObjectFl, implements IExec, implements IDisplay
 		execs.set('sca', swapChildrenAt);
 	}
 	
-	inline static private function addChild(target:ContainerFl, id:String):Void{
+	inline static private function addChild(target:ContainerFl, id:Int):Void{
 		target.container.addChild(Control.displays.get(id).display);	
 	}
 	
@@ -35,7 +35,7 @@ class ContainerFl extends DisplayObjectFl, implements IExec, implements IDisplay
 		target.container.addChildAt(Control.displays.get(props[0]).display, props[1]);	
 	}
 	
-	inline static private function removeChild(target:ContainerFl, id:String):Void{
+	inline static private function removeChild(target:ContainerFl, id:Int):Void{
 		target.container.removeChild(Control.displays.get(id).display);	
 	}
 	
@@ -60,7 +60,7 @@ class ContainerFl extends DisplayObjectFl, implements IExec, implements IDisplay
 	
 	public var container:DisplayObjectContainer;
 	
-	public function new(id:String){
+	public function new(id:Int){
 		super(id);
 		this.container = display = new Sprite();
 	}

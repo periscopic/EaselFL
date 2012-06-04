@@ -1,19 +1,16 @@
 (function(window) {
 
-    var ImageFl = function(){
+
+    var ImageFl = function(img){
         this.id = UID.get();
-       // Stage._flPushCreate('img', this);
-        //Ticker.addListener(this);
+        this._img = img;
     }
     
     var p = ImageFl.prototype;
-    p._flCtx = null;
-    p.complete = true;
     p.id = null;
+    p._img = null;
+    p._flCtx = null;    
     p._flSrc = null;
-    p.src = null;
-    p._flOnload = null;
-    p.onload = null;
     
     p.draw = function( ctx ){
         if(!this._flCtx){
@@ -21,12 +18,17 @@
             ctx._flCreate.push(['img', this]);
         }
         
-        if(this._flSrc!==this.src){
-            this._flSrc = this.src;
-            ctx._flChange.push([this.id, 'src', this.src]);
+        if(this._flSrc!==this._img.src){
+            this._flSrc = this._img.src;
+            ctx._flChange.push([this.id, 'src', this._flSrc]);
         }
     }
     
+    ImageFl.watch = function(HTMLImageElement) {
+        if(!HTMLImageElement.__fl){
+            HTMLImageElement.__fl = new ImageFl(HTMLImageElement);
+        }      
+    }
 
 window.ImageFl = ImageFl;
 }(window));

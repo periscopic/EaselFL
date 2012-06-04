@@ -35,10 +35,7 @@
 * @constructor
 * @param {Image | HTMLCanvasElement | HTMLVideoElement | String} imageOrUri The source object or URI to an image to display. This can be either an Image, Canvas, or Video object, or a string URI to an image file to load and use. If it is a URI, a new Image object will be constructed and assigned to the .image property.
 **/
-var Bitmap = function(imageOrUri) {
-	if(!imageOrUri.draw){
-		console.log('no draw method');
-	}
+var Bitmap = function(imageOrUri) {	
   this.initialize(imageOrUri);
 }
 var p = Bitmap.prototype = new DisplayObject();
@@ -88,7 +85,7 @@ var p = Bitmap.prototype = new DisplayObject();
 		this.DisplayObject_initialize();
 		
 		if (typeof imageOrUri == "string") {
-			this.image = new ImageFl();//new Image();
+			this.image = new Image();
 			this.image.src = imageOrUri;
 		} else {
 			this.image = imageOrUri;
@@ -126,24 +123,21 @@ var p = Bitmap.prototype = new DisplayObject();
 	 * into itself).
 	 **/
 	p.draw = function(ctx, ignoreCache) {
-		if(!this._flCtx){
+		/*if(!this._flCtx){
 			this._flCtx = ctx;
 			ctx._flCreate.push(['bmp', this]);
-		}
+		}*/
 		
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
-		
-		
-		//currently not handling
-		if(this.image!==this._flImg && this.image){
-		}
 
 		if(this.image) {
 			if(this.image!==this._flImg){
 				this._flImg = this.image;
-				ctx._flChange.push([this.id, 'img', this.image.id]);
+				ImageFl.watch(this.image);
+				ctx._flChange.push([this.id, 'img', this.image.__fl.id]);
 			}
-				this.image.draw(ctx);
+			
+			this.image.__fl.draw(ctx);
 		}
 		
 		/*var rect = this.sourceRect;
@@ -155,6 +149,16 @@ var p = Bitmap.prototype = new DisplayObject();
 		return true;
 	}
 	
+	/**
+	 * Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
+	 **/
+	p._flRunCreate = function(ctx){
+	  if(this._flCtx!==ctx){
+		this._flCtx = ctx;
+		ctx._flCreate.push(['bmp', this]);
+	  }
+	}
+
 	//Note, the doc sections below document using the specified APIs (from DisplayObject)  from
 	//Bitmap. This is why they have no method implementations.
 	

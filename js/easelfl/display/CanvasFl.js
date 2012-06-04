@@ -69,7 +69,7 @@
             for(var i=0, l=creates.length; i<l; ++i) {
                item = creates[i][1];         
                creates[i][1] = item.id;
-               index[item.id] = item;      
+               index[item.id] = item;
             }
             
             //-- notify flash to create these
@@ -81,13 +81,24 @@
          
          //-- Adjust state of Flash counterparts 
          if(this._flChange.length){
-            for(var i = 0, l=this._flChange.length; i<l; ++i) {
-               if(this._flChange[i][1]==='amck'){
-                  console.log(this._flChange[i]);
-               }
-            }
            inst.change(this._flChange);
            this._flChange = [];
+           
+          /* var a = [];
+           while(this._flChange.length){
+            a[0] = this._flChange.shift();
+            try{
+               inst.change(a);
+            }catch(e){
+               console.log('error:');
+               console.log(e);
+               console.log(a);
+               console.log(this._flItemIndex[a[0][0]]);
+               debugger;
+            }
+            
+           }*/
+           
          }
       }
    }
@@ -212,6 +223,7 @@
 	CanvasFl.FL_HEIGHT = 400;
 	CanvasFl.FL_ELEMENT_ID = null;
 	CanvasFl.FL_TRANSPARENT = true;
+	CanvasFl.VERBOSE = false; //log warnings
 	
 
 	//-- Object on which 'ready' callback is exposed to Flash Movie

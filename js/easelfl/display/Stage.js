@@ -43,7 +43,10 @@ var Stage = function(canvas) {
 /** Hack to allow prototyping when superclasses reference Stage **/
 window.Stage = {_flPushCreate:function(){}};
 
+Stage.isEaselFl = true;
+
 var p = Stage.prototype = new Container();
+
 // static properties:
 	/**
 	 * @property _snapToPixelEnabled
@@ -265,8 +268,10 @@ var p = Stage.prototype = new Container();
 		
 		
 		//create container in flash
-		this._flCtx=ctx;
-		ctx._flCreate.push(['cnt', this]);
+		this._flRunCreate(ctx);
+		//this._flCtx=ctx;
+		//ctx._flCreate.push(['cnt', this]);
+		
 		//set as stage in flash
 		ctx._flCreate.push(['stg', this]);
 	}
@@ -528,52 +533,6 @@ var p = Stage.prototype = new Container();
 		//such that previous shapes and images are maintained
 		throw 'EaselFl::Stage._flBlit is not implemented';
 	}
-	
-	//Stage._flFlushCount = 0;
-	/**
-	 * @method _flFlush
-	 * @protected
-	 **/
-	/*
-	p._flFlush = function() {
-		//-- TODO : pass values to Flash movie
-		
-	//	if(Stage._flFlushCount<3){
-			
-	//	console.log('flush:' + Stage._flFlushCount++);
-		
-		var inst = this._flInstance,
-		queues = this._flCommandQueues;
-		
-		//-- Create Flash counterparts of EaselJS and asset classes
-		if(queues.create.length){
-			inst.create(queues.create);
-			queues.create = [];
-		}
-		
-		
-		//-- Adjust state of Flash counterparts 
-		if(queues.change.length){
-			inst.change(queues.change);
-			queues.change = [];
-		}
-		
-	//	}
-	}*/
-	
-	/**
-	 * Triggered when associated Flash Movie is ready for interaction
-	 * @method _flOnReady
-	 * @protected
-	 **/
-	/*p._flOnReady = function() {
-		this._flInstance = Stage._flGetInstance( this._flInstanceID );
-		this.flReady = true;
-		this._flFlush();
-		if( this.flOnReady ){
-				this.flOnReady(this);
-		}
-	}*/
 
 	/**
 	 * @method _testMouseOver
@@ -615,74 +574,6 @@ var p = Stage.prototype = new Container();
 			}
 		}
 	}
-	
-	//-- Static
-	
-	//-- Defaults
-	/*Stage.FL_URL = 'EaselFl.swf';
-	Stage.FL_WIDTH = 400;
-	Stage.FL_HEIGHT = 400;
-	Stage.FL_ELEMENT_ID = null;
-	Stage.FL_TRANSPARENT = true;
-	*/
-
-	//-- Object on which 'ready' callback is exposed to Flash Movie
-	//Stage._flHooks = {};
-	//Stage._flStageCount = 0;
-	
-	//-- Singleton stage instance, currenlty necessary for pushing create / change commands
-	//TODO : find a clean & fast way to handle multiple stages
-
-/*	Stage._flOneStage = null;
-
-	Stage._flPushChange = function( target, command, params) {
-		console.log('change', target.id, command, params);
-		Stage._flOneStage._flCommandQueues.change.push([target.id, command, params]);
-	}
-	
-	Stage._flPushCreate = function( type, target) {
-		console.log('create', type, target.id);
-		Stage._flOneStage._flCommandQueues.create.push([type, target.id]);
-	}*/
-	
-	/**
-	 * @method _flLoadInstance
-	 * @protected
-	 **/
-	//-- TODO : verify cross-browser compatability, specifically regarding 'user focus' issue.
-	//-- TODO : use the dom container, dimensions, margins, etc of the canvas passed - instead of the elementId of the container
-	/*Stage._flLoadInstance = function(id, width, height, elementId) {
-	
-		var element, html;
-		
-		if(elementId && typeof(elementId) === "string") {
-			element = document.getElementById(elementId);
-		}
-		
-		if(!element) {
-			element = document.createElement("div");
-			document.body.appendChild(element);
-		}
-		
-		html = "<object id='"+id+"' codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0' width='"+width+"' height='"+height+"'>"
-				+ "<param name='flashvars' value='id="+id+"'/>"
-				+ "<param name='src' value='"+Stage.FL_URL+"'/>"
-				+ ( Stage.FL_TRANSPARENT ? "<param name='wmode' value='transparent'>" : "" )
-				+ "<embed name='"+id+"' pluginspage='http://www.macromedia.com/go/getflashplayer' src='"+Stage.FL_URL+"' width='"+width+"' height='"+height+"' flashvars='id="+id+"'"
-				+ ( Stage.FL_TRANSPARENT ? " wmode='transparent'" : "" ) + "/>"
-				+ "</object>";
-
-		element.innerHTML = html;	         
-	}
-
-	//-- Get the movie object by id
-	Stage._flGetInstance = function(id){
-		if (/Explorer/.test(navigator.appName)) {
-				return window[id];
-			} else {
-				return document[id];
-		}
-	}*/
 
 window.Stage = Stage;
 }(window));

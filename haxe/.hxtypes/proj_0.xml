@@ -1109,6 +1109,72 @@
 		<new public="1" set="method"><f a=""><e path="Void"/></f></new>
 		<haxe_dynamic><d/></haxe_dynamic>
 	</class>
+	<class path="IntHash" params="T" file="/usr/lib/haxe/std/flash9/_std/IntHash.hx">
+		<h><c path="flash.utils.Dictionary"/></h>
+		<set public="1" set="method" line="34">
+			<f a="key:value">
+				<c path="Int"/>
+				<c path="IntHash.T"/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+		Set a value for the given key.
+	</haxe_doc>
+		</set>
+		<get public="1" set="method" line="38">
+			<f a="key">
+				<c path="Int"/>
+				<t path="Null"><c path="IntHash.T"/></t>
+			</f>
+			<haxe_doc>
+		Get a value for the given key.
+	</haxe_doc>
+		</get>
+		<exists public="1" set="method" line="42">
+			<f a="key">
+				<c path="Int"/>
+				<e path="Bool"/>
+			</f>
+			<haxe_doc>
+		Tells if a value exists for the given key.
+		In particular, it's useful to tells if a key has
+		a [null] value versus no value.
+	</haxe_doc>
+		</exists>
+		<remove public="1" set="method" line="46">
+			<f a="key">
+				<c path="Int"/>
+				<e path="Bool"/>
+			</f>
+			<haxe_doc>
+		Removes a hashtable entry. Returns [true] if
+		there was such entry.
+	</haxe_doc>
+		</remove>
+		<keys public="1" set="method" line="52">
+			<f a=""><t path="Iterator"><c path="Int"/></t></f>
+			<haxe_doc>
+		Returns an iterator of all keys in the hashtable.
+	</haxe_doc>
+		</keys>
+		<iterator public="1" set="method" line="56">
+			<f a=""><t path="Iterator"><c path="IntHash.T"/></t></f>
+			<haxe_doc>
+		Returns an iterator of all values in the hashtable.
+	</haxe_doc>
+		</iterator>
+		<toString public="1" set="method" line="65">
+			<f a=""><c path="String"/></f>
+			<haxe_doc>
+		Returns an displayable representation of the hashtable content.
+	</haxe_doc>
+		</toString>
+		<new public="1" set="method" line="30"><f a=""><e path="Void"/></f></new>
+		<haxe_doc>
+	Hashtable over a set of elements, using [Int] as keys.
+	On Flash and Javascript, the underlying structure is an Object.
+</haxe_doc>
+	</class>
 	<class path="flash.text.TextSnapshot" params="" file="/usr/lib/haxe/std/flash9/text/TextSnapshot.hx" extern="1">
 		<charCount public="1" set="null"><c path="Int"/></charCount>
 		<findText public="1" set="method"><f a="beginIndex:textToFind:caseSensitive">
@@ -1596,7 +1662,7 @@
 	<e path="Void"/>
 </f></addOutHandler>
 		<display public="1"><c path="flash.display.DisplayObjectContainer"/></display>
-		<id public="1"><c path="String"/></id>
+		<id public="1"><c path="Int"/></id>
 		<handleClick public="1" set="method" line="98"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
@@ -1610,7 +1676,7 @@
 	<e path="Void"/>
 </f></handleOut>
 		<new public="1" set="method" line="96"><f a="id">
-	<c path="String"/>
+	<c path="Int"/>
 	<e path="Void"/>
 </f></new>
 	</class>
@@ -1623,7 +1689,7 @@
 		<init public="1" set="method" line="13" static="1"><f a=""><e path="Void"/></f></init>
 		<setImage get="inline" set="null" line="19" static="1"><f a="target:id">
 	<c path="display.BitmapFl"/>
-	<c path="String"/>
+	<c path="Int"/>
 	<e path="Void"/>
 </f></setImage>
 		<bmp><c path="flash.display.Bitmap"/></bmp>
@@ -1643,7 +1709,7 @@
 	<d/>
 </f></exec>
 		<new public="1" set="method" line="27"><f a="id">
-	<c path="String"/>
+	<c path="Int"/>
 	<e path="Void"/>
 </f></new>
 	</class>
@@ -1983,13 +2049,13 @@
 </haxe_doc>
 	</class>
 	<class path="display.Control" params="" file="src/display/Control.hx">
-		<items public="1" static="1"><c path="Hash"><c path="display.IExec"/></c></items>
-		<containers public="1" static="1"><c path="Hash"><c path="display.ContainerFl"/></c></containers>
-		<displays public="1" static="1"><c path="Hash"><c path="display.IDisplayable"/></c></displays>
-		<bitmapDatas public="1" static="1"><c path="Hash"><c path="display.IBitmapData"/></c></bitmapDatas>
-		<graphicsList public="1" static="1"><c path="Hash"><c path="display.GraphicsFl"/></c></graphicsList>
+		<items public="1" static="1"><c path="IntHash"><c path="display.IExec"/></c></items>
+		<containers public="1" static="1"><c path="IntHash"><c path="display.ContainerFl"/></c></containers>
+		<displays public="1" static="1"><c path="IntHash"><c path="display.IDisplayable"/></c></displays>
+		<bitmapDatas public="1" static="1"><c path="IntHash"><c path="display.IBitmapData"/></c></bitmapDatas>
+		<graphicsList public="1" static="1"><c path="IntHash"><c path="display.GraphicsFl"/></c></graphicsList>
 		<makers public="1" static="1"><c path="Hash"><f a="">
-	<c path="String"/>
+	<c path="Int"/>
 	<e path="Void"/>
 </f></c></makers>
 		<stageFl static="1"><c path="display.ContainerFl"/></stageFl>
@@ -2007,27 +2073,27 @@
 	<d/>
 </f></invokeOn>
 		<image get="inline" set="null" line="74" static="1"><f a="id">
-	<c path="String"/>
+	<c path="Int"/>
 	<e path="Void"/>
 </f></image>
 		<bitmap get="inline" set="null" line="80" static="1"><f a="id">
-	<c path="String"/>
+	<c path="Int"/>
 	<e path="Void"/>
 </f></bitmap>
 		<shape get="inline" set="null" line="86" static="1"><f a="id">
-	<c path="String"/>
+	<c path="Int"/>
 	<e path="Void"/>
 </f></shape>
 		<graphics get="inline" set="null" line="92" static="1"><f a="id">
-	<c path="String"/>
+	<c path="Int"/>
 	<e path="Void"/>
 </f></graphics>
 		<container get="inline" set="null" line="98" static="1"><f a="id">
-	<c path="String"/>
+	<c path="Int"/>
 	<e path="Void"/>
 </f></container>
-		<stage get="inline" set="null" line="105" static="1"><f a="id">
-	<c path="String"/>
+		<stage get="inline" set="null" line="106" static="1"><f a="id">
+	<c path="Int"/>
 	<e path="Void"/>
 </f></stage>
 	</class>
@@ -2719,90 +2785,90 @@
 	</class>
 	<class path="display.GraphicsFl" params="" file="src/display/GraphicsFl.hx">
 		<implements path="display.IExec"/>
-		<QUART_PI get="inline" set="null" line="10" static="1"><c path="Float"/></QUART_PI>
+		<QUART_PI get="inline" set="null" line="11" static="1"><c path="Float"/></QUART_PI>
 		<execs static="1"><c path="Hash"><d/></c></execs>
-		<init public="1" set="method" line="14" static="1"><f a=""><e path="Void"/></f></init>
-		<beginFill get="inline" set="null" line="44" static="1"><f a="target:color">
+		<init public="1" set="method" line="15" static="1"><f a=""><e path="Void"/></f></init>
+		<beginFill get="inline" set="null" line="45" static="1"><f a="target:color">
 	<c path="display.GraphicsFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></beginFill>
-		<setStrokeStyle get="inline" set="null" line="49" static="1"><f a="target:args">
+		<setStrokeStyle get="inline" set="null" line="50" static="1"><f a="target:args">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></setStrokeStyle>
-		<beginStroke get="inline" set="null" line="54" static="1"><f a="target:color">
+		<beginStroke get="inline" set="null" line="55" static="1"><f a="target:color">
 	<c path="display.GraphicsFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></beginStroke>
-		<beginBitmapStroke get="inline" set="null" line="59" static="1"><f a="target:args">
+		<beginBitmapStroke get="inline" set="null" line="60" static="1"><f a="target:args">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></beginBitmapStroke>
-		<endStroke get="inline" set="null" line="65" static="1"><f a="target:?nada">
+		<endStroke get="inline" set="null" line="66" static="1"><f a="target:?nada">
 	<c path="display.GraphicsFl"/>
 	<d/>
 	<e path="Void"/>
 </f></endStroke>
-		<endFill get="inline" set="null" line="69" static="1"><f a="target:?nada">
+		<endFill get="inline" set="null" line="70" static="1"><f a="target:?nada">
 	<c path="display.GraphicsFl"/>
 	<d/>
 	<e path="Void"/>
 </f></endFill>
-		<moveTo get="inline" set="null" line="73" static="1"><f a="target:xy">
+		<moveTo get="inline" set="null" line="74" static="1"><f a="target:xy">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></moveTo>
-		<lineTo get="inline" set="null" line="77" static="1"><f a="target:xy">
+		<lineTo get="inline" set="null" line="78" static="1"><f a="target:xy">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></lineTo>
-		<quadraticCurveTo get="inline" set="null" line="85" static="1"><f a="target:pts">
+		<quadraticCurveTo get="inline" set="null" line="86" static="1"><f a="target:pts">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></quadraticCurveTo>
-		<drawRect get="inline" set="null" line="89" static="1"><f a="target:rct">
+		<drawRect get="inline" set="null" line="90" static="1"><f a="target:rct">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></drawRect>
-		<clear get="inline" set="null" line="93" static="1"><f a="target:?nada">
+		<clear get="inline" set="null" line="94" static="1"><f a="target:?nada">
 	<c path="display.GraphicsFl"/>
 	<d/>
 	<e path="Void"/>
 </f></clear>
-		<drawRoundRect get="inline" set="null" line="97" static="1"><f a="target:rect">
+		<drawRoundRect get="inline" set="null" line="98" static="1"><f a="target:rect">
 	<c path="display.GraphicsFl"/>
 	<d/>
 	<e path="Void"/>
 </f></drawRoundRect>
-		<drawRoundRectComplex get="inline" set="null" line="100" static="1"><f a="target:rect">
+		<drawRoundRectComplex get="inline" set="null" line="101" static="1"><f a="target:rect">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></drawRoundRectComplex>
-		<drawCircle get="inline" set="null" line="104" static="1"><f a="target:circ">
+		<drawCircle get="inline" set="null" line="105" static="1"><f a="target:circ">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></drawCircle>
-		<drawEllipse get="inline" set="null" line="108" static="1"><f a="target:ell">
+		<drawEllipse get="inline" set="null" line="109" static="1"><f a="target:ell">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></drawEllipse>
-		<drawArc get="inline" set="null" line="112" static="1"><f a="target:args">
+		<drawArc get="inline" set="null" line="113" static="1"><f a="target:args">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></drawArc>
-		<intersectLines set="method" line="191" static="1"><f a="x1:y1:x2:y2:x3:y3:x4:y4">
+		<intersectLines set="method" line="185" static="1"><f a="x1:y1:x2:y2:x3:y3:x4:y4">
 	<c path="Float"/>
 	<c path="Float"/>
 	<c path="Float"/>
@@ -2815,16 +2881,16 @@
 </f></intersectLines>
 		<graphics><c path="flash.display.Graphics"/></graphics>
 		<strokeThickness><c path="Float"/></strokeThickness>
-		<link public="1" get="inline" set="null" line="171"><f a="g">
+		<link public="1" get="inline" set="null" line="165"><f a="g">
 	<c path="flash.display.Graphics"/>
 	<e path="Void"/>
 </f></link>
-		<exec public="1" get="inline" set="null" line="176"><f a="method:?arguments">
+		<exec public="1" get="inline" set="null" line="170"><f a="method:?arguments">
 	<c path="String"/>
 	<d/>
 	<d/>
 </f></exec>
-		<new public="1" set="method" line="169"><f a=""><e path="Void"/></f></new>
+		<new public="1" set="method" line="163"><f a=""><e path="Void"/></f></new>
 	</class>
 	<enum path="flash.display3D.Context3DCompareMode" params="" file="/usr/lib/haxe/std/flash9/display3D/Context3DCompareMode.hx">
 		<NOT_EQUAL/>
@@ -3343,7 +3409,7 @@
 		<init public="1" set="method" line="11" static="1"><f a=""><e path="Void"/></f></init>
 		<linkGraphics get="inline" set="null" line="17" static="1"><f a="target:id">
 	<c path="display.ShapeFl"/>
-	<c path="String"/>
+	<c path="Int"/>
 	<e path="Void"/>
 </f></linkGraphics>
 		<shape><c path="flash.display.Sprite"/></shape>
@@ -3353,7 +3419,7 @@
 	<d/>
 </f></exec>
 		<new public="1" set="method" line="24"><f a="id">
-	<c path="String"/>
+	<c path="Int"/>
 	<e path="Void"/>
 </f></new>
 	</class>
@@ -3752,7 +3818,7 @@
 		<init public="1" set="method" line="15" static="1"><f a=""><e path="Void"/></f></init>
 		<addChild get="inline" set="null" line="27" static="1"><f a="target:id">
 	<c path="display.ContainerFl"/>
-	<c path="String"/>
+	<c path="Int"/>
 	<e path="Void"/>
 </f></addChild>
 		<addChildAt get="inline" set="null" line="34" static="1">
@@ -3767,7 +3833,7 @@
 		</addChildAt>
 		<removeChild get="inline" set="null" line="38" static="1"><f a="target:id">
 	<c path="display.ContainerFl"/>
-	<c path="String"/>
+	<c path="Int"/>
 	<e path="Void"/>
 </f></removeChild>
 		<removeChildAt get="inline" set="null" line="42" static="1"><f a="target:index">
@@ -3797,7 +3863,7 @@
 	<d/>
 </f></exec>
 		<new public="1" set="method" line="63"><f a="id">
-	<c path="String"/>
+	<c path="Int"/>
 	<e path="Void"/>
 </f></new>
 	</class>

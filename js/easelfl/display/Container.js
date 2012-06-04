@@ -107,15 +107,10 @@ var p = Container.prototype = new DisplayObject();
 	 * into itself).
 	 **/
 	p.draw = function(ctx, ignoreCache, _mtx) {
-		if(!this._flCtx){
-			this._flCtx=ctx;
-			ctx._flCreate.push(['cnt', this]);
-		}
-		
 		var snap = Stage._snapToPixelEnabled;
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
 		_mtx = _mtx || this._matrix.reinitialize(1,0,0,1,0,0,this.alpha, this.shadow, this.compositeOperation);
-		
+
 		//don't sync children if not visible
 		if (!this.isVisible()) { return true;}
 		
@@ -124,24 +119,11 @@ var p = Container.prototype = new DisplayObject();
 		var list = this.children.slice(0);
 		for (var i=0; i<l; i++) {
 			var child = list[i];
-			//if (!child.isVisible()) { continue; }
 			var shadow = false;
 			var mtx = child._matrix.reinitialize(_mtx.a,_mtx.b,_mtx.c,_mtx.d,_mtx.tx,_mtx.ty,_mtx.alpha,_mtx.shadow,_mtx.compositeOperation);
 			mtx.appendTransform(child.x, child.y, child.scaleX, child.scaleY, child.rotation, child.skewX, child.skewY,
 									child.regX, child.regY);
-			mtx.appendProperties(child.alpha, child.shadow, child.compositeOperation);
-			/*
-			if (!(child instanceof Container && child.cacheCanvas == null)) {
-				if (snap && child.snapToPixel && mtx.a == 1 && mtx.b == 0 && mtx.c == 0 && mtx.d == 1) {
-					ctx.setTransform(mtx.a,  mtx.b, mtx.c, mtx.d, mtx.tx+0.5|0, mtx.ty+0.5|0);
-				} else {
-					ctx.setTransform(mtx.a,  mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty);
-				}
-				ctx.globalAlpha = mtx.alpha;
-				ctx.globalCompositeOperation = mtx.compositeOperation || "source-over";
-				
-				if (shadow = mtx.shadow) { this.applyShadow(ctx, shadow); }
-			}*/
+			mtx.appendProperties(child.alpha, child.shadow, child.compositeOperation);		
 			child.draw(ctx, false, mtx);
 			/*if (shadow) { this.applyShadow(ctx); }*/ //-- TODO : make sure shadow gets applied
 		}
@@ -166,10 +148,29 @@ var p = Container.prototype = new DisplayObject();
 		child.parent = this;
 		this.children.push(child);
 		
+		if(this._flCtx){
+		  child._flRunCreate(this._flCtx);
+		}
+		
 		this._flChange.push([this.id, 'ac', child.id]);
 		
 		return child;
 	}
+	
+	/**
+	 * Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
+	 **/
+	p._flRunCreate = function(ctx){
+	  if(this._flCtx!==ctx){
+		this._flCtx = ctx;
+		ctx._flCreate.push(['cnt', this]);
+		
+		for(var i=0, l=this.children.length; i<l; ++i) {
+		  this.children[i]._flRunCreate(ctx);
+		}
+	  }
+	}
+	
 
 	/**
 	 * Adds a child to the display list at the specified index, bumping children at equal or greater indexes up one, and setting
@@ -192,6 +193,10 @@ var p = Container.prototype = new DisplayObject();
 		if (child.parent) { child.parent.removeChild(child); }
 		child.parent = this;
 		this.children.splice(index, 0, child);
+		
+		if(this._flCtx){
+		  child._flRunCreate(this._flCtx);
+		}
 		
 		this._flChange.push([this.id, 'aca', [child.id, index]]);
 		

@@ -91,9 +91,9 @@ class DisplayObjectFl{
 	
 	
 	public var display:DisplayObjectContainer;
-	public var id:String;
+	public var id:Int;
 	
-	public function new( id:String ){ this.id = id;}
+	public function new( id:Int ){ this.id = id;}
 	
 	public function handleClick(e:MouseEvent):Void{
 		//var evt:Dynamic = e;

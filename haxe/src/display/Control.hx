@@ -5,22 +5,22 @@ import flash.Lib;
 
 class Control {
 	
-	static public var items:Hash<IExec>;
-	static public var containers:Hash<ContainerFl>;
-	static public var displays:Hash<IDisplayable>;
-	static public var bitmapDatas:Hash<IBitmapData>;
-	static public var graphicsList:Hash<GraphicsFl>;
-	static public var makers:Hash<String->Void>;
+	static public var items:IntHash<IExec>;
+	static public var containers:IntHash<ContainerFl>;
+	static public var displays:IntHash<IDisplayable>;
+	static public var bitmapDatas:IntHash<IBitmapData>;
+	static public var graphicsList:IntHash<GraphicsFl>;
+	static public var makers:Hash<Int->Void>;
 	static private var stageFl:ContainerFl;
 	
 	
 	static public function init(){
-		items = new Hash<IExec>();
-		containers = new Hash<ContainerFl>();
-		displays = new Hash<IDisplayable>();
-		bitmapDatas = new Hash<IBitmapData>();
-		graphicsList = new Hash<GraphicsFl>();
-		makers = new Hash<String->Void>();
+		items = new IntHash<IExec>();
+		containers = new IntHash<ContainerFl>();
+		displays = new IntHash<IDisplayable>();
+		bitmapDatas = new IntHash<IBitmapData>();
+		graphicsList = new IntHash<GraphicsFl>();
+		makers = new Hash<Int->Void>();
 		
 		makers.set('img', image);
 		makers.set('bmp', bitmap);
@@ -71,46 +71,47 @@ class Control {
 		return items.get(cmd[0]).exec(cmd[1], cmd[2]);
 	}
 	
-	inline static private function image(id:String):Void{
+	inline static private function image(id:Int):Void{
 		var img:ImageFl = new ImageFl();
 		items.set(id, img);
 		bitmapDatas.set(id, img);
 	}
 	
-	inline static private function bitmap(id:String):Void{
+	inline static private function bitmap(id:Int):Void{
 		var bmp:BitmapFl = new BitmapFl(id);
 		items.set(id, bmp);
 		displays.set(id, bmp);
 	}
 	
-	inline static private function shape(id:String):Void{
+	inline static private function shape(id:Int):Void{
 		var shp:ShapeFl = new ShapeFl(id);
 		items.set(id, shp);
 		displays.set(id, shp);
 	}
 	
-	inline static private function graphics(id:String):Void{
+	inline static private function graphics(id:Int):Void{
 		var gfx:GraphicsFl = new GraphicsFl();
 		items.set(id, gfx);
 		graphicsList.set(id, gfx);
 	}
 	
-	inline static private function container(id:String):Void{
+	inline static private function container(id:Int):Void{
 		var cnt:ContainerFl = new ContainerFl(id);
+		
 		containers.set(id, cnt);
 		displays.set(id, cnt);
 		items.set(id, cnt);
 	}	
 	
-	inline static private function stage(id:String):Void{
+	inline static private function stage(id:Int):Void{
 		//-- Alias stage as another ID
 		//-- by assigning to an already created ContainerFl
 		var cnt = containers.get(id);		
 		cnt.display = cnt.container = Lib.current.stage;
 		
-		containers.set('stage', cnt);
+		/*containers.set('stage', cnt);
 		items.set('stage', cnt);
-		displays.set('stage', cnt);
+		displays.set('stage', cnt);*/
 	}	
 	
 }

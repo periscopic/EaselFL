@@ -102,16 +102,28 @@ var p = Shape.prototype = new DisplayObject();
 	 * into itself).
 	 **/
 	p.draw = function(ctx, ignoreCache) {
-		if(!this._flCtx){
+		/*if(!this._flCtx){
 			this._flCtx=ctx;
 			ctx._flCreate.push(['shp', this]);
 			ctx._flChange.push([this.id, 'gfx', [this.graphics.id]]) //-- link the graphics
-		}
+		}*/
 		
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
 		this.graphics.draw(ctx);
 		return true;
 	}
+	
+	/**
+	 * Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
+	 **/
+	p._flRunCreate = function(ctx){
+	  if(this._flCtx!==ctx){
+		this._flCtx = ctx;
+		ctx._flCreate.push(['shp', this]);
+		ctx._flCreate.push(['gfx', this.graphics]); //-- create the graphics		
+		ctx._flChange.push([this.id, 'gfx', [this.graphics.id]]) //-- link the graphics
+	  }
+	}	
 	
 	/**
 	 * Returns a clone of this Shape. Some properties that are specific to this instance's current context are reverted to 

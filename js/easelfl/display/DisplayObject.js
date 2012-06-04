@@ -415,6 +415,19 @@ var p = DisplayObject.prototype;
 		ctx.drawImage(this.cacheCanvas, this._cacheOffsetX, this._cacheOffsetY);
 		return true;*/
 	}
+	
+	/**
+	 * Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
+	 **/
+	p._flRunCreate = function(ctx){
+	  throw 'prototype._flRunCreate must be overriden for all DisplayObject subclasses';
+	  /*if(this._flCtx!==ctx){
+		this._flCtx = ctx;
+		ctx._flCreate.push(['shp', this]);		
+	  }*/
+	}
+	
+	
 
 	/**
 	 * Draws the display object into a new canvas, which is then used for subsequent draws. For complex content
@@ -432,7 +445,7 @@ var p = DisplayObject.prototype;
 	 * @param {Number} height The height of the cache region.
 	 **/
 	p.cache = function(x, y, width, height) {
-		console.log("EaselFl::DisplayObject.cache not yet implemented");
+		if(CanvasFl.VERBOSE) console.log("EaselFl::DisplayObject.cache not yet implemented");
 		/*
 		// draw to canvas.
 		var cacheCanvas = this.cacheCanvas;
@@ -459,7 +472,7 @@ var p = DisplayObject.prototype;
 	 * whatwg spec on compositing</a>.
 	 **/
 	p.updateCache = function(compositeOperation) {
-		throw "EaselFl::DisplayObject.updateCache not yet implemented";
+		if(CanvasFl.VERBOSE) console.log("EaselFl::DisplayObject.updateCache not yet implemented");
 		//-- TODO : implement in EaselFl
 		/*var cacheCanvas = this.cacheCanvas, offX = this._cacheOffsetX, offY = this._cacheOffsetY;
 		if (cacheCanvas == null) { throw "cache() must be called before updateCache()"; }
@@ -479,7 +492,7 @@ var p = DisplayObject.prototype;
 	 * @method uncache
 	 **/
 	p.uncache = function() {
-		console.log("EaselFl::DisplayObject.uncache not yet implemented");
+		if(CanvasFl.VERBOSE) console.log("EaselFl::DisplayObject.uncache not yet implemented");
 		//--this._cacheDataURL = this.cacheCanvas = null;
 		//--this.cacheID = this._cacheOffsetX = this._cacheOffsetY = 0;
 	}
@@ -727,7 +740,6 @@ var p = DisplayObject.prototype;
 	 * @protected
 	 **/
 	p._flSyncProps = function() {
-
 	  
 		//-- Synchronize Visibility		
 		if( this.visible !== this._flVisible) {			

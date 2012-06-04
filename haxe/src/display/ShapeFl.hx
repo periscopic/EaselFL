@@ -14,14 +14,14 @@ class ShapeFl extends DisplayObjectFl, implements IExec, implements IDisplayable
 		execs.set('gfx', linkGraphics);
 	}
 	
-	inline static private function linkGraphics(target:ShapeFl, id:String){
+	inline static private function linkGraphics(target:ShapeFl, id:Int){
 		Control.graphicsList.get(id).link(target.shape.graphics);
 	}
 
 	//Shapes are mapped to Sprite in order to have mouse events
 	private var shape:Sprite;
 	
-	public function new(id:String){
+	public function new(id:Int){
 		super(id);		
 		display = shape = new Sprite();
 	}

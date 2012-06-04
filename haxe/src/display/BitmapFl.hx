@@ -16,7 +16,7 @@ class BitmapFl extends DisplayObjectFl, implements IExec, implements IDisplayabl
 		execs.set('img', setImage);
 	}
 	
-	inline static private function setImage(target:BitmapFl, id:String){
+	inline static private function setImage(target:BitmapFl, id:Int){
 		target.swapImage(Control.bitmapDatas.get(id));
 	}
 	
@@ -24,7 +24,7 @@ class BitmapFl extends DisplayObjectFl, implements IExec, implements IDisplayabl
 	public var loaded(default, null):Bool;
 	private var _img:IBitmapData;
 	
-	public function new(id:String){
+	public function new(id:Int){
 		super(id);
 		display = new flash.display.Sprite();
 		bmp = new Bitmap();		
