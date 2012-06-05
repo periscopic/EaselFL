@@ -727,10 +727,14 @@ var p = DisplayObject.prototype;
 	
 	p._flVisible = true;
 	p._flAlpha = 1;
-	
+	p._flMouseEnabled = true;
 	p._flMouseOver =
 	p._flMouseOut =
 	p._flClick = null;
+	
+	//-- Not part of the original EaselJS api
+	p._flUseHandCursor = false;
+	p._flButtonMode = false;
 	
 	//-- Static
 	DisplayObject._flTempMtx = new Matrix2D();
@@ -750,44 +754,40 @@ var p = DisplayObject.prototype;
 		//don't sync anything else if not visible
 		if(!this.visible) {
 		  return;
-		}		
+		}			
 		
-		
-		//synchronize mouse events
+		//synchronize mouse enabled
 		if(this.mouseEnabled!==this._flMouseEnabled){
-			this._flMouseEnabled = this.mouseEnabled;
-/*
-			if(!this.mouseEnabled){
-				//mouseover mouseout mouseclick doubleclick
-				if(this._flMouseOver){
-					this._flChange.push([this.id, 'rmov']);
-					this._flMouseOver = null;
-				}
-				if(this._flMouseOut){
-					this._flChange.push([this.id, 'rmot']);
-					this._flMouseOut = null;
-				}
-				if(this._flClick){
-					this._flChange.push([this.id, 'rmck']);
-					this._flClick = null;
-				}
-			}
-*/
+		  this._flMouseEnabled = this.mouseEnabled;
+		  this._flChange.push([this.id, 'smen', this.mouseEnabled]);
 		}
 		
 		if(this.mouseEnabled) {
-			if(this.onMouseOver!==this._flMouseOver) {
-				this._flMouseOver = this.onMouseOver;
-				this._flChange.push([this.id, 'amov']);
+		  //synchronize mouse events
+		  if(this.onMouseOver!==this._flMouseOver) {
+			if(this.onMouseOver  && !this._flMouseOver) {
+			  this._flChange.push([this.id, 'amov']);
+			}else if(!this.onMouseOver && this._flMouseOver) {
+			  this._flChange.push([this.id, 'rmov']);
+			}				
+			this._flMouseOver = this.onMouseOver;
+		  }
+		  if(this.onMouseOut!==this._flMouseOut) {
+			if(this.onMouseOut  && !this._flMouseOut) {
+			  this._flChange.push([this.id, 'amot']);
+			}else if(!this.onMouseOut && this._flMouseOut) {
+			  this._flChange.push([this.id, 'rmot']);
 			}
-			if(this.onMouseOut!==this._flMouseOut) {
-				this._flMouseOut = this.onMouseOut;
-				this._flChange.push([this.id, 'amot']);
+			  this._flMouseOut = this.onMouseOut;
+		  }
+		  if(this.onClick!==this._flClick) {
+			if(this.onClick  && !this._flClick) {
+			  this._flChange.push([this.id, 'amck']);
+			}else if(!this.onClick && this._flClick) {
+			  this._flChange.push([this.id, 'rmck']);
 			}
-			if(this.onClick!==this._flClick) {
-				this._flClick = this.onClick;
-				this._flChange.push([this.id, 'amck']);
-			}
+			  this._flClick = this.onClick;
+		  }
 		}
 		
 		//-- Synchronize Alpha
@@ -824,8 +824,20 @@ var p = DisplayObject.prototype;
 			
 			this._flChange.push([this.id, 'mtx', [mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty]]);
 		}
+	}	
+	
+	//-- Set usage of hand cursor
+	//-- Not part of the original EaselJS api
+	p.flSetCursorMode = function(useHandCursor, buttonMode) {
+		if(useHandCursor !== this._flUseHandCursor) {
+		  this._flChange.push([this.id, 'scrs', useHandCursor]);
+		  this._flUseHandCursor = useHandCursor;
+		}
 		
-		
+		if(buttonMode !== this._flButtonMode) {
+		  this._flChange.push([this.id, 'sbtn', buttonMode]);
+		  this._flButtonMode = buttonMode;
+		}
 	}
 
 	/**

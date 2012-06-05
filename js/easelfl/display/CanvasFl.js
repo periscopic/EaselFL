@@ -1,12 +1,17 @@
 /**
  * Current known shortcomings:
  * -Garbage collection will not remove EaselFl objects either from
- * Flash or JS due to stage level index of items.
+ * Flash or JS due to stage level index of items. This could be
+ * remedied by storing all commands passed to flash for a specific
+ * object, removing it from flash and from the index whenever it is
+ * removed from the display list. A new instance would then be created
+ * again in Flash when added to the display list.
  * -Event handlers are not applied in Flash synchronously
  * -MouseOver, MouseOut, MouseClick tested using shape of
  * display object, not alpha of pixel as in EaselJS
- * -Assets (eg images) must be created using an EaselFl
- * function so that they will be loaded in Flash.
+ * -Graphics have lineScaleMode set to 'none' which prevents issue of lines
+ * scaling when only scaling horizontal or vertical, but causes lines not
+ * to scale proportionately, as they would in EaselJS.
  **/
 
 (function(window) {
@@ -30,7 +35,6 @@
      * @type Boolean
      **/
     p.flReady = false;
-
 
     /**
      * @property _flCommandQueues
@@ -56,6 +60,8 @@
     p._flChange = null;
     p._flCreate = null;
     p._flItemIndex = null;
+	
+	p._flAttempts = 0;
 
     p._flFlush = function() {		
       if(this.flReady){
@@ -66,39 +72,24 @@
             
             //step through items, replacing actual items with id, and recording in index
             var creates = this._flCreate, item, index = this._flItemIndex;
-            for(var i=0, l=creates.length; i<l; ++i) {
-               item = creates[i][1];         
+
+            for(var i=0, l=creates.length; i<l; ++i) {    
+			   item = creates[i][1];         
                creates[i][1] = item.id;
-               index[item.id] = item;
+               index[item.id] = item;	
             }
             
             //-- notify flash to create these
-            inst.create(this._flCreate);
+            inst.create(this._flCreate);            
+		 
             //-- clean create queue
             this._flCreate = [];
-         }
-         
+         }         
          
          //-- Adjust state of Flash counterparts 
          if(this._flChange.length){
            inst.change(this._flChange);
            this._flChange = [];
-           
-          /* var a = [];
-           while(this._flChange.length){
-            a[0] = this._flChange.shift();
-            try{
-               inst.change(a);
-            }catch(e){
-               console.log('error:');
-               console.log(e);
-               console.log(a);
-               console.log(this._flItemIndex[a[0][0]]);
-               debugger;
-            }
-            
-           }*/
-           
          }
       }
    }
@@ -109,9 +100,9 @@
 	 * @protected
 	 **/
 	p._flOnReady = function() {
-		this._flInstance = ContextFl._flGetInstance( this._flInstanceID );
-		this.flReady = true;
-		this._flFlush();
+	  this._flInstance = ContextFl._flGetInstance( this._flInstanceID );
+	  this.flReady = true;
+	  this._flFlush();
 		
       if( this.flOnReady ){
          this.flOnReady(this);
@@ -119,10 +110,9 @@
    }
     
     p.initialize = function(){
-
-      function handleEvents(obj) {
-         //-- Handle dispatches from Flash
-         
+	  
+	  //-- Handle dispatches from Flash
+      function handleEvents(obj) {         
          if(obj.type==='onClick' || obj.type==='onMouseOver' || obj.type==='onMouseOut'){
             //-- Mouse events
             var item = self._flItemIndex[obj.id];
@@ -130,8 +120,7 @@
                item[obj.type](new MouseEvent(obj.type, obj.stageX, obj.stageY, item, null));  
             }
          }
-      }
-         
+      }         
          
       var myID, self = this;
         
@@ -143,10 +132,9 @@
       this._flItemIndex = {};
        
       //-- Assign unique ID to this EaseFl canvasFl
-      this._flInstanceID = myID = 'EaselFl_'+ContextFl._flCount++;
-        
-         
-        
+      myID = 'EaselFl_'+ContextFl._flCount++;
+      this._flInstanceID = CanvasFl.FL_ELEMENT_ID;
+	          
       //-- Create proxy of function to be called when Flash Movie is ready
       CanvasFl._flHooks[myID] = function(){
          //reassign hook to receive calls from Flash
@@ -160,34 +148,22 @@
     
    ContextFl._flCount = 0;
   
-/**
+   /**
 	 * @method _flLoadInstance
 	 * @protected
 	 **/
-	//-- TODO : verify cross-browser compatability, specifically regarding 'user focus' issue.
 	//-- TODO : use the dom container, dimensions, margins, etc of the canvas passed - instead of the elementId of the container
 	ContextFl._flLoadInstance = function(id, width, height, elementId) {
 	
-		var element, html;
-		
-		if(elementId && typeof(elementId) === "string") {
-			element = document.getElementById(elementId);
-		}
-		
-		if(!element) {
-			element = document.createElement("div");
-			document.body.appendChild(element);
-		}
-		
-		html = "<object id='"+id+"' codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0' width='"+width+"' height='"+height+"'>"
-				+ "<param name='flashvars' value='id="+id+"'/>"
-				+ "<param name='src' value='"+CanvasFl.FL_URL+"'/>"
-				+ ( CanvasFl.FL_TRANSPARENT ? "<param name='wmode' value='transparent'>" : "" )
-				+ "<embed name='"+id+"' pluginspage='http://www.macromedia.com/go/getflashplayer' src='"+CanvasFl.FL_URL+"' width='"+width+"' height='"+height+"' flashvars='id="+id+"'"
-				+ ( CanvasFl.FL_TRANSPARENT ? " wmode='transparent'" : "" ) + "/>"
-				+ "</object>";
-
-		element.innerHTML = html;	         
+		 var flashvars = {
+			id : id
+		 }
+		 
+		 var params = {
+			wmode : (CanvasFl.FL_TRANSPARENT?'transparent':'opaque'),
+		 }
+	
+		swfobject.embedSWF(CanvasFl.FL_URL, elementId, width.toString(), height.toString(), '9.0.0', false, flashvars, params)
 	}
 
 	//-- Get the movie object by id
@@ -198,8 +174,6 @@
 				return document[id];
 		}
 	}
-
-
 
     function CanvasFl(){
         this._ctx = new ContextFl();
@@ -215,21 +189,21 @@
         return null;
     }
 
-	//-- Static
-	
-	//-- Defaults
-	CanvasFl.FL_URL = 'EaselFl.swf';
-	CanvasFl.FL_WIDTH = 400;
-	CanvasFl.FL_HEIGHT = 400;
-	CanvasFl.FL_ELEMENT_ID = null;
-	CanvasFl.FL_TRANSPARENT = true;
-	CanvasFl.VERBOSE = false; //log warnings
-	
+   //-- Static	
+   //-- Defaults
+   CanvasFl.SWFOBJECT_URL = 'js/swfobject.js';
+   CanvasFl.FL_URL = 'EaselFl.swf';
+   CanvasFl.FL_WIDTH = 400;
+   CanvasFl.FL_HEIGHT = 400;
+   CanvasFl.FL_ELEMENT_ID = null;
+   CanvasFl.FL_TRANSPARENT = true;
+   CanvasFl.VERBOSE = false; //--log warnings
+   
 
-	//-- Object on which 'ready' callback is exposed to Flash Movie
-	CanvasFl._flHooks = {};
+   //-- Object on which 'ready' callback is exposed to Flash Movie
+   CanvasFl._flHooks = {};
 	
   
-  window.CanvasFl = CanvasFl;
+   window.CanvasFl = CanvasFl;
         
 }(window));        

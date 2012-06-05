@@ -7,48 +7,25 @@ import flash.events.MouseEvent;
 
 import flash.geom.Matrix;
 
-class DisplayObjectFl{
-	
-	/**
-	 * TODO: add registrationX, registrationY, skewX, skewY, mouseEnabled
-	 */
+class DisplayObjectFl{	
+
 	static public function init(execs:Hash<Dynamic>){
-		execs.set('x',x);
-		execs.set('y',y);
-		execs.set('sx',scaleX);
-		execs.set('sy',scaleY);
-		execs.set('rt',rotation);
 		execs.set('op',opacity);
 		execs.set('vs',visible);
-		execs.set('mtx', setMatrix);
-		
+		execs.set('mtx', setMatrix);		
 		execs.set('amck', addClickHandler);
 		execs.set('amot', addOutHandler);
 		execs.set('amov', addOverHandler);
+		execs.set('rmck', removeClickHandler);
+		execs.set('rmot', removeOutHandler);
+		execs.set('rmov', removeOverHandler);
+		execs.set('smen', setMouseEnabled);
+		execs.set('scrs', setHandCursor);
+		execs.set('sbtn', setButtonMode);
 		
 		//-- has callback
 		execs.set('htp',hitTestPoint);
-	}
-
-	inline static private function x(target:IDisplayable, val:Float):Void{
-		target.display.x = val;
-	}
-	
-	inline static private function y(target:IDisplayable, val:Float):Void{
-		target.display.y = val;
-	}
-	
-	inline static private function scaleX(target:IDisplayable, val:Float):Void{
-		target.display.scaleX = val;
-	}
-	
-	inline static private function scaleY(target:IDisplayable, val:Float):Void{
-		target.display.scaleY = val;
-	}
-	
-	inline static private function rotation(target:IDisplayable, val:Float):Void{
-		target.display.rotation = val;
-	}
+	}	
 	
 	inline static private function opacity(target:IDisplayable, val:Float):Void{
 		target.display.alpha = val;
@@ -76,8 +53,7 @@ class DisplayObjectFl{
 		return target.display.hitTestPoint(xy[0], xy[1], true);
 	}
 	
-	//inline 
-	static private function addClickHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{
+	inline static private function addClickHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{
 		target.display.addEventListener(MouseEvent.CLICK, target.handleClick, false, 0, true);
 	}
 	
@@ -89,14 +65,38 @@ class DisplayObjectFl{
 		target.display.addEventListener(MouseEvent.MOUSE_OUT, target.handleOut, false, 0, true);
 	}
 	
+	inline static private function removeClickHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{
+		target.display.removeEventListener(MouseEvent.CLICK, target.handleClick, false);
+	}
 	
-	public var display:DisplayObjectContainer;
+	inline static private function removeOverHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{
+		target.display.removeEventListener(MouseEvent.MOUSE_OVER, target.handleOver, false);
+	}
+	
+	inline static private function removeOutHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{
+		target.display.removeEventListener(MouseEvent.MOUSE_OUT, target.handleOut, false);
+	}
+	
+	inline static private function setMouseEnabled(target:DisplayObjectFl,isOn:Bool):Void{
+		target.display.mouseEnabled = isOn;
+	}
+	
+	inline static private function setHandCursor(target:DisplayObjectFl,isOn:Bool):Void{
+		target.display.useHandCursor = isOn;
+	}
+	
+	inline static private function setButtonMode(target:DisplayObjectFl,isOn:Bool):Void{
+		target.display.buttonMode = isOn;
+	}
+	
+
+	/** Instance **/
+	public var display:Sprite;
 	public var id:Int;
 	
 	public function new( id:Int ){ this.id = id;}
 	
 	public function handleClick(e:MouseEvent):Void{
-		//var evt:Dynamic = e;
 		var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'onClick', id:this.id};
 		Main.dispatch(evt);
 	}

@@ -174,7 +174,7 @@ var p = Graphics.prototype;
 	 * @protected
 	 * @type CanvasRenderingContext2D
 	 **/
-	Graphics._ctx = document.createElement("canvas").getContext("2d");
+	Graphics._ctx = null;//document.createElement("canvas").getContext("2d");
 	
 	/**
 	 * @property beginCmd
@@ -182,7 +182,7 @@ var p = Graphics.prototype;
 	 * @protected
 	 * @type Command
 	 **/
-	Graphics.beginCmd = new Command(Graphics._ctx.beginPath, []);
+	Graphics.beginCmd = null;// new Command(Graphics._ctx.beginPath, []);
 	
 	/**
 	 * @property fillCmd
@@ -190,7 +190,7 @@ var p = Graphics.prototype;
 	 * @protected
 	 * @type Command
 	 **/
-	Graphics.fillCmd = new Command(Graphics._ctx.fill, []);
+	Graphics.fillCmd = null;//new Command(Graphics._ctx.fill, []);
 	
 	/**
 	 * @property strokeCmd
@@ -198,7 +198,7 @@ var p = Graphics.prototype;
 	 * @protected
 	 * @type Command
 	 **/
-	Graphics.strokeCmd = new Command(Graphics._ctx.stroke, []);
+	Graphics.strokeCmd = null;//new Command(Graphics._ctx.stroke, []);
 
 	/**
 	 * @property _strokeInstructions
@@ -554,11 +554,11 @@ var p = Graphics.prototype;
 	p.beginBitmapFill = function(image, repetition) {
 		throw 'EaselFl:Graphics.beginBitmapFill currently not impelement';
 		
-		if (this._active) { this._newPath(); }
+		/*if (this._active) { this._newPath(); }
 		repetition = repetition || "";
 		var o = this._ctx.createPattern(image, repetition);
 		this._fillInstructions = [new Command(this._setProp, ["fillStyle", o])];
-		return this;
+		return this;*/
 	}
 	
 	/**
@@ -620,13 +620,13 @@ var p = Graphics.prototype;
 	 **/
 	p.beginLinearGradientStroke = function(colors, ratios, x0, y0, x1, y1) {
 		throw 'EaselFl:Graphics.beginLinearGradientStroke currently not implemented';
-		if (this._active) { this._newPath(); }
+		/*if (this._active) { this._newPath(); }
 		var o = this._ctx.createLinearGradient(x0, y0, x1, y1);
 		for (var i=0, l=colors.length; i<l; i++) {
 			o.addColorStop(ratios[i], colors[i]);
 		}
 		this._strokeInstructions = [new Command(this._setProp, ["strokeStyle", o])];
-		return this;
+		return this;*/
 	}
 	
 	
@@ -645,13 +645,13 @@ var p = Graphics.prototype;
 	 **/
 	p.beginRadialGradientStroke = function(colors, ratios, x0, y0, r0, x1, y1, r1) {
 		throw 'EaselFl:Graphics.beginRadialGradientStroke currently not implemented';
-		if (this._active) { this._newPath(); }
+		/*if (this._active) { this._newPath(); }
 		var o = this._ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);
 		for (var i=0, l=colors.length; i<l; i++) {
 			o.addColorStop(ratios[i], colors[i]);
 		}
 		this._strokeInstructions = [new Command(this._setProp, ["strokeStyle", o])];
-		return this;
+		return this;*/
 	}
 	
 	/**
@@ -729,7 +729,7 @@ var p = Graphics.prototype;
 	 **/
 	p.drawRoundRectComplex = function(x, y, w, h, radiusTL, radiusTR, radiusBR, radiusBL) {
 		throw 'EaselFl:Graphics.drawRoundRectComplex currently not implemented';
-		this._dirty = this._active = true;
+		/*this._dirty = this._active = true;
 		var pi = Math.PI, arc=this._ctx.arc, lineTo=this._ctx.lineTo;
 		
 		this._activeInstructions.push(
@@ -751,7 +751,7 @@ var p = Graphics.prototype;
 				new Command(arc, [x+radiusTL, y+radiusTL, radiusTL, pi, -pi/2]) :
 				new Command(arc, [x, y, -radiusTL, pi/2, 0, true])
 		);
-		return this;
+		return this;*/
 	} 
 	
 	/**
@@ -792,7 +792,7 @@ var p = Graphics.prototype;
 	 **/
 	p.drawEllipse = function(x, y, w, h) {
 		throw 'EaselFl:Graphics.drawEllipse currently not implemented';
-		this._dirty = this._active = true;
+		/*this._dirty = this._active = true;
 		var k = 0.5522848;
 		var ox = (w / 2) * k;
 		var oy = (h / 2) * k;
@@ -808,7 +808,7 @@ var p = Graphics.prototype;
 			new Command(this._ctx.bezierCurveTo, [xe, ym+oy, xm+ox, ye, xm, ye]),
 			new Command(this._ctx.bezierCurveTo, [xm-ox, ye, x, ym+oy, x, ym])
 		);
-		return this;
+		return this;*/
 	}
 	
 	/**
@@ -828,7 +828,7 @@ var p = Graphics.prototype;
 	 **/
 	p.drawPolyStar = function(x, y, radius, sides, pointSize, angle) {
 		throw 'EaselFl:Graphics.drawPolyStar currently not implemented';
-		this._dirty = this._active = true;
+		/*this._dirty = this._active = true;
 		if (pointSize == null) { pointSize = 0; }
 		pointSize = 1-pointSize;
 		if (angle == null) { angle = 0; }
@@ -844,7 +844,7 @@ var p = Graphics.prototype;
 			angle += a;
 			this._activeInstructions.push(new Command(this._ctx.lineTo, [x+Math.cos(angle)*radius, y+Math.sin(angle)*radius]));
 		}
-		return this;
+		return this;*/
 	}
 	
 	/**

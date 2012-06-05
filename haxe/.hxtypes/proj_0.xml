@@ -1592,78 +1592,81 @@
 </f></as>
 	</class>
 	<class path="display.DisplayObjectFl" params="" file="src/display/DisplayObjectFl.hx">
-		<init public="1" set="method" line="15" static="1">
-			<f a="execs">
-				<c path="Hash"><d/></c>
-				<e path="Void"/>
-			</f>
-			<haxe_doc>
-	 * TODO: add registrationX, registrationY, skewX, skewY, mouseEnabled
-	 </haxe_doc>
-		</init>
-		<x get="inline" set="null" line="33" static="1"><f a="target:val">
-	<c path="display.IDisplayable"/>
-	<c path="Float"/>
+		<init public="1" set="method" line="12" static="1"><f a="execs">
+	<c path="Hash"><d/></c>
 	<e path="Void"/>
-</f></x>
-		<y get="inline" set="null" line="37" static="1"><f a="target:val">
-	<c path="display.IDisplayable"/>
-	<c path="Float"/>
-	<e path="Void"/>
-</f></y>
-		<scaleX get="inline" set="null" line="41" static="1"><f a="target:val">
-	<c path="display.IDisplayable"/>
-	<c path="Float"/>
-	<e path="Void"/>
-</f></scaleX>
-		<scaleY get="inline" set="null" line="45" static="1"><f a="target:val">
-	<c path="display.IDisplayable"/>
-	<c path="Float"/>
-	<e path="Void"/>
-</f></scaleY>
-		<rotation get="inline" set="null" line="49" static="1"><f a="target:val">
-	<c path="display.IDisplayable"/>
-	<c path="Float"/>
-	<e path="Void"/>
-</f></rotation>
-		<opacity get="inline" set="null" line="53" static="1"><f a="target:val">
+</f></init>
+		<opacity get="inline" set="null" line="30" static="1"><f a="target:val">
 	<c path="display.IDisplayable"/>
 	<c path="Float"/>
 	<e path="Void"/>
 </f></opacity>
-		<visible get="inline" set="null" line="57" static="1"><f a="target:val">
+		<visible get="inline" set="null" line="34" static="1"><f a="target:val">
 	<c path="display.IDisplayable"/>
 	<e path="Bool"/>
 	<e path="Void"/>
 </f></visible>
-		<setMatrix get="inline" set="null" line="61" static="1"><f a="target:vals">
+		<setMatrix get="inline" set="null" line="38" static="1"><f a="target:vals">
 	<c path="display.IDisplayable"/>
 	<c path="Array"><c path="Float"/></c>
 	<e path="Void"/>
 </f></setMatrix>
-		<hitTestPoint get="inline" set="null" line="75" static="1"><f a="target:xy">
+		<hitTestPoint get="inline" set="null" line="52" static="1"><f a="target:xy">
 	<c path="display.IDisplayable"/>
 	<c path="Array"><c path="Float"/></c>
 	<e path="Bool"/>
 </f></hitTestPoint>
-		<addClickHandler set="method" line="80" static="1"><f a="target:?nada">
+		<addClickHandler get="inline" set="null" line="56" static="1"><f a="target:?nada">
 	<c path="display.DisplayObjectFl"/>
 	<d/>
 	<e path="Void"/>
 </f></addClickHandler>
-		<addOverHandler get="inline" set="null" line="84" static="1"><f a="target:?nada">
+		<addOverHandler get="inline" set="null" line="60" static="1"><f a="target:?nada">
 	<c path="display.DisplayObjectFl"/>
 	<d/>
 	<e path="Void"/>
 </f></addOverHandler>
-		<addOutHandler get="inline" set="null" line="88" static="1"><f a="target:?nada">
+		<addOutHandler get="inline" set="null" line="64" static="1"><f a="target:?nada">
 	<c path="display.DisplayObjectFl"/>
 	<d/>
 	<e path="Void"/>
 </f></addOutHandler>
-		<display public="1"><c path="flash.display.DisplayObjectContainer"/></display>
+		<removeClickHandler get="inline" set="null" line="68" static="1"><f a="target:?nada">
+	<c path="display.DisplayObjectFl"/>
+	<d/>
+	<e path="Void"/>
+</f></removeClickHandler>
+		<removeOverHandler get="inline" set="null" line="72" static="1"><f a="target:?nada">
+	<c path="display.DisplayObjectFl"/>
+	<d/>
+	<e path="Void"/>
+</f></removeOverHandler>
+		<removeOutHandler get="inline" set="null" line="76" static="1"><f a="target:?nada">
+	<c path="display.DisplayObjectFl"/>
+	<d/>
+	<e path="Void"/>
+</f></removeOutHandler>
+		<setMouseEnabled get="inline" set="null" line="80" static="1"><f a="target:isOn">
+	<c path="display.DisplayObjectFl"/>
+	<e path="Bool"/>
+	<e path="Void"/>
+</f></setMouseEnabled>
+		<setHandCursor get="inline" set="null" line="84" static="1"><f a="target:isOn">
+	<c path="display.DisplayObjectFl"/>
+	<e path="Bool"/>
+	<e path="Void"/>
+</f></setHandCursor>
+		<setButtonMode get="inline" set="null" line="88" static="1"><f a="target:isOn">
+	<c path="display.DisplayObjectFl"/>
+	<e path="Bool"/>
+	<e path="Void"/>
+</f></setButtonMode>
+		<display public="1">
+			<c path="flash.display.Sprite"/>
+			<haxe_doc> Instance </haxe_doc>
+		</display>
 		<id public="1"><c path="Int"/></id>
-		<handleClick public="1" set="method" line="98"><f a="e">
+		<handleClick public="1" set="method" line="99"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></handleClick>
@@ -1675,12 +1678,12 @@
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></handleOut>
-		<new public="1" set="method" line="96"><f a="id">
+		<new public="1" set="method" line="97"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></new>
 	</class>
-	<class path="display.IDisplayable" params="" file="src/display/IDisplayable.hx" interface="1"><display public="1"><c path="flash.display.DisplayObjectContainer"/></display></class>
+	<class path="display.IDisplayable" params="" file="src/display/IDisplayable.hx" interface="1"><display public="1"><c path="flash.display.Sprite"/></display></class>
 	<class path="display.BitmapFl" params="" file="src/display/BitmapFl.hx">
 		<extends path="display.DisplayObjectFl"/>
 		<implements path="display.IDisplayable"/>
@@ -2922,7 +2925,7 @@
 		<DEFAULT_ID get="inline" set="null" line="20" static="1"><c path="String"/></DEFAULT_ID>
 		<callbackMethod static="1"><c path="String"/></callbackMethod>
 		<main public="1" set="method" line="24" static="1"><f a=""><e path="Void"/></f></main>
-		<dispatch public="1" set="method" line="51" static="1"><f a="evt">
+		<dispatch public="1" set="method" line="47" static="1"><f a="evt">
 	<d/>
 	<e path="Void"/>
 </f></dispatch>
@@ -2930,7 +2933,7 @@
 	<c path="flash.events.Event"/>
 	<e path="Void"/>
 </f></addedToStage>
-		<init set="method" line="55"><f a="?evt">
+		<init set="method" line="51"><f a="?evt">
 	<c path="flash.events.Event"/>
 	<e path="Void"/>
 </f></init>
@@ -3856,7 +3859,7 @@
 	<c path="Array"><c path="Int"/></c>
 	<e path="Void"/>
 </f></swapChildrenAt>
-		<container public="1"><c path="flash.display.DisplayObjectContainer"/></container>
+		<container public="1"><c path="flash.display.Sprite"/></container>
 		<exec public="1" get="inline" set="null" line="68"><f a="method:?arguments">
 	<c path="String"/>
 	<d/>

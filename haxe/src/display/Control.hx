@@ -107,8 +107,8 @@ class Control {
 		//-- Alias stage as another ID
 		//-- by assigning to an already created ContainerFl
 		var cnt = containers.get(id);		
-		cnt.display = cnt.container = Lib.current.stage;
-		
+		//cnt.display = cnt.container = Lib.current.stage;
+		Lib.current.stage.addChild(cnt.display);
 		/*containers.set('stage', cnt);
 		items.set('stage', cnt);
 		displays.set('stage', cnt);*/

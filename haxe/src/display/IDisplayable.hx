@@ -1,7 +1,7 @@
 package display;
 
-import flash.display.DisplayObjectContainer;
+import flash.display.Sprite;
 
 interface IDisplayable {
-		var display:DisplayObjectContainer;
+		var display:Sprite;
 }

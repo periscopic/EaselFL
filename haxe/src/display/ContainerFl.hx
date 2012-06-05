@@ -58,11 +58,11 @@ class ContainerFl extends DisplayObjectFl, implements IExec, implements IDisplay
 		target.container.swapChildrenAt(props[0], props[1]);
 	}
 	
-	public var container:DisplayObjectContainer;
+	public var container:Sprite;
 	
 	public function new(id:Int){
 		super(id);
-		this.container = display = new Sprite();
+		display = this.container = new Sprite();
 	}
 	
 	inline public function exec(method:String, ?arguments:Dynamic=null):Dynamic{

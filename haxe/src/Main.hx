@@ -35,11 +35,7 @@ class Main {
 	}
 	
 	private function addedToStage(?evt:Event=null):Void{
-		
-	
-		
-		
-		
+
 		//-- Wait to init util stage initialized
 		if(Std.is(Lib.current.stage.stageWidth , Int )){
 			init();
@@ -62,14 +58,6 @@ class Main {
 		if (ExternalInterface.available == false) {
             return;
         }
-       /* var shp = new flash.display.Shape();
-        shp.graphics.beginFill(0xFF0000);
-        shp.graphics.drawRect(0,0,10,10);
-        shp.graphics.endFill();
-        Lib.current.stage.addChild(shp);*/
-        
-        //trace('fresh');
-        
 		
 		var flashVars:Dynamic = Lib.current.loaderInfo.parameters;
 		var id:String = Reflect.hasField( flashVars, 'id') ? Reflect.field( flashVars, 'id') : DEFAULT_ID;
