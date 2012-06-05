@@ -232,9 +232,12 @@ var p = Stage.prototype = new Container();
 	 * @protected
 	 **/
 	p.initialize = function(canvas) {
-		this.canvas = canvas;
-		
-		
+		if(canvas.isFl == true) {
+		    this.canvas = canvas;
+		}
+		else {
+		    this.canvas = new CanvasFl(canvas);
+		}
 		
 		//-- Begin EaselFl specific setup
 		var myID, self = this;
@@ -264,7 +267,7 @@ var p = Stage.prototype = new Container();
 		
 		//-- Set this container as Stage in flash
 		//Stage._flPushCreate('stg', this);
-		var ctx = canvas.getContext('2d');
+		var ctx = this.canvas.getContext('2d');
 		
 		
 		//create container in flash

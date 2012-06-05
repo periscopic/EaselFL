@@ -16,8 +16,8 @@
 
 (function(window) {
 
-    function ContextFl(){
-       this.initialize(); 
+    function ContextFl(thecanvas, fl_url, width, height){
+       this.initialize(thecanvas, fl_url, width, height); 
     }
     var p = ContextFl.prototype;
     
@@ -35,7 +35,7 @@
      * @type Boolean
      **/
     p.flReady = false;
-
+    
     /**
      * @property _flCommandQueues
      * @protected
@@ -109,8 +109,14 @@
       }
    }
     
-    p.initialize = function(){
+    p.initialize = function(thecanvas, fl_url, width, height){
 	  
+      CanvasFl.FL_ELEMENT_ID = thecanvas.getAttribute('id');
+      console.log(CanvasFl.FL_ELEMENT_ID);
+      CanvasFl.FL_URL = '../EaselFl/haxe/bin/EaselFl.swf';			   
+      CanvasFl.FL_WIDTH = thecanvas.getAttribute('width');
+      CanvasFl.FL_HEIGHT = thecanvas.getAttribute('height');
+      
 	  //-- Handle dispatches from Flash
       function handleEvents(obj) {         
          if(obj.type==='onClick' || obj.type==='onMouseOver' || obj.type==='onMouseOut'){
@@ -130,7 +136,7 @@
        
       //-- Index of created items for distributing events dispatched in Flash
       this._flItemIndex = {};
-       
+      
       //-- Assign unique ID to this EaseFl canvasFl
       myID = 'EaselFl_'+ContextFl._flCount++;
       this._flInstanceID = CanvasFl.FL_ELEMENT_ID;
@@ -175,12 +181,19 @@
 		}
 	}
 
-    function CanvasFl(){
-        this._ctx = new ContextFl();
+    function CanvasFl(thecanvas, fl_url, width, height){
+        this._ctx = new ContextFl(thecanvas, fl_url, width, height);
     }
     var p = CanvasFl.prototype;
 
     p._ctx = null;
+    
+    /**
+     * READ-ONLY Used for testing type in Stage.js
+     * @property
+     * @type Boolean
+     **/
+    p.isFl = true;
     
     p.getContext = function(type) {
         if(type==='2d'){
