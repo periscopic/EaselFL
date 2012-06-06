@@ -113,7 +113,8 @@
 	  
       var cnvID = thecanvas.getAttribute('id'),
 	  cnvWd = thecanvas.getAttribute('width') || CanvasFl.FL_WIDTH,
-	  cnvHt = thecanvas.getAttribute('height') || CanvasFl.FL_HEIGHT;
+	  cnvHt = thecanvas.getAttribute('height') || CanvasFl.FL_HEIGHT,
+          fl_swf_url = thecanvas.getAttribute('fl_swf_url') || CanvasFl.FL_URL;
       
 	  //-- Handle dispatches from Flash
       function handleEvents(obj) {         
@@ -152,17 +153,21 @@
       }
      
       //-- Embed and initial loading of Flash Movie
-      ContextFl._flLoadInstance(myID, cnvWd, cnvHt, this._flInstanceID);
+      ContextFl._flLoadInstance(myID, cnvWd, cnvHt, this._flInstanceID, fl_swf_url);
    }
     
    ContextFl._flCount = 0;
   
-   /**
+        /**
 	 * @method _flLoadInstance
 	 * @protected
+	 * @param {int} id             ID of the container
+	 * @param {int} width          Width of the container to load the swf into
+	 * @param {int} height         Height of the container to load the swf into
+	 * @param {String} elementId   Unique instance ID of this CanvasFl
+	 * @param {String} swfUrl      The name and location of the EaselFl.swf file.  Defaults to :
 	 **/
-	//-- TODO : use the dom container, dimensions, margins, etc of the canvas passed - instead of the elementId of the container
-	ContextFl._flLoadInstance = function(id, width, height, elementId) {
+	ContextFl._flLoadInstance = function(id, width, height, elementId, swfUrl) {
 	
 		 var flashvars = {
 			id : id
@@ -172,7 +177,7 @@
 			wmode : (CanvasFl.FL_TRANSPARENT?'transparent':'opaque')
 		 }
 	
-		swfobject.embedSWF(CanvasFl.FL_URL, elementId, width.toString(), height.toString(), '9.0.0', false, flashvars, params)
+		swfobject.embedSWF(swfUrl, elementId, width.toString(), height.toString(), '9.0.0', false, flashvars, params)
 	}
 
 	//-- Get the movie object by id
