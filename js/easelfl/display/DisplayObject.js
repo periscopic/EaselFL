@@ -445,7 +445,7 @@ var p = DisplayObject.prototype;
 	 * @param {Number} height The height of the cache region.
 	 **/
 	p.cache = function(x, y, width, height) {
-		if(CanvasFl.VERBOSE) console.log("EaselFl::DisplayObject.cache not yet implemented");
+		if(CanvasFl.VERBOSE) console.warn("EaselFl::DisplayObject.cache not yet implemented");
 		/*
 		// draw to canvas.
 		var cacheCanvas = this.cacheCanvas;
@@ -472,7 +472,7 @@ var p = DisplayObject.prototype;
 	 * whatwg spec on compositing</a>.
 	 **/
 	p.updateCache = function(compositeOperation) {
-		if(CanvasFl.VERBOSE) console.log("EaselFl::DisplayObject.updateCache not yet implemented");
+		if(CanvasFl.VERBOSE) console.warn("EaselFl::DisplayObject.updateCache not yet implemented");
 		//-- TODO : implement in EaselFl
 		/*var cacheCanvas = this.cacheCanvas, offX = this._cacheOffsetX, offY = this._cacheOffsetY;
 		if (cacheCanvas == null) { throw "cache() must be called before updateCache()"; }
@@ -492,7 +492,7 @@ var p = DisplayObject.prototype;
 	 * @method uncache
 	 **/
 	p.uncache = function() {
-		if(CanvasFl.VERBOSE) console.log("EaselFl::DisplayObject.uncache not yet implemented");
+		if(CanvasFl.VERBOSE) console.warn("EaselFl::DisplayObject.uncache not yet implemented");
 		//--this._cacheDataURL = this.cacheCanvas = null;
 		//--this.cacheID = this._cacheOffsetX = this._cacheOffsetY = 0;
 	}
@@ -732,6 +732,8 @@ var p = DisplayObject.prototype;
 	p._flMouseOut =
 	p._flClick = null;
 	
+	p._flShadow = null;
+	
 	//-- Not part of the original EaselJS api
 	p._flUseHandCursor = false;
 	p._flButtonMode = false;
@@ -794,6 +796,12 @@ var p = DisplayObject.prototype;
 		if( this.alpha !== this._flAlpha) {
 			this._flAlpha = this.alpha;
 			this._flChange.push([this.id, 'op', this.alpha]);
+		}
+		
+		//-- Synchronize Shadow
+		if( this.shadow !== this._flShadow) {
+			this._flShadow = this.shadow;
+			this._flChange.push([this.id, 'sh', this.shadow]);
 		}
 
 

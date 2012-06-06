@@ -41,6 +41,8 @@ var Shadow = function(color, offsetX, offsetY, blur) {
   this.initialize(color, offsetX, offsetY, blur);
 }
 var p = Shadow.prototype;
+
+	p._flChange = null;
 	
 // static public properties:
 	/**
@@ -96,6 +98,7 @@ var p = Shadow.prototype;
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
 		this.blur = blur;
+		this._flChange = [];
 	}
 	
 // public methods:
@@ -118,7 +121,40 @@ var p = Shadow.prototype;
 		return new Shadow(this.color, this.offsetX, this.offsetY, this.blur);
 	}
 	
+	p._flSyncProps = function() {
+	  
+		//-- Synchronize Color		
+		if( this.color !== this._flColor) {			
+			this._flColor = this.color;
+			this._flChange.push([this.id, 'cl', this.color]);
+		}
+		
+		//-- Synchronize OffsetX		
+		if( this.offsetX !== this._flOffsetX) {			
+			this._flOffsetX = this.offsetX;
+			this._flChange.push([this.id, 'ox', this.offsetX]);
+		}
+		
+		//-- Synchronize OffsetY		
+		if( this.offsetY !== this._flOffsetY) {			
+			this._flOffsetY = this.offsetY;
+			this._flChange.push([this.id, 'oy', this.offsetY]);
+		}
+		
+		//-- Synchronize Blur		
+		if( this.blur !== this._flBlur) {			
+			this._flBlur = this.blur;
+			this._flChange.push([this.id, 'cl', this.blur]);
+		}
+	}
+	
+	p._flColor = null;
+	p._flOffsetX = 0;
+	p._flOffsetY = 0;
+	p._flBlur = 0;
+	
 	// this has to be populated after the class is defined:
+	// @TODO decide if this is needed in flash version
 	Shadow.identity = new Shadow("transparent", 0, 0, 0);
 	
 window.Shadow = Shadow;

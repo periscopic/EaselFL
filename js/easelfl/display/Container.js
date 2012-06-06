@@ -125,7 +125,7 @@ var p = Container.prototype = new DisplayObject();
 									child.regX, child.regY);
 			mtx.appendProperties(child.alpha, child.shadow, child.compositeOperation);		
 			child.draw(ctx, false, mtx);
-			/*if (shadow) { this.applyShadow(ctx); }*/ //-- TODO : make sure shadow gets applied
+			if (shadow) { this.applyShadow(ctx); } //-- TODO : make sure shadow gets applied
 		}
 		return true;
 	}
