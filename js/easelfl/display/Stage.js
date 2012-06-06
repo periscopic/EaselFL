@@ -40,9 +40,6 @@ var Stage = function(canvas) {
   this.initialize(canvas);
 }
 
-/** Hack to allow prototyping when superclasses reference Stage **/
-window.Stage = {_flPushCreate:function(){}};
-
 Stage.isEaselFl = true;
 
 var p = Stage.prototype = new Container();
@@ -167,28 +164,6 @@ var p = Stage.prototype = new Container();
 	 **/
 	p._activeMouseTarget = null;
 
-
-	/**
-	 * @property _flCommandQueues
-	 * @protected
-	 * @type Object
-	 **/
-	//p._flCommandQueues = null;
-	
-	/**
-	 * @property _flInstance
-	 * @protected
-	 * @type Flash Movie
-	 **/
-	//p._flInstance = null;	
-
-	/**
-	 * @property _flInstanceID
-	 * @protected
-	 * @type String
-	 **/
-	//p._flInstanceID = null;
-
 	/**
 	 * @property _mouseOverIntervalID
 	 * @protected
@@ -233,49 +208,28 @@ var p = Stage.prototype = new Container();
 	 **/
 	p.initialize = function(canvas) {
 		if(canvas.isFl == true) {
-		    this.canvas = canvas;
+		  //-- Already a CanvasFl
+		  this.canvas = canvas;
 		}
 		else {
-		    this.canvas = new CanvasFl(canvas);
+		  //-- Not a CanvasFl
+		  this.canvas = new CanvasFl(canvas);
 		}
-		
+
 		//-- Begin EaselFl specific setup
-		var myID, self = this;
+		var myID, self = this;		
 		
-		/*
-		
-		//-- Setup flush data staging queues
-		this._flCommandQueues = {
-			create : [],
-			change : []
-		};
-		
-		//-- Assign unique ID to this EaseFl stage
-		this._flInstanceID = myID = 'EaselFl_'+Stage._flStageCount++;
-		
-		//-- Create proxy of function to be called when Flash Movie is ready
-		Stage._flHooks[myID] = function(){ self._flOnReady(); }
-		
-		//-- Embed and initial loading of Flash Movie
-		Stage._flLoadInstance(myID, Stage.FL_WIDTH, Stage.FL_HEIGHT, Stage.FL_ELEMENT_ID);
-		
-		//-- End EaselFl specific setup
-		*/
 		this.Container_initialize();
 		
 		this._enableMouseEvents(true);
 		
 		//-- Set this container as Stage in flash
-		//Stage._flPushCreate('stg', this);
-		var ctx = this.canvas.getContext('2d');
+		var ctx = this.canvas.getContext('2d');		
 		
-		
-		//create container in flash
+		//-- Create container in flash
 		this._flRunCreate(ctx);
-		//this._flCtx=ctx;
-		//ctx._flCreate.push(['cnt', this]);
 		
-		//set as stage in flash
+		//-- Set as stage in flash
 		ctx._flCreate.push(['stg', this]);
 	}
 

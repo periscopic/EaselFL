@@ -111,11 +111,9 @@
     
     p.initialize = function(thecanvas, fl_url, width, height){
 	  
-      CanvasFl.FL_ELEMENT_ID = thecanvas.getAttribute('id');
-      console.log(CanvasFl.FL_ELEMENT_ID);
-      CanvasFl.FL_URL = '../EaselFl/haxe/bin/EaselFl.swf';			   
-      CanvasFl.FL_WIDTH = thecanvas.getAttribute('width');
-      CanvasFl.FL_HEIGHT = thecanvas.getAttribute('height');
+      var cnvID = thecanvas.getAttribute('id'),
+	  cnvWd = thecanvas.getAttribute('width') || CanvasFl.FL_WIDTH,
+	  cnvHt = thecanvas.getAttribute('height') || CanvasFl.FL_HEIGHT;
       
 	  //-- Handle dispatches from Flash
       function handleEvents(obj) {         
@@ -139,7 +137,12 @@
       
       //-- Assign unique ID to this EaseFl canvasFl
       myID = 'EaselFl_'+ContextFl._flCount++;
-      this._flInstanceID = CanvasFl.FL_ELEMENT_ID;
+      this._flInstanceID = cnvID || myID;
+	  
+	  if(cnvID!==this._flInstanceID){
+		 thecanvas.setAttribute('id', myID);
+	  }
+	  
 	          
       //-- Create proxy of function to be called when Flash Movie is ready
       CanvasFl._flHooks[myID] = function(){
@@ -149,7 +152,7 @@
       }
      
       //-- Embed and initial loading of Flash Movie
-      ContextFl._flLoadInstance(myID, CanvasFl.FL_WIDTH, CanvasFl.FL_HEIGHT, CanvasFl.FL_ELEMENT_ID);
+      ContextFl._flLoadInstance(myID, cnvWd, cnvHt, this._flInstanceID);
    }
     
    ContextFl._flCount = 0;
@@ -166,7 +169,7 @@
 		 }
 		 
 		 var params = {
-			wmode : (CanvasFl.FL_TRANSPARENT?'transparent':'opaque'),
+			wmode : (CanvasFl.FL_TRANSPARENT?'transparent':'opaque')
 		 }
 	
 		swfobject.embedSWF(CanvasFl.FL_URL, elementId, width.toString(), height.toString(), '9.0.0', false, flashvars, params)
@@ -204,12 +207,11 @@
 
    //-- Static	
    //-- Defaults
-   CanvasFl.SWFOBJECT_URL = 'js/swfobject.js';
+
    CanvasFl.FL_URL = 'EaselFl.swf';
-   CanvasFl.FL_WIDTH = 400;
-   CanvasFl.FL_HEIGHT = 400;
-   CanvasFl.FL_ELEMENT_ID = null;
    CanvasFl.FL_TRANSPARENT = true;
+   CanvasFl.FL_WIDTH = '400';
+   CanvasFl.FL_HEIGHT= '400';
    CanvasFl.VERBOSE = false; //--log warnings
    
 
