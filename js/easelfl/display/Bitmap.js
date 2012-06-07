@@ -42,6 +42,17 @@ var p = Bitmap.prototype = new DisplayObject();
 
 	p._flCtx = null;
 	p._flImg = null;
+	p._flSmoothing = false;
+	p.flSmoothing = false;
+	
+	p.flSetSmoothing = function(smooth) {
+		if(this._flCtx && smooth!==this._flSmoothing){
+			this.flSmoothing = this._flSmoothing = smooth;
+			this._flCtx._flChange.push([this.id, 'smth', smooth]);	
+		}else{
+			this.flSmoothing = smooth;
+		}
+	}
 
 // public properties:
 	/**
@@ -123,15 +134,11 @@ var p = Bitmap.prototype = new DisplayObject();
 	 * into itself).
 	 **/
 	p.draw = function(ctx, ignoreCache) {
-		/*if(!this._flCtx){
-			this._flCtx = ctx;
-			ctx._flCreate.push(['bmp', this]);
-		}*/
-		
+	
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
 
 		if(this.image) {
-			if(this.image!==this._flImg){
+			if(this.image!==this._flImg) {
 				this._flImg = this.image;
 				ImageFl.watch(this.image);
 				ctx._flChange.push([this.id, 'img', this.image.__fl.id]);
@@ -139,7 +146,7 @@ var p = Bitmap.prototype = new DisplayObject();
 			
 			this.image.__fl.draw(ctx);
 		}
-		
+				
 		/*var rect = this.sourceRect;
 		if (rect) {
 			ctx.drawImage(this.image, rect.x, rect.y, rect.width, rect.height, 0, 0, rect.width, rect.height);
@@ -156,6 +163,9 @@ var p = Bitmap.prototype = new DisplayObject();
 	  if(this._flCtx!==ctx){
 		this._flCtx = ctx;
 		ctx._flCreate.push(['bmp', this]);
+		
+		//we have a context, so we can update smoothing
+		this.flSetSmoothing(this.flSmoothing);		
 	  }
 	}
 

@@ -14,20 +14,27 @@ class BitmapFl extends DisplayObjectFl, implements IExec, implements IDisplayabl
 		execs = new Hash();
 		DisplayObjectFl.init(execs);
 		execs.set('img', setImage);
+		execs.set('smth', setSmoothing);
 	}
 	
 	inline static private function setImage(target:BitmapFl, id:Int){
 		target.swapImage(Control.bitmapDatas.get(id));
 	}
 	
+	inline static private function setSmoothing(target:BitmapFl, smoothing:Bool){
+		target.smoothing = target.bmp.smoothing = smoothing;
+	}
+	
 	private var bmp:Bitmap;
+	private var smoothing:Bool;
 	public var loaded(default, null):Bool;
 	private var _img:IBitmapData;
 	
 	public function new(id:Int){
 		super(id);
 		display = new flash.display.Sprite();
-		bmp = new Bitmap();		
+		smoothing = false;
+		bmp = new Bitmap();
 		display.addChild(bmp);
 	}
 	
@@ -50,16 +57,18 @@ class BitmapFl extends DisplayObjectFl, implements IExec, implements IDisplayabl
 			}else{
 				//-- sync bitmapdata
 				bmp.bitmapData = _img.bitmapData;
-			}
+			}			
 			
 			//-- Listen for subsequent loads
 			_img.dispatcher.addEventListener(Event.COMPLETE, updateBitmap);
 		}
+		bmp.smoothing = smoothing;
 	}
 	
 	function updateBitmap(?e:Event=null):Void{
 		//-- sync bitmapdata
 		bmp.bitmapData = _img.bitmapData;
+		bmp.smoothing = smoothing;
 	}
 	
 	

@@ -276,7 +276,7 @@
 	<c path="flash.events.Event"/>
 	<e path="Void"/>
 </f></handleLoad>
-		<exec public="1" get="inline" set="null" line="62"><f a="method:?arguments">
+		<exec public="1" get="inline" set="null" line="63"><f a="method:?arguments">
 	<c path="String"/>
 	<d/>
 	<d/>
@@ -1690,28 +1690,34 @@
 		<implements path="display.IExec"/>
 		<execs static="1"><c path="Hash"><d/></c></execs>
 		<init public="1" set="method" line="13" static="1"><f a=""><e path="Void"/></f></init>
-		<setImage get="inline" set="null" line="19" static="1"><f a="target:id">
+		<setImage get="inline" set="null" line="20" static="1"><f a="target:id">
 	<c path="display.BitmapFl"/>
 	<c path="Int"/>
 	<e path="Void"/>
 </f></setImage>
+		<setSmoothing get="inline" set="null" line="24" static="1"><f a="target:smoothing">
+	<c path="display.BitmapFl"/>
+	<e path="Bool"/>
+	<e path="Void"/>
+</f></setSmoothing>
 		<bmp><c path="flash.display.Bitmap"/></bmp>
+		<smoothing><e path="Bool"/></smoothing>
 		<loaded public="1" set="null"><e path="Bool"/></loaded>
 		<_img><c path="display.IBitmapData"/></_img>
-		<swapImage set="method" line="34"><f a="image">
+		<swapImage set="method" line="41"><f a="image">
 	<c path="display.IBitmapData"/>
 	<e path="Void"/>
 </f></swapImage>
-		<updateBitmap set="method" line="60"><f a="?e">
+		<updateBitmap set="method" line="68"><f a="?e">
 	<c path="flash.events.Event"/>
 	<e path="Void"/>
 </f></updateBitmap>
-		<exec public="1" get="inline" set="null" line="66"><f a="method:?arguments">
+		<exec public="1" get="inline" set="null" line="75"><f a="method:?arguments">
 	<c path="String"/>
 	<d/>
 	<d/>
 </f></exec>
-		<new public="1" set="method" line="27"><f a="id">
+		<new public="1" set="method" line="33"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></new>
@@ -2062,43 +2068,47 @@
 	<e path="Void"/>
 </f></c></makers>
 		<stageFl static="1"><c path="display.ContainerFl"/></stageFl>
-		<init public="1" set="method" line="17" static="1"><f a=""><e path="Void"/></f></init>
-		<createItems public="1" get="inline" set="null" line="48" static="1"><f a="a">
+		<init public="1" set="method" line="20" static="1"><f a=""><e path="Void"/></f></init>
+		<createItems public="1" get="inline" set="null" line="64" static="1"><f a="a">
 	<c path="Array"><c path="Array"><d/></c></c>
 	<e path="Void"/>
 </f></createItems>
-		<changeItems public="1" get="inline" set="null" line="59" static="1"><f a="a">
+		<changeItems public="1" get="inline" set="null" line="76" static="1"><f a="a">
 	<c path="Array"><c path="Array"><d/></c></c>
 	<e path="Void"/>
 </f></changeItems>
-		<invokeOn public="1" get="inline" set="null" line="70" static="1"><f a="cmd">
+		<invokeOn public="1" get="inline" set="null" line="88" static="1"><f a="cmd">
 	<c path="Array"><d/></c>
 	<d/>
 </f></invokeOn>
-		<image get="inline" set="null" line="74" static="1"><f a="id">
+		<image get="inline" set="null" line="92" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></image>
-		<bitmap get="inline" set="null" line="80" static="1"><f a="id">
+		<bitmap get="inline" set="null" line="98" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></bitmap>
-		<shape get="inline" set="null" line="86" static="1"><f a="id">
+		<shape get="inline" set="null" line="104" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></shape>
-		<graphics get="inline" set="null" line="92" static="1"><f a="id">
+		<graphics get="inline" set="null" line="110" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></graphics>
-		<container get="inline" set="null" line="98" static="1"><f a="id">
+		<container get="inline" set="null" line="116" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></container>
-		<stage get="inline" set="null" line="106" static="1"><f a="id">
+		<stage get="inline" set="null" line="124" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></stage>
+		<shadow get="inline" set="null" line="135" static="1"><f a="id">
+	<c path="Int"/>
+	<e path="Void"/>
+</f></shadow>
 	</class>
 	<class path="flash.net.NetStream" params="" file="/usr/lib/haxe/std/flash9/net/NetStream.hx" extern="1">
 		<extends path="flash.events.EventDispatcher"/>
@@ -2915,6 +2925,18 @@
 	<c path="Int"/>
 	<e path="Void"/>
 </f></new>
+	</class>
+	<class path="haxe.Log" params="" file="/usr/lib/haxe/std/haxe/Log.hx">
+		<trace public="1" set="dynamic" line="29" static="1"><f a="v:?infos">
+	<d/>
+	<t path="haxe.PosInfos"/>
+	<e path="Void"/>
+</f></trace>
+		<clear public="1" set="dynamic" line="43" static="1"><f a=""><e path="Void"/></f></clear>
+		<setColor public="1" set="dynamic" line="52" static="1"><f a="rgb">
+	<c path="Int"/>
+	<e path="Void"/>
+</f></setColor>
 	</class>
 	<class path="flash.net.Responder" params="" file="/usr/lib/haxe/std/flash9/net/Responder.hx" extern="1"><new public="1" set="method"><f a="result:?status">
 	<d/>

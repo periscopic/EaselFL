@@ -56,6 +56,7 @@ class ImageFl implements IExec, implements IBitmapData{
 	function handleLoad(e:Event):Void{
 		bitmapData = new BitmapData(Std.int(loader.width), Std.int(loader.height), true, 0);
 		bitmapData.draw(loader);
+		//bitmapData.draw(loader, null, null, null, null, true);
 		ready = true;
 	}
 	

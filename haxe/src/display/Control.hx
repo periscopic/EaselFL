@@ -13,6 +13,9 @@ class Control {
 	static public var makers:Hash<Int->Void>;
 	static private var stageFl:ContainerFl;
 	
+	//static private var valid:Bool = true;
+	//inline static var UPDATE_INTERVAL:Int = 17; //check every 5ms
+	
 	
 	static public function init(){
 		items = new IntHash<IExec>();
@@ -41,7 +44,19 @@ class Control {
 		//stageFl = new ContainerFl( Lib.current.stage );
 		//items.set('stage', stageFl);
 		//displays.set('stage', stageFl);
+		
+		/*var tmr = new flash.utils.Timer(UPDATE_INTERVAL, 0);
+		tmr.addEventListener(flash.events.TimerEvent.TIMER, handleUpdateInterval,false, 0, true);
+		tmr.start();*/
 	}
+	/*
+	inline static public function handleUpdateInterval(e:flash.events.TimerEvent):Void{
+		if(!valid) {
+			valid = true;
+			e.updateAfterEvent();
+		}
+	}*/
+	
 	
 	/*
 	 * Takes a list of creation commands [ ['type','id'], ...] 
@@ -52,6 +67,7 @@ class Control {
 				makers.get(baby[0])(baby[1]);
 			}			
 		}
+		//valid = false;
 	}
 	
 	/*
@@ -62,6 +78,7 @@ class Control {
 				//-- Get item by id and delegate execution to it
 			items.get(cmd[0]).exec(cmd[1], cmd[2]);			
 		}
+		//valid = false;
 	}
 	
 	/*

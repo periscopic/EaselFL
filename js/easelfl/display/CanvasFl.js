@@ -114,7 +114,7 @@
       var cnvID = thecanvas.getAttribute('id'),
 	  cnvWd = thecanvas.getAttribute('width') || CanvasFl.FL_WIDTH,
 	  cnvHt = thecanvas.getAttribute('height') || CanvasFl.FL_HEIGHT,
-          fl_swf_url = thecanvas.getAttribute('fl_swf_url') || CanvasFl.FL_URL;
+      fl_swf_url = thecanvas.getAttribute('fl_swf_url') || CanvasFl.FL_URL;
       
 	  //-- Handle dispatches from Flash
       function handleEvents(obj) {         
@@ -158,57 +158,58 @@
     
    ContextFl._flCount = 0;
   
-        /**
-	 * @method _flLoadInstance
-	 * @protected
-	 * @param {int} id             ID of the container
-	 * @param {int} width          Width of the container to load the swf into
-	 * @param {int} height         Height of the container to load the swf into
-	 * @param {String} elementId   Unique instance ID of this CanvasFl
-	 * @param {String} swfUrl      The name and location of the EaselFl.swf file.  Defaults to :
-	 **/
-	ContextFl._flLoadInstance = function(id, width, height, elementId, swfUrl) {
+   /**
+  * @method _flLoadInstance
+  * @protected
+  * @param {int} id             ID of the container
+  * @param {int} width          Width of the container to load the swf into
+  * @param {int} height         Height of the container to load the swf into
+  * @param {String} elementId   Unique instance ID of this CanvasFl
+  * @param {String} swfUrl      The name and location of the EaselFl.swf file.  Defaults to :
+  **/
+   ContextFl._flLoadInstance = function(id, width, height, elementId, swfUrl) {
 	
-		 var flashvars = {
-			id : id
-		 }
-		 
-		 var params = {
-			wmode : (CanvasFl.FL_TRANSPARENT?'transparent':'opaque')
-		 }
-	
-		swfobject.embedSWF(swfUrl, elementId, width.toString(), height.toString(), '9.0.0', false, flashvars, params)
-	}
+	  var flashvars = {
+		 id : id
+	  }
+	  
+	  var params = {
+		 wmode : (CanvasFl.FL_TRANSPARENT?'transparent':'opaque')
+	  }
+ 
+	 swfobject.embedSWF(swfUrl, elementId, width.toString(), height.toString(), '9.0.0', false, flashvars, params)
+   }
 
-	//-- Get the movie object by id
-	ContextFl._flGetInstance = function(id){
-		if (/Explorer/.test(navigator.appName)) {
-				return window[id];
-			} else {
-				return document[id];
-		}
-	}
+   //-- Get the movie object by id
+   ContextFl._flGetInstance = function(id){
+	   if (/Explorer/.test(navigator.appName)) {
+			   return window[id];
+		   } else {
+			   return document[id];
+	   }
+   }
 
-    function CanvasFl(thecanvas, fl_url, width, height){
-        this._ctx = new ContextFl(thecanvas, fl_url, width, height);
-    }
-    var p = CanvasFl.prototype;
+   function CanvasFl(thecanvas, fl_url, width, height){
+	   this._ctx = new ContextFl(thecanvas, fl_url, width, height);
+   }
+   
+   var p = CanvasFl.prototype;
 
-    p._ctx = null;
-    
-    /**
-     * READ-ONLY Used for testing type in Stage.js
-     * @property
-     * @type Boolean
-     **/
-    p.isFl = true;
-    
-    p.getContext = function(type) {
-        if(type==='2d'){
-            return this._ctx;
-        }
-        return null;
-    }
+   p._ctx = null;
+   
+   /**
+	* READ-ONLY Used for testing type in Stage.js
+	* @property
+	* @type Boolean
+	**/
+   p.isFl = true;
+   
+   p.getContext = function(type) {
+	  if(type==='2d'){
+		  return this._ctx;
+	  }
+	  return null;
+   }
 
    //-- Static	
    //-- Defaults
