@@ -31,10 +31,6 @@ window.onload = function(){
 	document.getElementById('stats').appendChild(stats.domElement);
 	setInterval(function(){stats.update();}, 1000/60);
 	
-	CanvasFl.FL_URL = '../haxe/bin/EaselFl.swf';
-	CanvasFl.FL_ELEMENT_ID = 'testContainer';
-	CanvasFl.FL_WIDTH = 600;
-	
 	var canvas = document.createElement('canvas');
 	canvas.setAttribute('width', 600);
 	canvas.setAttribute('height', 400);
