@@ -730,7 +730,8 @@ var p = DisplayObject.prototype;
 	p._flMouseEnabled = true;
 	p._flMouseOver =
 	p._flMouseOut =
-	p._flClick = null;
+	p._flClick =
+	p._flPress = null;
 	
 	p._flShadow = null;
 	
@@ -746,7 +747,7 @@ var p = DisplayObject.prototype;
 	 * @protected
 	 **/
 	p._flSyncProps = function() {
-	  
+
 		//-- Synchronize Visibility		
 		if( this.visible !== this._flVisible) {			
 			this._flVisible = this.visible;
@@ -767,28 +768,41 @@ var p = DisplayObject.prototype;
 		if(this.mouseEnabled) {
 		  //synchronize mouse events
 		  if(this.onMouseOver!==this._flMouseOver) {
-			if(this.onMouseOver  && !this._flMouseOver) {
-			  this._flChange.push([this.id, 'amov']);
-			}else if(!this.onMouseOver && this._flMouseOver) {
-			  this._flChange.push([this.id, 'rmov']);
-			}				
-			this._flMouseOver = this.onMouseOver;
+				if(this.onMouseOver  && !this._flMouseOver) {
+					this._flChange.push([this.id, 'amov']);
+				}else if(!this.onMouseOver && this._flMouseOver) {
+					this._flChange.push([this.id, 'rmov']);
+				}				
+				this._flMouseOver = this.onMouseOver;
 		  }
+			
 		  if(this.onMouseOut!==this._flMouseOut) {
-			if(this.onMouseOut  && !this._flMouseOut) {
-			  this._flChange.push([this.id, 'amot']);
-			}else if(!this.onMouseOut && this._flMouseOut) {
-			  this._flChange.push([this.id, 'rmot']);
-			}
+				if(this.onMouseOut  && !this._flMouseOut) {
+					this._flChange.push([this.id, 'amot']);
+				}else if(!this.onMouseOut && this._flMouseOut) {
+					this._flChange.push([this.id, 'rmot']);
+				}
 			  this._flMouseOut = this.onMouseOut;
 		  }
+			
 		  if(this.onClick!==this._flClick) {
-			if(this.onClick  && !this._flClick) {
-			  this._flChange.push([this.id, 'amck']);
-			}else if(!this.onClick && this._flClick) {
-			  this._flChange.push([this.id, 'rmck']);
-			}
+				if(this.onClick  && !this._flClick) {
+					this._flChange.push([this.id, 'amck']);
+				}else if(!this.onClick && this._flClick) {
+					this._flChange.push([this.id, 'rmck']);
+				}
 			  this._flClick = this.onClick;
+		  }
+			
+			
+			if(this.onPress!==this._flOnPress) {
+				
+				if(this.onPress  && !this._flOnPress) {
+					this._flChange.push([this.id, 'aprs']);
+				}else if(!this.onPress && this._flOnPress) {
+					this._flChange.push([this.id, 'rprs']);
+				}
+			  this._flOnPress = this.onPress;
 		  }
 		}
 		

@@ -1,0 +1,120 @@
+<!-- Displays a grid of red squares, rotated and translated; a small test image; hides
+everything after 3 seconds -->
+
+<html>
+<head>
+
+<script type="text/javascript" src="js/Stats.js"></script>
+<script type="text/javascript" src="../js/swfobject.js"></script>
+
+<script type="text/javascript" src="../js/easelfl/geom/Matrix2D.js"></script>
+<script type="text/javascript" src="../js/easelfl/geom/Point.js"></script>
+<script type="text/javascript" src="../js/easelfl/geom/Rectangle.js"></script>	
+<script type="text/javascript" src="../js/easelfl/utils/UID.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/CanvasFl.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/DisplayObject.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Container.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Stage.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Graphics.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Shape.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/ImageFl.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Bitmap.js"></script>
+<script type="text/javascript" src="../js/easelfl/events/MouseEvent.js"></script>
+<script type="text/javascript" src="../js/easelfl/utils/Ticker.js"></script>
+
+<script type="text/javascript">
+
+//-- Start it up!
+window.onload = function(){
+	
+	var stats = new Stats();
+	document.getElementById('stats').appendChild(stats.domElement);
+	setInterval(function(){stats.update();}, 1000/60);
+	
+	CanvasFl.FL_URL = '../haxe/bin/EaselFl.swf';
+	CanvasFl.FL_ELEMENT_ID = 'testContainer';
+	CanvasFl.FL_WIDTH = 600;
+	
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('width', 600);
+	canvas.setAttribute('height', 400);
+	canvas.setAttribute('fl_swf_url', '../haxe/bin/EaselFl.swf');
+	canvas.setAttribute('id', 'testContainer');
+	
+	var myStage = new Stage(canvas);
+	Ticker.addListener(myStage);
+	
+	//-- specific test code
+	var container = new Container();
+	myStage.addChild(container);
+
+	container.alpha = 0.5;
+	container.rotation = 5;
+	container.x = 100;
+
+	
+	var shp, g, shapes = [];
+	
+	for(var i=0; i<100; ++i){
+		shp = new Shape();
+		g = shp.graphics;
+		g.beginFill('#FF0000');
+		g.drawRect(0, 0, 20, 20);
+		g.endFill();
+		
+		shp.regX = 10;
+		shp.regY = 10;
+		shp.x = (i%10) * 40;
+		shp.y = Math.floor(i/10) * 40;
+		
+		container.addChild(shp);
+		shapes.push(shp);
+	}
+	
+	
+	var bmp = new Bitmap('img/testImage.png');
+	container.addChild(bmp);
+	bmp.x = 100;
+	bmp.y = 50;
+
+	setTimeout(function(){
+		container.visible = false;
+	},
+		3000
+	);
+}
+
+
+</script>
+
+<style type="text/css">
+ body {
+	margin: 0;
+	background: #EEE;
+ }
+ 
+ h1 {
+	color: #FFF;
+ }
+ 
+ #testContainer {
+	position: absolute;
+	top: 0;
+	left: 0;
+ }
+ 
+ #stats {
+	position: absolute;
+	top: 0;
+	right: 0;
+ }
+ 
+</style>
+</head>
+<body>
+<div id="stats"></div>
+<h1>The EaselFl Stage is transparent by default</h1>
+<div id="testContainer"></div>	
+	
+</body>
+</html>

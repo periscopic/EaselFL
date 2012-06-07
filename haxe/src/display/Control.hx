@@ -11,7 +11,7 @@ class Control {
 	static public var bitmapDatas:IntHash<IBitmapData>;
 	static public var graphicsList:IntHash<GraphicsFl>;
 	static public var makers:Hash<Int->Void>;
-	static private var stageFl:ContainerFl;
+	static public var stageFl:ContainerFl;
 	
 	//static private var valid:Bool = true;
 	//inline static var UPDATE_INTERVAL:Int = 17; //check every 5ms
@@ -127,6 +127,7 @@ class Control {
 		var cnt = containers.get(id);		
 		//cnt.display = cnt.container = Lib.current.stage;
 		Lib.current.stage.addChild(cnt.display);
+		stageFl = cnt;
 		/*containers.set('stage', cnt);
 		items.set('stage', cnt);
 		displays.set('stage', cnt);*/

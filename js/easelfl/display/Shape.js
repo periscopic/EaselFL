@@ -41,7 +41,24 @@ var Shape = function(graphics) {
 }
 var p = Shape.prototype = new DisplayObject();
 
+	/**
+	 * The ContextFl of the display list to which this is attached
+	 * @private
+	 **/
 	p._flCtx = null;
+
+	/**
+	* Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
+	* @param {ContextFl} ctx The EaselFl context as defined in CanvasFl.js
+	**/
+	p._flRunCreate = function(ctx){
+	  if(this._flCtx!==ctx){
+			this._flCtx = ctx;
+			ctx._flCreate.push(['shp', this]);
+			ctx._flCreate.push(['gfx', this.graphics]); //-- create the graphics		
+			ctx._flChange.push([this.id, 'gfx', [this.graphics.id]]) //-- link the graphics
+	  }
+	}	
 
 // public properties:
 	/**
@@ -68,9 +85,6 @@ var p = Shape.prototype = new DisplayObject();
 	p.initialize = function(graphics) {
 		this.DisplayObject_initialize();
 		this.graphics = graphics ? graphics : new Graphics();
-		
-		//Stage._flPushCreate('shp', this);
-		//Stage._flPushChange(this, 'gfx', [this.graphics.id]) //-- link the graphics
 	}
 
 	/**
@@ -102,28 +116,10 @@ var p = Shape.prototype = new DisplayObject();
 	 * into itself).
 	 **/
 	p.draw = function(ctx, ignoreCache) {
-		/*if(!this._flCtx){
-			this._flCtx=ctx;
-			ctx._flCreate.push(['shp', this]);
-			ctx._flChange.push([this.id, 'gfx', [this.graphics.id]]) //-- link the graphics
-		}*/
-		
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
 		this.graphics.draw(ctx);
 		return true;
 	}
-	
-	/**
-	 * Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
-	 **/
-	p._flRunCreate = function(ctx){
-	  if(this._flCtx!==ctx){
-		this._flCtx = ctx;
-		ctx._flCreate.push(['shp', this]);
-		ctx._flCreate.push(['gfx', this.graphics]); //-- create the graphics		
-		ctx._flChange.push([this.id, 'gfx', [this.graphics.id]]) //-- link the graphics
-	  }
-	}	
 	
 	/**
 	 * Returns a clone of this Shape. Some properties that are specific to this instance's current context are reverted to 
@@ -133,6 +129,8 @@ var p = Shape.prototype = new DisplayObject();
 	 * will be shared with the new Shape.
 	 **/
 	p.clone = function(recursive) {
+		throw 'EaselFl:Shape.clone currently not implemented';
+	
 		var o = new Shape((recursive && this.graphics) ? this.graphics.clone() : this.graphics);
 		this.cloneProps(o);
 		return o;

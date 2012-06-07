@@ -9,6 +9,7 @@ import flash.geom.Matrix;
 
 class DisplayObjectFl{	
 
+	
 	static public function init(execs:Hash<Dynamic>){
 		execs.set('op',opacity);
 		execs.set('vs',visible);
@@ -16,9 +17,11 @@ class DisplayObjectFl{
 		execs.set('amck', addClickHandler);
 		execs.set('amot', addOutHandler);
 		execs.set('amov', addOverHandler);
+		execs.set('aprs', addPressHandler);
 		execs.set('rmck', removeClickHandler);
 		execs.set('rmot', removeOutHandler);
 		execs.set('rmov', removeOverHandler);
+		execs.set('rprs', removePressHandler);
 		execs.set('smen', setMouseEnabled);
 		execs.set('scrs', setHandCursor);
 		execs.set('sbtn', setButtonMode);
@@ -65,6 +68,10 @@ class DisplayObjectFl{
 		target.display.addEventListener(MouseEvent.MOUSE_OUT, target.handleOut, false, 0, true);
 	}
 	
+	inline static private function addPressHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{
+		target.display.addEventListener(MouseEvent.MOUSE_DOWN, target.handlePress, false, 0, true);
+	}
+	
 	inline static private function removeClickHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{
 		target.display.removeEventListener(MouseEvent.CLICK, target.handleClick, false);
 	}
@@ -75,6 +82,10 @@ class DisplayObjectFl{
 	
 	inline static private function removeOutHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{
 		target.display.removeEventListener(MouseEvent.MOUSE_OUT, target.handleOut, false);
+	}
+	
+	inline static private function removePressHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{
+		target.display.removeEventListener(MouseEvent.MOUSE_DOWN, target.handlePress, false);
 	}
 	
 	inline static private function setMouseEnabled(target:DisplayObjectFl,isOn:Bool):Void{
@@ -89,6 +100,30 @@ class DisplayObjectFl{
 		target.display.buttonMode = isOn;
 	}
 	
+	//TODO: decide if these should be moved to a Stage specific class
+	
+	//-- onMouseMove and onMouseUp events are sent back to handlers on the onPress event
+	static private var lastMoveEvtTime:Float = 0.0;
+	
+	static function handleStageMove(e:MouseEvent):Void{
+		//-- throttling this to 30fps, since constant dispatches seem to be a bottle neck
+		var time:Float = Date.now().getTime();
+		if(time-lastMoveEvtTime>=33) {
+			lastMoveEvtTime = time;
+			var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'onMouseMove'};
+			Main.dispatch(evt);
+		}
+	}
+	
+	static function handleStageUp(e:MouseEvent):Void{
+		//-- unsubscribe to receive mousemove, up events which were assigned via an onPress handler
+		e.target.removeEventListener(MouseEvent.MOUSE_MOVE, handleStageMove, false);
+		e.target.removeEventListener(MouseEvent.MOUSE_UP, handleStageUp, false);
+		
+		//-- dispatch event to js
+		var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'onMouseUp'};
+		Main.dispatch(evt);
+	}
 
 	/** Instance **/
 	public var display:Sprite;
@@ -108,6 +143,17 @@ class DisplayObjectFl{
 	
 	public function handleOut(e:MouseEvent):Void{
 		var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'onMouseOut', id:this.id};
+		Main.dispatch(evt);	
+	}
+	
+	public function handlePress(e:MouseEvent):Void{
+		//-- subscribe stage to receive mousemove, up events
+		var stg = Control.stageFl;
+		stg.display.addEventListener(MouseEvent.MOUSE_MOVE, handleStageMove, false, 0, true);
+		stg.display.addEventListener(MouseEvent.MOUSE_UP, handleStageUp, false, 0, true);
+		
+		//-- dispatch event
+		var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'onPress', id:this.id};
 		Main.dispatch(evt);	
 	}
 	

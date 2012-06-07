@@ -415,7 +415,7 @@ var p = Graphics.prototype;
 	p.bezierCurveTo = function(cp1x, cp1y, cp2x, cp2y, x, y) {
 		//this._dirty = this._active = true;
 		//this._activeInstructions.push(new Command(this._ctx.bezierCurveTo, [cp1x, cp1y, cp2x, cp2y, x, y]));
-		throw 'EaselFl:Graphics.bezierCurveTo currently not implemented'; 
+		//throw 'EaselFl:Graphics.bezierCurveTo currently not implemented'; 
 		this._flChange.push([this.id, 'bt', [cp1x, cp1y, cp2x, cp2y, x, y]]); //-- need implementation Flash side
 		return this;
 	}

@@ -60,8 +60,17 @@
     p._flChange = null;
     p._flCreate = null;
     p._flItemIndex = null;
+    
+    /**
+     * The MouseEvent corresponding to an onPress that
+     * has not yet been completed by corresponding onMouseUp
+     * @property _flCurPressEvent
+     * @protected
+     * @type MouseEvent
+     **/
+    p._flCurPressEvent = null;
 	
-	p._flAttempts = 0;
+   p._flAttempts = 0;
 
     p._flFlush = function() {		
       if(this.flReady){
@@ -110,24 +119,53 @@
    }
     
     p.initialize = function(thecanvas, fl_url, width, height){
+      
+      var myID, self = this;
 	  
       var cnvID = thecanvas.getAttribute('id'),
-	  cnvWd = thecanvas.getAttribute('width') || CanvasFl.FL_WIDTH,
-	  cnvHt = thecanvas.getAttribute('height') || CanvasFl.FL_HEIGHT,
+      cnvWd = thecanvas.getAttribute('width') || CanvasFl.FL_WIDTH,
+      cnvHt = thecanvas.getAttribute('height') || CanvasFl.FL_HEIGHT,
       fl_swf_url = thecanvas.getAttribute('fl_swf_url') || CanvasFl.FL_URL;
       
 	  //-- Handle dispatches from Flash
-      function handleEvents(obj) {         
-         if(obj.type==='onClick' || obj.type==='onMouseOver' || obj.type==='onMouseOut'){
-            //-- Mouse events
-            var item = self._flItemIndex[obj.id];
+      function handleEvents(obj) {
+         var evt, item, target;
+         //-- Mouse events
+         if(obj.type==='onClick' ||
+            obj.type==='onMouseOver' ||
+            obj.type==='onMouseOut' ||
+            obj.type==='onPress' ||
+            obj.type==='onMouseMove' ||
+            obj.type==='onMouseUp'
+            ){
+            
+            //-- Continuation/Completion of onPress session event
+            if(obj.type==='onMouseMove' ||
+               obj.type==='onMouseUp'
+               ){
+               
+               item = self._flCurPressEvent;
+               target = item.target;
+               
+               if(obj.type==='onMouseUp') {
+                  self._flCurPressEvent = null;
+               }
+            } else {
+               item = target = self._flItemIndex[obj.id];
+            }
+            
             if(item && item[obj.type]){
-               item[obj.type](new MouseEvent(obj.type, obj.stageX, obj.stageY, item, null));  
+               evt =  new MouseEvent(obj.type, obj.stageX, obj.stageY, target, null);
+               item[obj.type](evt);
+               
+               if(obj.type==='onPress'){
+                  //--Set as current press event and dispatch onMouseMove and onMouseUp to this
+                  self._flCurPressEvent = evt;
+               }
             }
          }
       }         
-         
-      var myID, self = this;
+      
         
       //-- Setup flush data staging queues
       this._flCreate = [];
