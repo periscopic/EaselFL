@@ -1,0 +1,109 @@
+<!-- Displays a grid of red squares, rotated and translated; a small test image; hides
+everything after 3 seconds -->
+
+<html>
+<head>
+
+<script type="text/javascript" src="../js/swfobject.js"></script>
+
+<script type="text/javascript" src="../js/easelfl/geom/Matrix2D.js"></script>
+<script type="text/javascript" src="../js/easelfl/geom/Point.js"></script>
+<script type="text/javascript" src="../js/easelfl/geom/Rectangle.js"></script>	
+<script type="text/javascript" src="../js/easelfl/utils/CrossBrowser.js"></script>
+<script type="text/javascript" src="../js/easelfl/utils/UID.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/CanvasFl.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/DisplayObject.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Container.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Stage.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Graphics.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Shape.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/ImageFl.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Bitmap.js"></script>
+<script type="text/javascript" src="../js/easelfl/events/MouseEvent.js"></script>
+<script type="text/javascript" src="../js/easelfl/utils/Ticker.js"></script>
+
+<script type="text/javascript">
+
+//-- Start it up!
+window.onload = function(){
+	
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('width', 600);
+	canvas.setAttribute('height', 400);
+	canvas.setAttribute('fl_swf_url', '../haxe/bin/EaselFl.swf');
+	canvas.setAttribute('id', 'testContainer');
+	
+	var myStage = new Stage(canvas);
+	Ticker.addListener(myStage);
+	
+	//-- specific test code
+	var trace = document.getElementById('trace');
+	
+	var container = new Container();
+	myStage.addChild(container);
+
+	var bg = new Shape();
+	bg.graphics.beginFill('#FFF');
+	bg.graphics.drawRect(0, 0, 400, 400);
+	bg.graphics.endFill();
+	container.addChild(bg);
+	
+	var targ = new Shape();
+	targ.graphics.beginFill('#F00');
+	targ.graphics.drawCircle(150, 150, 100);
+	targ.graphics.drawCircle(250, 150, 100);
+	targ.graphics.drawCircle(150, 250, 100);
+	targ.graphics.drawCircle(250, 250, 100);
+	targ.graphics.endFill();
+	
+	container.addChild(targ);
+	
+	container.onClick = function(evt) {
+		var val = targ.hitTest(evt.stageX, evt.stageY);
+		trace.innerHTML = '['+evt.stageX+', '+evt.stageY+'] is '+(val?'inside':'outside')+' the red area';
+	}
+}
+
+
+</script>
+
+<style type="text/css">
+ body {
+	margin: 0;
+	background: #EEE;
+ }
+ 
+ h1 {
+	color: #FFF;
+ }
+ 
+ #testContainer {
+	position: absolute;
+	top: 0;
+	left: 0;
+ }
+ 
+ #stats {
+	position: absolute;
+	top: 0;
+	right: 0;
+ }
+ 
+ #trace {
+	position: absolute;
+	top: 195px;
+	left: 450px;
+	font-size: 14px;
+	font-family: Helvetica, Arial, sans-serif;
+	color: #333;
+ }
+ 
+</style>
+</head>
+<body>
+<div id="stats"></div>
+<div id="testContainer"></div>
+<div id="trace">Click somewhere in the box...</div>
+	
+</body>
+</html>
