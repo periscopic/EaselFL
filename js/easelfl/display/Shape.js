@@ -117,7 +117,12 @@ var p = Shape.prototype = new DisplayObject();
 	 **/
 	p.draw = function(ctx, ignoreCache) {
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
-		this.graphics.draw(ctx);
+		
+		if(!this._flCached){
+		  this._flCached = this._flCache;
+		  this.graphics.draw(ctx);		  
+		}
+		
 		return true;
 	}
 	

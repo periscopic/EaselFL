@@ -111,8 +111,10 @@ var p = Container.prototype = new DisplayObject();
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
 		_mtx = _mtx || this._matrix.reinitialize(1,0,0,1,0,0,this.alpha, this.shadow, this.compositeOperation);
 
-		//don't sync children if not visible
-		if (!this.isVisible()) { return true;}
+		//don't sync children if not visible or if cached
+		if (this._flCached || !this.isVisible()) { return true;}		
+		
+		this._flCached = this._flCache;		
 		
 		var l = this.children.length;
 		// this ensures we don't have issues with display list changes that occur during a draw:

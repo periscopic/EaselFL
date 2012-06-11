@@ -35,6 +35,7 @@
 
 (function(window) {
 
+
 /**
 * DisplayObject is an abstract class that should not be constructed directly. Instead construct subclasses such as
 * Sprite, Bitmap, and Shape. DisplayObject is the base class for all display classes in the CanvasDisplay library.
@@ -48,6 +49,8 @@ var DisplayObject = function() {
 var p = DisplayObject.prototype;
 
 	p._flChange = null;
+	p._flCache = false;
+	p._flCached = false;
 
 	/**
 	 * Suppresses errors generated when using features like hitTest, onPress/onClick, and getObjectsUnderPoint with cross
@@ -408,12 +411,6 @@ var p = DisplayObject.prototype;
 			}
 			this._flChange = [];
 		}
-		
-		//-- TODO : verify that this call can be ignored in EaselFl
-		//-- or used as a hook for the update function
-		/*if (ignoreCache || !this.cacheCanvas) { return false; }
-		ctx.drawImage(this.cacheCanvas, this._cacheOffsetX, this._cacheOffsetY);
-		return true;*/
 	}
 	
 	/**
@@ -421,10 +418,6 @@ var p = DisplayObject.prototype;
 	 **/
 	p._flRunCreate = function(ctx){
 	  throw 'prototype._flRunCreate must be overriden for all DisplayObject subclasses';
-	  /*if(this._flCtx!==ctx){
-		this._flCtx = ctx;
-		ctx._flCreate.push(['shp', this]);		
-	  }*/
 	}
 	
 	
@@ -445,21 +438,9 @@ var p = DisplayObject.prototype;
 	 * @param {Number} height The height of the cache region.
 	 **/
 	p.cache = function(x, y, width, height) {
-		if(CanvasFl.VERBOSE) console.warn("EaselFl::DisplayObject.cache not yet implemented");
-		/*
-		// draw to canvas.
-		var cacheCanvas = this.cacheCanvas;
-		if (cacheCanvas == null) { cacheCanvas = this.cacheCanvas = document.createElement("canvas"); }
-		var ctx = cacheCanvas.getContext("2d");
-		cacheCanvas.width = width;
-		cacheCanvas.height = height;
-		ctx.setTransform(1, 0, 0, 1, -x, -y);
-		ctx.clearRect(x, y, cacheCanvas.width, cacheCanvas.height); // some browsers don't clear correctly.
-		this.draw(ctx, true, this._matrix.reinitialize(1,0,0,1,-x,-y)); // containers require the matrix to work from
-		this._cacheOffsetX = x;
-		this._cacheOffsetY = y;
-		this._applyFilters();
-		this.cacheID = DisplayObject._nextCacheID++;*/
+	  //-- In EaselFl cache currently only prevents redraw
+	  this._flCache = true;
+	  this._flCached = false;
 	}
 
 	/**
@@ -472,19 +453,9 @@ var p = DisplayObject.prototype;
 	 * whatwg spec on compositing</a>.
 	 **/
 	p.updateCache = function(compositeOperation) {
-		if(CanvasFl.VERBOSE) console.warn("EaselFl::DisplayObject.updateCache not yet implemented");
-		//-- TODO : implement in EaselFl
-		/*var cacheCanvas = this.cacheCanvas, offX = this._cacheOffsetX, offY = this._cacheOffsetY;
-		if (cacheCanvas == null) { throw "cache() must be called before updateCache()"; }
-		var ctx = cacheCanvas.getContext("2d");
-		ctx.setTransform(1, 0, 0, 1, -offX, -offY);
-		if (!compositeOperation) {
-			ctx.clearRect(offX, offY, cacheCanvas.width, cacheCanvas.height);
-		} else { ctx.globalCompositeOperation = compositeOperation; }
-		this.draw(ctx, true);
-		if (compositeOperation) { ctx.globalCompositeOperation = "source-over"; }
-		this._applyFilters();
-		this.cacheID = DisplayObject._nextCacheID++;*/
+	  //-- In EaselFl cache currently only prevents redraw
+	  this._flCache = true;
+	  this._flCached = false;
 	}
 
 	/**
@@ -492,9 +463,7 @@ var p = DisplayObject.prototype;
 	 * @method uncache
 	 **/
 	p.uncache = function() {
-		if(CanvasFl.VERBOSE) console.warn("EaselFl::DisplayObject.uncache not yet implemented");
-		//--this._cacheDataURL = this.cacheCanvas = null;
-		//--this.cacheID = this._cacheOffsetX = this._cacheOffsetY = 0;
+	  this._flCache = this._flCached = false;
 	}
 	
 	/**
