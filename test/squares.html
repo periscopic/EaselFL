@@ -4,13 +4,14 @@ everything after 3 seconds -->
 <html>
 <head>
 
-<script type="text/javascript" src="js/Stats.js"></script>
+
 <script type="text/javascript" src="../js/swfobject.js"></script>
 
 <script type="text/javascript" src="../js/easelfl/geom/Matrix2D.js"></script>
 <script type="text/javascript" src="../js/easelfl/geom/Point.js"></script>
 <script type="text/javascript" src="../js/easelfl/geom/Rectangle.js"></script>	
 <script type="text/javascript" src="../js/easelfl/utils/UID.js"></script>
+<script type="text/javascript" src="../js/easelfl/utils/CrossBrowser.js"></script>
 <script type="text/javascript" src="../js/easelfl/display/CanvasFl.js"></script>
 <script type="text/javascript" src="../js/easelfl/display/DisplayObject.js"></script>
 <script type="text/javascript" src="../js/easelfl/display/Container.js"></script>
@@ -26,10 +27,6 @@ everything after 3 seconds -->
 
 //-- Start it up!
 window.onload = function(){
-	
-	var stats = new Stats();
-	document.getElementById('stats').appendChild(stats.domElement);
-	setInterval(function(){stats.update();}, 1000/60);
 	
 	var canvas = document.createElement('canvas');
 	canvas.setAttribute('width', 600);
@@ -98,17 +95,10 @@ window.onload = function(){
 	top: 0;
 	left: 0;
  }
- 
- #stats {
-	position: absolute;
-	top: 0;
-	right: 0;
- }
- 
+  
 </style>
 </head>
 <body>
-<div id="stats"></div>
 <h1>The EaselFl Stage is transparent by default</h1>
 <div id="testContainer"></div>	
 	

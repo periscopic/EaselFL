@@ -5,6 +5,7 @@ CONFIGURATION
 */
 // listing of all source files, with dependencies listed in order:
 var SOURCE_FILES = [
+	"../js/easelfl/utils/CrossBrowser.js",
 	"../js/easelfl/utils/UID.js",
 	"../js/easelfl/utils/Ticker.js",
 	"../js/easelfl/events/MouseEvent.js",

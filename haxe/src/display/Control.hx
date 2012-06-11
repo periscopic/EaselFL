@@ -85,7 +85,7 @@ class Control {
 	 * Takes a command that is in form ['002','hitTestPoint',[100, 100]] 
 	 */
 	
-	inline static public function invokeOn( cmd:Array<Dynamic> ):Dynamic{
+	inline static public function invoke( cmd:Dynamic ):Dynamic{
 		return items.get(cmd[0]).exec(cmd[1], cmd[2]);
 	}
 	

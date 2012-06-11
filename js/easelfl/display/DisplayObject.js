@@ -638,9 +638,13 @@ var p = DisplayObject.prototype;
 	 * @return {Boolean} A Boolean indicting whether a visible portion of the DisplayObject intersect the specified
 	 * local Point.
 	*/
+	
 	p.hitTest = function(x, y) {
-		//--TODO : map to flash hittest
-		throw "DisplayObject.hitTest not yet implemented in EaseFl";
+		if(this._flCtx){
+		 var val =  this._flCtx.flInvoke (this.id, 'htp', [x, y]);//'002','hitTestPoint',[100, 100]);
+		  return val;
+		}
+		return false;
 	}
 
 	/**

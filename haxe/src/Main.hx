@@ -66,13 +66,19 @@ class Main {
 		Control.init();
 		
 		//-- Add JS  method
-		ExternalInterface.addCallback('create', Control.createItems);
-		ExternalInterface.addCallback('change', Control.changeItems);
-		ExternalInterface.addCallback('invokeOn', Control.invokeOn);	
+		ExternalInterface.addCallback('sendCreate', Control.createItems);
+		ExternalInterface.addCallback('sendChange', Control.changeItems);
+		ExternalInterface.addCallback('sendInvoke', Control.invoke);	
 		//-- Notify JS the module is ready
 		callbackMethod = 'CanvasFl._flHooks.'+id;
 		ExternalInterface.call(callbackMethod);		
 	}
+	
+	//static public function invoke():Dynamic{
+	/*inline static public function invoke( d:Dynamic ):Dynamic{
+		trace('hello');
+		return true;
+	}*/
 }
 
 

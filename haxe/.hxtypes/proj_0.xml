@@ -1616,67 +1616,67 @@
 	<c path="Array"><c path="Float"/></c>
 	<e path="Bool"/>
 </f></hitTestPoint>
-		<addClickHandler get="inline" set="null" line="59" static="1"><f a="target:?nada">
+		<addClickHandler get="inline" set="null" line="61" static="1"><f a="target:?nada">
 	<c path="display.DisplayObjectFl"/>
 	<d/>
 	<e path="Void"/>
 </f></addClickHandler>
-		<addOverHandler get="inline" set="null" line="63" static="1"><f a="target:?nada">
+		<addOverHandler get="inline" set="null" line="65" static="1"><f a="target:?nada">
 	<c path="display.DisplayObjectFl"/>
 	<d/>
 	<e path="Void"/>
 </f></addOverHandler>
-		<addOutHandler get="inline" set="null" line="67" static="1"><f a="target:?nada">
+		<addOutHandler get="inline" set="null" line="69" static="1"><f a="target:?nada">
 	<c path="display.DisplayObjectFl"/>
 	<d/>
 	<e path="Void"/>
 </f></addOutHandler>
-		<addPressHandler get="inline" set="null" line="71" static="1"><f a="target:?nada">
+		<addPressHandler get="inline" set="null" line="73" static="1"><f a="target:?nada">
 	<c path="display.DisplayObjectFl"/>
 	<d/>
 	<e path="Void"/>
 </f></addPressHandler>
-		<removeClickHandler get="inline" set="null" line="75" static="1"><f a="target:?nada">
+		<removeClickHandler get="inline" set="null" line="77" static="1"><f a="target:?nada">
 	<c path="display.DisplayObjectFl"/>
 	<d/>
 	<e path="Void"/>
 </f></removeClickHandler>
-		<removeOverHandler get="inline" set="null" line="79" static="1"><f a="target:?nada">
+		<removeOverHandler get="inline" set="null" line="81" static="1"><f a="target:?nada">
 	<c path="display.DisplayObjectFl"/>
 	<d/>
 	<e path="Void"/>
 </f></removeOverHandler>
-		<removeOutHandler get="inline" set="null" line="83" static="1"><f a="target:?nada">
+		<removeOutHandler get="inline" set="null" line="85" static="1"><f a="target:?nada">
 	<c path="display.DisplayObjectFl"/>
 	<d/>
 	<e path="Void"/>
 </f></removeOutHandler>
-		<removePressHandler get="inline" set="null" line="87" static="1"><f a="target:?nada">
+		<removePressHandler get="inline" set="null" line="89" static="1"><f a="target:?nada">
 	<c path="display.DisplayObjectFl"/>
 	<d/>
 	<e path="Void"/>
 </f></removePressHandler>
-		<setMouseEnabled get="inline" set="null" line="91" static="1"><f a="target:isOn">
+		<setMouseEnabled get="inline" set="null" line="93" static="1"><f a="target:isOn">
 	<c path="display.DisplayObjectFl"/>
 	<e path="Bool"/>
 	<e path="Void"/>
 </f></setMouseEnabled>
-		<setHandCursor get="inline" set="null" line="95" static="1"><f a="target:isOn">
+		<setHandCursor get="inline" set="null" line="97" static="1"><f a="target:isOn">
 	<c path="display.DisplayObjectFl"/>
 	<e path="Bool"/>
 	<e path="Void"/>
 </f></setHandCursor>
-		<setButtonMode get="inline" set="null" line="99" static="1"><f a="target:isOn">
+		<setButtonMode get="inline" set="null" line="101" static="1"><f a="target:isOn">
 	<c path="display.DisplayObjectFl"/>
 	<e path="Bool"/>
 	<e path="Void"/>
 </f></setButtonMode>
-		<lastMoveEvtTime line="106" static="1"><c path="Float"/></lastMoveEvtTime>
-		<handleStageMove set="method" line="108" static="1"><f a="e">
+		<lastMoveEvtTime line="108" static="1"><c path="Float"/></lastMoveEvtTime>
+		<handleStageMove set="method" line="110" static="1"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></handleStageMove>
-		<handleStageUp set="method" line="118" static="1"><f a="e">
+		<handleStageUp set="method" line="120" static="1"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></handleStageUp>
@@ -1685,23 +1685,23 @@
 			<haxe_doc> Instance </haxe_doc>
 		</display>
 		<id public="1"><c path="Int"/></id>
-		<handleClick public="1" set="method" line="134"><f a="e">
+		<handleClick public="1" set="method" line="136"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></handleClick>
-		<handleOver public="1" set="method" line="139"><f a="e">
+		<handleOver public="1" set="method" line="141"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></handleOver>
-		<handleOut public="1" set="method" line="144"><f a="e">
+		<handleOut public="1" set="method" line="146"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></handleOut>
-		<handlePress public="1" set="method" line="149"><f a="e">
+		<handlePress public="1" set="method" line="151"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></handlePress>
-		<new public="1" set="method" line="132"><f a="id">
+		<new public="1" set="method" line="134"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></new>
@@ -2100,10 +2100,10 @@
 	<c path="Array"><c path="Array"><d/></c></c>
 	<e path="Void"/>
 </f></changeItems>
-		<invokeOn public="1" get="inline" set="null" line="88" static="1"><f a="cmd">
-	<c path="Array"><d/></c>
+		<invoke public="1" get="inline" set="null" line="88" static="1"><f a="cmd">
 	<d/>
-</f></invokeOn>
+	<d/>
+</f></invoke>
 		<image get="inline" set="null" line="92" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
@@ -2924,98 +2924,116 @@
 	appending small elements together.
 </haxe_doc>
 	</class>
+	<typedef path="display.CubicBezier" params="" file="src/display/GraphicsFl.hx" module="display.GraphicsFl"><a>
+	<c2><c path="flash.geom.Point"/></c2>
+	<c1><c path="flash.geom.Point"/></c1>
+	<a2><c path="flash.geom.Point"/></a2>
+	<a1><c path="flash.geom.Point"/></a1>
+</a></typedef>
+	<typedef path="display.CubicPair" params="" file="src/display/GraphicsFl.hx" module="display.GraphicsFl"><a>
+	<b><t path="display.CubicBezier"/></b>
+	<a><t path="display.CubicBezier"/></a>
+</a></typedef>
 	<class path="display.GraphicsFl" params="" file="src/display/GraphicsFl.hx">
 		<implements path="display.IExec"/>
-		<QUART_PI get="inline" set="null" line="11" static="1"><c path="Float"/></QUART_PI>
-		<CUBIC_SAMPLES get="inline" set="null" line="12" static="1"><c path="Int"/></CUBIC_SAMPLES>
+		<QUART_PI get="inline" set="null" line="24" static="1"><c path="Float"/></QUART_PI>
+		<CUBIC_PRECISION get="inline" set="null" line="25" static="1"><c path="Float"/></CUBIC_PRECISION>
+		<recurseCount line="26" static="1"><c path="Int"/></recurseCount>
 		<execs static="1"><c path="Hash"><d/></c></execs>
-		<init public="1" set="method" line="16" static="1"><f a=""><e path="Void"/></f></init>
-		<beginFill get="inline" set="null" line="46" static="1"><f a="target:color">
+		<init public="1" set="method" line="30" static="1"><f a=""><e path="Void"/></f></init>
+		<beginFill get="inline" set="null" line="60" static="1"><f a="target:color">
 	<c path="display.GraphicsFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></beginFill>
-		<setStrokeStyle get="inline" set="null" line="51" static="1"><f a="target:args">
+		<setStrokeStyle get="inline" set="null" line="65" static="1"><f a="target:args">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></setStrokeStyle>
-		<beginStroke get="inline" set="null" line="56" static="1"><f a="target:color">
+		<beginStroke get="inline" set="null" line="70" static="1"><f a="target:color">
 	<c path="display.GraphicsFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></beginStroke>
-		<beginBitmapStroke get="inline" set="null" line="61" static="1"><f a="target:args">
+		<beginBitmapStroke get="inline" set="null" line="75" static="1"><f a="target:args">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></beginBitmapStroke>
-		<endStroke get="inline" set="null" line="67" static="1"><f a="target:?nada">
+		<endStroke get="inline" set="null" line="81" static="1"><f a="target:?nada">
 	<c path="display.GraphicsFl"/>
 	<d/>
 	<e path="Void"/>
 </f></endStroke>
-		<endFill get="inline" set="null" line="71" static="1"><f a="target:?nada">
+		<endFill get="inline" set="null" line="85" static="1"><f a="target:?nada">
 	<c path="display.GraphicsFl"/>
 	<d/>
 	<e path="Void"/>
 </f></endFill>
-		<moveTo get="inline" set="null" line="75" static="1"><f a="target:xy">
+		<moveTo get="inline" set="null" line="89" static="1"><f a="target:xy">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></moveTo>
-		<lineTo get="inline" set="null" line="81" static="1"><f a="target:xy">
+		<lineTo get="inline" set="null" line="95" static="1"><f a="target:xy">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></lineTo>
-		<cubicCurveTo set="method" line="89" static="1"><f a="target:pts">
+		<cubicCurveTo get="inline" set="null" line="103" static="1"><f a="target:pts">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></cubicCurveTo>
-		<quadraticCurveTo get="inline" set="null" line="183" static="1"><f a="target:pts">
+		<drawCubicApprox set="method" line="126" static="1"><f a="target:bz:tolerance:recurseCount">
+	<c path="display.GraphicsFl"/>
+	<t path="display.CubicBezier"/>
+	<c path="Float"/>
+	<c path="Int"/>
+	<e path="Void"/>
+</f></drawCubicApprox>
+		<quadraticCurveTo get="inline" set="null" line="175" static="1"><f a="target:pts">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></quadraticCurveTo>
-		<drawRect get="inline" set="null" line="189" static="1"><f a="target:rct">
+		<drawRect get="inline" set="null" line="181" static="1"><f a="target:rct">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></drawRect>
-		<clear get="inline" set="null" line="194" static="1"><f a="target:?nada">
+		<clear get="inline" set="null" line="186" static="1"><f a="target:?nada">
 	<c path="display.GraphicsFl"/>
 	<d/>
 	<e path="Void"/>
 </f></clear>
-		<drawRoundRect get="inline" set="null" line="200" static="1"><f a="target:rect">
+		<drawRoundRect get="inline" set="null" line="192" static="1"><f a="target:rect">
 	<c path="display.GraphicsFl"/>
 	<d/>
 	<e path="Void"/>
 </f></drawRoundRect>
-		<drawRoundRectComplex get="inline" set="null" line="203" static="1"><f a="target:rect">
+		<drawRoundRectComplex get="inline" set="null" line="195" static="1"><f a="target:rect">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></drawRoundRectComplex>
-		<drawCircle get="inline" set="null" line="207" static="1"><f a="target:circ">
+		<drawCircle get="inline" set="null" line="199" static="1"><f a="target:circ">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></drawCircle>
-		<drawEllipse get="inline" set="null" line="211" static="1"><f a="target:ell">
+		<drawEllipse get="inline" set="null" line="203" static="1"><f a="target:ell">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></drawEllipse>
-		<drawArc get="inline" set="null" line="215" static="1"><f a="target:args">
+		<drawArc get="inline" set="null" line="207" static="1"><f a="target:args">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></drawArc>
-		<intersectLines set="method" line="302" static="1">
+		<intersectLines set="method" line="323" static="1">
 			<f a="x1:y1:x2:y2:x3:y3:x4:y4">
 				<c path="Float"/>
 				<c path="Float"/>
@@ -3025,10 +3043,19 @@
 				<c path="Float"/>
 				<c path="Float"/>
 				<c path="Float"/>
-				<d/>
+				<c path="flash.geom.Point"/>
 			</f>
 			<haxe_doc> Geometric utils </haxe_doc>
 		</intersectLines>
+		<midpoint get="inline" set="null" line="349" static="1"><f a="a:b">
+	<c path="flash.geom.Point"/>
+	<c path="flash.geom.Point"/>
+	<c path="flash.geom.Point"/>
+</f></midpoint>
+		<cubicBezierSplit get="inline" set="null" line="353" static="1"><f a="bz">
+	<t path="display.CubicBezier"/>
+	<t path="display.CubicPair"/>
+</f></cubicBezierSplit>
 		<graphics>
 			<c path="flash.display.Graphics"/>
 			<haxe_doc>** Instance variable and methods **</haxe_doc>
@@ -3036,16 +3063,16 @@
 		<strokeThickness><c path="Float"/></strokeThickness>
 		<curX><c path="Float"/></curX>
 		<curY><c path="Float"/></curY>
-		<link public="1" get="inline" set="null" line="281"><f a="g">
+		<link public="1" get="inline" set="null" line="273"><f a="g">
 	<c path="flash.display.Graphics"/>
 	<e path="Void"/>
 </f></link>
-		<exec public="1" get="inline" set="null" line="286"><f a="method:?arguments">
+		<exec public="1" get="inline" set="null" line="278"><f a="method:?arguments">
 	<c path="String"/>
 	<d/>
 	<d/>
 </f></exec>
-		<new public="1" set="method" line="276"><f a=""><e path="Void"/></f></new>
+		<new public="1" set="method" line="268"><f a=""><e path="Void"/></f></new>
 	</class>
 	<enum path="flash.display3D.Context3DCompareMode" params="" file="/usr/lib/haxe/std/flash9/display3D/Context3DCompareMode.hx">
 		<NOT_EQUAL/>

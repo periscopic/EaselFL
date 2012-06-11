@@ -89,7 +89,7 @@
             }
             
             //-- notify flash to create these
-            inst.create(this._flCreate);            
+            inst.sendCreate(this._flCreate);            
 		 
             //-- clean create queue
             this._flCreate = [];
@@ -97,11 +97,25 @@
          
          //-- Adjust state of Flash counterparts 
          if(this._flChange.length){
-           inst.change(this._flChange);
+           inst.sendChange(this._flChange);
            this._flChange = [];
          }
       }
    }
+   
+   /**
+    * Invoke a function in flash
+    * @param Dynamic
+    * @return Dynamic
+    **/
+   p.flInvoke = function(id, methodId, args) {	 
+	  if(this._flInstance){
+		 //return this._flInstance.sendInvoke(arguments);
+		 return this._flInstance.sendInvoke([id, methodId, args]);
+	  }
+	  return null;
+   }
+   
     
    /**
 	 * Triggered when associated Flash Movie is ready for interaction

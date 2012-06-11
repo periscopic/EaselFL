@@ -53,7 +53,9 @@ class DisplayObjectFl{
 	//-- Note: this does not test against opacity values as Easel does
 	//-- and will therefore yield slightly different results
 	inline static private function hitTestPoint(target:IDisplayable, xy:Array<Float>):Bool{
-		return target.display.hitTestPoint(xy[0], xy[1], true);
+		//-- Coordinates from Easel are in local coordinates, while flash accepts global coordinates
+		var stagePt = target.display.localToGlobal(new flash.geom.Point(xy[0], xy[1]));
+		return target.display.hitTestPoint(stagePt.x, stagePt.y, true);
 	}
 	
 	inline static private function addClickHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{

@@ -4,12 +4,26 @@ import flash.display.Graphics;
 import flash.display.DisplayObject;
 import flash.display.BitmapData;
 import flash.display.LineScaleMode;
+import flash.geom.Point;
 import display.Control;
+
+typedef CubicBezier = {
+	a1:Point,
+	c1:Point,
+	c2:Point,
+	a2:Point
+}
+
+typedef CubicPair = {
+	a:CubicBezier,
+	b:CubicBezier
+}
 
 class GraphicsFl implements IExec{
 	
 	inline static var QUART_PI:Float = Math.PI*0.25;
-	inline static var CUBIC_SAMPLES:Int = 4;
+	inline static var CUBIC_PRECISION:Float = 1;
+	static var recurseCount:Int = 0;
 
 	static private var execs:Hash<Dynamic>;
 	
@@ -86,99 +100,77 @@ class GraphicsFl implements IExec{
 	
 	//-- Native version of cubicCurveTo not implemented until Flash11. 
 	//-- Implement approximation using Quadratic bezier segments
-	static private function cubicCurveTo(target:GraphicsFl, pts:Array<Dynamic>):Void{
+	inline static private function cubicCurveTo(target:GraphicsFl, pts:Array<Dynamic>):Void{
 		//Flash11 version
 		#if flash11
 		target.graphics.cubicCurveTo(pts[0], pts[1], pts[2], pts[3], pts[4], pts[5]);
 		#else
-		
-		//Flash9 version
-		//TODO : test accuracy and recurse if not precise enough
-		var startX:Float = target.curX;
-		var startY:Float = target.curY;
-		var t:Float;
-		var it:Float;
-		var tri1X:Float;
-		var tri1Y:Float;
-		var tri2X:Float;
-		var tri2Y:Float;
-		var tri3X:Float;
-		var tri3Y:Float;
-		var l1X:Float;
-		var l1Y:Float;
-		var l2X:Float;
-		var l2Y:Float;
-		
-		t = 1/CUBIC_SAMPLES;
-		it = 1-t;
-		
-		var a1X:Float = startX;
-		var a1Y:Float = startY;
-		var c1X:Float = startX*it + pts[0]*t;
-		var c1Y:Float = startY*it + pts[1]*t; 
-		var c2X:Float;
-		var c2Y:Float;
-		var a2X:Float;
-		var a2Y:Float;
-		var pt:Dynamic;
-		
-		
-		
-		for(i in 1...(CUBIC_SAMPLES+1)) {
-			t = i/CUBIC_SAMPLES;
-			it = 1-t;
-			
-			//-- Quadratic cage
-			tri1X = startX*it + pts[0]*t;
-	      	tri1Y = startY*it + pts[1]*t;      		
-	      	tri2X = pts[0]*it + pts[2]*t;
-	      	tri2Y = pts[1]*it + pts[3]*t;
-	      	tri3X = pts[2]*it + pts[4]*t;
-	      	tri3Y = pts[3]*it + pts[5]*t;
-	      		
-	      	//-- Linear cage
-	      	l1X = tri1X*it+tri2X*t;
-	      	l1Y = tri1Y*it+tri2Y*t;
-	      	l2X = tri2X*it+tri3X*t;
-	      	l2Y = tri2Y*it+tri3Y*t;
-		
-			//-- Second control point and anchor point for this segment
-			c2X = l1X;
-			c2Y = l1Y;
-			a2X = l1X*it+l2X*t;
-			a2Y = l1Y*it+l2Y*t; 
-		
-			//-- Intersection of handle segments (used for quadratic control point)
-			pt = intersectLines(a1X, a1Y, c1X, c1Y, c2X, c2Y, a2X, a2Y);
-			
-			//-- if segment uses parallel handles, call recursively using this segment.
-			//-- this will only occur if the initial handles intersect, so there will
-			//-- only be 1 level of recursion
-			if(pt==null) {
-				target.curX = a1X;
-      			target.curY = a1Y;
-				if(i==1){
-					cubicCurveTo(target, [c1X, c1Y, c2X, c2Y, a2X, a2Y]);
-				}else{
-					//-- first control point must be mirrored around anchor in all but first segment
-					cubicCurveTo(target, [2*a1X - c1X, 2*a1Y - c1Y, c2X, c2Y, a2X, a2Y]);
-				}
-			}else{
-				//-- Draw the approximated Quad curve
-				target.graphics.curveTo(pt.x, pt.y, a2X, a2Y);
-			}
-			
-			a1X = a2X;
-			a1Y = a2Y;
-			c1X = c2X;
-			c1Y = c2Y;
-		}
+			var bz:CubicBezier = 				
+				{ 	
+					a1:new Point(target.curX, target.curY),
+					c1:new Point(pts[0], pts[1]),
+					c2:new Point(pts[2], pts[3]),
+					a2:new Point(pts[4], pts[5])
+				};
+				
+			drawCubicApprox(target, bz, CUBIC_PRECISION, 8);
 
 		#end
 
       	target.curX = pts[4];
       	target.curY = pts[5];
 	}
+	
+	// TODO : fix crash when 3 of points are co-linear
+	
+	static function drawCubicApprox(target:GraphicsFl, bz:CubicBezier, tolerance:Float, recurseCount:Int) {
+		//points are equal
+		if(bz.a1.x == bz.a2.x && bz.a1.y == bz.a2.y && bz.a1.x == bz.c1.x && bz.a1.y == bz.c1.y  && bz.a1.x == bz.c2.x && bz.a1.y == bz.c2.y){			
+			return;
+		}
+		
+		// find intersection between bezier arms
+		var s:Point = intersectLines(bz.a1.x, bz.a1.y, bz.c1.x, bz.c1.y, bz.c2.x, bz.c2.y, bz.a2.x, bz.a2.y);
+		
+		var dx:Float;
+		var dy:Float;
+		
+	
+		
+			/*if(s==null){
+				
+				return;
+			}else{*/
+			
+			// find distance between the midpoints
+				dx = (bz.a1.x + bz.a2.x + s.x * 4 - (bz.c1.x + bz.c2.x) * 3) * .125;
+				dy = (bz.a1.y + bz.a2.y + s.y * 4 - (bz.c1.y + bz.c2.y) * 3) * .125;
+			
+				// split curve if the quadratic isn't close enough
+				if (recurseCount<1 || dx*dx + dy*dy > tolerance) {
+					
+						
+					
+					var halves = cubicBezierSplit(bz);
+					// recursive call to subdivide curve
+					drawCubicApprox(target, halves.a, tolerance, recurseCount-1);//this.$cBez (a,     b0.b, b0.c, b0.d, k);
+					drawCubicApprox(target, halves.b, tolerance, recurseCount-1);//this.$cBez (b1.a,  b1.b, b1.c, d,    k);
+					
+						
+					
+				} else {
+					// end recursion by drawing quadratic bezier
+					if(recurseCount>1){
+						target.graphics.curveTo (s.x, s.y, bz.a2.x, bz.a2.y);
+						//target.graphics.drawCircle(bz.a2.x, bz.a2.y, 1);
+						
+					}
+				}
+			//}
+		
+	}
+	
+	
 	
 	inline static private function quadraticCurveTo(target:GraphicsFl, pts:Array<Dynamic>):Void{
 		target.curX = pts[2];
@@ -299,14 +291,14 @@ class GraphicsFl implements IExec{
 	
 	/** Geometric utils **/
 		
-	static function intersectLines (x1:Float, y1:Float, x2:Float, y2:Float, x3:Float, y3:Float, x4:Float, y4:Float):Dynamic {
+	/*static function intersectLines (x1:Float, y1:Float, x2:Float, y2:Float, x3:Float, y3:Float, x4:Float, y4:Float):Point {
 	  var m1 : Float =(y2 - y1) / (x2 - x1);
 	  var m3 : Float = (y4 - y3) / (x4 - x3);
 	  
 	   if(m1==m3){
 		   	if((y4-y1)/(x4-x1) == m1) {
 		   		//same line
-		   		return {x:x1, y:y1}
+		   		return new Point(x1, y1);
 		   	}
 			//parallel lines
 		   	return null;
@@ -325,9 +317,52 @@ class GraphicsFl implements IExec{
 	   //intercept on more horizontal slope for greater precision
 	   var yInt:Float = Math.abs(m3) < Math.abs(m1) ? m3 * (xInt - x3) + y3 : m1 * (xInt - x1) + y1;
 	   
-	   return { x:xInt,y:yInt };
+	   return new Point(xInt,yInt);
+	}*/	
+	
+	static function intersectLines(x1:Float, y1:Float, x2:Float, y2:Float, x3:Float, y3:Float, x4:Float, y4:Float):Point {
+
+		var dx1 = x2 - x1;
+		var dx2 = x3 - x4;
+		
+		if (dx1==0 && dx2==0) return null;
+		
+		var m1 = (y2 - y1) / dx1;
+		var m2 = (y3 - y4) / dx2;
+		
+		if (dx1==0) {
+			// infinity
+			return new Point(x1, m2 * (x1 - x4) + y4);
+	
+		} else if (dx2==0) {
+			// infinity
+			return new Point(x4, m1 * (x4 - x1) + y1);
+		}
+		var xInt = (-m2 * x4 + y4 + m1 * x1 - y1) / (m1 - m2);
+		var yInt = m1 * (xInt - x1) + y1;
+		return new Point(xInt, yInt);
 	}
 	
+	
+	
 
+	inline static function midpoint(a:Point, b:Point):Point {
+		return Point.interpolate(a, b, 0.5);
+	}
+
+	inline static function cubicBezierSplit(bz:CubicBezier):CubicPair {
+	
+		var p01 = midpoint (bz.a1, bz.c1);
+		var p12 = midpoint (bz.c1, bz.c2);
+		var p23 = midpoint (bz.c2, bz.a2);
+		var p02 = midpoint (p01, p12);
+		var p13 = midpoint (p12, p23);
+		var p03 = midpoint (p02, p13);
+		
+		return {
+			a:{a1:bz.a1,  c1:p01, c2:p02, a2:p03},
+			b:{a1:p03, c1:p13, c2:p23, a2:bz.a2 }  
+		};
+	}
 	
 }

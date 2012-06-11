@@ -378,11 +378,11 @@ var p = Container.prototype = new DisplayObject();
 	 * @return {Boolean} A Boolean indicating whether there is a visible section of a DisplayObject that overlaps the specified
 	 * coordinates.
 	 **/
-	p.hitTest = function(x, y) {
+	/*p.hitTest = function(x, y) {
 		throw 'EaselFl:Container.hitTest not yet implemented';
 		// TODO: optimize to use the fast cache check where possible.
 		return (this.getObjectUnderPoint(x, y) != null);
-	}
+	}*/
 
 	/**
 	 * Returns an array of all display objects under the specified coordinates that are in this container's display list.
