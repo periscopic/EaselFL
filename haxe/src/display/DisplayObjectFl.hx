@@ -6,13 +6,14 @@ import flash.display.DisplayObject;
 import flash.events.MouseEvent;
 
 import flash.geom.Matrix;
+import flash.filters.DropShadowFilter;
 
 class DisplayObjectFl{	
-
 	
 	static public function init(execs:Hash<Dynamic>){
 		execs.set('op',opacity);
 		execs.set('vs',visible);
+		execs.set('sh', shadow);
 		execs.set('mtx', setMatrix);		
 		execs.set('amck', addClickHandler);
 		execs.set('amot', addOutHandler);
@@ -102,6 +103,34 @@ class DisplayObjectFl{
 		target.display.buttonMode = isOn;
 	}
 	
+	inline static private function shadow(target:DisplayObjectFl, params:Dynamic):Void{
+		if(!target._shadow) {
+			target._shadow = {
+				color:params.color,
+				blur:params.blur,
+				offsetX:params.offsetX,
+				offsetY:params.offsetY			
+			};
+			var ds:DropShadowFilter =  new DropShadowFilter(-(-target._shadow.offsetX - target._shadow.offsetY), getAngleFromOffsets(target._shadow.offsetX, target._shadow.offsetY), target._shadow.color, 1, target._shadow.blur, target._shadow.blur, 1, 2);
+			target.display.filters = [ds];
+		}
+		else {
+			target._shadow.color = params.color;
+			target._shadow.blur = params.blur;
+			target._shadow.offsetX = params.offsetX;
+			target._shadow.offsetY = params.offsetY;
+		}
+		target.display.filters[0].color = target._shadow.color;
+		target.display.filters[0].blurX = target.display.filters[0].blurX = target._shadow.blur;
+		target.display.filters[0].angle = getAngleFromOffsets(target._shadow.offsetX, target._shadow.offsetY);
+		target.display.filters[0].distance = -(-target._shadow.offsetX - target._shadow.offsetY);	
+	}
+	
+	inline private static function getAngleFromOffsets(ox:Float, oy:Float):Float {
+		var angle = Math.atan2(oy,ox) * 180/Math.PI;
+		return angle;
+	}
+	
 	//TODO: decide if these should be moved to a Stage specific class
 	
 	//-- onMouseMove and onMouseUp events are sent back to handlers on the onPress event
@@ -130,6 +159,8 @@ class DisplayObjectFl{
 	/** Instance **/
 	public var display:Sprite;
 	public var id:Int;
+	// stores the shadow props
+	private var _shadow:Dynamic;
 	
 	public function new( id:Int ){ this.id = id;}
 	
@@ -158,5 +189,7 @@ class DisplayObjectFl{
 		var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'onPress', id:this.id};
 		Main.dispatch(evt);	
 	}
+	
+	
 	
 }

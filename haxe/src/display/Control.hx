@@ -31,7 +31,6 @@ class Control {
 		makers.set('gfx', graphics);
 		makers.set('cnt', container);
 		makers.set('stg', stage);
-		makers.set('sh', shadow);
 		
 		ImageFl.init();
 		BitmapFl.init();
@@ -131,13 +130,6 @@ class Control {
 		/*containers.set('stage', cnt);
 		items.set('stage', cnt);
 		displays.set('stage', cnt);*/
-	}
-	
-	inline static private function shadow(id:Int):Void{
-		//var gfx:GraphicsFl = new GraphicsFl();
-		//items.set(id, gfx);
-		//graphicsList.set(id, gfx);
-		trace("shadow is being set");
 	}	
 	
 }

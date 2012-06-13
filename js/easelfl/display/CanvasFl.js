@@ -89,13 +89,13 @@
             }
             
             //-- notify flash to create these
-            inst.sendCreate(this._flCreate);            
-		 
+            inst.sendCreate(this._flCreate);    
+            
             //-- clean create queue
             this._flCreate = [];
          }         
          
-         //-- Adjust state of Flash counterparts 
+         //-- Adjust state of Flash counterparts
          if(this._flChange.length){
            inst.sendChange(this._flChange);
            this._flChange = [];
