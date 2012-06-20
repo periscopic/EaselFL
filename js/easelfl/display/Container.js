@@ -280,7 +280,7 @@ var p = Container.prototype = new DisplayObject();
 	 **/
 	p.sortChildren = function(sortFunction) {
 		this.children.sort(sortFunction);
-		throw 'EaselFl:Container.sortChildren not yet implemented';
+		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Container.sortChildren not yet implemented';
 	}
 
 	/**
@@ -343,7 +343,7 @@ var p = Container.prototype = new DisplayObject();
 	 * @method setChildIndex
 	 **/
 	p.setChildIndex = function(child, index) {
-		throw 'EaselFl:Container.setChildIndex not yet implemented';
+		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Container.setChildIndex not yet implemented';
 	
 		var kids = this.children;
 		for (var i=0,l=kids.length;i<l;i++) {
@@ -380,6 +380,7 @@ var p = Container.prototype = new DisplayObject();
 	 * @return {Boolean} A Boolean indicating whether there is a visible section of a DisplayObject that overlaps the specified
 	 * coordinates.
 	 **/
+	//-- NOTE: implemented in DisplayObject
 	/*p.hitTest = function(x, y) {
 		throw 'EaselFl:Container.hitTest not yet implemented';
 		// TODO: optimize to use the fast cache check where possible.

@@ -38,18 +38,10 @@ window.onload = function(){
 	Ticker.addListener(myStage);
 	
 	//-- specific test code
-
-	
 	var bmp = new Bitmap('img/testImage.png');
 	myStage.addChild(bmp);
 	bmp.x = 10;
 	bmp.y = 155;
-	
-	
-	// Note that bitmap fills and strokes are drawn immediately in flash
-	// and not redrawn each frame. Loading of an image must be loaded before
-	// drawing for rendering to occur properly, since it currently does not
-	// force a redraw of the graphics.
 	
 	var img = new Image();
 	img.src = 'img/testImage.png';
@@ -59,20 +51,14 @@ window.onload = function(){
 	shp.y = 200;
 	var g = shp.graphics;
 	g.beginBitmapFill(img);
+	g.drawCircle(0, 0, 100);
+	g.endFill();
+		
+	g.setStrokeStyle(2);
+	g.beginBitmapStroke(img);
+	g.drawCircle(160, 0, 50);
+	g.endFill();
 	myStage.addChild(shp);
-	
-	img.onload = function() {
-		setTimeout(function(){
-		g.beginBitmapFill(img);
-		g.drawCircle(0, 0, 100);
-		g.endFill();
-		
-		g.setStrokeStyle(2);
-		g.beginBitmapStroke(img);
-		g.drawCircle(160, 0, 50);
-		
-		}, 500);
-	}
 }
 
 

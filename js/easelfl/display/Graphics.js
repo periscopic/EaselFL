@@ -278,9 +278,6 @@ var p = Graphics.prototype;
 		this.id = UID.get();
 		this._flChange = [];
 		this._flChildImages = [];
-		//Stage._flPushCreate('gfx', this);
-		/*this.clear();
-		this._ctx = Graphics._ctx;*/
 	}
 	
 	/**
@@ -314,7 +311,6 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.moveTo = function(x, y) {
-		//this._activeInstructions.push(new Command(this._ctx.moveTo, [x, y]));
 		this._flChange.push([this.id, 'mt', [x, y]]);
 		return this;
 	}
@@ -330,8 +326,6 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.lineTo = function(x, y) {
-		//this._dirty = this._active = true;
-		//this._activeInstructions.push(new Command(this._ctx.lineTo, [x, y]));
 		this._flChange.push([this.id, 'lt', [x, y]]);
 		return this;
 	}
@@ -349,10 +343,8 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.arcTo = function(x1, y1, x2, y2, radius) {
-		//this._dirty = this._active = true;
-		//this._activeInstructions.push(new Command(this._ctx.arcTo, [x1, y1, x2, y2, radius]));
-		throw 'EaselFl:Graphics.arcTo currently not implemented'; 
-		this._flChange.push([this.id, 'art', [x1, y1, x2, y2, radius]]); //-- need implementation Flash side
+		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.arcTo currently not implemented (Note: Graphics.arc is implemented)'; 
+		//this._flChange.push([this.id, 'art', [x1, y1, x2, y2, radius]]); //-- need implementation Flash side
 		
 		return this;
 	}
@@ -372,11 +364,8 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.arc = function(x, y, radius, startAngle, endAngle, anticlockwise) {
-		//this._dirty = this._active = true;
 		if (anticlockwise == null) { anticlockwise = false; }
-		//this._activeInstructions.push(new Command(this._ctx.arc, [x, y, radius, startAngle, endAngle, anticlockwise]));
-		//throw 'EaselFl:Graphics.arc currently not implemented'; 
-		this._flChange.push([this.id, 'arc', [x, y, radius, startAngle, endAngle, anticlockwise]]); //-- need implementation Flash side
+		this._flChange.push([this.id, 'arc', [x, y, radius, startAngle, endAngle, anticlockwise]]);
 		return this;
 	}
 	
@@ -392,8 +381,6 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.quadraticCurveTo = function(cpx, cpy, x, y) {
-		//this._dirty = this._active = true;
-		//this._activeInstructions.push(new Command(this._ctx.quadraticCurveTo, [cpx, cpy, x, y]));
 		this._flChange.push([this.id, 'qt', [cpx, cpy, x, y]]);
 		return this;
 	}
@@ -413,10 +400,7 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.bezierCurveTo = function(cp1x, cp1y, cp2x, cp2y, x, y) {
-		//this._dirty = this._active = true;
-		//this._activeInstructions.push(new Command(this._ctx.bezierCurveTo, [cp1x, cp1y, cp2x, cp2y, x, y]));
-		//throw 'EaselFl:Graphics.bezierCurveTo currently not implemented'; 
-		this._flChange.push([this.id, 'bt', [cp1x, cp1y, cp2x, cp2y, x, y]]); //-- need implementation Flash side
+		this._flChange.push([this.id, 'bt', [cp1x, cp1y, cp2x, cp2y, x, y]]);
 		return this;
 	}
 	
@@ -433,8 +417,6 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.rect = function(x, y, w, h) {
-		//this._dirty = this._active = true;
-		//this._activeInstructions.push(new Command(this._ctx.rect, [x, y, w, h]));
 		this._flChange.push([this.id, 'dr', [x, y, w, h]]);
 		return this;
 	}
@@ -446,13 +428,9 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.closePath = function() {
-		//if (this._active) {
-		//	this._dirty = true;
-			//this._activeInstructions.push(new Command(this._ctx.closePath, []));
-			throw 'EaselFl:Graphics.closePath currently not implemented'; 
-			this._flChange.push([this.id, 'cp']); //--need implementation Flash side
-		//}
-		return this;
+			if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.closePath currently not implemented'; 
+			//this._flChange.push([this.id, 'cp']); //--need implementation Flash side
+			return this;
 	}
 	
 	
@@ -463,11 +441,6 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.clear = function() {
-		/*this._instructions = [];
-		this._oldInstructions = [];
-		this._activeInstructions = [];
-		this._strokeStyleInstructions = this._strokeInstructions = this._fillInstructions = null;*/
-		//this._active = this._dirty = false;
 		this._flChange.push([this.id, 'c']);
 		return this;
 	}
@@ -502,15 +475,8 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.beginLinearGradientFill = function(colors, ratios, x0, y0, x1, y1) {
-		/*if (this._active) { this._newPath(); }
-		var o = this._ctx.createLinearGradient(x0, y0, x1, y1);
-		for (var i=0, l=colors.length; i<l; i++) {
-			o.addColorStop(ratios[i], colors[i]);
-		}
-		this._fillInstructions = [new Command(this._setProp, ["fillStyle", o])];
-		*/
-		throw 'EaselFl:Graphics.beginLinearGradientFill currently not implemented';
-		this._flChange.push([this.id, 'lgf', [colors, ratios, x0, y0, x1, y1]]); //-- needs implementation on Flash side
+		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.beginLinearGradientFill currently not implemented';
+		//this._flChange.push([this.id, 'lgf', [colors, ratios, x0, y0, x1, y1]]); //-- needs implementation on Flash side
 		return this;
 	}
 	
@@ -532,14 +498,8 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.beginRadialGradientFill = function(colors, ratios, x0, y0, r0, x1, y1, r1) {
-		/*if (this._active) { this._newPath(); }
-		var o = this._ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);
-		for (var i=0, l=colors.length; i<l; i++) {
-			o.addColorStop(ratios[i], colors[i]);
-		}
-		this._fillInstructions = [new Command(this._setProp, ["fillStyle", o])];*/
-		throw 'EaselFl:Graphics.beginRadialGradientFill currently not implemented';
-		this._flChange.push([this.id, 'rgf', [colors, ratios, x0, y0, r0, x1, y1, r1]]); //-- needs implementation on Flash side
+		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.beginRadialGradientFill currently not implemented';
+		//this._flChange.push([this.id, 'rgf', [colors, ratios, x0, y0, r0, x1, y1, r1]]); //-- needs implementation on Flash side
 		return this;
 	}
 	
@@ -552,13 +512,15 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.beginBitmapFill = function(image, repetition) {
-		throw 'EaselFl:Graphics.beginBitmapFill currently not impelement';
+		ImageFl.watch(image);
+		this._flChildImages.push(image.__fl);
+		this._flChange.push([this.id, 'bf', [image.__fl.id, repetition]])
 		
 		/*if (this._active) { this._newPath(); }
 		repetition = repetition || "";
 		var o = this._ctx.createPattern(image, repetition);
-		this._fillInstructions = [new Command(this._setProp, ["fillStyle", o])];
-		return this;*/
+		this._fillInstructions = [new Command(this._setProp, ["fillStyle", o])];*/
+		return this;
 	}
 	
 	/**
@@ -566,7 +528,6 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.endFill = function() {
-		/*this.beginFill();*/
 		this._flChange.push([this.id, 'ef']);
 		return this;
 	}
@@ -582,7 +543,7 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.setStrokeStyle = function(thickness, caps, joints, miterLimit) {
-		//console.log('EaselFl:Graphics.setStrokeStyle currently not implemented');
+		//TODO : implement caps, joints, miterLimit in Flash
 		this._flChange.push([this.id, 'ss',[thickness, caps, joints, miterLimit]]);
 		
 		/*if (this._active) { this._newPath(); }
@@ -601,7 +562,7 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.beginStroke = function(color) {
-		this._flChange.push([this.id, 'bs', color]);
+		this._flChange.push([this.id, 's', color]);
 		/*if (this._active) { this._newPath(); }
 		this._strokeInstructions = color ? [new Command(this._setProp, ["strokeStyle", color])] : null;*/
 		return this;
@@ -619,14 +580,14 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.beginLinearGradientStroke = function(colors, ratios, x0, y0, x1, y1) {
-		throw 'EaselFl:Graphics.beginLinearGradientStroke currently not implemented';
+		if(CanvasFl.THROW_UNIMPLEMENTED)  throw 'EaselFl:Graphics.beginLinearGradientStroke currently not implemented';
 		/*if (this._active) { this._newPath(); }
 		var o = this._ctx.createLinearGradient(x0, y0, x1, y1);
 		for (var i=0, l=colors.length; i<l; i++) {
 			o.addColorStop(ratios[i], colors[i]);
 		}
-		this._strokeInstructions = [new Command(this._setProp, ["strokeStyle", o])];
-		return this;*/
+		this._strokeInstructions = [new Command(this._setProp, ["strokeStyle", o])];*/
+		return this;
 	}
 	
 	
@@ -644,14 +605,14 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)	
 	 **/
 	p.beginRadialGradientStroke = function(colors, ratios, x0, y0, r0, x1, y1, r1) {
-		throw 'EaselFl:Graphics.beginRadialGradientStroke currently not implemented';
+		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.beginRadialGradientStroke currently not implemented';
 		/*if (this._active) { this._newPath(); }
 		var o = this._ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);
 		for (var i=0, l=colors.length; i<l; i++) {
 			o.addColorStop(ratios[i], colors[i]);
 		}
-		this._strokeInstructions = [new Command(this._setProp, ["strokeStyle", o])];
-		return this;*/
+		this._strokeInstructions = [new Command(this._setProp, ["strokeStyle", o])];*/
+		return this;
 	}
 	
 	/**
@@ -662,13 +623,10 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)	
 	 **/
 	p.beginBitmapStroke = function(image, repetition) {
-		//throw 'EaselFl:Graphics.beginBitmapStroke currently not implemented';
-		this._flChildImages.push(image);
-		this._flChange.push([this.id, 'bbs', [image.id, repetition]]);
-		/*if (this._active) { this._newPath(); }
-		repetition = repetition || "";
-		var o = this._ctx.createPattern(image, repetition);
-		this._strokeInstructions = [new Command(this._setProp, ["strokeStyle", o])];*/
+		//-- make sure image has been loaded into flash
+		ImageFl.watch(image);
+		this._flChildImages.push(image.__fl);
+		this._flChange.push([this.id, 'bs', [image.__fl.id, repetition]]);
 		return this;
 	}
 	
@@ -679,8 +637,6 @@ var p = Graphics.prototype;
 	 **/
 	p.endStroke = function() {
 		this._flChange.push([this.id, 'es']);
-		//throw 'EaselFl:Graphics.endStroke currently not implemented';
-		//this.beginStroke();
 		return this;
 	}
 	
@@ -709,8 +665,8 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.drawRoundRect = function(x, y, w, h, radius) {
-		throw 'EaselFl:Graphics.drawRoundRect currently not implemented';
-		this.drawRoundRectComplex(x, y, w, h, radius, radius, radius, radius);
+		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.drawRoundRect currently not implemented';
+		//this.drawRoundRectComplex(x, y, w, h, radius, radius, radius, radius);
 		return this;
 	}
 	
@@ -728,7 +684,7 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.drawRoundRectComplex = function(x, y, w, h, radiusTL, radiusTR, radiusBR, radiusBL) {
-		throw 'EaselFl:Graphics.drawRoundRectComplex currently not implemented';
+		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.drawRoundRectComplex currently not implemented';
 		/*this._dirty = this._active = true;
 		var pi = Math.PI, arc=this._ctx.arc, lineTo=this._ctx.lineTo;
 		
@@ -750,8 +706,8 @@ var p = Graphics.prototype;
 			(radiusTL>=0) ?
 				new Command(arc, [x+radiusTL, y+radiusTL, radiusTL, pi, -pi/2]) :
 				new Command(arc, [x, y, -radiusTL, pi/2, 0, true])
-		);
-		return this;*/
+		);*/
+		return this;
 	} 
 	
 	/**
@@ -776,7 +732,6 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.drawCircle = function(x, y, radius) {
-		//throw 'EaselFl:Graphics.drawCircle currently not implemented';
 		this._flChange.push([this.id, 'dc', [x, y, radius]]);
 		return this;
 	}
@@ -791,7 +746,7 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.drawEllipse = function(x, y, w, h) {
-		throw 'EaselFl:Graphics.drawEllipse currently not implemented';
+		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.drawEllipse currently not implemented';
 		/*this._dirty = this._active = true;
 		var k = 0.5522848;
 		var ox = (w / 2) * k;
@@ -807,8 +762,8 @@ var p = Graphics.prototype;
 			new Command(this._ctx.bezierCurveTo, [xm+ox, y, xe, ym-oy, xe, ym]),
 			new Command(this._ctx.bezierCurveTo, [xe, ym+oy, xm+ox, ye, xm, ye]),
 			new Command(this._ctx.bezierCurveTo, [xm-ox, ye, x, ym+oy, x, ym])
-		);
-		return this;*/
+		);*/
+		return this;
 	}
 	
 	/**
@@ -827,7 +782,7 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.drawPolyStar = function(x, y, radius, sides, pointSize, angle) {
-		throw 'EaselFl:Graphics.drawPolyStar currently not implemented';
+		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.drawPolyStar currently not implemented';
 		/*this._dirty = this._active = true;
 		if (pointSize == null) { pointSize = 0; }
 		pointSize = 1-pointSize;
@@ -843,8 +798,8 @@ var p = Graphics.prototype;
 			}
 			angle += a;
 			this._activeInstructions.push(new Command(this._ctx.lineTo, [x+Math.cos(angle)*radius, y+Math.sin(angle)*radius]));
-		}
-		return this;*/
+		}*/
+		return this;
 	}
 	
 	/**
@@ -876,8 +831,8 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.decodePath = function(str) {
-		throw 'EaselFl:Graphics.decodePath currently not implemented';
-		var instructions = [this.moveTo, this.lineTo, this.quadraticCurveTo, this.bezierCurveTo];
+		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.decodePath currently not implemented';
+		/*var instructions = [this.moveTo, this.lineTo, this.quadraticCurveTo, this.bezierCurveTo];
 		var paramCount = [2, 2, 4, 6];
 		var i=0, l=str.length;
 		var params = [];
@@ -907,7 +862,7 @@ var p = Graphics.prototype;
 				i += charCount;
 			}
 			f.apply(this,params);
-		}
+		}*/
 		return this;
 	}
 	
@@ -917,8 +872,8 @@ var p = Graphics.prototype;
 	 @return {Graphics} A clone of the current Graphics instance.
 	 **/
 	p.clone = function() {
-		throw 'EaselFl:Graphics.clone currently not implemented';
-		var o = new Graphics();
+		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.clone currently not implemented';
+		/*var o = new Graphics();
 		o._instructions = this._instructions.slice();
 		o._activeInstructions = this._activeInstructions.slice();
 		o._oldInstructions = this._oldInstructions.slice();
@@ -926,7 +881,7 @@ var p = Graphics.prototype;
 		if (this._strokeInstructions) { o._strokeInstructions = this._strokeInstructions.slice(); }
 		if (this._strokeStyleInstructions) { o._strokeStyleInstructions = this._strokeStyleInstructions.slice(); }
 		o._active = this._active;
-		o._dirty = this._dirty;
+		o._dirty = this._dirty;*/
 		return o;
 	}
 		

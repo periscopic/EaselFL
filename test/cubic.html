@@ -51,7 +51,8 @@ window.onload = function(){
 	var a1 = createNode(200, 300, '#F00', myStage);
 	var a2 = createNode(400, 300, '#F00', myStage);
 	var c1 = createNode(200, 100, '#00F', myStage);
-	var c2 = createNode(300, 100, '#00F', myStage);
+	var c2 = createNode(400, 100, '#00F', myStage);
+
 	
 	renderCurve();
 	
@@ -65,7 +66,7 @@ window.onload = function(){
 		g.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, a2.x, a2.y);
 		g.endStroke();
 	}
-	
+
 	
 	function createNode(x, y, color, container) {
 		var shp = new Shape();

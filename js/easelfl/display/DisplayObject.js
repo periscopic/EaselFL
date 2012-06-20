@@ -472,7 +472,7 @@ var p = DisplayObject.prototype;
 	* @method getCacheDataURL.
 	**/
 	p.getCacheDataURL = function() {
-		throw "EaselFl::DisplayObject.getCacheDataURL not yet implemented";
+		if(CanvasFl.THROW_UNIMPLEMENTED) throw "EaselFl::DisplayObject.getCacheDataURL not yet implemented";
 		/*if (!this.cacheCanvas) { return null; }
 		if (this.cacheID != this._cacheDataURLID) { this._cacheDataURL = this.cacheCanvas.toDataURL(); }
 		return this._cacheDataURL;*/

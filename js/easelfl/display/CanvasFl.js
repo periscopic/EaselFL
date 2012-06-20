@@ -270,7 +270,8 @@
    CanvasFl.FL_TRANSPARENT = true;
    CanvasFl.FL_WIDTH = '400';
    CanvasFl.FL_HEIGHT= '400';
-   CanvasFl.VERBOSE = false; //--log warnings
+   CanvasFl.LOG_PART_IMPLEMENTED = true; //--log warning notes for partial implementations
+   CanvasFl.THROW_UNIMPLEMENTED = true; //--log unimplemented features
    
 
    //-- Object on which 'ready' callback is exposed to Flash Movie

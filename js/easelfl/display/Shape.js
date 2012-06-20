@@ -134,10 +134,10 @@ var p = Shape.prototype = new DisplayObject();
 	 * will be shared with the new Shape.
 	 **/
 	p.clone = function(recursive) {
-		throw 'EaselFl:Shape.clone currently not implemented';
+		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Shape.clone currently not implemented';
 	
-		var o = new Shape((recursive && this.graphics) ? this.graphics.clone() : this.graphics);
-		this.cloneProps(o);
+		//var o = new Shape((recursive && this.graphics) ? this.graphics.clone() : this.graphics);
+		//this.cloneProps(o);
 		return o;
 	}
 		

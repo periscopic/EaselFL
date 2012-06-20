@@ -277,7 +277,7 @@ var p = Stage.prototype = new Container();
 	 * @method clear
 	 **/
 	p.clear = function() {
-		throw 'EaseFl:Stage.clear not yet implemented';
+		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaseFl:Stage.clear not yet implemented';
 	
 		/*if (!this.canvas) { return; }
 		var ctx = this.canvas.getContext("2d");
@@ -296,7 +296,7 @@ var p = Stage.prototype = new Container();
 	 * @return {String} a Base64 encoded image.
 	 **/
 	p.toDataURL = function(backgroundColor, mimeType) {
-		throw "Stage.toDataURL not implemented in EaselFl";
+		if(CanvasFl.THROW_UNIMPLEMENTED) throw "Stage.toDataURL not implemented in EaselFl";
 		/*if(!mimeType) {
 			mimeType = "image/png";
 		}
@@ -488,7 +488,7 @@ var p = Stage.prototype = new Container();
 	p._flBlit = function(){
 		//TODO : record command which tells Flash to draw everything into a single bitmap instance
 		//such that previous shapes and images are maintained
-		throw 'EaselFl::Stage._flBlit is not implemented';
+		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl::Stage._flBlit is not implemented';
 	}
 
 	/**
