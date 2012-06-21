@@ -53,6 +53,7 @@ var p = Rectangle.prototype;
 		if(!this._flCtx){
 				this.id = UID.get();
 				this._flCtx = ctx;
+				
 				ctx._flCreate.push(['rct', this]);
 		}
 		

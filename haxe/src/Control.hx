@@ -33,6 +33,7 @@ class Control {
 		displays = new IntHash<IDisplayable>();
 		bitmapDatas = new IntHash<IBitmapData>();
 		graphicsList = new IntHash<GraphicsFl>();
+		rectangles = new IntHash<RectangleFl>();
 		makers = new Hash<Int->Void>();
 		
 		makers.set('img', image);
@@ -134,6 +135,7 @@ class Control {
 	inline static private function rectangle(id:Int):Void{
 		var rct:RectangleFl = new RectangleFl(id);
 		rectangles.set(id, rct);
+		items.set(id, rct);
 	}	
 	
 	inline static private function stage(id:Int):Void{

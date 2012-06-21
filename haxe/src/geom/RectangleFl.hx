@@ -36,11 +36,11 @@ class RectangleFl implements IExec, implements IWatchable {
 		dispatcher.removeEventListener(eventID, method, false);
 	}
 	
-	inline private function dimensions(args:Dynamic):Void {
+	private function dimensions(args:Dynamic):Void {
 		rect.x = args[0];
-		rect.y = args[0];
-		rect.width = args[0];
-		rect.height = args[0];
+		rect.y = args[1];
+		rect.width = args[2];
+		rect.height = args[3];
 		dispatcher.dispatchEvent(new Event(eventID));
 	}
 	

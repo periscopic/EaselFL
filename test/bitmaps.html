@@ -38,13 +38,14 @@ window.onload = function(){
 	Ticker.addListener(myStage);
 	
 	//-- specific test code
-	var bmp = new Bitmap('img/testImage.png');
+	var img = new Image();
+	img.src = 'img/testImage.png';
+	
+	var bmp = new Bitmap(img);
+	bmp.sourceRect = new Rectangle(0, 30, 78, 38);
 	myStage.addChild(bmp);
 	bmp.x = 10;
 	bmp.y = 155;
-	
-	var img = new Image();
-	img.src = 'img/testImage.png';
 	
 	var shp = new Shape();
 	shp.x = 200;
@@ -54,7 +55,7 @@ window.onload = function(){
 	g.drawCircle(0, 0, 100);
 	g.endFill();
 		
-	g.setStrokeStyle(2);
+	g.setStrokeStyle(10);
 	g.beginBitmapStroke(img);
 	g.drawCircle(160, 0, 50);
 	g.endFill();

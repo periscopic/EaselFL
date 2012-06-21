@@ -1408,7 +1408,7 @@
 	</f>
 	<e path="Void"/>
 </f></unwatch>
-		<dimensions get="inline" set="null" line="39"><f a="args">
+		<dimensions set="method" line="39"><f a="args">
 	<d/>
 	<e path="Void"/>
 </f></dimensions>
@@ -1597,40 +1597,230 @@
 	<e path="Void"/>
 </f></new>
 	</class>
+	<class path="flash.geom.Matrix" params="" file="/usr/lib/haxe/std/flash9/geom/Matrix.hx" extern="1">
+		<a public="1"><c path="Float"/></a>
+		<b public="1"><c path="Float"/></b>
+		<c public="1"><c path="Float"/></c>
+		<d public="1"><c path="Float"/></d>
+		<tx public="1"><c path="Float"/></tx>
+		<ty public="1"><c path="Float"/></ty>
+		<clone public="1" set="method"><f a=""><c path="flash.geom.Matrix"/></f></clone>
+		<concat public="1" set="method"><f a="m">
+	<c path="flash.geom.Matrix"/>
+	<e path="Void"/>
+</f></concat>
+		<copyColumnFrom public="1"><f a="column:vector3D">
+	<t path="UInt"/>
+	<c path="flash.geom.Vector3D"/>
+	<e path="Void"/>
+</f></copyColumnFrom>
+		<copyColumnTo public="1"><f a="column:vector3D">
+	<t path="UInt"/>
+	<c path="flash.geom.Vector3D"/>
+	<e path="Void"/>
+</f></copyColumnTo>
+		<copyFrom public="1"><f a="sourceMatrix">
+	<c path="flash.geom.Matrix"/>
+	<e path="Void"/>
+</f></copyFrom>
+		<copyRowFrom public="1"><f a="row:vector3D">
+	<t path="UInt"/>
+	<c path="flash.geom.Vector3D"/>
+	<e path="Void"/>
+</f></copyRowFrom>
+		<copyRowTo public="1"><f a="row:vector3D">
+	<t path="UInt"/>
+	<c path="flash.geom.Vector3D"/>
+	<e path="Void"/>
+</f></copyRowTo>
+		<createBox public="1" set="method"><f a="scaleX:scaleY:?rotation:?tx:?ty">
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<e path="Void"/>
+</f></createBox>
+		<createGradientBox public="1" set="method"><f a="width:height:?rotation:?tx:?ty">
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<e path="Void"/>
+</f></createGradientBox>
+		<deltaTransformPoint public="1" set="method"><f a="point">
+	<c path="flash.geom.Point"/>
+	<c path="flash.geom.Point"/>
+</f></deltaTransformPoint>
+		<identity public="1" set="method"><f a=""><e path="Void"/></f></identity>
+		<invert public="1" set="method"><f a=""><e path="Void"/></f></invert>
+		<rotate public="1" set="method"><f a="angle">
+	<c path="Float"/>
+	<e path="Void"/>
+</f></rotate>
+		<scale public="1" set="method"><f a="sx:sy">
+	<c path="Float"/>
+	<c path="Float"/>
+	<e path="Void"/>
+</f></scale>
+		<setTo public="1"><f a="aa:ba:ca:da:txa:tya">
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<e path="Void"/>
+</f></setTo>
+		<toString public="1" set="method"><f a=""><c path="String"/></f></toString>
+		<transformPoint public="1" set="method"><f a="point">
+	<c path="flash.geom.Point"/>
+	<c path="flash.geom.Point"/>
+</f></transformPoint>
+		<translate public="1" set="method"><f a="dx:dy">
+	<c path="Float"/>
+	<c path="Float"/>
+	<e path="Void"/>
+</f></translate>
+		<new public="1" set="method"><f a="?a:?b:?c:?d:?tx:?ty">
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<e path="Void"/>
+</f></new>
+	</class>
+	<class path="flash.geom.Rectangle" params="" file="/usr/lib/haxe/std/flash9/geom/Rectangle.hx" extern="1">
+		<bottom public="1"><c path="Float"/></bottom>
+		<bottomRight public="1"><c path="flash.geom.Point"/></bottomRight>
+		<height public="1"><c path="Float"/></height>
+		<left public="1"><c path="Float"/></left>
+		<right public="1"><c path="Float"/></right>
+		<size public="1"><c path="flash.geom.Point"/></size>
+		<top public="1"><c path="Float"/></top>
+		<topLeft public="1"><c path="flash.geom.Point"/></topLeft>
+		<width public="1"><c path="Float"/></width>
+		<x public="1"><c path="Float"/></x>
+		<y public="1"><c path="Float"/></y>
+		<clone public="1" set="method"><f a=""><c path="flash.geom.Rectangle"/></f></clone>
+		<contains public="1" set="method"><f a="x:y">
+	<c path="Float"/>
+	<c path="Float"/>
+	<e path="Bool"/>
+</f></contains>
+		<containsPoint public="1" set="method"><f a="point">
+	<c path="flash.geom.Point"/>
+	<e path="Bool"/>
+</f></containsPoint>
+		<containsRect public="1" set="method"><f a="rect">
+	<c path="flash.geom.Rectangle"/>
+	<e path="Bool"/>
+</f></containsRect>
+		<copyFrom public="1"><f a="sourceRect">
+	<c path="flash.geom.Rectangle"/>
+	<e path="Void"/>
+</f></copyFrom>
+		<equals public="1" set="method"><f a="toCompare">
+	<c path="flash.geom.Rectangle"/>
+	<e path="Bool"/>
+</f></equals>
+		<inflate public="1" set="method"><f a="dx:dy">
+	<c path="Float"/>
+	<c path="Float"/>
+	<e path="Void"/>
+</f></inflate>
+		<inflatePoint public="1" set="method"><f a="point">
+	<c path="flash.geom.Point"/>
+	<e path="Void"/>
+</f></inflatePoint>
+		<intersection public="1" set="method"><f a="toIntersect">
+	<c path="flash.geom.Rectangle"/>
+	<c path="flash.geom.Rectangle"/>
+</f></intersection>
+		<intersects public="1" set="method"><f a="toIntersect">
+	<c path="flash.geom.Rectangle"/>
+	<e path="Bool"/>
+</f></intersects>
+		<isEmpty public="1" set="method"><f a=""><e path="Bool"/></f></isEmpty>
+		<offset public="1" set="method"><f a="dx:dy">
+	<c path="Float"/>
+	<c path="Float"/>
+	<e path="Void"/>
+</f></offset>
+		<offsetPoint public="1" set="method"><f a="point">
+	<c path="flash.geom.Point"/>
+	<e path="Void"/>
+</f></offsetPoint>
+		<setEmpty public="1" set="method"><f a=""><e path="Void"/></f></setEmpty>
+		<setTo public="1"><f a="xa:ya:widtha:heighta">
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<e path="Void"/>
+</f></setTo>
+		<toString public="1" set="method"><f a=""><c path="String"/></f></toString>
+		<union public="1" set="method"><f a="toUnion">
+	<c path="flash.geom.Rectangle"/>
+	<c path="flash.geom.Rectangle"/>
+</f></union>
+		<new public="1" set="method"><f a="?x:?y:?width:?height">
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<e path="Void"/>
+</f></new>
+	</class>
 	<class path="display.BitmapFl" params="" file="src/display/BitmapFl.hx">
 		<extends path="display.DisplayObjectFl"/>
 		<implements path="interfaces.IDisplayable"/>
 		<implements path="interfaces.IExec"/>
 		<execs static="1"><c path="Hash"><d/></c></execs>
-		<init public="1" set="method" line="16" static="1"><f a=""><e path="Void"/></f></init>
-		<setImage get="inline" set="null" line="23" static="1"><f a="target:id">
+		<tmpMtx line="18" static="1"><c path="flash.geom.Matrix"/></tmpMtx>
+		<tmpRect line="19" static="1"><c path="flash.geom.Rectangle"/></tmpRect>
+		<init public="1" set="method" line="21" static="1"><f a=""><e path="Void"/></f></init>
+		<setImage get="inline" set="null" line="29" static="1"><f a="target:id">
 	<c path="display.BitmapFl"/>
 	<c path="Int"/>
 	<e path="Void"/>
 </f></setImage>
-		<setSmoothing get="inline" set="null" line="27" static="1"><f a="target:smoothing">
+		<setSmoothing get="inline" set="null" line="33" static="1"><f a="target:smoothing">
 	<c path="display.BitmapFl"/>
 	<e path="Bool"/>
 	<e path="Void"/>
 </f></setSmoothing>
+		<setRectangle get="inline" set="null" line="37" static="1"><f a="target:id">
+	<c path="display.BitmapFl"/>
+	<c path="Int"/>
+	<e path="Void"/>
+</f></setRectangle>
 		<bmp><c path="flash.display.Bitmap"/></bmp>
 		<smoothing><e path="Bool"/></smoothing>
 		<loaded public="1" set="null"><e path="Bool"/></loaded>
 		<_img><c path="interfaces.IBitmapData"/></_img>
-		<swapImage set="method" line="44"><f a="image">
+		<_rect><c path="geom.RectangleFl"/></_rect>
+		<swapImage set="method" line="55"><f a="image">
 	<c path="interfaces.IBitmapData"/>
 	<e path="Void"/>
 </f></swapImage>
-		<updateBitmap set="method" line="71"><f a="?e">
+		<swapRect set="method" line="76"><f a="rect">
+	<c path="geom.RectangleFl"/>
+	<e path="Void"/>
+</f></swapRect>
+		<updateBitmap set="method" line="95"><f a="?e">
 	<c path="flash.events.Event"/>
 	<e path="Void"/>
 </f></updateBitmap>
-		<exec public="1" get="inline" set="null" line="78"><f a="method:?arguments">
+		<exec public="1" get="inline" set="null" line="119"><f a="method:?arguments">
 	<c path="String"/>
 	<d/>
 	<d/>
 </f></exec>
-		<new public="1" set="method" line="36"><f a="id">
+		<new public="1" set="method" line="47"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></new>
@@ -2112,43 +2302,43 @@
 </f></c></makers>
 		<stageFl public="1" static="1"><c path="display.ContainerFl"/></stageFl>
 		<init public="1" set="method" line="30" static="1"><f a=""><e path="Void"/></f></init>
-		<createItems public="1" get="inline" set="null" line="75" static="1"><f a="a">
+		<createItems public="1" get="inline" set="null" line="76" static="1"><f a="a">
 	<c path="Array"><c path="Array"><d/></c></c>
 	<e path="Void"/>
 </f></createItems>
-		<changeItems public="1" get="inline" set="null" line="87" static="1"><f a="a">
+		<changeItems public="1" get="inline" set="null" line="88" static="1"><f a="a">
 	<c path="Array"><c path="Array"><d/></c></c>
 	<e path="Void"/>
 </f></changeItems>
-		<invoke public="1" get="inline" set="null" line="99" static="1"><f a="cmd">
+		<invoke public="1" get="inline" set="null" line="100" static="1"><f a="cmd">
 	<d/>
 	<d/>
 </f></invoke>
-		<image get="inline" set="null" line="103" static="1"><f a="id">
+		<image get="inline" set="null" line="104" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></image>
-		<bitmap get="inline" set="null" line="109" static="1"><f a="id">
+		<bitmap get="inline" set="null" line="110" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></bitmap>
-		<shape get="inline" set="null" line="115" static="1"><f a="id">
+		<shape get="inline" set="null" line="116" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></shape>
-		<graphics get="inline" set="null" line="121" static="1"><f a="id">
+		<graphics get="inline" set="null" line="122" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></graphics>
-		<container get="inline" set="null" line="127" static="1"><f a="id">
+		<container get="inline" set="null" line="128" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></container>
-		<rectangle get="inline" set="null" line="134" static="1"><f a="id">
+		<rectangle get="inline" set="null" line="135" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></rectangle>
-		<stage get="inline" set="null" line="139" static="1"><f a="id">
+		<stage get="inline" set="null" line="141" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></stage>
@@ -3311,102 +3501,6 @@
 		<NORMAL/>
 		<ADVANCED/>
 	</enum>
-	<class path="flash.geom.Matrix" params="" file="/usr/lib/haxe/std/flash9/geom/Matrix.hx" extern="1">
-		<a public="1"><c path="Float"/></a>
-		<b public="1"><c path="Float"/></b>
-		<c public="1"><c path="Float"/></c>
-		<d public="1"><c path="Float"/></d>
-		<tx public="1"><c path="Float"/></tx>
-		<ty public="1"><c path="Float"/></ty>
-		<clone public="1" set="method"><f a=""><c path="flash.geom.Matrix"/></f></clone>
-		<concat public="1" set="method"><f a="m">
-	<c path="flash.geom.Matrix"/>
-	<e path="Void"/>
-</f></concat>
-		<copyColumnFrom public="1"><f a="column:vector3D">
-	<t path="UInt"/>
-	<c path="flash.geom.Vector3D"/>
-	<e path="Void"/>
-</f></copyColumnFrom>
-		<copyColumnTo public="1"><f a="column:vector3D">
-	<t path="UInt"/>
-	<c path="flash.geom.Vector3D"/>
-	<e path="Void"/>
-</f></copyColumnTo>
-		<copyFrom public="1"><f a="sourceMatrix">
-	<c path="flash.geom.Matrix"/>
-	<e path="Void"/>
-</f></copyFrom>
-		<copyRowFrom public="1"><f a="row:vector3D">
-	<t path="UInt"/>
-	<c path="flash.geom.Vector3D"/>
-	<e path="Void"/>
-</f></copyRowFrom>
-		<copyRowTo public="1"><f a="row:vector3D">
-	<t path="UInt"/>
-	<c path="flash.geom.Vector3D"/>
-	<e path="Void"/>
-</f></copyRowTo>
-		<createBox public="1" set="method"><f a="scaleX:scaleY:?rotation:?tx:?ty">
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<e path="Void"/>
-</f></createBox>
-		<createGradientBox public="1" set="method"><f a="width:height:?rotation:?tx:?ty">
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<e path="Void"/>
-</f></createGradientBox>
-		<deltaTransformPoint public="1" set="method"><f a="point">
-	<c path="flash.geom.Point"/>
-	<c path="flash.geom.Point"/>
-</f></deltaTransformPoint>
-		<identity public="1" set="method"><f a=""><e path="Void"/></f></identity>
-		<invert public="1" set="method"><f a=""><e path="Void"/></f></invert>
-		<rotate public="1" set="method"><f a="angle">
-	<c path="Float"/>
-	<e path="Void"/>
-</f></rotate>
-		<scale public="1" set="method"><f a="sx:sy">
-	<c path="Float"/>
-	<c path="Float"/>
-	<e path="Void"/>
-</f></scale>
-		<setTo public="1"><f a="aa:ba:ca:da:txa:tya">
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<e path="Void"/>
-</f></setTo>
-		<toString public="1" set="method"><f a=""><c path="String"/></f></toString>
-		<transformPoint public="1" set="method"><f a="point">
-	<c path="flash.geom.Point"/>
-	<c path="flash.geom.Point"/>
-</f></transformPoint>
-		<translate public="1" set="method"><f a="dx:dy">
-	<c path="Float"/>
-	<c path="Float"/>
-	<e path="Void"/>
-</f></translate>
-		<new public="1" set="method"><f a="?a:?b:?c:?d:?tx:?ty">
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<e path="Void"/>
-</f></new>
-	</class>
 	<class path="flash.net.NetStreamMulticastInfo" params="" file="/usr/lib/haxe/std/flash9/net/NetStreamMulticastInfo.hx" extern="1">
 		<bytesPushedFromPeers public="1" set="null"><c path="Float"/></bytesPushedFromPeers>
 		<bytesPushedToPeers public="1" set="null"><c path="Float"/></bytesPushedToPeers>
@@ -3764,88 +3858,6 @@
 		<DESTINATION_COLOR/>
 		<DESTINATION_ALPHA/>
 	</enum>
-	<class path="flash.geom.Rectangle" params="" file="/usr/lib/haxe/std/flash9/geom/Rectangle.hx" extern="1">
-		<bottom public="1"><c path="Float"/></bottom>
-		<bottomRight public="1"><c path="flash.geom.Point"/></bottomRight>
-		<height public="1"><c path="Float"/></height>
-		<left public="1"><c path="Float"/></left>
-		<right public="1"><c path="Float"/></right>
-		<size public="1"><c path="flash.geom.Point"/></size>
-		<top public="1"><c path="Float"/></top>
-		<topLeft public="1"><c path="flash.geom.Point"/></topLeft>
-		<width public="1"><c path="Float"/></width>
-		<x public="1"><c path="Float"/></x>
-		<y public="1"><c path="Float"/></y>
-		<clone public="1" set="method"><f a=""><c path="flash.geom.Rectangle"/></f></clone>
-		<contains public="1" set="method"><f a="x:y">
-	<c path="Float"/>
-	<c path="Float"/>
-	<e path="Bool"/>
-</f></contains>
-		<containsPoint public="1" set="method"><f a="point">
-	<c path="flash.geom.Point"/>
-	<e path="Bool"/>
-</f></containsPoint>
-		<containsRect public="1" set="method"><f a="rect">
-	<c path="flash.geom.Rectangle"/>
-	<e path="Bool"/>
-</f></containsRect>
-		<copyFrom public="1"><f a="sourceRect">
-	<c path="flash.geom.Rectangle"/>
-	<e path="Void"/>
-</f></copyFrom>
-		<equals public="1" set="method"><f a="toCompare">
-	<c path="flash.geom.Rectangle"/>
-	<e path="Bool"/>
-</f></equals>
-		<inflate public="1" set="method"><f a="dx:dy">
-	<c path="Float"/>
-	<c path="Float"/>
-	<e path="Void"/>
-</f></inflate>
-		<inflatePoint public="1" set="method"><f a="point">
-	<c path="flash.geom.Point"/>
-	<e path="Void"/>
-</f></inflatePoint>
-		<intersection public="1" set="method"><f a="toIntersect">
-	<c path="flash.geom.Rectangle"/>
-	<c path="flash.geom.Rectangle"/>
-</f></intersection>
-		<intersects public="1" set="method"><f a="toIntersect">
-	<c path="flash.geom.Rectangle"/>
-	<e path="Bool"/>
-</f></intersects>
-		<isEmpty public="1" set="method"><f a=""><e path="Bool"/></f></isEmpty>
-		<offset public="1" set="method"><f a="dx:dy">
-	<c path="Float"/>
-	<c path="Float"/>
-	<e path="Void"/>
-</f></offset>
-		<offsetPoint public="1" set="method"><f a="point">
-	<c path="flash.geom.Point"/>
-	<e path="Void"/>
-</f></offsetPoint>
-		<setEmpty public="1" set="method"><f a=""><e path="Void"/></f></setEmpty>
-		<setTo public="1"><f a="xa:ya:widtha:heighta">
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<e path="Void"/>
-</f></setTo>
-		<toString public="1" set="method"><f a=""><c path="String"/></f></toString>
-		<union public="1" set="method"><f a="toUnion">
-	<c path="flash.geom.Rectangle"/>
-	<c path="flash.geom.Rectangle"/>
-</f></union>
-		<new public="1" set="method"><f a="?x:?y:?width:?height">
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<e path="Void"/>
-</f></new>
-	</class>
 	<enum path="flash.text.TextInteractionMode" params="" file="/usr/lib/haxe/std/flash9/text/TextInteractionMode.hx">
 		<SELECTION/>
 		<NORMAL/>
