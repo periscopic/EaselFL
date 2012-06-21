@@ -4,6 +4,7 @@ import flash.display.Sprite;
 import flash.display.DisplayObjectContainer;
 import flash.display.DisplayObject;
 import flash.events.MouseEvent;
+import interfaces.IDisplayable;
 
 import flash.geom.Matrix;
 import flash.filters.DropShadowFilter;

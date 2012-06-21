@@ -2,6 +2,8 @@ package display;
 
 import flash.display.Sprite;
 import flash.display.DisplayObject;
+import interfaces.IExec;
+import interfaces.IDisplayable;
 
 class ShapeFl extends DisplayObjectFl, implements IExec, implements IDisplayable{
 

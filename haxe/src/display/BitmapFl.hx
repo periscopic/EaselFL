@@ -1,10 +1,13 @@
-/* TEST */package display;
+package display;
 
 import flash.display.Bitmap;
 import flash.display.DisplayObject;
 import flash.events.Event;
+import interfaces.IExec;
+import interfaces.IDisplayable;
+import interfaces.IBitmapData;
 
-class BitmapFl extends DisplayObjectFl, implements IExec, implements IDisplayable{
+class BitmapFl extends DisplayObjectFl, implements IExec, implements IDisplayable {
 
 	// TODO : handle cropping of bitmap
 
@@ -41,7 +44,7 @@ class BitmapFl extends DisplayObjectFl, implements IExec, implements IDisplayabl
 	function swapImage( image : IBitmapData):Void{
 		if(_img!=null && _img!=image){
 			//stop listening for load of previous image
-			_img.dispatcher.removeEventListener(Event.COMPLETE, updateBitmap);
+			_img.unwatch(updateBitmap);
 		}
 		
 		_img = image;
@@ -60,7 +63,7 @@ class BitmapFl extends DisplayObjectFl, implements IExec, implements IDisplayabl
 			}			
 			
 			//-- Listen for subsequent loads
-			_img.dispatcher.addEventListener(Event.COMPLETE, updateBitmap);
+			_img.watch(updateBitmap);
 		}
 		bmp.smoothing = smoothing;
 	}

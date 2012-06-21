@@ -10,7 +10,7 @@ package ;
 import flash.Lib;
 import flash.display.Sprite;
 import flash.display.Stage;
-import display.Control;
+import Control;
 import flash.external.ExternalInterface;
 import flash.events.Event;
 

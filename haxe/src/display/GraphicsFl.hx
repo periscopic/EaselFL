@@ -1,4 +1,4 @@
-/* TEST */package display;
+package display;
 
 import flash.display.Graphics;
 import flash.display.DisplayObject;
@@ -6,8 +6,11 @@ import flash.display.BitmapData;
 import flash.display.LineScaleMode;
 import flash.events.Event;
 import flash.geom.Point;
-import display.Control;
+import Control;
 import utils.Geometry;
+import utils.CSSColor;
+import interfaces.IExec;
+import interfaces.IBitmapData;
 
 typedef Command = {
 	method : String,
@@ -186,7 +189,7 @@ class GraphicsFl implements IExec{
 		//-- Stop listening for redraws
 		var bmpds = target.bitmapDatas;
 		while(bmpds!=null && bmpds.length>0) {
-			bmpds.pop().dispatcher.removeEventListener(Event.COMPLETE, target.handleRedraw, false);
+			bmpds.pop().unwatch(target.handleRedraw);
 		}		
 	}
 	
@@ -265,7 +268,7 @@ class GraphicsFl implements IExec{
 			target.bitmapDatas = [];
 		}
 		target.bitmapDatas.push(bmpd);
-		bmpd.dispatcher.addEventListener(Event.COMPLETE, target.handleRedraw, false, 0, true);
+		bmpd.watch(target.handleRedraw);
 	}
 	
 	

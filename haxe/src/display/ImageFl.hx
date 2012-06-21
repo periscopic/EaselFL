@@ -1,16 +1,20 @@
 package display;
 
-import flash.display.Shape;
 import flash.display.DisplayObject;
 import flash.display.Loader;
 import flash.net.URLRequest;
 import flash.events.Event;
-import flash.events.IEventDispatcher;
+import flash.events.EventDispatcher;
 import flash.display.BitmapData;
+import interfaces.IExec;
+import interfaces.IBitmapData;
+import interfaces.IWatchable;
 
-class ImageFl implements IExec, implements IBitmapData{
+class ImageFl implements IExec, implements IBitmapData, implements IWatchable{
 
 
+	inline static var IMAGE_CHANGE:String = 'imageChange';
+	static var dispatcher:EventDispatcher = new EventDispatcher();
 
 	static private var execs:Hash<Dynamic>;
 	
@@ -29,26 +33,31 @@ class ImageFl implements IExec, implements IBitmapData{
 		target.loader.load( req );
 	}
 	
-	// TODO : verify this is max int in Flash 9
-	inline static var MAX_INT:Int = Std.int(Math.pow(2,8));
 	static public var defaultData(default, null):BitmapData;
-	
-	
-	private var loader:Loader;
 	
 	public var ready(default, null):Bool;
 	public var bitmapData(default, null):BitmapData;
-	public var dispatcher(default, null):IEventDispatcher;
 	
+	private var loader:Loader;
+	private var eventID:String;	
 	
-	public function new(){
+	public function new(id:Int){
 		ready = false;
 		loader = new Loader();
 		bitmapData = defaultData;
-		dispatcher = loader.contentLoaderInfo;
+		eventID = IMAGE_CHANGE + id;		
 		
-		loader.contentLoaderInfo.addEventListener(Event.COMPLETE, handleLoad, false, MAX_INT, true);
+		loader.contentLoaderInfo.addEventListener(Event.COMPLETE, handleLoad, false, 0, true);
 	}
+	
+	inline public function watch(method:Dynamic->Void):Void {
+		dispatcher.addEventListener(eventID, method, false, 0, true);
+	}
+	
+	inline public function unwatch(method:Dynamic->Void):Void {
+		dispatcher.removeEventListener(eventID, method, false);
+	}
+	
 	
 	/*
 	 * Handle load of loader, create new bitmap data 
@@ -57,6 +66,8 @@ class ImageFl implements IExec, implements IBitmapData{
 		bitmapData = new BitmapData(Std.int(loader.width), Std.int(loader.height), true, 0);
 		bitmapData.draw(loader);
 		ready = true;
+		
+		dispatcher.dispatchEvent(new Event(eventID));
 	}
 	
 	inline public function exec(method:String, ?arguments:Dynamic=null):Dynamic{

@@ -42,6 +42,7 @@ var p = Bitmap.prototype = new DisplayObject();
 
 	p._flCtx = null;
 	p._flImg = null;
+	p._flSourceRect = null;
 	p._flSmoothing = false;
 	p.flSmoothing = false;
 	
@@ -141,12 +142,24 @@ var p = Bitmap.prototype = new DisplayObject();
 			if(this.image!==this._flImg) {
 				this._flImg = this.image;
 				ImageFl.watch(this.image);
+				
+				if(this.sourceRect) {
+					this.sourceRect._flSync(ctx);
+				}
+				
+				if(this.sourceRect!==this._flSourceRect) {
+					this.sourceRect = this._flSourceRect;
+					//TODO : sync into Flash
+					//ctx._flChange.push([this.id, 'rct', this.sourceRect.id]);
+				}
 				ctx._flChange.push([this.id, 'img', this.image.__fl.id]);
 			}
 			
 			this.image.__fl.draw(ctx);
 		}
 				
+		//TODO : implement sourceRect in EaselFL
+		
 		/*var rect = this.sourceRect;
 		if (rect) {
 			ctx.drawImage(this.image, rect.x, rect.y, rect.width, rect.height, 0, 0, rect.width, rect.height);
