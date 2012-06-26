@@ -45,6 +45,8 @@ var BitmapAnimation = function(spriteSheet) {
 }
 var p = BitmapAnimation.prototype = new DisplayObject();
 
+	p._flFrame = null;
+
 // public properties:
 
 	/**
@@ -186,12 +188,36 @@ var p = BitmapAnimation.prototype = new DisplayObject();
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
 		this._normalizeFrame();
 		var o = this.spriteSheet.getFrame(this.currentFrame);
-		if (o == null) { return; }
-		var rect = o.rect;
+		if (o == null) { return false; }
+		
+		if(o!==this._flFrame) {
+			FrameFl.watch(o);
+			o.__fl.sync(ctx);
+			this._flFrame = o;
+			//console.log(this.id, o.__fl.id);
+			ctx._flChange.push([this.id, 'frm', o.__fl.id]);
+		}
+		
+		/*var rect = o.rect;
 		// TODO: implement snapToPixel on regX/Y?
-		ctx.drawImage(o.image, rect.x, rect.y, rect.width, rect.height, -o.regX, -o.regY, rect.width, rect.height);
+		ctx.drawImage(o.image, rect.x, rect.y, rect.width, rect.height, -o.regX, -o.regY, rect.width, rect.height);*/
 		return true;
 	}
+	
+	/**
+	 * Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
+	 **/
+	p._flRunCreate = function(ctx){
+	  if(this._flCtx!==ctx){
+		this._flCtx = ctx;
+		ctx._flCreate.push(['ban', this]);
+		
+		//we have a context, so we can update smoothing
+		//this.flSetSmoothing(this.flSmoothing);		
+	  }
+	}
+	
+	
 
 	//Note, the doc sections below document using the specified APIs (from DisplayObject)  from
 	//Bitmap. This is why they have no method implementations.

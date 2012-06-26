@@ -1,6 +1,5 @@
 (function(window) {
 
-
     var ImageFl = function(img){
         this.id = UID.get();
         this._img = img;
@@ -12,7 +11,7 @@
     p._flCtx = null;    
     p._flSrc = null;
     
-    p.draw = function( ctx ){
+    p.sync = function( ctx ){
         if(!this._flCtx){
             this._flCtx = ctx;
             ctx._flCreate.push(['img', this]);
@@ -27,7 +26,10 @@
     ImageFl.watch = function(HTMLImageElement) {
         if(!HTMLImageElement.__fl){
             HTMLImageElement.__fl = new ImageFl(HTMLImageElement);
-        }      
+            return true;
+        }
+        
+        return false;
     }
 
 window.ImageFl = ImageFl;

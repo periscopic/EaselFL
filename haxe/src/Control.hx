@@ -6,9 +6,11 @@ import interfaces.IDisplayable;
 import interfaces.IBitmapData;
 import display.ContainerFl;
 import display.BitmapFl;
+import display.BitmapAnimationFl;
 import display.ShapeFl;
 import display.GraphicsFl;
 import display.ImageFl;
+import display.FrameFl;
 import geom.RectangleFl;
 
 
@@ -18,8 +20,10 @@ class Control {
 	static public var containers:IntHash<ContainerFl>;
 	static public var displays:IntHash<IDisplayable>;
 	static public var bitmapDatas:IntHash<IBitmapData>;
+	static public var bmpAnimations:IntHash<BitmapAnimationFl>;
 	static public var graphicsList:IntHash<GraphicsFl>;
 	static public var rectangles:IntHash<RectangleFl>;
+	static public var frames:IntHash<FrameFl>;
 	static public var makers:Hash<Int->Void>;
 	static public var stageFl:ContainerFl;
 	
@@ -32,17 +36,21 @@ class Control {
 		containers = new IntHash<ContainerFl>();
 		displays = new IntHash<IDisplayable>();
 		bitmapDatas = new IntHash<IBitmapData>();
+		bmpAnimations = new IntHash<BitmapAnimationFl>();
 		graphicsList = new IntHash<GraphicsFl>();
 		rectangles = new IntHash<RectangleFl>();
+		frames = new IntHash<FrameFl>();
 		makers = new Hash<Int->Void>();
 		
 		makers.set('img', image);
 		makers.set('bmp', bitmap);
+		makers.set('ban', bitmapAnimation);
 		makers.set('shp', shape);
 		makers.set('gfx', graphics);
 		makers.set('cnt', container);
 		makers.set('stg', stage);
 		makers.set('rct', rectangle);
+		makers.set('frm', frame);
 		
 		ImageFl.init();
 		BitmapFl.init();
@@ -50,25 +58,11 @@ class Control {
 		GraphicsFl.init();
 		ContainerFl.init();
 		RectangleFl.init();
+		BitmapAnimationFl.init();
+		FrameFl.init();
 		
-		//-- Define stage
-		// TODO : make sure stage doesn't have issues arising from transforms being applied to it
-		//stageFl = new ContainerFl( Lib.current.stage );
-		//items.set('stage', stageFl);
-		//displays.set('stage', stageFl);
 		
-		/*var tmr = new flash.utils.Timer(UPDATE_INTERVAL, 0);
-		tmr.addEventListener(flash.events.TimerEvent.TIMER, handleUpdateInterval,false, 0, true);
-		tmr.start();*/
 	}
-	/*
-	inline static public function handleUpdateInterval(e:flash.events.TimerEvent):Void{
-		if(!valid) {
-			valid = true;
-			e.updateAfterEvent();
-		}
-	}*/
-	
 	
 	/*
 	 * Takes a list of creation commands [ ['type','id'], ...] 
@@ -79,7 +73,6 @@ class Control {
 				makers.get(baby[0])(baby[1]);
 			}			
 		}
-		//valid = false;
 	}
 	
 	/*
@@ -87,10 +80,9 @@ class Control {
 	 */
 	inline static public function changeItems(a:Array<Array<Dynamic>>):Void{
 		for(cmd in a){
-				//-- Get item by id and delegate execution to it
+			//-- Get item by id and delegate execution to it
 			items.get(cmd[0]).exec(cmd[1], cmd[2]);			
 		}
-		//valid = false;
 	}
 	
 	/*
@@ -111,6 +103,13 @@ class Control {
 		var bmp:BitmapFl = new BitmapFl(id);
 		items.set(id, bmp);
 		displays.set(id, bmp);
+	}
+	
+	inline static private function bitmapAnimation(id:Int):Void{
+		var bmpAnim:BitmapAnimationFl = new BitmapAnimationFl(id);
+		items.set(id, bmpAnim);
+		displays.set(id, bmpAnim);
+		bmpAnimations.set(id, bmpAnim);
 	}
 	
 	inline static private function shape(id:Int):Void{
@@ -137,6 +136,12 @@ class Control {
 		rectangles.set(id, rct);
 		items.set(id, rct);
 	}	
+	
+	inline static private function frame(id:Int):Void{
+		var frm:FrameFl = new FrameFl(id);
+		frames.set(id, frm);
+		items.set(id, frm);
+	}
 	
 	inline static private function stage(id:Int):Void{
 		//-- Alias stage as another ID

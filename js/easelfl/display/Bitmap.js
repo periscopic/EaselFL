@@ -155,17 +155,8 @@ var p = Bitmap.prototype = new DisplayObject();
 				ctx._flChange.push([this.id, 'img', this.image.__fl.id]);
 			}
 			
-			this.image.__fl.draw(ctx);
+			this.image.__fl.sync(ctx);
 		}
-				
-		//TODO : implement sourceRect in EaselFL
-		
-		/*var rect = this.sourceRect;
-		if (rect) {
-			ctx.drawImage(this.image, rect.x, rect.y, rect.width, rect.height, 0, 0, rect.width, rect.height);
-		} else {
-			ctx.drawImage(this.image, 0, 0);
-		}*/
 		return true;
 	}
 	

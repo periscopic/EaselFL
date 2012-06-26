@@ -290,7 +290,7 @@ var p = Graphics.prototype;
 	p.draw = function(ctx) {
 		//--make sure images drawn (e.g. using bitmapBitmapStroke) are added to Flash 
 		while(this._flChildImages.length){
-			this._flChildImages.pop().draw(ctx);
+			this._flChildImages.pop().sync(ctx);
 		}
 	
 		//-- these are order dependent, so use FIFO
