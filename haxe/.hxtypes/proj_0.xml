@@ -891,6 +891,72 @@
 		<VERTEX/>
 		<FRAGMENT/>
 	</enum>
+	<class path="IntHash" params="T" file="/usr/lib/haxe/std/flash9/_std/IntHash.hx">
+		<h><c path="flash.utils.Dictionary"/></h>
+		<set public="1" set="method" line="34">
+			<f a="key:value">
+				<c path="Int"/>
+				<c path="IntHash.T"/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+		Set a value for the given key.
+	</haxe_doc>
+		</set>
+		<get public="1" set="method" line="38">
+			<f a="key">
+				<c path="Int"/>
+				<t path="Null"><c path="IntHash.T"/></t>
+			</f>
+			<haxe_doc>
+		Get a value for the given key.
+	</haxe_doc>
+		</get>
+		<exists public="1" set="method" line="42">
+			<f a="key">
+				<c path="Int"/>
+				<e path="Bool"/>
+			</f>
+			<haxe_doc>
+		Tells if a value exists for the given key.
+		In particular, it's useful to tells if a key has
+		a [null] value versus no value.
+	</haxe_doc>
+		</exists>
+		<remove public="1" set="method" line="46">
+			<f a="key">
+				<c path="Int"/>
+				<e path="Bool"/>
+			</f>
+			<haxe_doc>
+		Removes a hashtable entry. Returns [true] if
+		there was such entry.
+	</haxe_doc>
+		</remove>
+		<keys public="1" set="method" line="52">
+			<f a=""><t path="Iterator"><c path="Int"/></t></f>
+			<haxe_doc>
+		Returns an iterator of all keys in the hashtable.
+	</haxe_doc>
+		</keys>
+		<iterator public="1" set="method" line="56">
+			<f a=""><t path="Iterator"><c path="IntHash.T"/></t></f>
+			<haxe_doc>
+		Returns an iterator of all values in the hashtable.
+	</haxe_doc>
+		</iterator>
+		<toString public="1" set="method" line="65">
+			<f a=""><c path="String"/></f>
+			<haxe_doc>
+		Returns an displayable representation of the hashtable content.
+	</haxe_doc>
+		</toString>
+		<new public="1" set="method" line="30"><f a=""><e path="Void"/></f></new>
+		<haxe_doc>
+	Hashtable over a set of elements, using [Int] as keys.
+	On Flash and Javascript, the underlying structure is an Object.
+</haxe_doc>
+	</class>
 	<class path="flash.text.StyleSheet" params="" file="/usr/lib/haxe/std/flash9/text/StyleSheet.hx" extern="1">
 		<extends path="flash.events.EventDispatcher"/>
 		<styleNames public="1" set="null"><c path="Array"><d/></c></styleNames>
@@ -1286,72 +1352,6 @@
 		<new public="1" set="method"><f a=""><e path="Void"/></f></new>
 		<haxe_dynamic><d/></haxe_dynamic>
 	</class>
-	<class path="IntHash" params="T" file="/usr/lib/haxe/std/flash9/_std/IntHash.hx">
-		<h><c path="flash.utils.Dictionary"/></h>
-		<set public="1" set="method" line="34">
-			<f a="key:value">
-				<c path="Int"/>
-				<c path="IntHash.T"/>
-				<e path="Void"/>
-			</f>
-			<haxe_doc>
-		Set a value for the given key.
-	</haxe_doc>
-		</set>
-		<get public="1" set="method" line="38">
-			<f a="key">
-				<c path="Int"/>
-				<t path="Null"><c path="IntHash.T"/></t>
-			</f>
-			<haxe_doc>
-		Get a value for the given key.
-	</haxe_doc>
-		</get>
-		<exists public="1" set="method" line="42">
-			<f a="key">
-				<c path="Int"/>
-				<e path="Bool"/>
-			</f>
-			<haxe_doc>
-		Tells if a value exists for the given key.
-		In particular, it's useful to tells if a key has
-		a [null] value versus no value.
-	</haxe_doc>
-		</exists>
-		<remove public="1" set="method" line="46">
-			<f a="key">
-				<c path="Int"/>
-				<e path="Bool"/>
-			</f>
-			<haxe_doc>
-		Removes a hashtable entry. Returns [true] if
-		there was such entry.
-	</haxe_doc>
-		</remove>
-		<keys public="1" set="method" line="52">
-			<f a=""><t path="Iterator"><c path="Int"/></t></f>
-			<haxe_doc>
-		Returns an iterator of all keys in the hashtable.
-	</haxe_doc>
-		</keys>
-		<iterator public="1" set="method" line="56">
-			<f a=""><t path="Iterator"><c path="IntHash.T"/></t></f>
-			<haxe_doc>
-		Returns an iterator of all values in the hashtable.
-	</haxe_doc>
-		</iterator>
-		<toString public="1" set="method" line="65">
-			<f a=""><c path="String"/></f>
-			<haxe_doc>
-		Returns an displayable representation of the hashtable content.
-	</haxe_doc>
-		</toString>
-		<new public="1" set="method" line="30"><f a=""><e path="Void"/></f></new>
-		<haxe_doc>
-	Hashtable over a set of elements, using [Int] as keys.
-	On Flash and Javascript, the underlying structure is an Object.
-</haxe_doc>
-	</class>
 	<class path="flash.text.TextSnapshot" params="" file="/usr/lib/haxe/std/flash9/text/TextSnapshot.hx" extern="1">
 		<charCount public="1" set="null"><c path="Int"/></charCount>
 		<findText public="1" set="method"><f a="beginIndex:textToFind:caseSensitive">
@@ -1404,6 +1404,165 @@
 	<e path="Void"/>
 </f></new>
 		<haxe_dynamic><d/></haxe_dynamic>
+	</class>
+	<class path="StringTools" params="" file="/usr/lib/haxe/std/StringTools.hx">
+		<urlEncode public="1" set="method" line="38" static="1">
+			<f a="s">
+				<c path="String"/>
+				<c path="String"/>
+			</f>
+			<haxe_doc>
+		Encode an URL by using the standard format.
+	</haxe_doc>
+		</urlEncode>
+		<urlDecode public="1" set="method" line="59" static="1">
+			<f a="s">
+				<c path="String"/>
+				<c path="String"/>
+			</f>
+			<haxe_doc>
+		Decode an URL using the standard format.
+	</haxe_doc>
+		</urlDecode>
+		<htmlEscape public="1" set="method" line="80" static="1">
+			<f a="s">
+				<c path="String"/>
+				<c path="String"/>
+			</f>
+			<haxe_doc>
+		Escape HTML special characters of the string.
+	</haxe_doc>
+		</htmlEscape>
+		<htmlUnescape public="1" set="method" line="87" static="1">
+			<f a="s">
+				<c path="String"/>
+				<c path="String"/>
+			</f>
+			<haxe_doc>
+		Unescape HTML special characters of the string.
+	</haxe_doc>
+		</htmlUnescape>
+		<startsWith public="1" set="method" line="98" static="1">
+			<f a="s:start">
+				<c path="String"/>
+				<c path="String"/>
+				<e path="Bool"/>
+			</f>
+			<haxe_doc>
+		Tells if the string [s] starts with the string [start].
+	</haxe_doc>
+		</startsWith>
+		<endsWith public="1" set="method" line="105" static="1">
+			<f a="s:end">
+				<c path="String"/>
+				<c path="String"/>
+				<e path="Bool"/>
+			</f>
+			<haxe_doc>
+		Tells if the string [s] ends with the string [end].
+	</haxe_doc>
+		</endsWith>
+		<isSpace public="1" set="method" line="114" static="1">
+			<f a="s:pos">
+				<c path="String"/>
+				<c path="Int"/>
+				<e path="Bool"/>
+			</f>
+			<haxe_doc>
+		Tells if the character in the string [s] at position [pos] is a space.
+	</haxe_doc>
+		</isSpace>
+		<ltrim public="1" set="method" line="122" static="1">
+			<f a="s">
+				<c path="String"/>
+				<c path="String"/>
+			</f>
+			<haxe_doc>
+		Removes spaces at the left of the String [s].
+	</haxe_doc>
+		</ltrim>
+		<rtrim public="1" set="method" line="141" static="1">
+			<f a="s">
+				<c path="String"/>
+				<c path="String"/>
+			</f>
+			<haxe_doc>
+		Removes spaces at the right of the String [s].
+	</haxe_doc>
+		</rtrim>
+		<trim public="1" set="method" line="161" static="1">
+			<f a="s">
+				<c path="String"/>
+				<c path="String"/>
+			</f>
+			<haxe_doc>
+		Removes spaces at the beginning and the end of the String [s].
+	</haxe_doc>
+		</trim>
+		<rpad public="1" set="method" line="172" static="1">
+			<f a="s:c:l">
+				<c path="String"/>
+				<c path="String"/>
+				<c path="Int"/>
+				<c path="String"/>
+			</f>
+			<haxe_doc>
+		Pad the string [s] by appending [c] at its right until it reach [l] characters.
+	</haxe_doc>
+		</rpad>
+		<lpad public="1" set="method" line="194" static="1">
+			<f a="s:c:l">
+				<c path="String"/>
+				<c path="String"/>
+				<c path="Int"/>
+				<c path="String"/>
+			</f>
+			<haxe_doc>
+		Pad the string [s] by appending [c] at its left until it reach [l] characters.
+	</haxe_doc>
+		</lpad>
+		<replace public="1" set="method" line="219" static="1">
+			<f a="s:sub:by">
+				<c path="String"/>
+				<c path="String"/>
+				<c path="String"/>
+				<c path="String"/>
+			</f>
+			<haxe_doc>
+		Replace all occurences of the string [sub] in the string [s] by the string [by].
+	</haxe_doc>
+		</replace>
+		<hex public="1" set="method" line="230" static="1">
+			<f a="n:?digits">
+				<c path="Int"/>
+				<c path="Int"/>
+				<c path="String"/>
+			</f>
+			<haxe_doc>
+		Encode a number into a hexadecimal representation, with an optional number of zeros for left padding.
+	</haxe_doc>
+		</hex>
+		<fastCodeAt public="1" get="inline" set="null" line="253" static="1">
+			<f a="s:index">
+				<c path="String"/>
+				<c path="Int"/>
+				<c path="Int"/>
+			</f>
+			<haxe_doc>
+		Provides a fast native string charCodeAt access. Since the EOF value might vary depending on the platforms, always test with StringTools.isEOF.
+		Only guaranteed to work if index in [0,s.length] range. Might not work with strings containing \0 char.
+	</haxe_doc>
+		</fastCodeAt>
+		<isEOF public="1" get="inline" set="null" line="270" static="1"><f a="c">
+	<c path="Int"/>
+	<e path="Bool"/>
+</f></isEOF>
+		<haxe_doc>
+	The StringTools class contains some extra functionalities for [String]
+	manipulation. It's stored in a different class in order to prevent
+	the standard [String] of being bloated and thus increasing the size of
+	each application using it.
+</haxe_doc>
 	</class>
 	<class path="flash.filters.DropShadowFilter" params="" file="/usr/lib/haxe/std/flash9/filters/DropShadowFilter.hx" extern="1">
 		<extends path="flash.filters.BitmapFilter"/>
@@ -1700,6 +1859,7 @@
 </f></as>
 	</class>
 	<class path="display.DisplayObjectFl" params="" file="src/display/DisplayObjectFl.hx">
+		<implements path="interfaces.IDisplayable"/>
 		<init public="1" set="method" line="14" static="1"><f a="execs">
 	<c path="Hash"><d/></c>
 	<e path="Void"/>
@@ -1827,7 +1987,6 @@
 	</class>
 	<class path="display.BitmapAnimationFl" params="" file="src/display/BitmapAnimationFl.hx">
 		<extends path="display.DisplayObjectFl"/>
-		<implements path="interfaces.IDisplayable"/>
 		<implements path="interfaces.IExec"/>
 		<execs static="1"><c path="Hash"><d/></c></execs>
 		<tmpMtx line="19" static="1"><c path="flash.geom.Matrix"/></tmpMtx>
@@ -1867,7 +2026,6 @@
 	</class>
 	<class path="display.BitmapFl" params="" file="src/display/BitmapFl.hx">
 		<extends path="display.DisplayObjectFl"/>
-		<implements path="interfaces.IDisplayable"/>
 		<implements path="interfaces.IExec"/>
 		<execs static="1"><c path="Hash"><d/></c></execs>
 		<tmpMtx line="18" static="1"><c path="flash.geom.Matrix"/></tmpMtx>
@@ -1961,102 +2119,6 @@
 	<e path="Void"/>
 </f></uploadFromByteArray>
 	</class>
-	<class path="flash.external.ExternalInterface" params="" file="/usr/lib/haxe/std/flash9/external/ExternalInterface.hx" extern="1">
-		<available public="1" set="null" static="1"><e path="Bool"/></available>
-		<marshallExceptions public="1" static="1"><e path="Bool"/></marshallExceptions>
-		<objectID public="1" set="null" static="1"><c path="String"/></objectID>
-		<addCallback public="1" set="method" static="1"><f a="functionName:closure">
-	<c path="String"/>
-	<d/>
-	<e path="Void"/>
-</f></addCallback>
-		<call public="1" set="method" static="1"><f a="functionName:?p1:?p2:?p3:?p4:?p5">
-	<c path="String"/>
-	<d/>
-	<d/>
-	<d/>
-	<d/>
-	<d/>
-	<d/>
-</f></call>
-	</class>
-	<class path="flash.net.NetStreamInfo" params="" file="/usr/lib/haxe/std/flash9/net/NetStreamInfo.hx" extern="1">
-		<SRTT public="1" set="null"><c path="Float"/></SRTT>
-		<audioBufferByteLength public="1" set="null"><c path="Float"/></audioBufferByteLength>
-		<audioBufferLength public="1" set="null"><c path="Float"/></audioBufferLength>
-		<audioByteCount public="1" set="null"><c path="Float"/></audioByteCount>
-		<audioBytesPerSecond public="1" set="null"><c path="Float"/></audioBytesPerSecond>
-		<audioLossRate public="1" set="null"><c path="Float"/></audioLossRate>
-		<byteCount public="1" set="null"><c path="Float"/></byteCount>
-		<currentBytesPerSecond public="1" set="null"><c path="Float"/></currentBytesPerSecond>
-		<dataBufferByteLength public="1" set="null"><c path="Float"/></dataBufferByteLength>
-		<dataBufferLength public="1" set="null"><c path="Float"/></dataBufferLength>
-		<dataByteCount public="1" set="null"><c path="Float"/></dataByteCount>
-		<dataBytesPerSecond public="1" set="null"><c path="Float"/></dataBytesPerSecond>
-		<droppedFrames public="1" set="null"><c path="Float"/></droppedFrames>
-		<isLive public="1" set="null"><e path="Bool"/></isLive>
-		<maxBytesPerSecond public="1" set="null"><c path="Float"/></maxBytesPerSecond>
-		<metaData public="1" set="null"><d/></metaData>
-		<playbackBytesPerSecond public="1" set="null"><c path="Float"/></playbackBytesPerSecond>
-		<resourceName public="1" set="null"><c path="String"/></resourceName>
-		<uri public="1" set="null"><c path="String"/></uri>
-		<videoBufferByteLength public="1" set="null"><c path="Float"/></videoBufferByteLength>
-		<videoBufferLength public="1" set="null"><c path="Float"/></videoBufferLength>
-		<videoByteCount public="1" set="null"><c path="Float"/></videoByteCount>
-		<videoBytesPerSecond public="1" set="null"><c path="Float"/></videoBytesPerSecond>
-		<videoLossRate public="1"><c path="Float"/></videoLossRate>
-		<xmpData public="1" set="null"><d/></xmpData>
-		<toString public="1" set="method"><f a=""><c path="String"/></f></toString>
-		<new public="1" set="method"><f a="curBPS:byteCount:maxBPS:audioBPS:audioByteCount:videoBPS:videoByteCount:dataBPS:dataByteCount:playbackBPS:droppedFrames:audioBufferByteLength:videoBufferByteLength:dataBufferByteLength:audioBufferLength:videoBufferLength:dataBufferLength:srtt:audioLossRate:videoLossRate:?metaData:?xmpData:?uri:?resourceName:?isLive">
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<d/>
-	<d/>
-	<c path="String"/>
-	<c path="String"/>
-	<e path="Bool"/>
-	<e path="Void"/>
-</f></new>
-	</class>
-	<class path="flash.display.Stage3D" params="" file="/usr/lib/haxe/std/flash9/display/Stage3D.hx" extern="1">
-		<extends path="flash.events.EventDispatcher"/>
-		<context3D public="1" set="null"><c path="flash.display3D.Context3D"/></context3D>
-		<transparent public="1"><e path="Bool"/></transparent>
-		<visible public="1"><e path="Bool"/></visible>
-		<x public="1"><c path="Float"/></x>
-		<y public="1"><c path="Float"/></y>
-		<requestContext3D public="1" set="method"><f a="?context3DRenderMode">
-	<c path="String"/>
-	<e path="Void"/>
-</f></requestContext3D>
-	</class>
-	<typedef path="utils.AlphaColor" params="" file="src/utils/CSSColor.hx" module="utils.CSSColor">
-		<a>
-			<color><c path="Int"/></color>
-			<alpha><c path="Float"/></alpha>
-		</a>
-		<haxe_doc>
- * Based on the class from FlashCanvas:
- </haxe_doc>
-	</typedef>
 	<class path="EReg" params="" file="/usr/lib/haxe/std/flash9/_std/EReg.hx">
 		<r><c path="flash.utils.RegExp"/></r>
 		<result><c path="+Array"/></result>
@@ -2153,6 +2215,107 @@
 	how to use them.
 </haxe_doc>
 	</class>
+	<class path="utils.CSSFont" params="" file="src/utils/CSSFont.hx">
+		<boldRgx get="inline" set="null" line="10" static="1"><c path="EReg"/></boldRgx>
+		<italicRgx get="inline" set="null" line="11" static="1"><c path="EReg"/></italicRgx>
+		<DEFAULT_FONT get="inline" set="null" line="13" static="1"><c path="String"/></DEFAULT_FONT>
+		<DEFAULT_SIZE get="inline" set="null" line="14" static="1"><c path="Float"/></DEFAULT_SIZE>
+		<font public="1" set="null" static="1"><c path="String"/></font>
+		<size public="1" set="null" static="1"><c path="Float"/></size>
+		<bold public="1" set="null" static="1"><e path="Bool"/></bold>
+		<italic public="1" set="null" static="1"><e path="Bool"/></italic>
+		<parse public="1" set="method" line="21" static="1"><f a="str">
+	<c path="String"/>
+	<e path="Void"/>
+</f></parse>
+	</class>
+	<class path="flash.external.ExternalInterface" params="" file="/usr/lib/haxe/std/flash9/external/ExternalInterface.hx" extern="1">
+		<available public="1" set="null" static="1"><e path="Bool"/></available>
+		<marshallExceptions public="1" static="1"><e path="Bool"/></marshallExceptions>
+		<objectID public="1" set="null" static="1"><c path="String"/></objectID>
+		<addCallback public="1" set="method" static="1"><f a="functionName:closure">
+	<c path="String"/>
+	<d/>
+	<e path="Void"/>
+</f></addCallback>
+		<call public="1" set="method" static="1"><f a="functionName:?p1:?p2:?p3:?p4:?p5">
+	<c path="String"/>
+	<d/>
+	<d/>
+	<d/>
+	<d/>
+	<d/>
+	<d/>
+</f></call>
+	</class>
+	<class path="flash.net.NetStreamInfo" params="" file="/usr/lib/haxe/std/flash9/net/NetStreamInfo.hx" extern="1">
+		<SRTT public="1" set="null"><c path="Float"/></SRTT>
+		<audioBufferByteLength public="1" set="null"><c path="Float"/></audioBufferByteLength>
+		<audioBufferLength public="1" set="null"><c path="Float"/></audioBufferLength>
+		<audioByteCount public="1" set="null"><c path="Float"/></audioByteCount>
+		<audioBytesPerSecond public="1" set="null"><c path="Float"/></audioBytesPerSecond>
+		<audioLossRate public="1" set="null"><c path="Float"/></audioLossRate>
+		<byteCount public="1" set="null"><c path="Float"/></byteCount>
+		<currentBytesPerSecond public="1" set="null"><c path="Float"/></currentBytesPerSecond>
+		<dataBufferByteLength public="1" set="null"><c path="Float"/></dataBufferByteLength>
+		<dataBufferLength public="1" set="null"><c path="Float"/></dataBufferLength>
+		<dataByteCount public="1" set="null"><c path="Float"/></dataByteCount>
+		<dataBytesPerSecond public="1" set="null"><c path="Float"/></dataBytesPerSecond>
+		<droppedFrames public="1" set="null"><c path="Float"/></droppedFrames>
+		<isLive public="1" set="null"><e path="Bool"/></isLive>
+		<maxBytesPerSecond public="1" set="null"><c path="Float"/></maxBytesPerSecond>
+		<metaData public="1" set="null"><d/></metaData>
+		<playbackBytesPerSecond public="1" set="null"><c path="Float"/></playbackBytesPerSecond>
+		<resourceName public="1" set="null"><c path="String"/></resourceName>
+		<uri public="1" set="null"><c path="String"/></uri>
+		<videoBufferByteLength public="1" set="null"><c path="Float"/></videoBufferByteLength>
+		<videoBufferLength public="1" set="null"><c path="Float"/></videoBufferLength>
+		<videoByteCount public="1" set="null"><c path="Float"/></videoByteCount>
+		<videoBytesPerSecond public="1" set="null"><c path="Float"/></videoBytesPerSecond>
+		<videoLossRate public="1"><c path="Float"/></videoLossRate>
+		<xmpData public="1" set="null"><d/></xmpData>
+		<toString public="1" set="method"><f a=""><c path="String"/></f></toString>
+		<new public="1" set="method"><f a="curBPS:byteCount:maxBPS:audioBPS:audioByteCount:videoBPS:videoByteCount:dataBPS:dataByteCount:playbackBPS:droppedFrames:audioBufferByteLength:videoBufferByteLength:dataBufferByteLength:audioBufferLength:videoBufferLength:dataBufferLength:srtt:audioLossRate:videoLossRate:?metaData:?xmpData:?uri:?resourceName:?isLive">
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<d/>
+	<d/>
+	<c path="String"/>
+	<c path="String"/>
+	<e path="Bool"/>
+	<e path="Void"/>
+</f></new>
+	</class>
+	<class path="flash.display.Stage3D" params="" file="/usr/lib/haxe/std/flash9/display/Stage3D.hx" extern="1">
+		<extends path="flash.events.EventDispatcher"/>
+		<context3D public="1" set="null"><c path="flash.display3D.Context3D"/></context3D>
+		<transparent public="1"><e path="Bool"/></transparent>
+		<visible public="1"><e path="Bool"/></visible>
+		<x public="1"><c path="Float"/></x>
+		<y public="1"><c path="Float"/></y>
+		<requestContext3D public="1" set="method"><f a="?context3DRenderMode">
+	<c path="String"/>
+	<e path="Void"/>
+</f></requestContext3D>
+	</class>
 	<class path="utils.CSSColor" params="" file="src/utils/CSSColor.hx">
 		<hex3 get="inline" set="null" line="46" static="1"><c path="EReg"/></hex3>
 		<hex6 get="inline" set="null" line="47" static="1"><c path="EReg"/></hex6>
@@ -2162,25 +2325,35 @@
 		<rgba2 get="inline" set="null" line="51" static="1"><c path="EReg"/></rgba2>
 		<hsl get="inline" set="null" line="52" static="1"><c path="EReg"/></hsl>
 		<hsla get="inline" set="null" line="53" static="1"><c path="EReg"/></hsla>
-		<_names line="56" static="1"><d/></_names>
-		<parse public="1" set="method" line="206" static="1"><f a="str">
+		<color public="1" set="null" static="1"><c path="Int"/></color>
+		<alpha public="1" set="null" static="1"><c path="Float"/></alpha>
+		<_names line="59" static="1"><d/></_names>
+		<parse public="1" set="method" line="209" static="1"><f a="str">
 	<c path="String"/>
-	<t path="utils.AlphaColor"/>
+	<e path="Void"/>
 </f></parse>
-		<rgb2hex set="method" line="286" static="1"><f a="rgb">
+		<rgb2hex set="method" line="293" static="1"><f a="rgb">
 	<c path="Array"><c path="String"/></c>
 	<c path="Int"/>
 </f></rgb2hex>
-		<hsl2hex set="method" line="308" static="1"><f a="hsl">
+		<hsl2hex set="method" line="315" static="1"><f a="hsl">
 	<c path="Array"><c path="String"/></c>
 	<c path="Int"/>
 </f></hsl2hex>
-		<hue2rgb set="method" line="329" static="1"><f a="m1:m2:h">
+		<hue2rgb set="method" line="336" static="1"><f a="m1:m2:h">
 	<c path="Float"/>
 	<c path="Float"/>
 	<c path="Float"/>
 	<c path="Float"/>
 </f></hue2rgb>
+		<haxe_doc>
+ * Based on the class from FlashCanvas.
+ * 
+ * Example:
+ * 
+ * CSSColor.parse('#FF0000');
+ * trace(CSSColor.color+', '+CSSColor.alpha);
+ </haxe_doc>
 	</class>
 	<class path="flash.net.NetStreamPlayOptions" params="" file="/usr/lib/haxe/std/flash9/net/NetStreamPlayOptions.hx" extern="1">
 		<extends path="flash.events.EventDispatcher"/>
@@ -2388,60 +2561,97 @@
 		<graphicsList public="1" static="1"><c path="IntHash"><c path="display.GraphicsFl"/></c></graphicsList>
 		<rectangles public="1" static="1"><c path="IntHash"><c path="geom.RectangleFl"/></c></rectangles>
 		<frames public="1" static="1"><c path="IntHash"><c path="display.FrameFl"/></c></frames>
+		<texts public="1" static="1"><c path="IntHash"><c path="display.TextFl"/></c></texts>
 		<makers public="1" static="1"><c path="Hash"><f a="">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></c></makers>
 		<stageFl public="1" static="1"><c path="display.ContainerFl"/></stageFl>
-		<init public="1" set="method" line="34" static="1"><f a=""><e path="Void"/></f></init>
-		<createItems public="1" get="inline" set="null" line="70" static="1"><f a="a">
+		<init public="1" set="method" line="38" static="1"><f a=""><e path="Void"/></f></init>
+		<createItems public="1" get="inline" set="null" line="79" static="1"><f a="a">
 	<c path="Array"><c path="Array"><d/></c></c>
 	<e path="Void"/>
 </f></createItems>
-		<changeItems public="1" get="inline" set="null" line="81" static="1"><f a="a">
+		<changeItems public="1" get="inline" set="null" line="90" static="1"><f a="a">
 	<c path="Array"><c path="Array"><d/></c></c>
 	<e path="Void"/>
 </f></changeItems>
-		<invoke public="1" get="inline" set="null" line="92" static="1"><f a="cmd">
+		<invoke public="1" get="inline" set="null" line="101" static="1"><f a="cmd">
 	<d/>
 	<d/>
 </f></invoke>
-		<image get="inline" set="null" line="96" static="1"><f a="id">
+		<image get="inline" set="null" line="105" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></image>
-		<bitmap get="inline" set="null" line="102" static="1"><f a="id">
+		<bitmap get="inline" set="null" line="111" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></bitmap>
-		<bitmapAnimation get="inline" set="null" line="108" static="1"><f a="id">
+		<bitmapAnimation get="inline" set="null" line="117" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></bitmapAnimation>
-		<shape get="inline" set="null" line="115" static="1"><f a="id">
+		<shape get="inline" set="null" line="124" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></shape>
-		<graphics get="inline" set="null" line="121" static="1"><f a="id">
+		<graphics get="inline" set="null" line="130" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></graphics>
-		<container get="inline" set="null" line="127" static="1"><f a="id">
+		<container get="inline" set="null" line="136" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></container>
-		<rectangle get="inline" set="null" line="134" static="1"><f a="id">
+		<rectangle get="inline" set="null" line="143" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></rectangle>
-		<frame get="inline" set="null" line="140" static="1"><f a="id">
+		<frame get="inline" set="null" line="149" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></frame>
-		<stage get="inline" set="null" line="146" static="1"><f a="id">
+		<text get="inline" set="null" line="155" static="1"><f a="id">
+	<c path="Int"/>
+	<e path="Void"/>
+</f></text>
+		<stage get="inline" set="null" line="162" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></stage>
+	</class>
+	<class path="display.TextFl" params="" file="src/display/TextFl.hx">
+		<extends path="display.DisplayObjectFl"/>
+		<implements path="interfaces.IExec"/>
+		<execs static="1"><c path="Hash"><d/></c></execs>
+		<init public="1" set="method" line="14" static="1"><f a=""><e path="Void"/></f></init>
+		<setFont public="1" get="inline" set="null" line="22" static="1"><f a="target:cssFontString">
+	<c path="display.TextFl"/>
+	<c path="String"/>
+	<e path="Void"/>
+</f></setFont>
+		<setColor public="1" get="inline" set="null" line="32" static="1"><f a="target:cssColorString">
+	<c path="display.TextFl"/>
+	<c path="String"/>
+	<e path="Void"/>
+</f></setColor>
+		<setText public="1" get="inline" set="null" line="39" static="1"><f a="target:text">
+	<c path="display.TextFl"/>
+	<c path="String"/>
+	<e path="Void"/>
+</f></setText>
+		<tf><c path="flash.text.TextField"/></tf>
+		<fmt><c path="flash.text.TextFormat"/></fmt>
+		<exec public="1" get="inline" set="null" line="56"><f a="method:?arguments">
+	<c path="String"/>
+	<d/>
+	<d/>
+</f></exec>
+		<new public="1" set="method" line="46"><f a="id">
+	<c path="Int"/>
+	<e path="Void"/>
+</f></new>
 	</class>
 	<class path="flash.net.NetStream" params="" file="/usr/lib/haxe/std/flash9/net/NetStream.hx" extern="1">
 		<extends path="flash.events.EventDispatcher"/>
@@ -3926,7 +4136,6 @@
 	</class>
 	<class path="display.ShapeFl" params="" file="src/display/ShapeFl.hx">
 		<extends path="display.DisplayObjectFl"/>
-		<implements path="interfaces.IDisplayable"/>
 		<implements path="interfaces.IExec"/>
 		<execs static="1"><c path="Hash"><d/></c></execs>
 		<init public="1" set="method" line="13" static="1"><f a=""><e path="Void"/></f></init>
@@ -4396,7 +4605,6 @@
 	</class>
 	<class path="display.ContainerFl" params="" file="src/display/ContainerFl.hx">
 		<extends path="display.DisplayObjectFl"/>
-		<implements path="interfaces.IDisplayable"/>
 		<implements path="interfaces.IExec"/>
 		<execs static="1">
 			<c path="Hash"><d/></c>

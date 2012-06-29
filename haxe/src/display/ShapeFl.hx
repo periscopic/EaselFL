@@ -5,7 +5,7 @@ import flash.display.DisplayObject;
 import interfaces.IExec;
 import interfaces.IDisplayable;
 
-class ShapeFl extends DisplayObjectFl, implements IExec, implements IDisplayable{
+class ShapeFl extends DisplayObjectFl, implements IExec {
 
 
 	static private var execs:Hash<Dynamic>;

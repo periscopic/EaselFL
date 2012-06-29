@@ -149,7 +149,6 @@ var p = Bitmap.prototype = new DisplayObject();
 				
 				if(this.sourceRect!==this._flSourceRect) {
 					this._flSourceRect = this.sourceRect;
-					//TODO : sync into Flash
 					ctx._flChange.push([this.id, 'rct', this.sourceRect ? this.sourceRect.id : null]);
 				}
 				ctx._flChange.push([this.id, 'img', this.image.__fl.id]);

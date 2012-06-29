@@ -1,7 +1,12 @@
 package utils;
 
 /**
- * Based on the class from FlashCanvas:
+ * Based on the class from FlashCanvas.
+ * 
+ * Example:
+ * 
+ * CSSColor.parse('#FF0000');
+ * trace(CSSColor.color+', '+CSSColor.alpha);
  **/
 /*
  * FlashCanvas
@@ -34,11 +39,6 @@ package utils;
  */
 
 
-	typedef AlphaColor = {
-		color : Int, 
-		alpha : Float
-	};
-
 
     class CSSColor
     {
@@ -51,6 +51,9 @@ package utils;
         inline static var rgba2:EReg = ~/^rgba\(\s*[+-]?[\d.]+%\s*,\s*[+-]?[\d.]+%\s*,\s*[+-]?[\d.]+%\s*,\s*[+-]?[\d.]+\s*\)$/;
         inline static var hsl:EReg = ~/^hsl\(\s*[+-]?[\d.]+\s*,\s*[+-]?[\d.]+%\s*,\s*[+-]?[\d.]+%\s*\)$/;
         inline static var hsla:EReg = ~/^hsla\(\s*[+-]?[\d.]+\s*,\s*[+-]?[\d.]+%\s*,\s*[+-]?[\d.]+%\s*,\s*[+-]?[\d.]+\s*\)$/;
+
+		public static var color(default, null):Int;
+		public static var alpha(default, null):Float;
 
         private static var _names:Dynamic =
         {
@@ -203,10 +206,9 @@ package utils;
             yellowgreen:          0x9ACD32
         };
 
-        static public function parse(str:String) : AlphaColor
+        static public function parse(str:String) : Void//AlphaColor
         {
         	
-            //str = str.toLowerCase().replace(~/^\s*/, "").replace(~/\s*$/, "");
 			str = (~/\s*$/).replace((~/^\s*/).replace(str.toLowerCase(),''), '');
 			
 
@@ -218,15 +220,16 @@ package utils;
                 var r:String = str.charAt(1);
                 var g:String = str.charAt(2);
                 var b:String = str.charAt(3);
-                return { color: Std.parseInt("0x" + r + r + g + g + b + b), alpha : 1.0 };                
                 
+                color = Std.parseInt("0x" + r + r + g + g + b + b);
+                alpha = 1.0;                
             }
 
             // #FF0000
             else if (hex6.match(str))
             {
-            	return { color: Std.parseInt("0x" + str.substr(1, 6)), alpha : 1.0 };                
-                
+            	color = Std.parseInt("0x" + str.substr(1, 6));
+            	alpha = 1.0;                
             }
 
             // rgb(255,0,0), rgb(100%,0%,0%)
@@ -234,7 +237,8 @@ package utils;
             {
                 //var rgb:Array<String> = str.slice(4, -1).split(",");
                 var rgb:Array<String> = str.substr(4,str.length-5).split(",");
-                return { color: rgb2hex(rgb), alpha : 1.0 };                
+                color = rgb2hex(rgb);
+                alpha = 1.0;
             }
 
             // rgba(255,0,0,1), rgba(100%,0%,0%,1)
@@ -243,42 +247,45 @@ package utils;
             					
                 //var rgba:Array<String> = str.slice(5, -1).split(",");
                 var rgba:Array<String> = str.substr(5, str.length-6).split(",");
-                return { color: rgb2hex(rgba), alpha : Std.parseFloat(rgba[3]) };                
-                
+                color = rgb2hex(rgba);
+                alpha = Std.parseFloat(rgba[3]);                
             }
 
             // hsl(0,100%,50%)
             else if (hsl.match(str))
             {
-                //var hsl:Array<String> = str.slice(4, -1).split(",");
                 var hsl:Array<String> = str.substr(4, str.length-5).split(",");
-                return { color: hsl2hex(hsl), alpha : 1.0 };                
+               	color = hsl2hex(hsl);
+               	alpha = 1.0;
             }
 
             // hsla(0,100%,50%,1)
             else if (hsla.match(str))
             {
-                //var hsla:Array<String> = str.slice(5, -1).split(",");
                 var hsla:Array<String> = str.substr(5, str.length-6).split(",");
-                return { color: hsl2hex(hsla), alpha : Std.parseFloat(hsla[3]) };
+                color = hsl2hex(hsla);
+                alpha = Std.parseFloat(hsla[3]);
             }
 
             // red
             else if (Reflect.hasField(_names, str))//str in _names)
             {
-                //_color = _names[str];
-                return { color: Reflect.field(_names, str), alpha : 1.0 };                
+                color = Reflect.field(_names, str);
+                alpha = 1.0;
             }
 
             // transparent
             else if (str == "transparent")
             {
-            	return { color: 0x000000, alpha : 0.0 };                
+            	color = 0x000000;
+            	alpha = 0.0;
             }
 
             // invalid color
             else
             {
+            	color = 0x000000;
+            	alpha = 0.0;
                 throw 'Invalid CSS color argument: '+str;
             }
         }

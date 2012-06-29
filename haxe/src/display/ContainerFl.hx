@@ -6,7 +6,7 @@ import flash.display.DisplayObject;
 import interfaces.IExec;
 import interfaces.IDisplayable;
 
-class ContainerFl extends DisplayObjectFl, implements IExec, implements IDisplayable{
+class ContainerFl extends DisplayObjectFl, implements IExec {
 	
 /**
  * TODO: handle sortChildren, hitTest, getObjectsUnderPoint, clone

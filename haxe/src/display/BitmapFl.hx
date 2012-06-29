@@ -12,7 +12,7 @@ import interfaces.IBitmapData;
 import geom.RectangleFl;
 
 
-class BitmapFl extends DisplayObjectFl, implements IExec, implements IDisplayable {
+class BitmapFl extends DisplayObjectFl, implements IExec {
 
 	static private var execs:Hash<Dynamic>;
 	static private var tmpMtx:Matrix = new Matrix();

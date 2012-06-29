@@ -1,4 +1,4 @@
-/* TEST */package display;
+package display;
 
 import flash.display.Sprite;
 import flash.display.DisplayObjectContainer;
@@ -9,7 +9,7 @@ import interfaces.IDisplayable;
 import flash.geom.Matrix;
 import flash.filters.DropShadowFilter;
 
-class DisplayObjectFl{	
+class DisplayObjectFl implements IDisplayable {	
 	
 	static public function init(execs:Hash<Dynamic>){
 		execs.set('op',opacity);

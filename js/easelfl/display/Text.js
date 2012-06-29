@@ -47,13 +47,32 @@ var Text = function(text, font, color) {
 }
 var p = Text.prototype = new DisplayObject();
 
+	p._flFont = null;
+	p._flText = "";
+	p._flColor = null;
+	p._flTextAlign = null;
+	p._flTextBaseline = null;
+	p._flOutline = false;
+	p._flLineHeight = null;
+	p._flLineWidth = null;
+	
+	/**
+	 * Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
+	 **/
+	p._flRunCreate = function(ctx){
+	  if(this._flCtx!==ctx){
+			this._flCtx = ctx;
+			ctx._flCreate.push(['txt', this]);
+	  }
+	}
+	
 
 	/**
 	 * @property _workingContext
 	 * @type CanvasRenderingContext2D
 	 * @private
 	 **/
-	Text._workingContext = document.createElement("canvas").getContext("2d");
+	//Text._workingContext = document.createElement("canvas").getContext("2d");
 
 // public properties:
 	/**
@@ -178,6 +197,22 @@ var p = Text.prototype = new DisplayObject();
 	p.draw = function(ctx, ignoreCache) {
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
 		
+		if(this.text!==this._flText) {
+			ctx._flChange.push([this.id, 'txt', this.text]);
+			this._flText = this.text;
+		}
+		
+		if(this.color!==this._flColor) {
+			ctx._flChange.push([this.id, 'clr', this.color]);
+			this._flColor = this.color;
+		}
+		
+		if(this.font!==this._flFont) {
+			ctx._flChange.push([this.id, 'fnt', this.font]);
+			this._flFont = this.font;
+		}
+		
+		/*
 		if (this.outline) { ctx.strokeStyle = this.color; }
 		else { ctx.fillStyle = this.color; }
 		ctx.font = this.font;
@@ -211,6 +246,7 @@ var p = Text.prototype = new DisplayObject();
 			this._drawTextLine(ctx, str, y); // Draw remaining text
 			y += lineHeight;
 		}
+		*/
 		return true;
 	}
 	

@@ -11,7 +11,10 @@ import display.ShapeFl;
 import display.GraphicsFl;
 import display.ImageFl;
 import display.FrameFl;
+import display.TextFl;
 import geom.RectangleFl;
+
+import utils.CSSFont;
 
 
 class Control {
@@ -24,6 +27,7 @@ class Control {
 	static public var graphicsList:IntHash<GraphicsFl>;
 	static public var rectangles:IntHash<RectangleFl>;
 	static public var frames:IntHash<FrameFl>;
+	static public var texts:IntHash<TextFl>;
 	static public var makers:Hash<Int->Void>;
 	static public var stageFl:ContainerFl;
 	
@@ -40,6 +44,7 @@ class Control {
 		graphicsList = new IntHash<GraphicsFl>();
 		rectangles = new IntHash<RectangleFl>();
 		frames = new IntHash<FrameFl>();
+		texts = new IntHash<TextFl>();
 		makers = new Hash<Int->Void>();
 		
 		makers.set('img', image);
@@ -51,6 +56,7 @@ class Control {
 		makers.set('stg', stage);
 		makers.set('rct', rectangle);
 		makers.set('frm', frame);
+		makers.set('txt', text);
 		
 		ImageFl.init();
 		BitmapFl.init();
@@ -60,7 +66,10 @@ class Control {
 		RectangleFl.init();
 		BitmapAnimationFl.init();
 		FrameFl.init();
+		TextFl.init();
 		
+		//CSSFont.parse('36px Arial Bold');
+		//trace(CSSFont);
 		
 	}
 	
@@ -143,16 +152,22 @@ class Control {
 		items.set(id, frm);
 	}
 	
+	inline static private function text(id:Int):Void{
+		var txt:TextFl = new TextFl(id);
+		displays.set(id, txt);
+		texts.set(id, txt);
+		items.set(id, txt);
+	}
+	
 	inline static private function stage(id:Int):Void{
-		//-- Alias stage as another ID
+		//-- Alias another container as Stage
 		//-- by assigning to an already created ContainerFl
+		//-- The EaselFl 'stage' is a child of the Flash stage
+		//-- (Flash stage itself doesn't not have all the interactive object
+		//-- characteristics necessary for Easel stage)
 		var cnt = containers.get(id);		
-		//cnt.display = cnt.container = Lib.current.stage;
 		Lib.current.stage.addChild(cnt.display);
 		stageFl = cnt;
-		/*containers.set('stage', cnt);
-		items.set('stage', cnt);
-		displays.set('stage', cnt);*/
 	}	
 	
 }

@@ -54,8 +54,8 @@ class GraphicsFl implements IExec{
 
 
 	inline static private function beginFill(target:GraphicsFl, color:String):Void{
-		var col = CSSColor.parse(color);
-		target.graphics.beginFill(col.color, col.alpha);
+		CSSColor.parse(color);
+		target.graphics.beginFill(CSSColor.color, CSSColor.alpha);
 	}
 	
 	inline static private function beginBitmapFill(target:GraphicsFl, args:Array<Dynamic>):Void{
@@ -72,8 +72,8 @@ class GraphicsFl implements IExec{
 	}
 	
 	inline static private function beginStroke(target:GraphicsFl, color:String):Void{
-		var col = CSSColor.parse(color);
-		target.graphics.lineStyle(target.strokeThickness, col.color, col.alpha, false, LineScaleMode.NONE);//, pixelHinting, scaleMode, caps, joints, miterLimit)
+		CSSColor.parse(color);
+		target.graphics.lineStyle(target.strokeThickness, CSSColor.color, CSSColor.alpha, false, LineScaleMode.NONE);//, pixelHinting, scaleMode, caps, joints, miterLimit)
 	}
 	
 	inline static private function beginBitmapStroke(target:GraphicsFl, args:Array<Dynamic>):Void{
