@@ -2625,30 +2625,60 @@
 		<extends path="display.DisplayObjectFl"/>
 		<implements path="interfaces.IExec"/>
 		<execs static="1"><c path="Hash"><d/></c></execs>
-		<init public="1" set="method" line="14" static="1"><f a=""><e path="Void"/></f></init>
-		<setFont public="1" get="inline" set="null" line="22" static="1"><f a="target:cssFontString">
+		<LINE_DELIMITER get="inline" set="null" line="17" static="1"><c path="EReg"/></LINE_DELIMITER>
+		<WORD_DELIMITER get="inline" set="null" line="18" static="1"><c path="EReg"/></WORD_DELIMITER>
+		<init public="1" set="method" line="21" static="1"><f a=""><e path="Void"/></f></init>
+		<setFont get="inline" set="null" line="32" static="1"><f a="target:cssFontString">
 	<c path="display.TextFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></setFont>
-		<setColor public="1" get="inline" set="null" line="32" static="1"><f a="target:cssColorString">
+		<setColor get="inline" set="null" line="44" static="1"><f a="target:cssColorString">
 	<c path="display.TextFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></setColor>
-		<setText public="1" get="inline" set="null" line="39" static="1"><f a="target:text">
+		<setLineWidth get="inline" set="null" line="52" static="1"><f a="target:wd">
+	<c path="display.TextFl"/>
+	<d/>
+	<e path="Void"/>
+</f></setLineWidth>
+		<setTextAlign get="inline" set="null" line="60" static="1"><f a="target:align">
+	<c path="display.TextFl"/>
+	<c path="String"/>
+	<e path="Void"/>
+</f></setTextAlign>
+		<setTextBaseline get="inline" set="null" line="65" static="1"><f a="target:baseline">
+	<c path="display.TextFl"/>
+	<c path="String"/>
+	<e path="Void"/>
+</f></setTextBaseline>
+		<setText public="1" get="inline" set="null" line="74" static="1"><f a="target:text">
 	<c path="display.TextFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></setText>
 		<tf><c path="flash.text.TextField"/></tf>
 		<fmt><c path="flash.text.TextFormat"/></fmt>
-		<exec public="1" get="inline" set="null" line="56"><f a="method:?arguments">
+		<baseline><c path="String"/></baseline>
+		<align><c path="String"/></align>
+		<text><c path="String"/></text>
+		<lineWidth><c path="Float"/></lineWidth>
+		<updateBaseline set="method" line="103"><f a=""><e path="Void"/></f></updateBaseline>
+		<updateAlign set="method" line="123"><f a=""><e path="Void"/></f></updateAlign>
+		<updateText set="method" line="152">
+			<f a=""><e path="Void"/></f>
+			<haxe_doc>
+	 * Mimic the text application in EaselJS since we want as close as possible
+	 * a match to that output.
+	 </haxe_doc>
+		</updateText>
+		<exec public="1" get="inline" set="null" line="207"><f a="method:?arguments">
 	<c path="String"/>
 	<d/>
 	<d/>
 </f></exec>
-		<new public="1" set="method" line="46"><f a="id">
+		<new public="1" set="method" line="88"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></new>

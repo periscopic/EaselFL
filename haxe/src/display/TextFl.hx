@@ -2,6 +2,9 @@ package display;
 
 import flash.text.TextField;
 import flash.text.TextFormat;
+import flash.text.TextLineMetrics;
+import flash.text.TextFieldAutoSize;
+import flash.text.TextFormatAlign;
 import flash.display.Sprite;
 import utils.CSSFont;
 import utils.CSSColor;
@@ -11,46 +14,194 @@ class TextFl extends DisplayObjectFl, implements IExec {
 
 	static private var execs:Hash<Dynamic>;
 	
+	inline static var LINE_DELIMITER:EReg = ~/(?:\r\n|\r|\n)/;
+	inline static var WORD_DELIMITER:EReg = ~/(\s)/g;
+	
+	
 	static public function init(){
 		execs = new Hash();
 		DisplayObjectFl.init(execs);
 		execs.set('fnt', setFont);
 		execs.set('clr', setColor);
 		execs.set('txt', setText);
+		execs.set('bsl', setTextBaseline);
+		execs.set('lwd', setLineWidth);
+		execs.set('aln', setTextAlign);
 	}
 
-	inline static public function setFont(target:TextFl, cssFontString:String) {
+	inline static private function setFont(target:TextFl, cssFontString:String) {
 		var fmt = target.fmt;
 		CSSFont.parse(cssFontString);
 		fmt.bold = CSSFont.bold;
 		fmt.italic = CSSFont.italic;
 		fmt.size = CSSFont.size;
 		fmt.font = CSSFont.font;
-		target.tf.setTextFormat(target.fmt);		
+		target.tf.setTextFormat(target.fmt);
+		target.tf.defaultTextFormat = target.fmt;
+		target.updateBaseline();		
 	}
 	
-	inline static public function setColor(target:TextFl, cssColorString:String) {
+	inline static private function setColor(target:TextFl, cssColorString:String) {
 		CSSColor.parse(cssColorString);
 		target.fmt.color = CSSColor.color;
 		target.tf.alpha = CSSColor.alpha;
 		target.tf.setTextFormat(target.fmt);
+		target.tf.defaultTextFormat = target.fmt;
 	}
 	
-	inline static public function setText(target:TextFl, text:String) {
-		target.tf.text = text;
+	inline static private function setLineWidth(target:TextFl, wd:Dynamic) {
+		//TODO : split text instead of wrapping based on actual width, to match Easel
+		
+		target.lineWidth = wd;
+		target.updateText();
+		target.updateAlign();
 	}
+	
+	inline static private function setTextAlign(target:TextFl, align:String) {
+		target.align = align;
+		target.updateAlign();
+	}
+	
+	inline static private function setTextBaseline(target:TextFl, baseline:String) {
+		target.baseline = baseline;
+		target.updateBaseline();
+	}
+	
+	
+	
+	
+	
+	inline static public function setText(target:TextFl, text:String) {
+		target.text = text;
+		target.updateText();
+	}
+	
 
 	private var tf:TextField;
 	private var fmt:TextFormat;
+	private var baseline:String; //"top", "hanging", "middle", "alphabetic", "ideographic", or "bottom"
+	private var align:String;
+	//private var autoSizing:Bool;
+	private var text:String;
+	private var lineWidth:Float;
 	
 	public function new(id:Int) {
 		super(id);
 		
+		
 		tf = new TextField();
+		tf.autoSize = TextFieldAutoSize.LEFT;
 		fmt = new TextFormat();
+		tf.defaultTextFormat = fmt;
+		text = '';
 	
 		display = new Sprite();
 		display.addChild(tf);
+		baseline = 'alphabetic';
+	}
+	
+	function updateBaseline():Void {
+		var metrics:TextLineMetrics = tf.getLineMetrics(0);
+	
+		//ultimately 'hanging', 'ideographic' should be treated differently
+		switch(baseline) {
+			
+			case 'top', 'hanging': 
+				tf.y = -2;
+				
+			case 'bottom':
+				tf.y = - (metrics.ascent + metrics.descent + 2);
+				
+			case 'middle':
+				tf.y = - ((metrics.ascent + metrics.descent) * 0.5 +2);	
+			
+			default: //'alphabetic', 'ideographic', null
+				tf.y = - (metrics.ascent + 2);		
+		}	
+	}
+	
+	function updateAlign():Void {
+		
+		// ultimately start, end should be treated differntly
+		switch(align) {
+			
+			case 'end', 'right':
+				tf.x = -tf.width;
+				fmt.align = TextFormatAlign.RIGHT;
+				tf.autoSize = TextFieldAutoSize.RIGHT;
+				
+			case 'center':
+				tf.x = -tf.width*0.5;
+				fmt.align = TextFormatAlign.CENTER;	
+				tf.autoSize = TextFieldAutoSize.CENTER;
+			
+			default: //'start', 'left'
+				tf.x = 0;
+				fmt.align = TextFormatAlign.LEFT;
+				tf.autoSize = TextFieldAutoSize.LEFT;
+		}
+		
+		tf.setTextFormat(fmt);
+	}
+	
+	
+	/**
+	 * Mimic the text application in EaselJS since we want as close as possible
+	 * a match to that output.
+	 */
+	function updateText():Void {
+		if(Math.isNaN(lineWidth)){
+			tf.text = text;
+		}else{
+
+			var lines:Array<String> = LINE_DELIMITER.split(text);
+			var finalLines:Array<String> = [];
+			var words:Array<String>;
+			var line:String;
+			var str;
+			var metrics:TextLineMetrics;
+			
+			for( line in lines) {
+				
+				
+				tf.text = line;
+				metrics = tf.getLineMetrics(0);
+				if(metrics.width < lineWidth) {
+					finalLines.push(line);
+					continue;
+				}
+				
+				//pass the AS3 native regexp to the AS3 String.split
+				//since we want the white space characters included
+				words = line.split( untyped WORD_DELIMITER.r );
+				str = words[0];
+				
+				var i =1;
+				var l = words.length;
+				
+				while(i<l) {
+					tf.text = str + words[i] + words[i+1];
+					metrics = tf.getLineMetrics(0);
+
+					if(metrics.width > lineWidth) {
+						
+						//add whitespace character to end of last line
+						str += words[i];
+						
+						finalLines.push(str);
+						
+						str = words[i+1]; //words[i] + words[i+1];
+					}else{
+						str += words[i] + words[i+1];
+					}
+					
+					i+=2;
+				}
+				
+				finalLines.push(str);
+				tf.text = finalLines.join('\n');
+			}
+		}
 	}
 	
 	inline public function exec(method:String, ?arguments:Dynamic=null):Dynamic{

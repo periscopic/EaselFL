@@ -43,9 +43,10 @@ window.onload = function(){
 	Ticker.addListener(myStage);
 	
 	//-- specific test code
-	var txt = new Text('hello text', '36px Arial bold', '#F00');
-	//var txt = new Text('hello text', 'bold 36px Arial', '#F00');
-	//txt.x = txt.y = 100;
+	var txt = new Text('lorem ipsum dolor sit amet noni polerum', 'bold 36px Arial', '#F00');
+	txt.x = 100;
+	txt.y = 20;
+	txt.lineWidth = 100;
 	myStage.addChild(txt);
 }
 

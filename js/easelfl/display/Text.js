@@ -212,6 +212,21 @@ var p = Text.prototype = new DisplayObject();
 			this._flFont = this.font;
 		}
 		
+		if(this.textBaseline!==this._flTextBaseline) {
+			ctx._flChange.push([this.id, 'bsl', this.textBaseline]);
+			this._flTextBaseline = this.textBaseline;
+		}
+		
+		if(this.textAlign!==this._flTextAlign) {
+			ctx._flChange.push([this.id, 'aln', this.textAlign]);
+			this._flTextAlign = this.textAlign;
+		}
+		
+		if(this.lineWidth!==this._flLineWidth) {
+			ctx._flChange.push([this.id, 'lwd', this.lineWidth]);
+			this._flLineWidth = this.lineWidth;
+		}
+		
 		/*
 		if (this.outline) { ctx.strokeStyle = this.color; }
 		else { ctx.fillStyle = this.color; }
