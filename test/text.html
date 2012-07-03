@@ -25,6 +25,8 @@ everything after 3 seconds -->
 <script type="text/javascript" src="../js/easelfl/utils/Ticker.js"></script>
 
 <!--<script type="text/javascript" src="http://code.createjs.com/easeljs-0.4.2.min.js"></script>-->
+<!--<script type="text/javascript" src="../../easeljs-0.4.2.min.js"></script>-->
+
 
 <script type="text/javascript">
 
@@ -43,11 +45,26 @@ window.onload = function(){
 	Ticker.addListener(myStage);
 	
 	//-- specific test code
-	var txt = new Text('lorem ipsum dolor sit amet noni polerum', 'bold 36px Arial', '#F00');
-	txt.x = 100;
-	txt.y = 20;
-	txt.lineWidth = 100;
+	var head = new Text('EASEL', '112px Arial', '#DDD');
+	head.y = 329;
+	head.x = 400;
+	head.textAlign = 'right';
+	myStage.addChild(head);
+	
+	var copy = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.';
+	var txt = new Text(copy, 'italic 14px Georgia', '#F00');
+	txt.y = 42;
+	txt.x = 400;
+	txt.lineWidth = 300;
+	txt.lineHeight = 25;
+	txt.textAlign = 'right';
 	myStage.addChild(txt);
+	
+	
+	
+	
+	
+	
 }
 
 

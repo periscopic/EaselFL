@@ -9,6 +9,7 @@ import flash.display.Sprite;
 import utils.CSSFont;
 import utils.CSSColor;
 import interfaces.IExec;
+import flash.filters.GlowFilter;
 
 class TextFl extends DisplayObjectFl, implements IExec {
 
@@ -16,7 +17,7 @@ class TextFl extends DisplayObjectFl, implements IExec {
 	
 	inline static var LINE_DELIMITER:EReg = ~/(?:\r\n|\r|\n)/;
 	inline static var WORD_DELIMITER:EReg = ~/(\s)/g;
-	
+	inline static var OUTLINE:GlowFilter = new GlowFilter(0, 1, 2, 2, 8, 1, false, true);
 	
 	static public function init(){
 		execs = new Hash();
@@ -26,7 +27,13 @@ class TextFl extends DisplayObjectFl, implements IExec {
 		execs.set('txt', setText);
 		execs.set('bsl', setTextBaseline);
 		execs.set('lwd', setLineWidth);
+		execs.set('lht', setLineHeight);
+		execs.set('otl', setOutline);
 		execs.set('aln', setTextAlign);
+	}
+	
+	inline static private function getOutlineFilter(color:Int) {
+		return new GlowFilter(color, 1, 1.1, 1.1, 16, 2, true, true);
 	}
 
 	inline static private function setFont(target:TextFl, cssFontString:String) {
@@ -47,14 +54,30 @@ class TextFl extends DisplayObjectFl, implements IExec {
 		target.tf.alpha = CSSColor.alpha;
 		target.tf.setTextFormat(target.fmt);
 		target.tf.defaultTextFormat = target.fmt;
+		
+		if(target.outline) {
+			target.tf.filters = [getOutlineFilter(target.fmt.color)];
+		}
 	}
 	
-	inline static private function setLineWidth(target:TextFl, wd:Dynamic) {
-		//TODO : split text instead of wrapping based on actual width, to match Easel
-		
+	inline static private function setOutline(target:TextFl, outline:Bool) {
+		target.outline = outline;
+		if(outline) {
+			target.tf.filters = [getOutlineFilter(target.fmt.color)];
+		}else{
+			target.tf.filters = null;
+		}
+	}
+	
+	inline static private function setLineWidth(target:TextFl, wd:Dynamic) {		
 		target.lineWidth = wd;
 		target.updateText();
 		target.updateAlign();
+	}
+	
+	inline static private function setLineHeight(target:TextFl, ht:Dynamic) {
+		target.lineHeight = ht;		
+		target.updateLineHeight();
 	}
 	
 	inline static private function setTextAlign(target:TextFl, align:String) {
@@ -79,18 +102,20 @@ class TextFl extends DisplayObjectFl, implements IExec {
 
 	private var tf:TextField;
 	private var fmt:TextFormat;
-	private var baseline:String; //"top", "hanging", "middle", "alphabetic", "ideographic", or "bottom"
+	private var baseline:String;
 	private var align:String;
-	//private var autoSizing:Bool;
 	private var text:String;
 	private var lineWidth:Float;
+	private var lineHeight:Float;
+	private var outline:Bool;
 	
 	public function new(id:Int) {
 		super(id);
 		
-		
+		outline = false;
 		tf = new TextField();
 		tf.autoSize = TextFieldAutoSize.LEFT;
+		tf.selectable = false;
 		fmt = new TextFormat();
 		tf.defaultTextFormat = fmt;
 		text = '';
@@ -118,6 +143,19 @@ class TextFl extends DisplayObjectFl, implements IExec {
 			default: //'alphabetic', 'ideographic', null
 				tf.y = - (metrics.ascent + 2);		
 		}	
+	}
+	
+	function updateLineHeight():Void{
+		if(Math.isNaN(lineHeight)){
+			fmt.leading = null;
+			
+		}else{
+			var metrics:TextLineMetrics = tf.getLineMetrics(0);
+			fmt.leading = lineHeight - (metrics.ascent + metrics.descent);
+		}
+
+		tf.setTextFormat(fmt);
+		tf.defaultTextFormat = fmt;
 	}
 	
 	function updateAlign():Void {

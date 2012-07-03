@@ -164,12 +164,12 @@ var p = Container.prototype = new DisplayObject();
 	 **/
 	p._flRunCreate = function(ctx){
 	  if(this._flCtx!==ctx){
-		this._flCtx = ctx;
-		ctx._flCreate.push(['cnt', this]);
-		
-		for(var i=0, l=this.children.length; i<l; ++i) {
-		  this.children[i]._flRunCreate(ctx);
-		}
+			this._flCtx = ctx;
+			ctx._flCreate.push(['cnt', this]);
+			
+			for(var i=0, l=this.children.length; i<l; ++i) {
+				this.children[i]._flRunCreate(ctx);
+			}
 	  }
 	}
 	

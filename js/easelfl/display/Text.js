@@ -227,6 +227,16 @@ var p = Text.prototype = new DisplayObject();
 			this._flLineWidth = this.lineWidth;
 		}
 		
+		if(this.lineHeight!==this._flLineHeight) {
+			ctx._flChange.push([this.id, 'lht', this.lineHeight]);
+			this._flLineHeight = this.lineHeight;
+		}
+		
+		if(this.outline!==this._flOutline) {
+			ctx._flChange.push([this.id, 'otl', this.outline]);
+			this._flOutline = this.outline;
+		}
+		
 		/*
 		if (this.outline) { ctx.strokeStyle = this.color; }
 		else { ctx.fillStyle = this.color; }
