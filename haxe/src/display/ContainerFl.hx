@@ -20,7 +20,7 @@ class ContainerFl extends DisplayObjectFl, implements IExec {
 	}
 	
 	static public function mapMethods(excs:Hash<Dynamic>) :Void{
-		DisplayObjectFl.mapMethods(execs);
+		DisplayObjectFl.mapMethods(excs);
 		excs.set('ac', addChild );
 		excs.set('aca', addChildAt );
 		excs.set('rc', removeChild );
