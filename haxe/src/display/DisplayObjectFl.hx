@@ -11,7 +11,7 @@ import flash.filters.DropShadowFilter;
 
 class DisplayObjectFl implements IDisplayable {	
 	
-	static public function init(execs:Hash<Dynamic>){
+	static public function mapMethods(execs:Hash<Dynamic>){
 		execs.set('op',opacity);
 		execs.set('vs',visible);
 		execs.set('sh', shadow);

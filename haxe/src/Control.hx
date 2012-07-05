@@ -4,6 +4,7 @@ import flash.Lib;
 import interfaces.IExec;
 import interfaces.IDisplayable;
 import interfaces.IBitmapData;
+import display.StageFl;
 import display.ContainerFl;
 import display.BitmapFl;
 import display.BitmapAnimationFl;
@@ -29,7 +30,7 @@ class Control {
 	static public var frames:IntHash<FrameFl>;
 	static public var texts:IntHash<TextFl>;
 	static public var makers:Hash<Int->Void>;
-	static public var stageFl:ContainerFl;
+	static public var stageFl:StageFl;
 	
 	//static private var valid:Bool = true;
 	//inline static var UPDATE_INTERVAL:Int = 17; //check every 5ms
@@ -67,6 +68,7 @@ class Control {
 		BitmapAnimationFl.init();
 		FrameFl.init();
 		TextFl.init();
+		StageFl.init();
 		
 		//CSSFont.parse('36px Arial Bold');
 		//trace(CSSFont);
@@ -165,9 +167,16 @@ class Control {
 		//-- The EaselFl 'stage' is a child of the Flash stage
 		//-- (Flash stage itself doesn't not have all the interactive object
 		//-- characteristics necessary for Easel stage)
-		var cnt = containers.get(id);		
+		/*var cnt = containers.get(id);		
 		Lib.current.stage.addChild(cnt.display);
-		stageFl = cnt;
+		stageFl = cnt;*/
+		var stg = new StageFl(id, Lib.current.stage);
+		containers.set(id, stg);
+		displays.set(id, stg);
+		items.set(id, stg);
+		Lib.current.stage.addChild(stg.blitBitmap);
+		Lib.current.stage.addChild(stg.display);
+		stageFl = stg;
 	}	
 	
 }

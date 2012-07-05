@@ -44,6 +44,16 @@ Stage.isEaselFl = true;
 
 var p = Stage.prototype = new Container();
 
+/**
+ * @protected
+ * The CanvasFl context
+ **/
+p._flCtx = null;
+
+p._flAutoClear = true;
+
+
+
 // static properties:
 	/**
 	 * @property _snapToPixelEnabled
@@ -227,9 +237,12 @@ var p = Stage.prototype = new Container();
 		var ctx = this.canvas.getContext('2d');		
 		
 		//-- Create container in flash
-		this._flRunCreate(ctx);
+		//this._flRunCreate(ctx);
 		
 		//-- Set as stage in flash
+		//ctx._flCreate.push(['stg', this]);
+		
+		this._flCtx = ctx;
 		ctx._flCreate.push(['stg', this]);
 	}
 
@@ -248,8 +261,14 @@ var p = Stage.prototype = new Container();
 	p.update = function(data) {
 		if(!(this.canvas && this.canvas._ctx && this.canvas._ctx.flReady)) { return; }
 		
-		if(this.autoClear === false) { this._flBlit() };
-	
+		if(this.autoClear === false) {
+			this._flAutoClear = this.autoClear;
+			this.canvas._ctx._flChange.push([this.id, 'blt']);
+		}else if(this._flAutoClear === false) {
+			this._flAutoClear = true;
+			this.canvas._ctx._flChange.push([this.id, 'clr']);
+		}
+		
 		Stage._snapToPixelEnabled = this.snapToPixelEnabled;
 		
 		if(this.tickOnUpdate) {
@@ -479,16 +498,6 @@ var p = Stage.prototype = new Container();
 			}
 			this._activeMouseTarget = target;
 		}
-	}
-	
-	/**
-	 * @method _flBlit
-	 * @protected
-	 **/
-	p._flBlit = function(){
-		//TODO : record command which tells Flash to draw everything into a single bitmap instance
-		//such that previous shapes and images are maintained
-		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl::Stage._flBlit is not implemented';
 	}
 
 	/**

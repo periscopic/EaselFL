@@ -20,7 +20,11 @@ class BitmapFl extends DisplayObjectFl, implements IExec {
 	
 	static public function init(){
 		execs = new Hash();
-		DisplayObjectFl.init(execs);
+		mapMethods(execs);
+	}
+	
+	static public function mapMethods(execs:Hash<Dynamic>) :Void{
+		DisplayObjectFl.mapMethods(execs);
 		execs.set('img', setImage);
 		execs.set('smth', setSmoothing);
 		execs.set('rct', setRectangle);

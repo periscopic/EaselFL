@@ -12,7 +12,11 @@ class ShapeFl extends DisplayObjectFl, implements IExec {
 	
 	static public function init(){
 		execs = new Hash();
-		DisplayObjectFl.init(execs);
+		mapMethods(execs);
+	}
+	
+	static public function mapMethods(execs:Hash<Dynamic>) :Void{
+		DisplayObjectFl.mapMethods(execs);
 		execs.set('gfx', linkGraphics);
 	}
 	

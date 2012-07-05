@@ -45,17 +45,16 @@ window.onload = function(){
 	Ticker.addListener(myStage);
 	
 	//-- specific test code
-	var head = new Text('EASEL', '112px Arial', '#DDD');
-	head.y = 329;
-	head.x = 400;
-	head.textAlign = 'right';
+	var head = new Text('EASEL', 'bold 112px "Trebuchet MS"', '#3399E9');
+	head.y = 341;
+	head.x = 260;
 	myStage.addChild(head);
 	
 	var copy = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.';
-	var txt = new Text(copy, 'italic 14px Georgia', '#F00');
+	var txt = new Text(copy, '14px "Trebuchet MS"', '#000');
 	txt.y = 42;
-	txt.x = 400;
-	txt.lineWidth = 300;
+	txt.x = 260;
+	txt.lineWidth = 240;
 	txt.lineHeight = 25;
 	txt.textAlign = 'right';
 	myStage.addChild(txt);
@@ -73,7 +72,7 @@ window.onload = function(){
 <style type="text/css">
  body {
 	margin: 0;
-	background: #EEE;
+	background: #E6E6E6;
  }
  
  h1 {

@@ -9,21 +9,25 @@ import interfaces.IDisplayable;
 class ContainerFl extends DisplayObjectFl, implements IExec {
 	
 /**
- * TODO: handle sortChildren, hitTest, getObjectsUnderPoint, clone
+ * TODO: handle sortChildren, getObjectsUnderPoint, clone
  **/
 	
 	static private var execs:Hash<Dynamic>;
 	
 	static public function init(){
 		execs = new Hash();
-		DisplayObjectFl.init(execs);
-		execs.set('ac', addChild );
-		execs.set('aca', addChildAt );
-		execs.set('rc', removeChild );
-		execs.set('rca', removeChildAt );
-		execs.set('rac', removeAllChildren);
-		execs.set('sc', swapChildren);
-		execs.set('sca', swapChildrenAt);
+		mapMethods(execs);
+	}
+	
+	static public function mapMethods(excs:Hash<Dynamic>) :Void{
+		DisplayObjectFl.mapMethods(execs);
+		excs.set('ac', addChild );
+		excs.set('aca', addChildAt );
+		excs.set('rc', removeChild );
+		excs.set('rca', removeChildAt );
+		excs.set('rac', removeAllChildren);
+		excs.set('sc', swapChildren);
+		excs.set('sca', swapChildrenAt);
 	}
 	
 	inline static private function addChild(target:ContainerFl, id:Int):Void{
@@ -38,7 +42,14 @@ class ContainerFl extends DisplayObjectFl, implements IExec {
 	}
 	
 	inline static private function removeChild(target:ContainerFl, id:Int):Void{
-		target.container.removeChild(Control.displays.get(id).display);	
+		// Since child add/remove is not synchronously called, and are added to flush in
+		// an order that is based on the position in the display tree, it is possible
+		// that a child will be added to another container, and then removal attempted
+		// afterward, even if the calls were made in the correct order in JS
+		var child = Control.displays.get(id).display;
+		if(child.parent==target.container){
+			target.container.removeChild(child);	
+		}
 	}
 	
 	inline static private function removeChildAt(target:ContainerFl, index:Int):Void{
@@ -67,7 +78,7 @@ class ContainerFl extends DisplayObjectFl, implements IExec {
 		display = this.container = new Sprite();
 	}
 	
-	inline public function exec(method:String, ?arguments:Dynamic=null):Dynamic{
+	public function exec(method:String, ?arguments:Dynamic=null):Dynamic{
 		#if debug
 			if(execs.exists(method)){
 		#end
