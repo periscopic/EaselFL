@@ -50,7 +50,7 @@ class Main {
 	
 	private function init(?evt:Event=null):Void{
 		
-		Lib.current.stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
+		Lib.current.stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;	
 		
 		//-- Can anything be done but fail silently?
 		//-- Perhaps flash without external interface can
@@ -58,7 +58,7 @@ class Main {
 		if (ExternalInterface.available == false) {
             return;
         }
-		
+        		
 		var flashVars:Dynamic = Lib.current.loaderInfo.parameters;
 		var id:String = Reflect.hasField( flashVars, 'id') ? Reflect.field( flashVars, 'id') : DEFAULT_ID;
 		

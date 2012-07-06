@@ -28,10 +28,11 @@ everything after 3 seconds -->
 window.onload = function(){
 	
 	var canvas = document.createElement('canvas');
-	canvas.setAttribute('width', 600);
+	canvas.setAttribute('width', 500);
 	canvas.setAttribute('height', 400);
 	canvas.setAttribute('fl_swf_url', '../haxe/bin/EaselFl.swf');
-	canvas.setAttribute('id', 'testContainer');
+	//canvas.setAttribute('id', 'testContainer');
+	document.getElementById('shell').appendChild(canvas);
 	
 	var myStage = new Stage(canvas);
 	Ticker.addListener(myStage);
@@ -43,6 +44,7 @@ window.onload = function(){
 	myStage.addChild(container);
 
 	var bg = new Shape();
+	bg.alpha = 0.8;
 	bg.graphics.beginFill('#FFF');
 	bg.graphics.drawRect(0, 0, 400, 400);
 	bg.graphics.endFill();
@@ -50,10 +52,10 @@ window.onload = function(){
 	
 	var targ = new Shape();
 	targ.graphics.beginFill('#F00');
-	targ.graphics.drawCircle(150, 150, 100);
-	targ.graphics.drawCircle(250, 150, 100);
-	targ.graphics.drawCircle(150, 250, 100);
-	targ.graphics.drawCircle(250, 250, 100);
+	for(var i=0, l=24; i<l; ++i) {
+		var ang = Math.PI * 2 * i/l;
+		targ.graphics.drawCircle(200 + 100*Math.cos(ang), 200 + 100*Math.sin(ang), 100)
+	}
 	targ.graphics.endFill();
 	
 	container.addChild(targ);
@@ -98,11 +100,23 @@ window.onload = function(){
 	color: #333;
  }
  
+ #shell {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 600px;
+	height: 400px;
+ }
+ 
 </style>
 </head>
 <body>
 <div id="stats"></div>
+<div id="shell">
 <div id="testContainer"></div>
+</div>
+<div style='width:400px; height:1px; background-color:#CCC; position:absolute; top:400px;'></div>
+
 <div id="trace">Click somewhere in the box...</div>
 	
 </body>

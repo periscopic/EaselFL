@@ -44,13 +44,33 @@ Stage.isEaselFl = true;
 
 var p = Stage.prototype = new Container();
 
-/**
- * @protected
- * The CanvasFl context
- **/
-p._flCtx = null;
+	/**
+	 * @protected
+	 * The CanvasFl context
+	 **/
+	p._flCtx = null;
+	
+	/**
+	 * @private
+	 * Synced state of the autoclear
+	 **/
+	p._flAutoClear = true;
 
-p._flAutoClear = true;
+
+	/** 
+     * The flOnReady callback is called when the Flash Movie has loaded, all existing commands have been flushed
+     * to it, and it is prepared for invocation of synchronous methods (such as hitTestPoint).
+     * @event flOnReady
+     * @param Stage The stage instance which is ready.
+     **/
+    p.flOnReady = null;
+
+    /**
+     * READ-ONLY Indicates whether the Flash Movie is ready.
+     * @property
+     * @type Boolean
+     **/
+    p.flReady = false;
 
 
 
@@ -225,6 +245,8 @@ p._flAutoClear = true;
 		  //-- Not a CanvasFl
 		  this.canvas = new CanvasFl(canvas);
 		}
+		
+		this.canvas._stage = this;
 
 		//-- Begin EaselFl specific setup
 		var myID, self = this;		
@@ -234,16 +256,11 @@ p._flAutoClear = true;
 		this._enableMouseEvents(true);
 		
 		//-- Set this container as Stage in flash
-		var ctx = this.canvas.getContext('2d');		
-		
-		//-- Create container in flash
-		//this._flRunCreate(ctx);
-		
+		var ctx = this.canvas.getContext('2d');			
+	
 		//-- Set as stage in flash
-		//ctx._flCreate.push(['stg', this]);
-		
 		this._flCtx = ctx;
-		ctx._flCreate.push(['stg', this]);
+		ctx._flCreate.push(['stg', this]);		
 	}
 
 // public methods:
@@ -370,7 +387,7 @@ p._flAutoClear = true;
 	 * over events completely. Maximum is 50. A lower frequency is less responsive, but uses less CPU. Default is 20.
 	 **/
 	p.enableMouseOver = function(frequency) {
-		if (this._mouseOverIntervalID) {
+		/*if (this._mouseOverIntervalID) {
 			clearInterval(this._mouseOverIntervalID);
 			this._mouseOverIntervalID = null;
 		}
@@ -379,7 +396,7 @@ p._flAutoClear = true;
 		var o = this;
 		this._mouseOverIntervalID = setInterval(function(){ o._testMouseOver(); }, 1000/Math.min(50,frequency));
 		this._mouseOverX = NaN;
-		this._mouseOverTarget = null;
+		this._mouseOverTarget = null;*/
 	}
 
 	/**
@@ -409,6 +426,12 @@ p._flAutoClear = true;
 	 * @param {Boolean} enabled
 	 **/
 	p._enableMouseEvents = function() {
+	  
+	
+	  var o = this;
+	  var evtTarget = window.addEventListener ? window : document;
+	  evtTarget.addEventListener("mousemove", function(e) { o._handleMouseMove(e); }, false);
+	  
 		/*var o = this;
 		var evtTarget = window.addEventListener ? window : document;
 		evtTarget.addEventListener("mouseup", function(e) { o._handleMouseUp(e); }, false);
@@ -424,21 +447,23 @@ p._flAutoClear = true;
 	 * @param {MouseEvent} e
 	 **/
 	p._handleMouseMove = function(e) {
+	
 
 		if (!this.canvas) {
 			this.mouseX = this.mouseY = null;
 			return;
 		}
+		
 		if(!e){ e = window.event; }
 
 		var inBounds = this.mouseInBounds;
 		this._updateMousePosition(e.pageX, e.pageY);
 		if (!inBounds && !this.mouseInBounds) { return; }
 
-		var evt = new MouseEvent("onMouseMove", this.mouseX, this.mouseY, this, e);
+		/*var evt = new MouseEvent("onMouseMove", this.mouseX, this.mouseY, this, e);
 
 		if (this.onMouseMove) { this.onMouseMove(evt); }
-		if (this._activeMouseEvent && this._activeMouseEvent.onMouseMove) { this._activeMouseEvent.onMouseMove(evt); }
+		if (this._activeMouseEvent && this._activeMouseEvent.onMouseMove) { this._activeMouseEvent.onMouseMove(evt); }*/
 	}
 
 	/**
@@ -447,19 +472,21 @@ p._flAutoClear = true;
 	 * @param {Number} pageX
 	 * @param {Number} pageY
 	 **/
-	p._updateMousePosition = function(pageX, pageY) {
-
-		var o = this.canvas;
-		do {
-			pageX -= o.offsetLeft;
-			pageY -= o.offsetTop;
-		} while (o = o.offsetParent);
-
-		this.mouseInBounds = (pageX >= 0 && pageY >= 0 && pageX < this.canvas.width && pageY < this.canvas.height);
-
-		if (this.mouseInBounds) {
-			this.mouseX = pageX;
-			this.mouseY = pageY;
+	p._updateMousePosition = function(pageX, pageY) {	
+		
+		var o = this.canvas._ctx._flInstance;
+		if(o){
+		  do {
+			  pageX -= o.offsetLeft;
+			  pageY -= o.offsetTop;
+		  } while (o = o.offsetParent);		  
+		  
+		  this.mouseInBounds = (pageX >= 0 && pageY >= 0 && pageX < this.canvas.width && pageY < this.canvas.height);
+		  //console.log(pageX+','+pageY);
+		  if (this.mouseInBounds) {
+			  this.mouseX = pageX;
+			  this.mouseY = pageY;
+		  }
 		}
 	}
 
@@ -469,7 +496,7 @@ p._flAutoClear = true;
 	 * @param {MouseEvent} e
 	 **/
 	p._handleMouseUp = function(e) {
-		var evt = new MouseEvent("onMouseUp", this.mouseX, this.mouseY, this, e);
+		/*var evt = new MouseEvent("onMouseUp", this.mouseX, this.mouseY, this, e);
 		if (this.onMouseUp) { this.onMouseUp(evt); }
 		if (this._activeMouseEvent && this._activeMouseEvent.onMouseUp) { this._activeMouseEvent.onMouseUp(evt); }
 		if (this._activeMouseTarget && this._activeMouseTarget.onClick &&
@@ -477,7 +504,7 @@ p._flAutoClear = true;
 
 			this._activeMouseTarget.onClick(new MouseEvent("onClick", this.mouseX, this.mouseY, this._activeMouseTarget, e));
 		}
-		this._activeMouseEvent = this._activeMouseTarget = null;
+		this._activeMouseEvent = this._activeMouseTarget = null;*/
 	}
 
 	/**
@@ -486,7 +513,7 @@ p._flAutoClear = true;
 	 * @param {MouseEvent} e
 	 **/
 	p._handleMouseDown = function(e) {
-		if (this.onMouseDown) {
+	/*	if (this.onMouseDown) {
 			this.onMouseDown(new MouseEvent("onMouseDown", this.mouseX, this.mouseY, this, e));
 		}
 		var target = this._getObjectsUnderPoint(this.mouseX, this.mouseY, null, (this._mouseOverIntervalID ? 3 : 1));
@@ -497,7 +524,7 @@ p._flAutoClear = true;
 				if (evt.onMouseMove || evt.onMouseUp) { this._activeMouseEvent = evt; }
 			}
 			this._activeMouseTarget = target;
-		}
+		}*/
 	}
 
 	/**
@@ -505,7 +532,7 @@ p._flAutoClear = true;
 	 * @protected
 	 **/
 	p._testMouseOver = function() {
-		if (this.mouseX == this._mouseOverX && this.mouseY == this._mouseOverY && this.mouseInBounds) { return; }
+		/*if (this.mouseX == this._mouseOverX && this.mouseY == this._mouseOverY && this.mouseInBounds) { return; }
 		var target = null;
 		if (this.mouseInBounds) {
 			target = this._getObjectsUnderPoint(this.mouseX, this.mouseY, null, 3);
@@ -521,7 +548,7 @@ p._flAutoClear = true;
 				target.onMouseOver(new MouseEvent("onMouseOver", this.mouseX, this.mouseY, target));
 			}
 			this._mouseOverTarget = target;
-		}
+		}*/
 	}
 
 	/**
@@ -530,7 +557,7 @@ p._flAutoClear = true;
 	 * @param {MouseEvent} e
 	 **/
 	p._handleDoubleClick = function(e) {
-		if (this.onDoubleClick) {
+		/*if (this.onDoubleClick) {
 			this.onDoubleClick(new MouseEvent("onDoubleClick", this.mouseX, this.mouseY, this, e));
 		}
 		var target = this._getObjectsUnderPoint(this.mouseX, this.mouseY, null, (this._mouseOverIntervalID ? 3 : 1));
@@ -538,7 +565,7 @@ p._flAutoClear = true;
 			if (target.onDoubleClick instanceof Function) {
 				target.onDoubleClick(new MouseEvent("onPress", this.mouseX, this.mouseY, target, e));
 			}
-		}
+		}*/
 	}
 
 window.Stage = Stage;

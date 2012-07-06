@@ -16,63 +16,60 @@
 
 (function(window) {
 
-    function ContextFl(thecanvas, fl_url, width, height){
-       this.initialize(thecanvas, fl_url, width, height); 
-    }
-    var p = ContextFl.prototype;
-    
-    /** 
-     * The flOnReady callback is called when the Flash Movie has loaded, all existing commands have been flushed
-     * to it, and it is prepared for invocation of synchronous methods (such as hitTestPoint).
-     * @event flOnReady
-     * @param Stage The stage instance which is ready.
-     **/
-    p.flOnReady = null;
+   function ContextFl(thecanvas){
+	  this.initialize(thecanvas); 
+   }
+   var p = ContextFl.prototype;
+   
+   
+	   
+   /**
+	* @property _flCommandQueues
+	* @protected
+	* @type Object
+	**/
+   p._flCommandQueues = null;
+   
+   /**
+	* @property _flInstance
+	* @protected
+	* @type Flash Movie
+	**/
+   p._flInstance = null;	
 
-    /**
-     * READ-ONLY Indicates whether the Flash Movie is ready.
-     * @property
-     * @type Boolean
-     **/
-    p.flReady = false;
-    
-    /**
-     * @property _flCommandQueues
-     * @protected
-     * @type Object
-     **/
-    p._flCommandQueues = null;
-    
-    /**
-     * @property _flInstance
-     * @protected
-     * @type Flash Movie
-     **/
-    p._flInstance = null;	
-
-    /**
-     * @property _flInstanceID
-     * @protected
-     * @type String
-     **/
-    p._flInstanceID = null;
-    
-    p._flChange = null;
-    p._flCreate = null;
-    p._flItemIndex = null;
-    
-    /**
-     * The MouseEvent corresponding to an onPress that
-     * has not yet been completed by corresponding onMouseUp
-     * @property _flCurPressEvent
-     * @protected
-     * @type MouseEvent
-     **/
-    p._flCurPressEvent = null;
+   /**
+	* @property _flInstanceID
+	* @protected
+	* @type String
+	**/
+   p._flInstanceID = null;
+   
+   p._flChange = null;
+   p._flCreate = null;
+   p._flItemIndex = null;
+   
+   /**
+	* The MouseEvent corresponding to an onPress that
+	* has not yet been completed by corresponding onMouseUp
+	* @property _flCurPressEvent
+	* @protected
+	* @type MouseEvent
+	**/
+   p._flCurPressEvent = null;
 	
-   p._flAttempts = 0;
+   /**
+	 * @property _flCanvas
+	 * @private
+	 * @type CanvasFl
+	 **/
+   p._flCanvas = null;
 
-    p._flFlush = function() {		
+
+   /**
+    * Send any queued commands to Flash
+    * @protected
+    **/
+   p._flFlush = function() {		
       if(this.flReady){
          var inst = this._flInstance;
        
@@ -105,6 +102,7 @@
    
    /**
     * Invoke a function in flash
+    * @method flInvoke
     * @param Dynamic
     * @return Dynamic
     **/
@@ -114,8 +112,7 @@
 		 return this._flInstance.sendInvoke([id, methodId, args]);
 	  }
 	  return null;
-   }
-   
+   }   
     
    /**
 	 * Triggered when associated Flash Movie is ready for interaction
@@ -127,18 +124,19 @@
 	  this.flReady = true;
 	  this._flFlush();
 		
-      if( this.flOnReady ){
-         this.flOnReady(this);
+      if(this._flCanvas._stage && this._flCanvas._stage.flOnReady){
+		 this._flCanvas._stage.flReady = true;
+         this._flCanvas._stage.flOnReady(this._flCanvas._stage);
       }
    }
     
-    p.initialize = function(thecanvas, fl_url, width, height){
+    p.initialize = function(thecanvas){
       
       var myID, self = this;
 	  
       var cnvID = thecanvas.getAttribute('id'),
-      cnvWd = thecanvas.getAttribute('width') || CanvasFl.FL_WIDTH,
-      cnvHt = thecanvas.getAttribute('height') || CanvasFl.FL_HEIGHT,
+     // cnvWd = thecanvas.getAttribute('width') || CanvasFl.FL_WIDTH,
+     // cnvHt = thecanvas.getAttribute('height') || CanvasFl.FL_HEIGHT,
       fl_swf_url = thecanvas.getAttribute('fl_swf_url') || CanvasFl.FL_URL;
       
 	  //-- Handle dispatches from Flash
@@ -205,7 +203,8 @@
       }
      
       //-- Embed and initial loading of Flash Movie
-      ContextFl._flLoadInstance(myID, cnvWd, cnvHt, this._flInstanceID, fl_swf_url);
+     // ContextFl._flLoadInstance(myID, cnvWd, cnvHt, this._flInstanceID, fl_swf_url);
+      ContextFl._flLoadInstance(myID, thecanvas.width, thecanvas.height, this._flInstanceID, fl_swf_url);
    }
     
    ContextFl._flCount = 0;
@@ -226,11 +225,13 @@
 	  }
 	  
 	  var params = {
+		 scale : 'noscale',
+		 salign : 'TL',
 		 wmode : (CanvasFl.FL_TRANSPARENT?'transparent':'opaque')
 	  }
  
 	 swfobject.embedSWF(swfUrl, elementId, width.toString(), height.toString(), '9.0.0', false, flashvars, params)
-   }
+   }   
 
    //-- Get the movie object by id
    ContextFl._flGetInstance = function(id){
@@ -241,13 +242,22 @@
 	   }
    }
 
-   function CanvasFl(thecanvas, fl_url, width, height){
-	   this._ctx = new ContextFl(thecanvas, fl_url, width, height);
+   function CanvasFl(thecanvas, fl_url){
+	  thecanvas.width = parseFloat(thecanvas.getAttribute('width') || CanvasFl.FL_WIDTH);
+      thecanvas.height = parseFloat(thecanvas.getAttribute('height') || CanvasFl.FL_HEIGHT);
+	  
+	   this._ctx = new ContextFl(thecanvas);
+	   this._ctx._flCanvas = this;
+	   this.width = thecanvas.width;
+	   this.height = thecanvas.height;
    }
    
    var p = CanvasFl.prototype;
 
-   p._ctx = null;
+   p._ctx = null;   
+   p._stage = null;
+   p.width = 0;
+   p.height = 0;
    
    /**
 	* READ-ONLY Used for testing type in Stage.js

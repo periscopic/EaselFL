@@ -53,7 +53,10 @@ class ContainerFl extends DisplayObjectFl, implements IExec {
 	}
 	
 	inline static private function removeChildAt(target:ContainerFl, index:Int):Void{
-		target.container.removeChildAt(index);	
+		if(target.container.numChildren>index) {
+			target.container.removeChildAt(index);
+		}
+			
 	}
 	
 	inline static private function removeAllChildren(target:ContainerFl, ?nada:Dynamic):Void{
