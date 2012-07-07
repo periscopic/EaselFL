@@ -119,7 +119,11 @@ class BitmapFl extends DisplayObjectFl, implements IExec {
 		}	
 	}
 	
-	
+	/**
+	 * Execute a method on this BitmapFl object
+	 * @param String key corresponding to the method
+	 * @param Array arguments for the method
+	 */
 	inline public function exec(method:String, ?arguments:Dynamic=null):Dynamic{
 		#if debug
 			if(execs.exists(method)){

@@ -343,8 +343,8 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.arcTo = function(x1, y1, x2, y2, radius) {
-		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.arcTo currently not implemented (Note: Graphics.arc is implemented)'; 
-		//this._flChange.push([this.id, 'art', [x1, y1, x2, y2, radius]]); //-- need implementation Flash side
+		//if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.arcTo currently not implemented (Note: Graphics.arc is implemented)'; 
+		this._flChange.push([this.id, 'at', [x1, y1, x2, y2, radius]]); //-- need implementation Flash side
 		
 		return this;
 	}
@@ -365,7 +365,7 @@ var p = Graphics.prototype;
 	 **/
 	p.arc = function(x, y, radius, startAngle, endAngle, anticlockwise) {
 		if (anticlockwise == null) { anticlockwise = false; }
-		this._flChange.push([this.id, 'arc', [x, y, radius, startAngle, endAngle, anticlockwise]]);
+		this._flChange.push([this.id, 'a', [x, y, radius, startAngle, endAngle, anticlockwise]]);
 		return this;
 	}
 	
@@ -831,8 +831,7 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.decodePath = function(str) {
-		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.decodePath currently not implemented';
-		/*var instructions = [this.moveTo, this.lineTo, this.quadraticCurveTo, this.bezierCurveTo];
+		var instructions = [this.moveTo, this.lineTo, this.quadraticCurveTo, this.bezierCurveTo];
 		var paramCount = [2, 2, 4, 6];
 		var i=0, l=str.length;
 		var params = [];
@@ -862,7 +861,7 @@ var p = Graphics.prototype;
 				i += charCount;
 			}
 			f.apply(this,params);
-		}*/
+		}
 		return this;
 	}
 	

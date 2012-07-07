@@ -20,6 +20,7 @@ typedef Command = {
 class GraphicsFl implements IExec{
 	
 	inline static var QUART_PI:Float = Math.PI*0.25;
+	inline static var TWO_PI:Float = Math.PI*2;
 	inline static var CUBIC_PRECISION:Float = 1;
 
 	static private var execs:Hash<Dynamic>;
@@ -33,10 +34,11 @@ class GraphicsFl implements IExec{
 		execs.set('lt', lineTo );		
 		execs.set('bt', cubicCurveTo );		
 		execs.set('qt', quadraticCurveTo );		
-		execs.set('dr', drawRect );		// or is it 'r'
+		execs.set('dr', drawRect );
 		execs.set('rr', drawRoundRect );		
 		execs.set('rc', drawRoundRectComplex );		
-		execs.set('arc', drawArc );		
+		execs.set('a', drawArc );		
+		execs.set('at', drawArcTo );		
 		execs.set('dc', drawCircle );		
 		execs.set('de', drawEllipse );		
 		execs.set('c', clear );		
@@ -46,7 +48,6 @@ class GraphicsFl implements IExec{
 		execs.set('es', endStroke);
 	}
 
-	//TODO : arcTo
 	//TODO : clearPath
 	//TODO : beginLinearGradientFill, radialGradientFill
 	//TODO : beginLinearGradientStroke, beginRadialGradientStroke
@@ -61,7 +62,6 @@ class GraphicsFl implements IExec{
 	inline static private function beginBitmapFill(target:GraphicsFl, args:Array<Dynamic>):Void{
 		//TODO : handle repeat-x, repeat-y
 		var img = Control.bitmapDatas.get(args[0]);	
-		//target.graphics.beginBitmapFill(img.bitmapData, new flash.geom.Matrix(), args[1]!='no-repeat', false);
 		target.graphics.beginBitmapFill(img.bitmapData, new flash.geom.Matrix(), args[1]!='no-repeat', false);
 		watchBitmapData(target, img);
 	}
@@ -92,18 +92,25 @@ class GraphicsFl implements IExec{
 		target.graphics.endFill();
 	}
 	
+	/**
+	 * Move drawing head to a point
+	 * 
+	 */
 	inline static private function moveTo(target:GraphicsFl, xy:Array<Dynamic>):Void{
+		target.graphics.moveTo(xy[0], xy[1]);
+		
+		//-- store current drawing point
 		target.curX = xy[0];
 		target.curY = xy[1];
-		target.graphics.moveTo(xy[0], xy[1]);
 	}
 	
 	inline static private function lineTo(target:GraphicsFl, xy:Array<Dynamic>):Void{
+		target.graphics.lineTo(xy[0], xy[1]);
+		
+		//-- store current drawing point
 		target.curX = xy[0];
 		target.curY = xy[1];
-		target.graphics.lineTo(xy[0], xy[1]);
 	}
-	
 	
 	inline static private function cubicCurveTo(target:GraphicsFl, pts:Array<Dynamic>):Void{
 		//-- Flash11 version
@@ -124,6 +131,7 @@ class GraphicsFl implements IExec{
 			
 		#end
 
+		//-- store current drawing point
       	target.curX = pts[4];
       	target.curY = pts[5];
 	}
@@ -160,7 +168,7 @@ class GraphicsFl implements IExec{
 			drawCubicApprox(target, halves.b, tolerance, recurseCount-1);
 		} else {
 			//-- give up and draw a straight line for this segment
-			//-- this avoids gross errors when handles are nearly parallel
+			//-- doing so avoids gross errors when handles are nearly parallel
 			target.graphics.lineTo( bz.a2.x, bz.a2.y);	
 		}
 	}
@@ -168,6 +176,8 @@ class GraphicsFl implements IExec{
 	
 	inline static private function quadraticCurveTo(target:GraphicsFl, pts:Array<Dynamic>):Void{
 		target.graphics.curveTo(pts[0], pts[1], pts[2], pts[3]);
+		
+		//-- store current drawing point
 		target.curX = pts[2];
 		target.curY = pts[3];
 	}
@@ -193,72 +203,196 @@ class GraphicsFl implements IExec{
 		}		
 	}
 	
+	 /**
+	 * Draw a simple round cornered rectangle
+	 * @param GraphicsFl
+	 * @param Array The arguments for the corresponding EaselJS method
+	 */
 	inline static private function drawRoundRect(target:GraphicsFl, rect:Dynamic):Void{
 		target.graphics.drawRoundRect(rect[0], rect[1], rect[2], rect[3], rect[4], rect[5]);
 	}
+	
+	 /**
+	 * Draw a complex round cornered rectangle
+	 * @param GraphicsFl
+	 * @param Array The arguments for the corresponding EaselJS method
+	 */
 	inline static private function drawRoundRectComplex(target:GraphicsFl, rect:Array<Dynamic>):Void{
 		target.graphics.drawRoundRectComplex(rect[0], rect[1], rect[2], rect[3], rect[4], rect[5], rect[6], rect[7]);
 	}
 	
+	/**
+	 * Draw a circle
+	 * @param GraphicsFl
+	 * @param Array The arguments for the corresponding EaselJS method
+	 */
 	inline static private function drawCircle(target:GraphicsFl, circ:Array<Dynamic>):Void{
 		target.graphics.drawCircle(circ[0], circ[1], circ[2]);
 	}
 	
+	/**
+	 * Draw an ellipse
+	 * @param GraphicsFl
+	 * @param Array The arguments for the corresponding EaselJS method
+	 */
 	inline static private function drawEllipse(target:GraphicsFl, ell:Array<Dynamic>):Void{
 		target.graphics.drawEllipse(ell[0], ell[1], ell[2], ell[3]);
 	}
 	
-	inline static private function drawArc(target:GraphicsFl, args:Array<Dynamic>):Void{
+	/**
+	 * Draw an arcTo
+	 * @param GraphicsFl
+	 * @param Array The arguments for the corresponding EaselJS method
+	 */
+	inline static function drawArcTo(target:GraphicsFl, args:Array<Dynamic>):Void{
 	
-		var cx:Float = args[0];
-		var cy:Float = args[1];
-		var rad:Float = args[2];
-		var sAng:Float;
-		var eAng:Float;
-		var difAng:Float;
-		var a1x:Float;
-		var a1y:Float;
-		var a2x:Float;
-		var a2y:Float;
-		var ctrl:Dynamic;
-		var g:flash.display.Graphics = target.graphics;
-		var dir:Int = 1;
+		//-- control point
+		var x1:Float = args[0];
+		var y1:Float = args[1];
 		
-		sAng = args[3];
-		eAng = args[4];
+		//-- start point relative to control point
+		var dx0:Float = target.curX - x1;
+		var dy0:Float = target.curY - y1;
+		
+		//-- end point relative to control point
+		var dx2:Float = args[2] - x1;
+		var dy2:Float = args[3] - y1;
+		
+		var radius:Float = args[4];
+		
+		//-- length of start to control, end to control
+		var len0:Float = Math.sqrt(dx0*dx0+dy0*dy0);
+		var len2:Float = Math.sqrt(dx2*dx2+dy2*dy2);
+		
+		//-- point on bisecting line
+		var bisectX:Float = (dx0+dx2*(len0/len2)) * 0.5;
+		var bisectY:Float = (dy0+dy2*(len0/len2)) * 0.5;
 		
 		
-		if(args.length>5 && args[5]){
-			dir = -1;
+		//-- the point on first line that is on radius of circle 
+		//-- from tip of bisector 
+		var tanPt0 = Geometry.intersectLines(0, 0, dx0, dy0, bisectX, bisectY, bisectX+dy0, bisectY-dx0);
+	
+		//-- scale factor of bisector to reach center point of circular arc
+		var scl = radius/Math.sqrt(Math.pow(tanPt0.x-bisectX,2)+Math.pow(tanPt0.y-bisectY,2));
+		var cx = bisectX*scl;
+		var cy = bisectY*scl;
+		
+		//-- two lines are colinear
+		if(Math.isNaN(cx) || !Math.isFinite(cx)) {
+			
+			//-- control point is betweent start & end points
+			if(tanPt0.x==0 && tanPt0.y==0) {
+				target.graphics.lineTo(x1, y1);
+				target.curX = x1;
+				target.curY = y1;
+				
+			//-- control point is not between start & end points
+			}else{
+				var x = target.curX - (x1-target.curX)*10000;
+				var y = target.curY - (y1-target.curY)*10000;
+				target.graphics.lineTo(x, y);
+				target.curX = x;
+				target.curY = y;
+			}
+		} else { 
+
+			// TODO : simplify calculation of start/end angles; intersecting lines should be unnecessary
+			var tanPt1 = Geometry.intersectLines(0, 0, dx0, dy0, cx, cy, cx+dy0, cy-dx0);
+			var tanPt2 = Geometry.intersectLines(0, 0, dx2, dy2, cx, cy, cx+dy2, cy-dx2);
+			var sAng = Math.atan2(tanPt1.y-cy, tanPt1.x-cx);
+			var eAng = Math.atan2(tanPt2.y-cy, tanPt2.x-cx);
+			eAng = eAng<sAng ? eAng+TWO_PI : eAng;
+			
+			//-- draw the arc
+			drawArc(target, [x1+cx, y1+cy, radius, sAng, eAng, eAng-sAng<=Math.PI ]);
 		}
-		
-		//-- render using quadratic beziers		
-		a2x = Math.cos(sAng) * rad;
-		a2y = Math.sin(sAng) * rad;				
-		
-		target.graphics.lineTo(a2x + cx, a2y + cy);	
-		
-		
-		while(eAng*dir>sAng*dir) {
-			a1x = a2x;
-			a1y = a2y;
-			
-			//step forward by max 1/8th of a circle
-			sAng +=  Math.min(QUART_PI, Math.abs(eAng - sAng)) * dir;
-			
-			//-- next anchor point			
-			a2x = Math.cos(sAng) * rad;
-			a2y = Math.sin(sAng) * rad;
-			
-			//find intersection between tangents
-			ctrl = Geometry.intersectLines(a1x, a1y, a1x-a1y, a1y+a1x, a2x, a2y, a2x-a2y, a2y+a2x);
-			g.curveTo(ctrl.x + cx, ctrl.y + cy, a2x + cx, a2y + cy);
-		}
-		
-		target.curX = a2x+cx;
-		target.curY = a2y+cy;		
 	}
 	
+	
+	/**
+	 * Draw an arc
+	 * @param GraphicsFl
+	 * @param Array The arguments for the corresponding EaselJS method
+	 */
+	inline static function drawArc(target:GraphicsFl, args:Array<Dynamic>):Void{
+            	
+       	//-- center of arc
+       	var ax:Float = args[0]; 
+        var ay:Float = args[1];
+        
+        var radius:Float = args[2];
+       	var startAngle:Float = args[3];
+        
+        //-- start of segment
+       	var bx:Float = ax + Math.cos(startAngle) * radius;
+       	var by:Float = ay + Math.sin(startAngle) * radius;
+        
+        //-- arc angle in radians
+        var arc:Float = args[4] - startAngle;
+        var clockwise:Bool = args[5]==null ? true : args[5];
+       
+       //-- graphics on which to render
+            var g:flash.display.Graphics = target.graphics;
+            
+            var segAngle:Float;
+            var angle:Float;
+            var angleMid:Float;
+            var numSegs:Int;
+            var cx:Float;
+            var cy:Float;
+            var cRadius:Float;
+
+ 
+            //-- line to start
+        g.lineTo(bx, by);
+
+        //-- draw only full circle if more than that is specified
+        if (Math.abs(arc) > TWO_PI) {
+                arc = TWO_PI;
+                
+        //-- or if necessary to flip direction of rendering        
+        }else if(arc!=0 && (arc>0) != clockwise) {
+        		arc = (TWO_PI - Math.abs(arc)) * (clockwise?1:-1); 
+        }
+        
+        //-- number of segments
+        numSegs = Math.ceil(Math.abs(arc) / QUART_PI);
+        
+        //-- angle of each segment
+        segAngle = arc / numSegs;
+        
+        //-- radius of control pts
+        cRadius = (radius / Math.cos(segAngle / 2));
+        
+        //-- current angle
+        angle = startAngle;
+        
+		//-- calculate and render segments
+		
+        for( i in 0...numSegs) {
+                //-- increment the angle
+                angle += segAngle;
+                
+                //-- angle halfway between the last and this
+                angleMid = angle - (segAngle / 2);
+                
+                //-- find the end pt
+                bx = ax + Math.cos(angle) * radius;
+                by = ay + Math.sin(angle) * radius;
+                
+                //-- find the control pt
+                cx = ax + Math.cos(angleMid) * cRadius;
+                cy = ay + Math.sin(angleMid) * cRadius;
+				
+                //-- render segment
+                g.curveTo(cx, cy, bx, by);
+        }
+    
+    	//-- store current drawing point
+    	target.curX = bx;
+		target.curY = by;
+    }
 	
 	/**
 	 * Watch an IBitmapData for change, so that a redraw can be triggered.
@@ -289,15 +423,19 @@ class GraphicsFl implements IExec{
 		curX = 0;
 		curY = 0;	
 		commands = [];
-	}
-	
-	inline public function link(g:Graphics):Void{
-		this.graphics = g;
 		strokeThickness = 1;
 	}
 	
 	/**
-	 * Redraw when an IBitmapData on which this is dependant
+	 * Map this object to a graphics object from a DisplayObject
+	 * @param Graphics
+	 */
+	inline public function link(g:Graphics):Void{
+		this.graphics = g;	
+	}
+	
+	/**
+	 * Redraw when an IBitmapData on which this dependant
 	 * has changed.
 	 */
 	private function handleRedraw(e:Dynamic):Void {
@@ -307,6 +445,11 @@ class GraphicsFl implements IExec{
 		}
 	}
 	
+	/**
+	 * Execute a method on this GraphicsFl object
+	 * @param String key corresponding to the method
+	 * @param Array arguments for the method
+	 */
 	inline public function exec(method:String, ?arguments:Dynamic=null):Dynamic{
 		#if debug
 			if(execs.exists(method)){

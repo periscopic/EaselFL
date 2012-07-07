@@ -322,40 +322,71 @@
 		<dispatcher line="17" static="1"><c path="flash.events.EventDispatcher"/></dispatcher>
 		<execs static="1"><c path="Hash"><d/></c></execs>
 		<init public="1" set="method" line="21" static="1"><f a=""><e path="Void"/></f></init>
-		<setSource get="inline" set="null" line="29" static="1"><f a="target:url">
-	<c path="display.ImageFl"/>
-	<d/>
-	<e path="Void"/>
-</f></setSource>
+		<setSource get="inline" set="null" line="35" static="1">
+			<f a="target:url">
+				<c path="display.ImageFl"/>
+				<d/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Change the source url of an ImageFl
+	 * @param ImageFl
+	 * @param String the URL
+	 </haxe_doc>
+		</setSource>
 		<defaultData public="1" set="null" static="1"><c path="flash.display.BitmapData"/></defaultData>
 		<ready public="1" set="null"><e path="Bool"/></ready>
 		<bitmapData public="1" set="null"><c path="flash.display.BitmapData"/></bitmapData>
 		<loader><c path="flash.display.Loader"/></loader>
 		<eventID><c path="String"/></eventID>
-		<watch public="1" get="inline" set="null" line="53"><f a="method">
-	<f a="">
-		<d/>
-		<e path="Void"/>
-	</f>
-	<e path="Void"/>
-</f></watch>
-		<unwatch public="1" get="inline" set="null" line="57"><f a="method">
-	<f a="">
-		<d/>
-		<e path="Void"/>
-	</f>
-	<e path="Void"/>
-</f></unwatch>
-		<handleLoad set="method" line="65"><f a="e">
-	<c path="flash.events.Event"/>
-	<e path="Void"/>
-</f></handleLoad>
-		<exec public="1" get="inline" set="null" line="73"><f a="method:?arguments">
-	<c path="String"/>
-	<d/>
-	<d/>
-</f></exec>
-		<new public="1" set="method" line="44"><f a="id">
+		<watch public="1" get="inline" set="null" line="63">
+			<f a="method">
+				<f a="">
+					<d/>
+					<e path="Void"/>
+				</f>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Add method to be called when bitmapdata changes
+	 * @param Method
+	 </haxe_doc>
+		</watch>
+		<unwatch public="1" get="inline" set="null" line="71">
+			<f a="method">
+				<f a="">
+					<d/>
+					<e path="Void"/>
+				</f>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Remove method to be called when bitmapdata changes
+	 * @param Method
+	 </haxe_doc>
+		</unwatch>
+		<handleLoad set="method" line="79">
+			<f a="e">
+				<c path="flash.events.Event"/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Handle load of loader, create new bitmap data 
+	 </haxe_doc>
+		</handleLoad>
+		<exec public="1" get="inline" set="null" line="92">
+			<f a="method:?arguments">
+				<c path="String"/>
+				<d/>
+				<d/>
+			</f>
+			<haxe_doc>
+	 * Execute a method on this ImageFl object
+	 * @param String key corresponding to the method
+	 * @param Array arguments for the method
+	 </haxe_doc>
+		</exec>
+		<new public="1" set="method" line="50"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></new>
@@ -620,11 +651,18 @@
 	<c path="flash.events.Event"/>
 	<e path="Void"/>
 </f></updateBitmap>
-		<exec public="1" get="inline" set="null" line="95"><f a="method:?arguments">
-	<c path="String"/>
-	<d/>
-	<d/>
-</f></exec>
+		<exec public="1" get="inline" set="null" line="100">
+			<f a="method:?arguments">
+				<c path="String"/>
+				<d/>
+				<d/>
+			</f>
+			<haxe_doc>
+	 * Execute a method on this FrameFl object
+	 * @param String key corresponding to the method
+	 * @param Array arguments for the method
+	 </haxe_doc>
+		</exec>
 		<new public="1" set="method" line="40"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
@@ -2040,11 +2078,18 @@
 	<c path="flash.events.Event"/>
 	<e path="Void"/>
 </f></updateBitmap>
-		<exec public="1" get="inline" set="null" line="86"><f a="method:?arguments">
-	<c path="String"/>
-	<d/>
-	<d/>
-</f></exec>
+		<exec public="1" get="inline" set="null" line="90">
+			<f a="method:?arguments">
+				<c path="String"/>
+				<d/>
+				<d/>
+			</f>
+			<haxe_doc>
+	 * Execute a method on this BitmapAnimationFl object
+	 * @param String key corresponding to the method
+	 * @param Array arguments for the method
+	 </haxe_doc>
+		</exec>
 		<new public="1" set="method" line="46"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
@@ -2093,11 +2138,18 @@
 	<c path="flash.events.Event"/>
 	<e path="Void"/>
 </f></updateBitmap>
-		<exec public="1" get="inline" set="null" line="123"><f a="method:?arguments">
-	<c path="String"/>
-	<d/>
-	<d/>
-</f></exec>
+		<exec public="1" get="inline" set="null" line="127">
+			<f a="method:?arguments">
+				<c path="String"/>
+				<d/>
+				<d/>
+			</f>
+			<haxe_doc>
+	 * Execute a method on this BitmapFl object
+	 * @param String key corresponding to the method
+	 * @param Array arguments for the method
+	 </haxe_doc>
+		</exec>
 		<new public="1" set="method" line="51"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
@@ -2314,11 +2366,18 @@
 	<e path="Void"/>
 </f></swapChildrenAt>
 		<container public="1"><c path="flash.display.Sprite"/></container>
-		<exec public="1" set="method" line="84"><f a="method:?arguments">
-	<c path="String"/>
-	<d/>
-	<d/>
-</f></exec>
+		<exec public="1" set="method" line="89">
+			<f a="method:?arguments">
+				<c path="String"/>
+				<d/>
+				<d/>
+			</f>
+			<haxe_doc>
+	 * Execute a method on this ContainerFl object
+	 * @param String key corresponding to the method
+	 * @param Array arguments for the method
+	 </haxe_doc>
+		</exec>
 		<new public="1" set="method" line="79"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
@@ -2371,11 +2430,18 @@
 	 * Create resized bitmap
 	 </haxe_doc>
 		</handleResize>
-		<exec public="1" set="method" line="58" override="1"><f a="method:?arguments">
-	<c path="String"/>
-	<d/>
-	<d/>
-</f></exec>
+		<exec public="1" set="method" line="63" override="1">
+			<f a="method:?arguments">
+				<c path="String"/>
+				<d/>
+				<d/>
+			</f>
+			<haxe_doc>
+	 * Execute a method on this StageFl object
+	 * @param String key corresponding to the method
+	 * @param Array arguments for the method
+	 </haxe_doc>
+		</exec>
 		<new public="1" set="method" line="41"><f a="id:stage">
 	<c path="Int"/>
 	<c path="flash.display.Stage"/>
@@ -2779,11 +2845,18 @@
 	 * a match to that output.
 	 </haxe_doc>
 		</updateText>
-		<exec public="1" get="inline" set="null" line="249"><f a="method:?arguments">
-	<c path="String"/>
-	<d/>
-	<d/>
-</f></exec>
+		<exec public="1" get="inline" set="null" line="254">
+			<f a="method:?arguments">
+				<c path="String"/>
+				<d/>
+				<d/>
+			</f>
+			<haxe_doc>
+	 * Execute a method on this TextFl object
+	 * @param String key corresponding to the method
+	 * @param Array arguments for the method
+	 </haxe_doc>
+		</exec>
 		<new public="1" set="method" line="116"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
@@ -3781,15 +3854,16 @@
 	<class path="display.GraphicsFl" params="" file="src/display/GraphicsFl.hx">
 		<implements path="interfaces.IExec"/>
 		<QUART_PI get="inline" set="null" line="22" static="1"><c path="Float"/></QUART_PI>
-		<CUBIC_PRECISION get="inline" set="null" line="23" static="1"><c path="Float"/></CUBIC_PRECISION>
+		<TWO_PI get="inline" set="null" line="23" static="1"><c path="Float"/></TWO_PI>
+		<CUBIC_PRECISION get="inline" set="null" line="24" static="1"><c path="Float"/></CUBIC_PRECISION>
 		<execs static="1"><c path="Hash"><d/></c></execs>
-		<init public="1" set="method" line="27" static="1"><f a=""><e path="Void"/></f></init>
-		<beginFill get="inline" set="null" line="56" static="1"><f a="target:color">
+		<init public="1" set="method" line="28" static="1"><f a=""><e path="Void"/></f></init>
+		<beginFill get="inline" set="null" line="57" static="1"><f a="target:color">
 	<c path="display.GraphicsFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></beginFill>
-		<beginBitmapFill get="inline" set="null" line="61" static="1"><f a="target:args">
+		<beginBitmapFill get="inline" set="null" line="62" static="1"><f a="target:args">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
@@ -3819,22 +3893,28 @@
 	<d/>
 	<e path="Void"/>
 </f></endFill>
-		<moveTo get="inline" set="null" line="95" static="1"><f a="target:xy">
-	<c path="display.GraphicsFl"/>
-	<c path="Array"><d/></c>
-	<e path="Void"/>
-</f></moveTo>
-		<lineTo get="inline" set="null" line="101" static="1"><f a="target:xy">
+		<moveTo get="inline" set="null" line="99" static="1">
+			<f a="target:xy">
+				<c path="display.GraphicsFl"/>
+				<c path="Array"><d/></c>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Move drawing head to a point
+	 * 
+	 </haxe_doc>
+		</moveTo>
+		<lineTo get="inline" set="null" line="107" static="1"><f a="target:xy">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></lineTo>
-		<cubicCurveTo get="inline" set="null" line="108" static="1"><f a="target:pts">
+		<cubicCurveTo get="inline" set="null" line="115" static="1"><f a="target:pts">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></cubicCurveTo>
-		<drawCubicApprox set="method" line="134" static="1">
+		<drawCubicApprox set="method" line="142" static="1">
 			<f a="target:bz:tolerance:recurseCount">
 				<c path="display.GraphicsFl"/>
 				<t path="utils.CubicBezier"/>
@@ -3846,47 +3926,94 @@
 	 * Approximation of Cubic bezier using Quadratic bezier segments	
 	 </haxe_doc>
 		</drawCubicApprox>
-		<quadraticCurveTo get="inline" set="null" line="169" static="1"><f a="target:pts">
+		<quadraticCurveTo get="inline" set="null" line="177" static="1"><f a="target:pts">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></quadraticCurveTo>
-		<drawRect get="inline" set="null" line="175" static="1"><f a="target:rct">
+		<drawRect get="inline" set="null" line="185" static="1"><f a="target:rct">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></drawRect>
-		<clear get="inline" set="null" line="180" static="1"><f a="target:?nada">
+		<clear get="inline" set="null" line="190" static="1"><f a="target:?nada">
 	<c path="display.GraphicsFl"/>
 	<d/>
 	<e path="Void"/>
 </f></clear>
-		<drawRoundRect get="inline" set="null" line="196" static="1"><f a="target:rect">
-	<c path="display.GraphicsFl"/>
-	<d/>
-	<e path="Void"/>
-</f></drawRoundRect>
-		<drawRoundRectComplex get="inline" set="null" line="199" static="1"><f a="target:rect">
-	<c path="display.GraphicsFl"/>
-	<c path="Array"><d/></c>
-	<e path="Void"/>
-</f></drawRoundRectComplex>
-		<drawCircle get="inline" set="null" line="203" static="1"><f a="target:circ">
-	<c path="display.GraphicsFl"/>
-	<c path="Array"><d/></c>
-	<e path="Void"/>
-</f></drawCircle>
-		<drawEllipse get="inline" set="null" line="207" static="1"><f a="target:ell">
-	<c path="display.GraphicsFl"/>
-	<c path="Array"><d/></c>
-	<e path="Void"/>
-</f></drawEllipse>
-		<drawArc get="inline" set="null" line="211" static="1"><f a="target:args">
-	<c path="display.GraphicsFl"/>
-	<c path="Array"><d/></c>
-	<e path="Void"/>
-</f></drawArc>
-		<watchBitmapData get="inline" set="null" line="266" static="1">
+		<drawRoundRect get="inline" set="null" line="211" static="1">
+			<f a="target:rect">
+				<c path="display.GraphicsFl"/>
+				<d/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Draw a simple round cornered rectangle
+	 * @param GraphicsFl
+	 * @param Array The arguments for the corresponding EaselJS method
+	 </haxe_doc>
+		</drawRoundRect>
+		<drawRoundRectComplex get="inline" set="null" line="220" static="1">
+			<f a="target:rect">
+				<c path="display.GraphicsFl"/>
+				<c path="Array"><d/></c>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Draw a complex round cornered rectangle
+	 * @param GraphicsFl
+	 * @param Array The arguments for the corresponding EaselJS method
+	 </haxe_doc>
+		</drawRoundRectComplex>
+		<drawCircle get="inline" set="null" line="229" static="1">
+			<f a="target:circ">
+				<c path="display.GraphicsFl"/>
+				<c path="Array"><d/></c>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Draw a circle
+	 * @param GraphicsFl
+	 * @param Array The arguments for the corresponding EaselJS method
+	 </haxe_doc>
+		</drawCircle>
+		<drawEllipse get="inline" set="null" line="238" static="1">
+			<f a="target:ell">
+				<c path="display.GraphicsFl"/>
+				<c path="Array"><d/></c>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Draw an ellipse
+	 * @param GraphicsFl
+	 * @param Array The arguments for the corresponding EaselJS method
+	 </haxe_doc>
+		</drawEllipse>
+		<drawArcTo get="inline" set="null" line="247" static="1">
+			<f a="target:args">
+				<c path="display.GraphicsFl"/>
+				<c path="Array"><d/></c>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Draw an arcTo
+	 * @param GraphicsFl
+	 * @param Array The arguments for the corresponding EaselJS method
+	 </haxe_doc>
+		</drawArcTo>
+		<drawArc get="inline" set="null" line="318" static="1">
+			<f a="target:args">
+				<c path="display.GraphicsFl"/>
+				<c path="Array"><d/></c>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Draw an arc
+	 * @param GraphicsFl
+	 * @param Array The arguments for the corresponding EaselJS method
+	 </haxe_doc>
+		</drawArc>
+		<watchBitmapData get="inline" set="null" line="400" static="1">
 			<f a="target:bmpd">
 				<c path="display.GraphicsFl"/>
 				<c path="interfaces.IBitmapData"/>
@@ -3905,26 +4032,39 @@
 		<curY><c path="Float"/></curY>
 		<commands><c path="Array"><d/></c></commands>
 		<bitmapDatas><c path="Array"><c path="interfaces.IBitmapData"/></c></bitmapDatas>
-		<link public="1" get="inline" set="null" line="294"><f a="g">
-	<c path="flash.display.Graphics"/>
-	<e path="Void"/>
-</f></link>
-		<handleRedraw set="method" line="303">
+		<link public="1" get="inline" set="null" line="433">
+			<f a="g">
+				<c path="flash.display.Graphics"/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Map this object to a graphics object from a DisplayObject
+	 * @param Graphics
+	 </haxe_doc>
+		</link>
+		<handleRedraw set="method" line="441">
 			<f a="e">
 				<d/>
 				<e path="Void"/>
 			</f>
 			<haxe_doc>
-	 * Redraw when an IBitmapData on which this is dependant
+	 * Redraw when an IBitmapData on which this dependant
 	 * has changed.
 	 </haxe_doc>
 		</handleRedraw>
-		<exec public="1" get="inline" set="null" line="310"><f a="method:?arguments">
-	<c path="String"/>
-	<d/>
-	<d/>
-</f></exec>
-		<new public="1" set="method" line="288"><f a=""><e path="Void"/></f></new>
+		<exec public="1" get="inline" set="null" line="453">
+			<f a="method:?arguments">
+				<c path="String"/>
+				<d/>
+				<d/>
+			</f>
+			<haxe_doc>
+	 * Execute a method on this GraphicsFl object
+	 * @param String key corresponding to the method
+	 * @param Array arguments for the method
+	 </haxe_doc>
+		</exec>
+		<new public="1" set="method" line="422"><f a=""><e path="Void"/></f></new>
 	</class>
 	<enum path="flash.display3D.Context3DCompareMode" params="" file="/usr/lib/haxe/std/flash9/display3D/Context3DCompareMode.hx">
 		<NOT_EQUAL/>
@@ -4354,11 +4494,18 @@
 	<e path="Void"/>
 </f></linkGraphics>
 		<shape><c path="flash.display.Sprite"/></shape>
-		<exec public="1" get="inline" set="null" line="35"><f a="method:?arguments">
-	<c path="String"/>
-	<d/>
-	<d/>
-</f></exec>
+		<exec public="1" get="inline" set="null" line="41">
+			<f a="method:?arguments">
+				<c path="String"/>
+				<d/>
+				<d/>
+			</f>
+			<haxe_doc>
+	 * Execute a method on this ShapeFl object
+	 * @param String key corresponding to the method
+	 * @param Array arguments for the method
+	 </haxe_doc>
+		</exec>
 		<new public="1" set="method" line="30"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>

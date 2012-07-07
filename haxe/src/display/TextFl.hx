@@ -132,7 +132,7 @@ class TextFl extends DisplayObjectFl, implements IExec {
 	function updateBaseline():Void {
 		var metrics:TextLineMetrics = tf.getLineMetrics(0);
 	
-		//ultimately 'hanging', 'ideographic' should be treated differently
+		//TODO : 'hanging', 'ideographic' should be treated differently
 		switch(baseline) {
 			
 			case 'top', 'hanging': 
@@ -164,7 +164,7 @@ class TextFl extends DisplayObjectFl, implements IExec {
 	
 	function updateAlign():Void {
 		
-		// ultimately start, end should be treated differntly
+		//TODO : start, end should be treated differently
 		switch(align) {
 			
 			case 'end', 'right':
@@ -246,6 +246,11 @@ class TextFl extends DisplayObjectFl, implements IExec {
 		}
 	}
 	
+	/**
+	 * Execute a method on this TextFl object
+	 * @param String key corresponding to the method
+	 * @param Array arguments for the method
+	 */
 	inline public function exec(method:String, ?arguments:Dynamic=null):Dynamic{
 		#if debug
 			if(execs.exists(method)){

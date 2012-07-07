@@ -19,6 +19,7 @@ class ImageFl implements IExec, implements IBitmapData, implements IWatchable{
 	static private var execs:Hash<Dynamic>;
 	
 	static public function init(){
+		//-- assign method values for keys
 		execs = new Hash();
 		execs.set('src', setSource);
 		
@@ -26,6 +27,11 @@ class ImageFl implements IExec, implements IBitmapData, implements IWatchable{
 		defaultData = new BitmapData(1,1, true, 0);
 	}
 	
+	/**
+	 * Change the source url of an ImageFl
+	 * @param ImageFl
+	 * @param String the URL
+	 */
 	inline static private function setSource(target:ImageFl, url:Dynamic){
 		var req = new URLRequest();
 		req.url = url;
@@ -50,16 +56,24 @@ class ImageFl implements IExec, implements IBitmapData, implements IWatchable{
 		loader.contentLoaderInfo.addEventListener(Event.COMPLETE, handleLoad, false, 0, true);
 	}
 	
+	/**
+	 * Add method to be called when bitmapdata changes
+	 * @param Method
+	 */
 	inline public function watch(method:Dynamic->Void):Void {
 		dispatcher.addEventListener(eventID, method, false, 0, true);
 	}
 	
+	/**
+	 * Remove method to be called when bitmapdata changes
+	 * @param Method
+	 */
 	inline public function unwatch(method:Dynamic->Void):Void {
 		dispatcher.removeEventListener(eventID, method, false);
 	}
 	
 	
-	/*
+	/**
 	 * Handle load of loader, create new bitmap data 
 	 */
 	function handleLoad(e:Event):Void{
@@ -70,6 +84,11 @@ class ImageFl implements IExec, implements IBitmapData, implements IWatchable{
 		dispatcher.dispatchEvent(new Event(eventID));
 	}
 	
+	/**
+	 * Execute a method on this ImageFl object
+	 * @param String key corresponding to the method
+	 * @param Array arguments for the method
+	 */
 	inline public function exec(method:String, ?arguments:Dynamic=null):Dynamic{
 		#if debug
 			if(execs.exists(method)){

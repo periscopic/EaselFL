@@ -55,6 +55,11 @@ class StageFl extends ContainerFl {
 		blitBitmap.bitmapData = blitBitmapData;
 	}
 	
+	/**
+	 * Execute a method on this StageFl object
+	 * @param String key corresponding to the method
+	 * @param Array arguments for the method
+	 */
 	override public function exec(method:String, ?arguments:Dynamic=null):Dynamic{
 		return execs.get(method)( this, arguments);		
 	}

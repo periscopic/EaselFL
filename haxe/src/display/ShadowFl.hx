@@ -1,5 +1,7 @@
 package display;
 
+import interfaces.IExec;
+
 class ShadowFl implements IExec {
 
 	static private var execs:Hash<Dynamic>;

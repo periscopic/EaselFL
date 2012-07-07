@@ -92,6 +92,11 @@ class FrameFl implements IExec, implements IWatchable {
 		dispatcher.dispatchEvent(new Event(_eventID));
 	}
 	
+	/**
+	 * Execute a method on this FrameFl object
+	 * @param String key corresponding to the method
+	 * @param Array arguments for the method
+	 */
 	inline public function exec(method:String, ?arguments:Dynamic=null):Dynamic{
 		//-- currently there is nothing you can do except set the dimension
 		//-- so do that instead of looking up the method and then executing

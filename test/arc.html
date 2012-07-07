@@ -1,0 +1,151 @@
+<!-- Displays a cubic curve -->
+
+<html>
+<head>
+
+<script type="text/javascript" src="../js/swfobject.js"></script>
+
+<script type="text/javascript" src="../js/easelfl/geom/Matrix2D.js"></script>
+<script type="text/javascript" src="../js/easelfl/geom/Point.js"></script>
+<script type="text/javascript" src="../js/easelfl/geom/Rectangle.js"></script>	
+<script type="text/javascript" src="../js/easelfl/utils/UID.js"></script>
+<script type="text/javascript" src="../js/easelfl/utils/CrossBrowser.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/CanvasFl.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/DisplayObject.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Container.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Stage.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Graphics.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Shape.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/ImageFl.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Bitmap.js"></script>
+<script type="text/javascript" src="../js/easelfl/events/MouseEvent.js"></script>
+<script type="text/javascript" src="../js/easelfl/utils/Ticker.js"></script>
+
+<script type="text/javascript">
+
+//-- Start it up!
+window.onload = function(){
+	
+		
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('width', 600);
+	canvas.setAttribute('height', 400);
+	canvas.setAttribute('fl_swf_url', '../haxe/bin/EaselFl.swf');
+	canvas.setAttribute('id', 'testContainer');
+	
+	var myStage = new Stage(canvas);
+	Ticker.addListener(myStage);
+	
+	//-- specific test code
+
+	var bg = new Shape();
+	//Flash doesn't recieve mousemove's on a perfectly transparent stage
+	bg.graphics.beginFill('rgba(255, 255, 255, 0.5)');
+	bg.graphics.drawRect(0, 0, 600, 400);
+	bg.graphics.endFill();
+	myStage.addChild(bg);
+
+	var curve = new Shape();
+	myStage.addChild(curve);
+	
+	
+	
+	var updateC2 = function(shp){
+		c2.x = shp.x + c2.dx;
+		c2.y = shp.y + c2.dy;
+	}
+	
+	var updateDeltaC2 = function(shp){
+		shp.dx = shp.x - c1.x;
+		shp.dy = shp.y - c1.y;
+	}
+	
+	var a1 = createNode(100, 300, '#F00', myStage);
+	var a2 = createNode(400, 300, '#F00', myStage);
+	var c2 = createNode(0, 0, '#0F0', myStage, null, updateDeltaC2);
+	c2.dx = 150;
+	c2.dy = 0;
+	
+	var c1 = createNode(250, 100, '#00F', myStage, updateC2);
+	updateC2(c1);
+
+	
+	renderCurve();
+	
+	
+	function renderCurve(){
+		var g = curve.graphics;
+		g.clear();
+		g.moveTo(a1.x, a1.y);
+		g.setStrokeStyle(1);
+		g.beginStroke('#000');
+		
+		var rad = Math.sqrt(c2.dx*c2.dx+c2.dy*c2.dy);
+		g.arcTo(c1.x, c1.y, a2.x, a2.y, rad);
+		g.endStroke();
+	}
+
+	
+	function createNode(x, y, color, container, constraint, postChange) {
+		var shp = new Shape();
+		shp.graphics.beginFill(color);
+		shp.graphics.drawRect(0, 0, 8, 8);
+		shp.graphics.endFill();
+		shp.regX = 4;
+		shp.regY = 4;
+		shp.x = x;
+		shp.y = y;
+		
+		container.addChild(shp);
+		
+		shp.onPress = function(e){
+			var x = shp.x;
+			var y = shp.y;
+			var mx = e.stageX;
+			var my = e.stageY;
+			
+			e.onMouseMove = function(e){
+				if(constraint) {
+					constraint(shp);
+				}
+				shp.x = x + e.stageX - mx;
+				shp.y = y + e.stageY - my;
+				
+				if(postChange) {
+					postChange(shp);
+				}
+				renderCurve();
+			}
+		}
+		return shp;
+	}
+}
+
+
+</script>
+
+<style type="text/css">
+ body {
+	margin: 0;
+	background: #EEE;
+ }
+ 
+ h1 {
+	color: #FFF;
+ }
+ 
+ #testContainer {
+	position: absolute;
+	top: 0;
+	left: 0;
+ }
+ 
+
+ 
+</style>
+</head>
+<body>
+<div id="testContainer"></div>	
+	
+</body>
+</html>

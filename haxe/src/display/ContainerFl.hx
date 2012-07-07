@@ -81,6 +81,11 @@ class ContainerFl extends DisplayObjectFl, implements IExec {
 		display = this.container = new Sprite();
 	}
 	
+	/**
+	 * Execute a method on this ContainerFl object
+	 * @param String key corresponding to the method
+	 * @param Array arguments for the method
+	 */
 	public function exec(method:String, ?arguments:Dynamic=null):Dynamic{
 		#if debug
 			if(execs.exists(method)){

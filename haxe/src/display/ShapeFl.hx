@@ -24,7 +24,7 @@ class ShapeFl extends DisplayObjectFl, implements IExec {
 		Control.graphicsList.get(id).link(target.shape.graphics);
 	}
 
-	//Shapes are mapped to Sprite in order to have mouse events
+	//-- Shapes are mapped to Sprite in order to have mouse events
 	private var shape:Sprite;
 	
 	public function new(id:Int){
@@ -32,6 +32,12 @@ class ShapeFl extends DisplayObjectFl, implements IExec {
 		display = shape = new Sprite();
 	}
 	
+	
+	/**
+	 * Execute a method on this ShapeFl object
+	 * @param String key corresponding to the method
+	 * @param Array arguments for the method
+	 */
 	inline public function exec(method:String, ?arguments:Dynamic=null):Dynamic{
 		#if debug
 			if(execs.exists(method)){
