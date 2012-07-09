@@ -343,9 +343,7 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.arcTo = function(x1, y1, x2, y2, radius) {
-		//if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.arcTo currently not implemented (Note: Graphics.arc is implemented)'; 
-		this._flChange.push([this.id, 'at', [x1, y1, x2, y2, radius]]); //-- need implementation Flash side
-		
+		this._flChange.push([this.id, 'at', [x1, y1, x2, y2, radius]]); //-- need implementation Flash side		
 		return this;
 	}
 	
@@ -428,8 +426,7 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.closePath = function() {
-			if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.closePath currently not implemented'; 
-			//this._flChange.push([this.id, 'cp']); //--need implementation Flash side
+			this._flChange.push([this.id, 'cp']);
 			return this;
 	}
 	
@@ -453,8 +450,6 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.beginFill = function(color) {
-		//if (this._active) { this._newPath(); }
-		//this._fillInstructions = color ? [new Command(this._setProp, ["fillStyle", color])] : null;
 		this._flChange.push([this.id, 'f', [color]]);
 		return this;
 	}
@@ -515,11 +510,6 @@ var p = Graphics.prototype;
 		ImageFl.watch(image);
 		this._flChildImages.push(image.__fl);
 		this._flChange.push([this.id, 'bf', [image.__fl.id, repetition]])
-		
-		/*if (this._active) { this._newPath(); }
-		repetition = repetition || "";
-		var o = this._ctx.createPattern(image, repetition);
-		this._fillInstructions = [new Command(this._setProp, ["fillStyle", o])];*/
 		return this;
 	}
 	
@@ -545,14 +535,6 @@ var p = Graphics.prototype;
 	p.setStrokeStyle = function(thickness, caps, joints, miterLimit) {
 		//TODO : implement caps, joints, miterLimit in Flash
 		this._flChange.push([this.id, 'ss',[thickness, caps, joints, miterLimit]]);
-		
-		/*if (this._active) { this._newPath(); }
-		this._strokeStyleInstructions = [
-			new Command(this._setProp, ["lineWidth", (thickness == null ? "1" : thickness)]),
-			new Command(this._setProp, ["lineCap", (caps == null ? "butt" : (isNaN(caps) ? caps : Graphics.STROKE_CAPS_MAP[caps]))]),
-			new Command(this._setProp, ["lineJoin", (joints == null ? "miter" : (isNaN(joints) ? joints : Graphics.STROKE_JOINTS_MAP[joints]))]),
-			new Command(this._setProp, ["miterLimit", (miterLimit == null ? "10" : miterLimit)])
-			];*/
 		return this;
 	}
 	
@@ -563,8 +545,6 @@ var p = Graphics.prototype;
 	 **/
 	p.beginStroke = function(color) {
 		this._flChange.push([this.id, 's', color]);
-		/*if (this._active) { this._newPath(); }
-		this._strokeInstructions = color ? [new Command(this._setProp, ["strokeStyle", color])] : null;*/
 		return this;
 	}
 	
@@ -665,8 +645,7 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.drawRoundRect = function(x, y, w, h, radius) {
-		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.drawRoundRect currently not implemented';
-		//this.drawRoundRectComplex(x, y, w, h, radius, radius, radius, radius);
+		this._flChange.push([this.id, 'rr', [x, y, w, h, radius]]);
 		return this;
 	}
 	
@@ -684,29 +663,7 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.drawRoundRectComplex = function(x, y, w, h, radiusTL, radiusTR, radiusBR, radiusBL) {
-		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.drawRoundRectComplex currently not implemented';
-		/*this._dirty = this._active = true;
-		var pi = Math.PI, arc=this._ctx.arc, lineTo=this._ctx.lineTo;
-		
-		this._activeInstructions.push(
-			new Command(this._ctx.moveTo, [x+radiusTL, y]),
-			new Command(lineTo, [x+w-radiusTR, y]),
-			(radiusTR>=0) ?
-				new Command(arc, [x+w-radiusTR, y+radiusTR, radiusTR, -pi/2, 0]) :
-				new Command(arc, [x+w, y, -radiusTR, pi, pi/2, true]) ,
-			new Command(lineTo, [x+w, y+h-radiusBR]),
-			(radiusBL>=0) ?
-				new Command(arc, [x+w-radiusBR, y+h-radiusBR, radiusBR, 0, pi/2]) :
-				new Command(arc, [x+w, y+h, -radiusBR, -pi/2, pi, true]) ,
-			new Command(lineTo, [x+radiusBL, y+h]),
-			(radiusBL>=0) ?
-				new Command(arc, [x+radiusBL, y+h-radiusBL, radiusBL, pi/2, pi]) :
-				new Command(arc, [x, y+h, -radiusBL, 0, -pi/2, true]) ,
-			new Command(lineTo, [x, y+radiusTL]),
-			(radiusTL>=0) ?
-				new Command(arc, [x+radiusTL, y+radiusTL, radiusTL, pi, -pi/2]) :
-				new Command(arc, [x, y, -radiusTL, pi/2, 0, true])
-		);*/
+		this._flChange.push([this.id, 'rc', [x, y, w, h, radiusTL, radiusTR, radiusBR, radiusBL]]);
 		return this;
 	} 
 	
@@ -746,23 +703,7 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.drawEllipse = function(x, y, w, h) {
-		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.drawEllipse currently not implemented';
-		/*this._dirty = this._active = true;
-		var k = 0.5522848;
-		var ox = (w / 2) * k;
-		var oy = (h / 2) * k;
-		var xe = x + w;
-		var ye = y + h;
-		var xm = x + w / 2;
-		var ym = y + h / 2;
-			
-		this._activeInstructions.push(
-			new Command(this._ctx.moveTo, [x, ym]),
-			new Command(this._ctx.bezierCurveTo, [x, ym-oy, xm-ox, y, xm, y]),
-			new Command(this._ctx.bezierCurveTo, [xm+ox, y, xe, ym-oy, xe, ym]),
-			new Command(this._ctx.bezierCurveTo, [xe, ym+oy, xm+ox, ye, xm, ye]),
-			new Command(this._ctx.bezierCurveTo, [xm-ox, ye, x, ym+oy, x, ym])
-		);*/
+		this._flChange.push([this.id, 'de',[x, y, w, h]]);
 		return this;
 	}
 	
@@ -782,23 +723,7 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.drawPolyStar = function(x, y, radius, sides, pointSize, angle) {
-		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.drawPolyStar currently not implemented';
-		/*this._dirty = this._active = true;
-		if (pointSize == null) { pointSize = 0; }
-		pointSize = 1-pointSize;
-		if (angle == null) { angle = 0; }
-		else { angle /= 180/Math.PI; }
-		var a = Math.PI/sides;
-		
-		this._activeInstructions.push(new Command(this._ctx.moveTo, [x+Math.cos(angle)*radius, y+Math.sin(angle)*radius]));
-		for (var i=0; i<sides; i++) {
-			angle += a;
-			if (pointSize != 1) {
-				this._activeInstructions.push(new Command(this._ctx.lineTo, [x+Math.cos(angle)*radius*pointSize, y+Math.sin(angle)*radius*pointSize]));
-			}
-			angle += a;
-			this._activeInstructions.push(new Command(this._ctx.lineTo, [x+Math.cos(angle)*radius, y+Math.sin(angle)*radius]));
-		}*/
+		this._flChange.push([this.id, 'dp',[x, y, radius, sides, pointSize, angle]]);
 		return this;
 	}
 	
@@ -1083,54 +1008,6 @@ var p = Graphics.prototype;
 	 * type Function
 	 **/
 	p.p = p.decodePath;
-	
-	
-// private methods:
-	/**
-	 * @method _updateInstructions
-	 * @protected
-	 **/
-	p._updateInstructions = function() {
-		/*this._instructions = this._oldInstructions.slice()
-		this._instructions.push(Graphics.beginCmd);
-		 
-		if (this._fillInstructions) { this._instructions.push.apply(this._instructions, this._fillInstructions); }
-		if (this._strokeInstructions) {
-			this._instructions.push.apply(this._instructions, this._strokeInstructions);
-			if (this._strokeStyleInstructions) {
-				this._instructions.push.apply(this._instructions, this._strokeStyleInstructions);
-			}
-		}
-		
-		this._instructions.push.apply(this._instructions, this._activeInstructions);
-		
-		if (this._fillInstructions) { this._instructions.push(Graphics.fillCmd); }
-		if (this._strokeInstructions) { this._instructions.push(Graphics.strokeCmd); }*/
-	}
-	
-	/**
-	 * @method _newPath
-	 * @protected
-	 **/
-	p._newPath = function() {
-		/*if (this._dirty) { this._updateInstructions(); }
-		this._oldInstructions = this._instructions;
-		this._activeInstructions = [];
-		this._active = this._dirty = false;*/
-	}
-	
-	// used to create Commands that set properties:
-	/**
-	 * used to create Commands that set properties
-	 * @method _setProp
-	 * @param {String} name
-	 * @param {String} value
-	 * @protected
-	 **/
-	p._setProp = function(name, value) {
-		this[name] = value;
-	}
-	
 	
 
 window.Graphics = Graphics;

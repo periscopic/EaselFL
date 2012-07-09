@@ -35,6 +35,7 @@ class GraphicsFl implements IExec{
 		execs.set('lt', lineTo );		
 		execs.set('bt', cubicCurveTo );		
 		execs.set('qt', quadraticCurveTo );		
+		execs.set('dp', drawPolyStar );
 		execs.set('dr', drawRect );
 		execs.set('rr', drawRoundRect );		
 		execs.set('rc', drawRoundRectComplex );		
@@ -47,21 +48,22 @@ class GraphicsFl implements IExec{
 		execs.set('s', beginStroke);
 		execs.set('bs', beginBitmapStroke);
 		execs.set('es', endStroke);
+		execs.set('cp', closePath);
 	}
 
-	//TODO : clearPath
 	//TODO : beginLinearGradientFill, radialGradientFill
 	//TODO : beginLinearGradientStroke, beginRadialGradientStroke
-	//TODO : drawPolystar
 
 
 	inline static private function beginFill(target:GraphicsFl, color:String):Void{
+		target.freshPath = true;
 		CSSColor.parse(color);
 		target.graphics.beginFill(CSSColor.color, CSSColor.alpha);
 	}
 	
 	inline static private function beginBitmapFill(target:GraphicsFl, args:Array<Dynamic>):Void{
 		//TODO : handle repeat-x, repeat-y
+		target.freshPath = true;
 		var img = Control.bitmapDatas.get(args[0]);	
 		target.graphics.beginBitmapFill(img.bitmapData, new flash.geom.Matrix(), args[1]!='no-repeat', false);
 		watchBitmapData(target, img);
@@ -69,16 +71,19 @@ class GraphicsFl implements IExec{
 	
 	inline static private function setStrokeStyle(target:GraphicsFl, args:Array<Dynamic>):Void{
 		//TODO map : caps, joints, miterLimit
+		target.freshPath = true;
 		target.strokeThickness = args[0];
 	}
 	
 	inline static private function beginStroke(target:GraphicsFl, color:String):Void{
+		target.freshPath = true;
 		CSSColor.parse(color);
 		target.graphics.lineStyle(target.strokeThickness, CSSColor.color, CSSColor.alpha, false, LineScaleMode.NONE);//, pixelHinting, scaleMode, caps, joints, miterLimit)
 	}
 	
 	inline static private function beginBitmapStroke(target:GraphicsFl, args:Array<Dynamic>):Void{
 		//TODO : handle repeat-x, repeat-y
+		target.freshPath = true;
 		var img = Control.bitmapDatas.get(args[0]);	
 		target.graphics.lineStyle(target.strokeThickness);	
 		target.graphics.lineBitmapStyle(img.bitmapData, null, args[1]!='no-repeat', false);
@@ -86,11 +91,20 @@ class GraphicsFl implements IExec{
 	}
 	
 	inline static private function endStroke(target:GraphicsFl, ?nada:Dynamic):Void{
+		target.freshPath = true;
 		target.graphics.lineStyle();
 	}
 	
 	inline static private function endFill(target:GraphicsFl, ?nada:Dynamic):Void{
+		target.freshPath = true;
 		target.graphics.endFill();
+	}
+	
+	inline static private function closePath(target:GraphicsFl, ?nada:Dynamic):Void{
+		if(target.freshPath == false) {
+			target.graphics.lineTo(target.startX, target.startY);
+			target.freshPath = true;
+		}
 	}
 	
 	/**
@@ -106,6 +120,7 @@ class GraphicsFl implements IExec{
 	}
 	
 	inline static private function lineTo(target:GraphicsFl, xy:Array<Dynamic>):Void{
+		target.checkFreshPath();
 		target.graphics.lineTo(xy[0], xy[1]);
 		
 		//-- store current drawing point
@@ -114,6 +129,8 @@ class GraphicsFl implements IExec{
 	}
 	
 	inline static private function cubicCurveTo(target:GraphicsFl, pts:Array<Dynamic>):Void{
+		target.checkFreshPath();
+		
 		//-- Flash11 version
 		#if flash11
 		target.graphics.cubicCurveTo(pts[0], pts[1], pts[2], pts[3], pts[4], pts[5]);
@@ -176,6 +193,7 @@ class GraphicsFl implements IExec{
 
 	
 	inline static private function quadraticCurveTo(target:GraphicsFl, pts:Array<Dynamic>):Void{
+		target.checkFreshPath();
 		target.graphics.curveTo(pts[0], pts[1], pts[2], pts[3]);
 		
 		//-- store current drawing point
@@ -189,8 +207,8 @@ class GraphicsFl implements IExec{
 	}
 	
 	inline static private function clear(target:GraphicsFl, ?nada:Dynamic):Void{
-		target.curX = 0;
-		target.curY = 0;
+		target.startX = target.startY = target.curX = target.curY = 0;
+		target.freshPath = true;
 		target.graphics.clear();
 		
 		//-- Clear redraw serialization
@@ -203,6 +221,38 @@ class GraphicsFl implements IExec{
 			bmpds.pop().unwatch(target.handleRedraw);
 		}		
 	}
+	
+	inline static private function drawPolyStar(target:GraphicsFl, args:Dynamic):Void{
+		var x:Float = args[0];
+		var y:Float = args[1];
+		var radius:Float = args[2];
+		var sides:Int = args[3];
+		var pointSize:Dynamic = args[4];
+		var angle:Dynamic = args[5];
+		
+		if (pointSize == null) { pointSize = 0; }
+		
+		pointSize = 1-pointSize;
+		
+		if (angle == null) { angle = 0; }
+		else { angle /= 180/Math.PI; }
+		
+		var a = Math.PI/sides;
+		
+		var g = target.graphics;
+		
+		g.moveTo(x+Math.cos(angle)*radius, y+Math.sin(angle)*radius);
+		
+		for (i in 0...sides) {
+			angle += a;
+			if (pointSize != 1) {
+				g.lineTo(x+Math.cos(angle)*radius*pointSize, y+Math.sin(angle)*radius*pointSize);
+			}
+			angle += a;
+			g.lineTo(x+Math.cos(angle)*radius, y+Math.sin(angle)*radius);
+		}
+	}
+	
 	
 	 /**
 	 * Draw a simple round cornered rectangle
@@ -246,7 +296,7 @@ class GraphicsFl implements IExec{
 	 * @param Array The arguments for the corresponding EaselJS method
 	 */
 	 inline static function drawArcTo(target:GraphicsFl, args:Array<Dynamic>):Void{
-	
+		
 		//-- control point
 		var x1:Float = args[0];
 		var y1:Float = args[1];
@@ -289,7 +339,8 @@ class GraphicsFl implements IExec{
 	 * @param Array The arguments for the corresponding EaselJS method
 	 */
 	inline static function drawArc(target:GraphicsFl, args:Array<Dynamic>):Void{
-            	
+        target.checkFreshPath();
+        
        	//-- center of arc
        	var ax:Float = args[0]; 
         var ay:Float = args[1];
@@ -388,15 +439,20 @@ class GraphicsFl implements IExec{
 	private var curX:Float;
 	private var curY:Float;
 	
+	//-- Start of current path
+	private var startX:Float;
+	private var startY:Float;
+	private var freshPath:Bool;
+	
 	//-- serialized commands
 	private var commands:Array<Dynamic>;
 	private var bitmapDatas:Array<IBitmapData>;
 
 	public function new(){
-		curX = 0;
-		curY = 0;	
+		startX = startY = curX = curY = 0;	
 		commands = [];
 		strokeThickness = 1;
+		freshPath = true;
 	}
 	
 	/**
@@ -415,6 +471,14 @@ class GraphicsFl implements IExec{
 		this.graphics.clear();
 		for(cmd in commands) {
 			execs.get(cmd.method)(this, cmd.arguments);
+		}
+	}
+	
+	inline private function checkFreshPath():Void{
+		if(freshPath){
+			startX = curX;
+			startY = curY;
+			freshPath = false;
 		}
 	}
 	

@@ -1,0 +1,90 @@
+<!-- Displays a grid of red squares, rotated and translated; a small test image; hides
+everything after 3 seconds -->
+
+<html>
+<head>
+
+
+<script type="text/javascript" src="../js/swfobject.js"></script>
+
+<script type="text/javascript" src="../js/easelfl/geom/Matrix2D.js"></script>
+<script type="text/javascript" src="../js/easelfl/geom/Point.js"></script>
+<script type="text/javascript" src="../js/easelfl/geom/Rectangle.js"></script>	
+<script type="text/javascript" src="../js/easelfl/utils/UID.js"></script>
+<script type="text/javascript" src="../js/easelfl/utils/CrossBrowser.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/CanvasFl.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/DisplayObject.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Container.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Stage.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Graphics.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Shape.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/ImageFl.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Bitmap.js"></script>
+<script type="text/javascript" src="../js/easelfl/events/MouseEvent.js"></script>
+<script type="text/javascript" src="../js/easelfl/utils/Ticker.js"></script>
+
+<script type="text/javascript">
+
+//-- Start it up!
+window.onload = function(){
+	
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('width', 600);
+	canvas.setAttribute('height', 400);
+	canvas.setAttribute('fl_swf_url', '../haxe/bin/EaselFl.swf');
+	canvas.setAttribute('id', 'testContainer');
+	
+	var myStage = new Stage(canvas);
+	Ticker.addListener(myStage);
+	
+	//-- specific test code
+	var g;
+	
+	var shp = new Shape();
+	g = shp.graphics;
+	g.beginFill('#3399E9');
+	
+	g.drawRect(10, 10, 50, 50);
+	g.drawEllipse(160, 10, 80, 40);
+	g.drawCircle(200, 120, 30);
+	g.drawPolyStar(35, 120, 40, 5, 0.5, 0);
+	
+	g.moveTo(10, 200);
+	g.quadraticCurveTo(50, 170, 100, 190);
+	g.bezierCurveTo(120, 190, 230, 130, 230, 200);
+	g.closePath();
+	
+	g.drawRoundRect(10, 220, 50, 50, 15);
+	g.drawRoundRectComplex(180, 220, 50, 50, 0, 5, 25, 0);
+	
+	g.endFill();
+	myStage.addChild(shp);
+	
+}
+
+
+</script>
+
+<style type="text/css">
+ body {
+	margin: 0;
+	background: #EEE;
+ }
+ 
+ h1 {
+	color: #FFF;
+ }
+ 
+ #testContainer {
+	position: absolute;
+	top: 0;
+	left: 0;
+ }
+  
+</style>
+</head>
+<body>
+<div id="testContainer"></div>	
+	
+</body>
+</html>

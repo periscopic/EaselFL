@@ -1,0 +1,109 @@
+<!-- Displays a cubic curve -->
+
+<html>
+<head>
+
+<script type="text/javascript" src="../js/swfobject.js"></script>
+
+<script type="text/javascript" src="../js/easelfl/geom/Matrix2D.js"></script>
+<script type="text/javascript" src="../js/easelfl/geom/Point.js"></script>
+<script type="text/javascript" src="../js/easelfl/geom/Rectangle.js"></script>	
+<script type="text/javascript" src="../js/easelfl/utils/UID.js"></script>
+<script type="text/javascript" src="../js/easelfl/utils/CrossBrowser.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/CanvasFl.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/DisplayObject.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Container.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Stage.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Graphics.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Shape.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/ImageFl.js"></script>
+<script type="text/javascript" src="../js/easelfl/display/Bitmap.js"></script>
+<script type="text/javascript" src="../js/easelfl/events/MouseEvent.js"></script>
+<script type="text/javascript" src="../js/easelfl/utils/Ticker.js"></script>
+
+<script type="text/javascript">
+
+//-- Start it up!
+window.onload = function(){
+	
+		
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('width', 600);
+	canvas.setAttribute('height', 400);
+	canvas.setAttribute('fl_swf_url', '../haxe/bin/EaselFl.swf');
+	canvas.setAttribute('id', 'testContainer');
+	
+	var myStage = new Stage(canvas);
+	Ticker.addListener(myStage);
+	
+	//-- specific test code
+	
+	
+	//-- to blit, don't clear the canvas each frame
+	myStage.autoClear = false;
+	
+	var shape1 = new Shape();
+	shape1.graphics.beginFill('rgba(98, 225, 245, 0.5)');
+	shape1.graphics.drawPolyStar(25, 0, 1, 3, 0, 0);
+	shape1.graphics.endFill();
+	shape1.x = 25;
+	
+	var shape2 = new Shape();
+	shape2.graphics.beginFill('rgba(0, 0, 0, 0.5)');
+	shape2.graphics.drawPolyStar(-25, 0, 1, 3, 0, 0);
+	shape2.graphics.endFill();
+	shape2.x = -25;
+
+	var cont = new Container();
+	cont.addChild(shape1);
+	cont.addChild(shape2);
+	cont.x = 300;
+	cont.y = 200;
+	cont.rotation = 90;
+	
+	myStage.addChild(cont);
+	
+	
+	Ticker.addListener({
+		tick : function(){
+			//-- advance the animation
+			shape1.rotation += 2;
+			shape2.rotation -= 2;
+			cont.rotation += 5;
+			cont.scaleX = cont.scaleY += 0.005;
+		}
+	})
+	
+	
+	
+	
+}
+
+
+</script>
+
+<style type="text/css">
+ body {
+	margin: 0;
+	background: #EEE;
+ }
+ 
+ h1 {
+	color: #FFF;
+ }
+ 
+ #testContainer {
+	position: absolute;
+	top: 0;
+	left: 0;
+ }
+ 
+
+ 
+</style>
+</head>
+<body>
+<div id="testContainer"></div>	
+	
+</body>
+</html>
