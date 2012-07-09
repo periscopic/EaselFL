@@ -20,6 +20,7 @@ typedef Command = {
 class GraphicsFl implements IExec{
 	
 	inline static var QUART_PI:Float = Math.PI*0.25;
+	inline static var HALF_PI:Float = Math.PI*0.5;
 	inline static var TWO_PI:Float = Math.PI*2;
 	inline static var CUBIC_PRECISION:Float = 1;
 
@@ -244,71 +245,43 @@ class GraphicsFl implements IExec{
 	 * @param GraphicsFl
 	 * @param Array The arguments for the corresponding EaselJS method
 	 */
-	inline static function drawArcTo(target:GraphicsFl, args:Array<Dynamic>):Void{
+	 inline static function drawArcTo(target:GraphicsFl, args:Array<Dynamic>):Void{
 	
 		//-- control point
 		var x1:Float = args[0];
 		var y1:Float = args[1];
-		
-		//-- start point relative to control point
-		var dx0:Float = target.curX - x1;
-		var dy0:Float = target.curY - y1;
-		
-		//-- end point relative to control point
-		var dx2:Float = args[2] - x1;
-		var dy2:Float = args[3] - y1;
-		
+		var ang1:Float = Math.atan2(target.curY-y1, target.curX-x1);
+		var ang2:Float = Math.atan2(args[3]-y1, args[2]-x1);
 		var radius:Float = args[4];
-		
-		//-- length of start to control, end to control
-		var len0:Float = Math.sqrt(dx0*dx0+dy0*dy0);
-		var len2:Float = Math.sqrt(dx2*dx2+dy2*dy2);
-		
-		//-- point on bisecting line
-		var bisectX:Float = (dx0+dx2*(len0/len2)) * 0.5;
-		var bisectY:Float = (dy0+dy2*(len0/len2)) * 0.5;
-		
-		
-		//-- the point on first line that is on radius of circle 
-		//-- from tip of bisector 
-		var tanPt0 = Geometry.intersectLines(0, 0, dx0, dy0, bisectX, bisectY, bisectX+dy0, bisectY-dx0);
-	
-		//-- scale factor of bisector to reach center point of circular arc
-		var scl = radius/Math.sqrt(Math.pow(tanPt0.x-bisectX,2)+Math.pow(tanPt0.y-bisectY,2));
-		var cx = bisectX*scl;
-		var cy = bisectY*scl;
-		
-		//-- two lines are colinear
-		if(Math.isNaN(cx) || !Math.isFinite(cx)) {
-			
-			//-- control point is betweent start & end points
-			if(tanPt0.x==0 && tanPt0.y==0) {
-				target.graphics.lineTo(x1, y1);
-				target.curX = x1;
-				target.curY = y1;
-				
-			//-- control point is not between start & end points
-			}else{
-				var x = target.curX - (x1-target.curX)*10000;
-				var y = target.curY - (y1-target.curY)*10000;
-				target.graphics.lineTo(x, y);
-				target.curX = x;
-				target.curY = y;
-			}
-		} else { 
+		var angDif:Float = ang1-ang2;
 
-			// TODO : simplify calculation of start/end angles; intersecting lines should be unnecessary
-			var tanPt1 = Geometry.intersectLines(0, 0, dx0, dy0, cx, cy, cx+dy0, cy-dx0);
-			var tanPt2 = Geometry.intersectLines(0, 0, dx2, dy2, cx, cy, cx+dy2, cy-dx2);
-			var sAng = Math.atan2(tanPt1.y-cy, tanPt1.x-cx);
-			var eAng = Math.atan2(tanPt2.y-cy, tanPt2.x-cx);
-			eAng = eAng<sAng ? eAng+TWO_PI : eAng;
-			
-			//-- draw the arc
-			drawArc(target, [x1+cx, y1+cy, radius, sAng, eAng, eAng-sAng<=Math.PI ]);
+		//-- fit angular distance to range -PI, PI
+		if(angDif<-Math.PI){
+			angDif+=TWO_PI;
+			ang1+=TWO_PI;
+		}else if(angDif>Math.PI) {
+			angDif-=TWO_PI;
+			ang1-=TWO_PI;
 		}
+		
+		//-- length and angle of bisecting segment to center of arc
+		//-- from control point
+		var distBisect:Float = radius / Math.sin(angDif * 0.5);
+		var angBisect:Float = angDif * 0.5 + ang2;
+		
+		//-- clockwise
+		var direction:Int = angDif>0? 1 : -1;
+		
+		//-- center point of circular arc
+		var sx:Float = Math.cos(angBisect) * distBisect * direction + x1;
+		var sy:Float = Math.sin(angBisect) * distBisect * direction + y1;
+		
+		//-- start and end angle 
+		var sAng = ang1 + HALF_PI * direction;
+		var eAng = sAng + Math.PI * direction - angDif;
+		
+		drawArc(target, [sx, sy, radius, sAng, eAng, direction==1 ]);
 	}
-	
 	
 	/**
 	 * Draw an arc

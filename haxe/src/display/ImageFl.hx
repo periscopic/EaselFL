@@ -15,7 +15,6 @@ class ImageFl implements IExec, implements IBitmapData, implements IWatchable{
 
 	inline static var IMAGE_CHANGE:String = 'imageChange';
 	static var dispatcher:EventDispatcher = new EventDispatcher();
-
 	static private var execs:Hash<Dynamic>;
 	
 	static public function init(){
