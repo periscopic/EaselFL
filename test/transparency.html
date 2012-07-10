@@ -1,4 +1,4 @@
-<!-- Render authoring tool generated drawing commands-->
+<!-- Show HTML beneath items rendered in Easel -->
 
 <html>
 <head>
@@ -31,22 +31,42 @@ function init(){
 	Ticker.addListener(myStage);
 	
 	//-- specific test code
+	var container = new Container();
+	myStage.addChild(container);
+
+	container.alpha = 0.5;
+	container.rotation = 5;
+	container.x = 100;
+
 	
-	var shape = new Shape();
-	var g = shape.graphics;
-	g.setStrokeStyle(1);
-	g.beginStroke('#3399E9');
-	g.decodePath('A3cAAMAu4AAA');
-	g.endStroke();
+	var shp, g, shapes = [];
 	
-	shape.x = 160;
-	shape.y = 10;
-	myStage.addChild(shape);
+	for(var i=0; i<100; ++i){
+		shp = new Shape();
+		g = shp.graphics;
+		g.beginFill('#FF0000');
+		g.drawRect(0, 0, 20, 20);
+		g.endFill();
+		
+		shp.regX = 10;
+		shp.regY = 10;
+		shp.x = (i%10) * 40;
+		shp.y = Math.floor(i/10) * 40;
+		
+		container.addChild(shp);
+		shapes.push(shp);
+	}
+	
+	var bmp = new Bitmap('img/testImage.png');
+	container.addChild(bmp);
+	bmp.x = 100;
+	bmp.y = 50;
 }
 
 </script>
 </head>
 <body>
+<h1>The Easel canvas is <br>transparent by default</h1>
 <div id="testContainer"></div>	
 <a id='swap' href="#" onclick="TestUtils.swapRenderMethod();return false;"></a>
 </body>

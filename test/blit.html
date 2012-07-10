@@ -1,37 +1,31 @@
-<!-- Displays a cubic curve -->
+<!-- Draw items to stage without clearing previous renderings -->
 
 <html>
 <head>
 
-<script type="text/javascript" src="../js/swfobject.js"></script>
+<script type="text/javascript" src="js/TestUtils.js"></script>
 
-<script type="text/javascript" src="../js/easelfl/geom/Matrix2D.js"></script>
-<script type="text/javascript" src="../js/easelfl/geom/Point.js"></script>
-<script type="text/javascript" src="../js/easelfl/geom/Rectangle.js"></script>	
-<script type="text/javascript" src="../js/easelfl/utils/UID.js"></script>
-<script type="text/javascript" src="../js/easelfl/utils/CrossBrowser.js"></script>
-<script type="text/javascript" src="../js/easelfl/display/CanvasFl.js"></script>
-<script type="text/javascript" src="../js/easelfl/display/DisplayObject.js"></script>
-<script type="text/javascript" src="../js/easelfl/display/Container.js"></script>
-<script type="text/javascript" src="../js/easelfl/display/Stage.js"></script>
-<script type="text/javascript" src="../js/easelfl/display/Graphics.js"></script>
-<script type="text/javascript" src="../js/easelfl/display/Shape.js"></script>
-<script type="text/javascript" src="../js/easelfl/display/ImageFl.js"></script>
-<script type="text/javascript" src="../js/easelfl/display/Bitmap.js"></script>
-<script type="text/javascript" src="../js/easelfl/events/MouseEvent.js"></script>
-<script type="text/javascript" src="../js/easelfl/utils/Ticker.js"></script>
+<link rel='stylesheet' type='text/css' href='css/test.css' />
 
 <script type="text/javascript">
 
-//-- Start it up!
 window.onload = function(){
-	
-		
+	if(TestUtils.useCanvas){
+		TestUtils.loadWithEaselJS(init);
+	}else{
+		TestUtils.loadWithEaselFL(init);
+	}
+}
+
+//-- Start it up!
+
+function init(){
 	var canvas = document.createElement('canvas');
 	canvas.setAttribute('width', 600);
 	canvas.setAttribute('height', 400);
 	canvas.setAttribute('fl_swf_url', '../haxe/bin/EaselFl.swf');
 	canvas.setAttribute('id', 'testContainer');
+	document.getElementById('testContainer').appendChild(canvas);
 	
 	var myStage = new Stage(canvas);
 	Ticker.addListener(myStage);
@@ -73,37 +67,12 @@ window.onload = function(){
 			cont.scaleX = cont.scaleY += 0.005;
 		}
 	})
-	
-	
-	
-	
 }
 
-
 </script>
-
-<style type="text/css">
- body {
-	margin: 0;
-	background: #EEE;
- }
- 
- h1 {
-	color: #FFF;
- }
- 
- #testContainer {
-	position: absolute;
-	top: 0;
-	left: 0;
- }
- 
-
- 
-</style>
 </head>
 <body>
 <div id="testContainer"></div>	
-	
+<a id='swap' href="#" onclick="TestUtils.swapRenderMethod();return false;"></a>
 </body>
 </html>
