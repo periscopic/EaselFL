@@ -23,6 +23,7 @@ class GraphicsFl implements IExec{
 	inline static var HALF_PI:Float = Math.PI*0.5;
 	inline static var TWO_PI:Float = Math.PI*2;
 	inline static var CUBIC_PRECISION:Float = 1;
+	inline static var IDENTITY_MATRIX = new flash.geom.Matrix();
 
 	static private var execs:Hash<Dynamic>;
 	
@@ -55,35 +56,46 @@ class GraphicsFl implements IExec{
 	//TODO : beginLinearGradientStroke, beginRadialGradientStroke
 
 
-	inline static private function beginFill(target:GraphicsFl, color:String):Void{
-		target.freshPath = true;
+	static private function beginFill(target:GraphicsFl, color:String):Void{
+		
 		CSSColor.parse(color);
 		target.graphics.beginFill(CSSColor.color, CSSColor.alpha);
+		
+		target.activePath = false;
+		
+		//-- these are necessary due to difference in winding rules between canvas/flash
+		target.fillMethod = beginFill;
+		target.fillArgs = color;
 	}
 	
-	inline static private function beginBitmapFill(target:GraphicsFl, args:Array<Dynamic>):Void{
+	static private function beginBitmapFill(target:GraphicsFl, args:Array<Dynamic>):Void{
 		//TODO : handle repeat-x, repeat-y
-		target.freshPath = true;
 		var img = Control.bitmapDatas.get(args[0]);	
-		target.graphics.beginBitmapFill(img.bitmapData, new flash.geom.Matrix(), args[1]!='no-repeat', false);
+		target.graphics.beginBitmapFill(img.bitmapData, IDENTITY_MATRIX, args[1]!='no-repeat', false);
 		watchBitmapData(target, img);
+		
+		target.activePath = false;
+		
+		//-- these are necessary due to difference in winding rules between canvas/flash
+		target.fillMethod = beginBitmapFill;
+		target.fillArgs = args;
 	}
 	
 	inline static private function setStrokeStyle(target:GraphicsFl, args:Array<Dynamic>):Void{
 		//TODO map : caps, joints, miterLimit
-		target.freshPath = true;
+		target.activePath = false;
 		target.strokeThickness = args[0];
 	}
 	
 	inline static private function beginStroke(target:GraphicsFl, color:String):Void{
-		target.freshPath = true;
+		target.activePath = false;
 		CSSColor.parse(color);
 		target.graphics.lineStyle(target.strokeThickness, CSSColor.color, CSSColor.alpha, false, LineScaleMode.NONE);//, pixelHinting, scaleMode, caps, joints, miterLimit)
 	}
 	
 	inline static private function beginBitmapStroke(target:GraphicsFl, args:Array<Dynamic>):Void{
 		//TODO : handle repeat-x, repeat-y
-		target.freshPath = true;
+		target.activePath = false;
 		var img = Control.bitmapDatas.get(args[0]);	
 		target.graphics.lineStyle(target.strokeThickness);	
 		target.graphics.lineBitmapStyle(img.bitmapData, null, args[1]!='no-repeat', false);
@@ -91,19 +103,22 @@ class GraphicsFl implements IExec{
 	}
 	
 	inline static private function endStroke(target:GraphicsFl, ?nada:Dynamic):Void{
-		target.freshPath = true;
+		target.activePath = false;
 		target.graphics.lineStyle();
 	}
 	
 	inline static private function endFill(target:GraphicsFl, ?nada:Dynamic):Void{
-		target.freshPath = true;
+		target.activePath = false;
 		target.graphics.endFill();
+		
+		target.activeFill = false;
+		target.fillMethod = target.fillArgs = null;
 	}
 	
 	inline static private function closePath(target:GraphicsFl, ?nada:Dynamic):Void{
-		if(target.freshPath == false) {
+		if(target.activePath == true) {
 			target.graphics.lineTo(target.startX, target.startY);
-			target.freshPath = true;
+			target.activePath = false;
 		}
 	}
 	
@@ -203,12 +218,16 @@ class GraphicsFl implements IExec{
 	
 	inline static private function drawRect(target:GraphicsFl, rct:Array<Dynamic>):Void{
 		//-- TODO : check if this should change current XY position
+		target.checkFreshFill();
 		target.graphics.drawRect(rct[0], rct[1], rct[2], rct[3]);
 	}
 	
 	inline static private function clear(target:GraphicsFl, ?nada:Dynamic):Void{
 		target.startX = target.startY = target.curX = target.curY = 0;
-		target.freshPath = true;
+		target.activePath = false;
+		target.activeFill = false;
+		target.fillMethod = target.fillArgs = null;
+		
 		target.graphics.clear();
 		
 		//-- Clear redraw serialization
@@ -223,6 +242,7 @@ class GraphicsFl implements IExec{
 	}
 	
 	inline static private function drawPolyStar(target:GraphicsFl, args:Dynamic):Void{
+		target.checkFreshFill();
 		var x:Float = args[0];
 		var y:Float = args[1];
 		var radius:Float = args[2];
@@ -260,6 +280,7 @@ class GraphicsFl implements IExec{
 	 * @param Array The arguments for the corresponding EaselJS method
 	 */
 	inline static private function drawRoundRect(target:GraphicsFl, rect:Dynamic):Void{
+		target.checkFreshFill();
 		target.graphics.drawRoundRect(rect[0], rect[1], rect[2], rect[3], rect[4], rect[5]);
 	}
 	
@@ -269,7 +290,8 @@ class GraphicsFl implements IExec{
 	 * @param Array The arguments for the corresponding EaselJS method
 	 */
 	inline static private function drawRoundRectComplex(target:GraphicsFl, rect:Array<Dynamic>):Void{
-		target.graphics.drawRoundRectComplex(rect[0], rect[1], rect[2], rect[3], rect[4], rect[5], rect[6], rect[7]);
+		target.checkFreshFill();
+		target.graphics.drawRoundRectComplex(rect[0], rect[1], rect[2], rect[3], rect[4], rect[5], rect[7], rect[6]);
 	}
 	
 	/**
@@ -278,6 +300,7 @@ class GraphicsFl implements IExec{
 	 * @param Array The arguments for the corresponding EaselJS method
 	 */
 	inline static private function drawCircle(target:GraphicsFl, circ:Array<Dynamic>):Void{
+		target.checkFreshFill();
 		target.graphics.drawCircle(circ[0], circ[1], circ[2]);
 	}
 	
@@ -287,6 +310,7 @@ class GraphicsFl implements IExec{
 	 * @param Array The arguments for the corresponding EaselJS method
 	 */
 	inline static private function drawEllipse(target:GraphicsFl, ell:Array<Dynamic>):Void{
+		target.checkFreshFill();
 		target.graphics.drawEllipse(ell[0], ell[1], ell[2], ell[3]);
 	}
 	
@@ -435,6 +459,10 @@ class GraphicsFl implements IExec{
 	private var graphics:Graphics;
 	private var strokeThickness:Float;
 	
+	private var fillMethod:Dynamic;
+	private var fillArgs:Dynamic;
+	private var activeFill:Bool;
+	
 	//-- The current position of the drawing head
 	private var curX:Float;
 	private var curY:Float;
@@ -442,7 +470,7 @@ class GraphicsFl implements IExec{
 	//-- Start of current path
 	private var startX:Float;
 	private var startY:Float;
-	private var freshPath:Bool;
+	private var activePath:Bool;
 	
 	//-- serialized commands
 	private var commands:Array<Dynamic>;
@@ -452,7 +480,7 @@ class GraphicsFl implements IExec{
 		startX = startY = curX = curY = 0;	
 		commands = [];
 		strokeThickness = 1;
-		freshPath = true;
+		activePath = activeFill = false;
 	}
 	
 	/**
@@ -474,12 +502,33 @@ class GraphicsFl implements IExec{
 		}
 	}
 	
+	/**
+	 * Store the first coordinates in a path, so that
+	 * when closePath is called, it can be fulfilled
+	 */
 	inline private function checkFreshPath():Void{
-		if(freshPath){
+		
+		if(!activePath){
+			checkFreshFill();
 			startX = curX;
 			startY = curY;
-			freshPath = false;
+			activePath = true;
 		}
+	}
+	
+	/**
+	 * When drawing successive shapes without calling beginFill/endFill,
+	 * Flash will knockout areas filled an even number of times, whereas
+	 * EaselJS will simply fill them. 
+	 */
+	inline private function checkFreshFill():Void{
+		//...being called at beginning of path causes issue...
+		if(activeFill && fillMethod!=null) {
+			this.graphics.endFill();
+			fillMethod(this, fillArgs);
+		}
+
+		activeFill = true;
 	}
 	
 	/**

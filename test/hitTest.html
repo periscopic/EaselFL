@@ -45,10 +45,12 @@ function init(){
 	
 	var targ = new Shape();
 	targ.graphics.beginFill('#F00');
-	for(var i=0, l=24; i<l; ++i) {
+	
+	for(var i=0, l=12; i<l; ++i) {
 		var ang = Math.PI * 2 * i/l;
-		targ.graphics.drawCircle(200 + 100*Math.cos(ang), 200 + 100*Math.sin(ang), 100)
+		targ.graphics.drawCircle(200 + 100*Math.cos(ang), 200 + 100*Math.sin(ang), 30)
 	}
+	
 	targ.graphics.endFill();
 	
 	container.addChild(targ);
