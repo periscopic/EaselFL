@@ -51,21 +51,25 @@ function init(){
 		});
 		
 		// create a BitmapAnimation instance to display and play back the sprite sheet:
-		var bmpAnim = new BitmapAnimation(spriteSheet);
+		var bmpAnim;
 		
-		// start playing the first sequence:
-		bmpAnim.gotoAndPlay("walkRt");		//animate
+		for(var i=0; i<96; ++i) {
+			bmpAnim= new BitmapAnimation(spriteSheet);
 		
-		bmpAnim.x = 50;
-		bmpAnim.y = 50;
-		myStage.addChild(bmpAnim);
+			// start playing the first sequence:
+			bmpAnim.gotoAndPlay("walkRt");		//animate
+			
+			bmpAnim.x = ((i%12) + 1) * 45;
+			bmpAnim.y = (Math.floor(i/12) + 1) * 45;
+			myStage.addChild(bmpAnim);	
+		}
+		
+		
 	}
 }
 
 </script>
 </head>
 <body>
-<div id="testContainer"></div>	
-<a id='swap' href="#" onclick="TestUtils.swapRenderMethod();return false;"></a>
 </body>
 </html>

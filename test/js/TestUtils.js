@@ -69,20 +69,43 @@ var ScriptLoader = {
 	
 	
     var usingCanvas = false;	
-	
+    
+    function buildHTML(label, swapLabel){
+        var doc = document;
+
+        var cont = document.createElement('div');
+        cont.setAttribute('id', 'testContainer');
+        doc.body.appendChild(cont);
+        
+        var curRender = doc.createElement('div');
+        curRender.setAttribute('id','curRender');
+        curRender.innerHTML = label;
+        doc.body.appendChild(curRender);
+        
+        var swap = doc.createElement('a');
+        swap.setAttribute('id', 'swap');
+        swap.setAttribute('href', '#');
+        swap.setAttribute('onclick', 'TestUtils.swapRenderMethod(); return false;');
+        swap.innerHTML = swapLabel;
+        doc.body.appendChild(swap);
+        
+        
+    }
+    
+    
+    
     return {
         useCanvas : window.location.search.toUpperCase().indexOf('CANVAS')>=0,	
     
         loadWithEaselJS : function(init) {
             usingCanvas = true;
-            document.getElementById('swap').innerHTML = 'view in Flash with EaselFL';
-            
+            buildHTML('Canvas + EaselJS', 'view in Flash with EaselFL');
             ScriptLoader.load('js/easeljs-0.4.2.min.js', init);
         },
       
         loadWithEaselFL : function(init) {
             usingCanvas = false;
-            document.getElementById('swap').innerHTML = 'view in Canvas with EaselJS';
+            buildHTML('Flash + EaselFL', 'view in Canvas with EaselJS');
             
             ScriptLoader.loadInOrder([
                 '../js/swfobject.js',

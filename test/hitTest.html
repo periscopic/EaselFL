@@ -36,10 +36,11 @@ function init(){
 	var container = new Container();
 	myStage.addChild(container);
 
+	//Flash doesn't receive mouseevents on 100% transparent
 	var bg = new Shape();
-	bg.alpha = 0.8;
+	bg.alpha = 0.3;
 	bg.graphics.beginFill('#FFF');
-	bg.graphics.drawRect(0, 0, 400, 400);
+	bg.graphics.drawRect(0, 0, 600, 400);
 	bg.graphics.endFill();
 	container.addChild(bg);
 	
@@ -48,7 +49,7 @@ function init(){
 	
 	for(var i=0, l=12; i<l; ++i) {
 		var ang = Math.PI * 2 * i/l;
-		targ.graphics.drawCircle(200 + 100*Math.cos(ang), 200 + 100*Math.sin(ang), 30)
+		targ.graphics.drawCircle(300 + 100*Math.cos(ang), 200 + 100*Math.sin(ang), 30)
 	}
 	
 	targ.graphics.endFill();
@@ -68,9 +69,9 @@ function init(){
  #trace {
 	position: absolute;
 	top: 195px;
-	left: 450px;
+	left: 630px;
 	font-size: 14px;
-	font-family: Helvetica, Arial, sans-serif;
+	font-family: Verdana, sans-serif;
 	color: #333;
  }
 </style>
@@ -80,8 +81,6 @@ function init(){
 </script>
 </head>
 <body>
-<div id="testContainer"></div>	
-<a id='swap' href="#" onclick="TestUtils.swapRenderMethod();return false;"></a>
 <div id="trace">Click somewhere in the box...</div>
 </body>
 </html>

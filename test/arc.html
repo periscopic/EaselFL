@@ -54,13 +54,13 @@ function init(){
 		shp.dy = shp.y - c1.y;
 	}
 	
-	var a1 = createNode(100, 300, '#F00', myStage);
-	var a2 = createNode(400, 300, '#F00', myStage);
-	var c2 = createNode(0, 0, '#0F0', myStage, null, updateDeltaC2);
+	var a1 = createNode(100, 300, '#AAA', myStage);
+	var a2 = createNode(400, 300, '#AAA', myStage);
+	var c2 = createNode(0, 0, '#D0D0D0', myStage, null, updateDeltaC2);
 	c2.dx = 100;
 	c2.dy = 0;
 	
-	var c1 = createNode(250, 100, '#00F', myStage, updateC2);
+	var c1 = createNode(250, 100, '#3399E9', myStage, updateC2);
 	updateC2(c1);
 
 	
@@ -70,13 +70,26 @@ function init(){
 	function renderCurve(){
 		var g = curve.graphics;
 		g.clear();
-		g.moveTo(a1.x, a1.y);
+		
 		g.setStrokeStyle(1);
+		
+		g.beginStroke('#E6E6E6');
+		g.drawCircle(c1.x, c1.y, Math.sqrt(Math.pow(c1.x-c2.x,2)+Math.pow(c1.y-c2.y,2)));
+
+		g.moveTo(a1.x, a1.y);
+		g.lineTo(c1.x, c1.y);
+		g.lineTo(a2.x, a2.y);
+
+		g.endStroke();
+		
+		g.moveTo(a1.x, a1.y);
+		
 		g.beginStroke('#000');
 		
 		var rad = Math.sqrt(c2.dx*c2.dx+c2.dy*c2.dy);
 		g.arcTo(c1.x, c1.y, a2.x, a2.y, rad);
 		g.endStroke();
+		
 	}
 
 	
@@ -119,7 +132,5 @@ function init(){
 </script>
 </head>
 <body>
-<div id="testContainer"></div>	
-<a id='swap' href="#" onclick="TestUtils.swapRenderMethod();return false;"></a>
 </body>
 </html>

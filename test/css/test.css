@@ -3,19 +3,26 @@ body {
     background: #EEE;
 }
  
-h1 {
-    color: #FFF;
-}
- 
 #testContainer {
     position: absolute;
     top: 0;
     left: 0;
 }
+
+#curRender {
+    position: absolute;
+    top: 18px;
+    left: 630px;
+    color: #000;
+    font-size: 14px;
+    font-family: sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
  
 #swap {
     position: absolute;
-    top: 18px;
+    top: 38px;
     left: 630px;
     color: #000;
     font-size: 11px;

@@ -37,11 +37,11 @@ function init(){
 	var bmp = new Bitmap(img);
 	bmp.sourceRect = new Rectangle(0, 30, 78, 38);
 	myStage.addChild(bmp);
-	bmp.x = 10;
-	bmp.y = 155;
+	bmp.x = 110;
+	bmp.y = 180;
 	
 	var shp = new Shape();
-	shp.x = 200;
+	shp.x = 300;
 	shp.y = 200;
 	var g = shp.graphics;
 	g.beginBitmapFill(img);
@@ -59,7 +59,5 @@ function init(){
 </script>
 </head>
 <body>
-<div id="testContainer"></div>	
-<a id='swap' href="#" onclick="TestUtils.swapRenderMethod();return false;"></a>
 </body>
 </html>

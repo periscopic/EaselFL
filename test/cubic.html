@@ -41,10 +41,10 @@ function init(){
 	var curve = new Shape();
 	myStage.addChild(curve);
 	
-	var a1 = createNode(200, 300, '#F00', myStage);
-	var a2 = createNode(400, 300, '#F00', myStage);
-	var c1 = createNode(200, 100, '#00F', myStage);
-	var c2 = createNode(400, 100, '#00F', myStage);
+	var a1 = createNode(200, 300, '#AAA', myStage);
+	var a2 = createNode(400, 300, '#AAA', myStage);
+	var c1 = createNode(200, 100, '#3399E9', myStage);
+	var c2 = createNode(400, 100, '#3399E9', myStage);
 
 	
 	renderCurve();
@@ -53,8 +53,17 @@ function init(){
 	function renderCurve(){
 		var g = curve.graphics;
 		g.clear();
-		g.moveTo(a1.x, a1.y);
+		
 		g.setStrokeStyle(1);
+		
+		g.moveTo(a1.x, a1.y);
+		g.beginStroke('#E6E6E6');
+		g.lineTo(c1.x, c1.y);
+		g.moveTo(a2.x, a2.y);
+		g.lineTo(c2.x, c2.y);
+		g.endStroke();
+		
+		g.moveTo(a1.x, a1.y);
 		g.beginStroke('#000');
 		g.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, a2.x, a2.y);
 		g.endStroke();
@@ -92,7 +101,5 @@ function init(){
 </script>
 </head>
 <body>
-<div id="testContainer"></div>	
-<a id='swap' href="#" onclick="TestUtils.swapRenderMethod();return false;"></a>
 </body>
 </html>

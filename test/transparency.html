@@ -34,9 +34,10 @@ function init(){
 	var container = new Container();
 	myStage.addChild(container);
 
-	container.alpha = 0.5;
-	container.rotation = 5;
-	container.x = 100;
+	container.rotation = 45;
+	container.x = 300;
+	container.y = -55;
+	
 
 	
 	var shp, g, shapes = [];
@@ -56,18 +57,23 @@ function init(){
 		container.addChild(shp);
 		shapes.push(shp);
 	}
-	
-	var bmp = new Bitmap('img/testImage.png');
-	container.addChild(bmp);
-	bmp.x = 100;
-	bmp.y = 50;
 }
 
 </script>
+
+<style type='text/css'>
+h1 {
+	color: #888;
+	font-family: Verdana, sans-serif;
+	position: absolute;
+	font-weight: normal;
+	top: 40px;
+	left: 50px;
+}
+
+</style>
 </head>
 <body>
 <h1>The Easel canvas is <br>transparent by default</h1>
-<div id="testContainer"></div>	
-<a id='swap' href="#" onclick="TestUtils.swapRenderMethod();return false;"></a>
 </body>
 </html>
