@@ -58,7 +58,7 @@ function init(){
 	
 	container.onClick = function(evt) {
 		var val = targ.hitTest(evt.stageX, evt.stageY);
-		trace.innerHTML = '['+evt.stageX+', '+evt.stageY+'] is '+(val?'inside':'outside')+' the red area';
+		trace.innerHTML = '('+evt.stageX+', '+evt.stageY+') is '+(val?'inside':'outside')+' the red area';
 	}
 }
 
@@ -70,7 +70,7 @@ function init(){
 	position: absolute;
 	top: 195px;
 	left: 630px;
-	font-size: 14px;
+	font-size: 12px;
 	font-family: Verdana, sans-serif;
 	color: #333;
  }
