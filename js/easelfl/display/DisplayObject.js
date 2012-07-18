@@ -326,6 +326,15 @@ var p = DisplayObject.prototype;
 	* @default 0
 	*/
 	p.cacheID = 0;
+	
+	/**
+	 * A Shape instance that defines a vector mask (clipping path) for this display object.  The shape's transformation
+	 * will be applied relative to the display object's parent coordinates (as if it were a child of the parent).
+	 * @property mask
+	 * @type Shape
+	 * @default null
+	 */
+	p.mask = null;
 
 // private properties:
 
@@ -723,7 +732,6 @@ var p = DisplayObject.prototype;
 	 * @type DisplayObject
 	 **/
 	p._flMask = null;
-	p.mask = null;
 	
 	
 	//TODO : figure out if shadow sync is used

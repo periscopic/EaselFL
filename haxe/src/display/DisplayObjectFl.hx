@@ -107,19 +107,9 @@ class DisplayObjectFl implements IDisplayable {
 	}
 	
 	inline static private function setMask(target:DisplayObjectFl, maskID:Dynamic):Void{
-		var msk = Control.displays.get(maskID);
 		
-		//-- hack to make transparent bitmaps work as masks
-		if(target.display.mask!=null){
-			target.display.cacheAsBitmap = target.display.mask.cacheAsBitmap = false;
-		}
-		
-		if(msk!=null && Type.getClass(msk) == BitmapFl) {
-			target.display.cacheAsBitmap = msk.display.cacheAsBitmap = true;
-		}
-		//-- end hack
-		
-		target.display.mask = msk.display;
+		//mask is a shape
+		target.display.mask = Control.displays.exists(maskID) ? Control.displays.get(maskID).display : null;
 	}
 	
 	inline static private function shadow(target:DisplayObjectFl, params:Dynamic):Void{
