@@ -672,6 +672,10 @@
 		<RGB/>
 		<LINEAR_RGB/>
 	</enum>
+	<class path="Enum" params="T" file="/usr/lib/haxe/std/Enum.hx" extern="1"><haxe_doc>
+	An abstract type that represents an Enum.
+	See [Type] for the haXe Reflection API.
+</haxe_doc></class>
 	<enum path="flash.text.TextFormatDisplay" params="" file="/usr/lib/haxe/std/flash9/text/TextFormatDisplay.hx">
 		<INLINE/>
 		<BLOCK/>
@@ -1918,103 +1922,212 @@
 	<t path="Null"><c path="as.T"/></t>
 </f></as>
 	</class>
+	<class path="flash.xml.XMLList" params="" file="/usr/lib/haxe/std/flash9/xml/XMLList.hx" extern="1">
+		<addNamespace public="1" set="method"><f a="ns">
+	<d/>
+	<c path="flash.xml.XML"/>
+</f></addNamespace>
+		<appendChild public="1" set="method"><f a="child">
+	<d/>
+	<c path="flash.xml.XML"/>
+</f></appendChild>
+		<attribute public="1" set="method"><f a="arg">
+	<d/>
+	<c path="flash.xml.XMLList"/>
+</f></attribute>
+		<attributes public="1" set="method"><f a=""><c path="flash.xml.XMLList"/></f></attributes>
+		<child public="1" set="method"><f a="propertyName">
+	<d/>
+	<c path="flash.xml.XMLList"/>
+</f></child>
+		<childIndex public="1" set="method"><f a=""><c path="Int"/></f></childIndex>
+		<children public="1" set="method"><f a=""><c path="flash.xml.XMLList"/></f></children>
+		<comments public="1" set="method"><f a=""><c path="flash.xml.XMLList"/></f></comments>
+		<contains public="1" set="method"><f a="value">
+	<d/>
+	<e path="Bool"/>
+</f></contains>
+		<copy public="1" set="method"><f a=""><c path="flash.xml.XMLList"/></f></copy>
+		<descendants public="1" set="method"><f a="?name">
+	<d/>
+	<c path="flash.xml.XMLList"/>
+</f></descendants>
+		<elements public="1" set="method"><f a="?name">
+	<d/>
+	<c path="flash.xml.XMLList"/>
+</f></elements>
+		<hasComplexContent public="1" set="method"><f a=""><e path="Bool"/></f></hasComplexContent>
+		<hasSimpleContent public="1" set="method"><f a=""><e path="Bool"/></f></hasSimpleContent>
+		<inScopeNamespaces public="1" set="method"><f a=""><c path="Array"><d/></c></f></inScopeNamespaces>
+		<insertChildAfter public="1" set="method"><f a="child1:child2">
+	<d/>
+	<d/>
+	<d/>
+</f></insertChildAfter>
+		<insertChildBefore public="1" set="method"><f a="child1:child2">
+	<d/>
+	<d/>
+	<d/>
+</f></insertChildBefore>
+		<length public="1" set="method"><f a=""><c path="Int"/></f></length>
+		<localName public="1" set="method"><f a=""><d/></f></localName>
+		<name public="1" set="method"><f a=""><d/></f></name>
+		<namespace public="1" set="method"><f a="?prefix">
+	<d/>
+	<c path="flash.utils.Namespace"/>
+</f></namespace>
+		<namespaceDeclarations public="1" set="method"><f a=""><c path="Array"><d/></c></f></namespaceDeclarations>
+		<nodeKind public="1" set="method"><f a=""><c path="String"/></f></nodeKind>
+		<normalize public="1" set="method"><f a=""><c path="flash.xml.XMLList"/></f></normalize>
+		<parent public="1" set="method"><f a=""><c path="flash.xml.XML"/></f></parent>
+		<prependChild public="1" set="method"><f a="value">
+	<d/>
+	<c path="flash.xml.XML"/>
+</f></prependChild>
+		<processingInstructions public="1" set="method"><f a="?name">
+	<d/>
+	<c path="flash.xml.XMLList"/>
+</f></processingInstructions>
+		<removeNamespace public="1" set="method"><f a="ns">
+	<d/>
+	<c path="flash.xml.XML"/>
+</f></removeNamespace>
+		<replace public="1" set="method"><f a="propertyName:value">
+	<d/>
+	<d/>
+	<c path="flash.xml.XML"/>
+</f></replace>
+		<setChildren public="1" set="method"><f a="value">
+	<d/>
+	<c path="flash.xml.XML"/>
+</f></setChildren>
+		<setLocalName public="1" set="method"><f a="name">
+	<d/>
+	<e path="Void"/>
+</f></setLocalName>
+		<setName public="1" set="method"><f a="name">
+	<d/>
+	<e path="Void"/>
+</f></setName>
+		<setNamespace public="1" set="method"><f a="ns">
+	<d/>
+	<e path="Void"/>
+</f></setNamespace>
+		<text public="1" set="method"><f a=""><c path="flash.xml.XMLList"/></f></text>
+		<toJSON public="1"><f a="k">
+	<c path="String"/>
+	<d/>
+</f></toJSON>
+		<toString public="1" set="method"><f a=""><c path="String"/></f></toString>
+		<toXMLString public="1" set="method"><f a=""><c path="String"/></f></toXMLString>
+		<valueOf public="1" set="method"><f a=""><c path="flash.xml.XMLList"/></f></valueOf>
+		<new public="1" set="method"><f a="?value">
+	<d/>
+	<e path="Void"/>
+</f></new>
+	</class>
 	<class path="display.DisplayObjectFl" params="" file="src/display/DisplayObjectFl.hx">
 		<implements path="interfaces.IDisplayable"/>
-		<mapMethods public="1" set="method" line="14" static="1"><f a="execs">
+		<mapMethods public="1" set="method" line="15" static="1"><f a="execs">
 	<c path="Hash"><d/></c>
 	<e path="Void"/>
 </f></mapMethods>
-		<opacity get="inline" set="null" line="35" static="1"><f a="target:val">
+		<opacity get="inline" set="null" line="37" static="1"><f a="target:val">
 	<c path="interfaces.IDisplayable"/>
 	<c path="Float"/>
 	<e path="Void"/>
 </f></opacity>
-		<visible get="inline" set="null" line="39" static="1"><f a="target:val">
+		<visible get="inline" set="null" line="41" static="1"><f a="target:val">
 	<c path="interfaces.IDisplayable"/>
 	<e path="Bool"/>
 	<e path="Void"/>
 </f></visible>
-		<setMatrix get="inline" set="null" line="43" static="1"><f a="target:vals">
+		<setMatrix get="inline" set="null" line="45" static="1"><f a="target:vals">
 	<c path="interfaces.IDisplayable"/>
 	<c path="Array"><c path="Float"/></c>
 	<e path="Void"/>
 </f></setMatrix>
-		<hitTestPoint get="inline" set="null" line="57" static="1"><f a="target:xy">
+		<hitTestPoint get="inline" set="null" line="59" static="1"><f a="target:xy">
 	<c path="interfaces.IDisplayable"/>
 	<c path="Array"><c path="Float"/></c>
 	<e path="Bool"/>
 </f></hitTestPoint>
-		<addClickHandler get="inline" set="null" line="63" static="1"><f a="target:?nada">
+		<addClickHandler get="inline" set="null" line="65" static="1"><f a="target:?nada">
 	<c path="display.DisplayObjectFl"/>
 	<d/>
 	<e path="Void"/>
 </f></addClickHandler>
-		<addOverHandler get="inline" set="null" line="67" static="1"><f a="target:?nada">
+		<addOverHandler get="inline" set="null" line="69" static="1"><f a="target:?nada">
 	<c path="display.DisplayObjectFl"/>
 	<d/>
 	<e path="Void"/>
 </f></addOverHandler>
-		<addOutHandler get="inline" set="null" line="71" static="1"><f a="target:?nada">
+		<addOutHandler get="inline" set="null" line="73" static="1"><f a="target:?nada">
 	<c path="display.DisplayObjectFl"/>
 	<d/>
 	<e path="Void"/>
 </f></addOutHandler>
-		<addPressHandler get="inline" set="null" line="75" static="1"><f a="target:?nada">
+		<addPressHandler get="inline" set="null" line="77" static="1"><f a="target:?nada">
 	<c path="display.DisplayObjectFl"/>
 	<d/>
 	<e path="Void"/>
 </f></addPressHandler>
-		<removeClickHandler get="inline" set="null" line="79" static="1"><f a="target:?nada">
+		<removeClickHandler get="inline" set="null" line="81" static="1"><f a="target:?nada">
 	<c path="display.DisplayObjectFl"/>
 	<d/>
 	<e path="Void"/>
 </f></removeClickHandler>
-		<removeOverHandler get="inline" set="null" line="83" static="1"><f a="target:?nada">
+		<removeOverHandler get="inline" set="null" line="85" static="1"><f a="target:?nada">
 	<c path="display.DisplayObjectFl"/>
 	<d/>
 	<e path="Void"/>
 </f></removeOverHandler>
-		<removeOutHandler get="inline" set="null" line="87" static="1"><f a="target:?nada">
+		<removeOutHandler get="inline" set="null" line="89" static="1"><f a="target:?nada">
 	<c path="display.DisplayObjectFl"/>
 	<d/>
 	<e path="Void"/>
 </f></removeOutHandler>
-		<removePressHandler get="inline" set="null" line="91" static="1"><f a="target:?nada">
+		<removePressHandler get="inline" set="null" line="93" static="1"><f a="target:?nada">
 	<c path="display.DisplayObjectFl"/>
 	<d/>
 	<e path="Void"/>
 </f></removePressHandler>
-		<setMouseEnabled get="inline" set="null" line="95" static="1"><f a="target:isOn">
+		<setMouseEnabled get="inline" set="null" line="97" static="1"><f a="target:isOn">
 	<c path="display.DisplayObjectFl"/>
 	<e path="Bool"/>
 	<e path="Void"/>
 </f></setMouseEnabled>
-		<setHandCursor get="inline" set="null" line="99" static="1"><f a="target:isOn">
+		<setHandCursor get="inline" set="null" line="101" static="1"><f a="target:isOn">
 	<c path="display.DisplayObjectFl"/>
 	<e path="Bool"/>
 	<e path="Void"/>
 </f></setHandCursor>
-		<setButtonMode get="inline" set="null" line="103" static="1"><f a="target:isOn">
+		<setButtonMode get="inline" set="null" line="105" static="1"><f a="target:isOn">
 	<c path="display.DisplayObjectFl"/>
 	<e path="Bool"/>
 	<e path="Void"/>
 </f></setButtonMode>
-		<shadow get="inline" set="null" line="107" static="1"><f a="target:params">
+		<setMask get="inline" set="null" line="109" static="1"><f a="target:maskID">
+	<c path="display.DisplayObjectFl"/>
+	<d/>
+	<e path="Void"/>
+</f></setMask>
+		<shadow get="inline" set="null" line="125" static="1"><f a="target:params">
 	<c path="display.DisplayObjectFl"/>
 	<d/>
 	<e path="Void"/>
 </f></shadow>
-		<getAngleFromOffsets get="inline" set="null" line="130" static="1"><f a="ox:oy">
+		<getAngleFromOffsets get="inline" set="null" line="154" static="1"><f a="ox:oy">
 	<c path="Float"/>
 	<c path="Float"/>
 	<c path="Float"/>
 </f></getAngleFromOffsets>
-		<lastMoveEvtTime line="138" static="1"><c path="Float"/></lastMoveEvtTime>
-		<handleStageMove set="method" line="140" static="1"><f a="e">
+		<lastMoveEvtTime line="162" static="1"><c path="Float"/></lastMoveEvtTime>
+		<handleStageMove set="method" line="164" static="1"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></handleStageMove>
-		<handleStageUp set="method" line="150" static="1"><f a="e">
+		<handleStageUp set="method" line="174" static="1"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></handleStageUp>
@@ -2024,23 +2137,23 @@
 		</display>
 		<id public="1"><c path="Int"/></id>
 		<_shadow><d/></_shadow>
-		<handleClick public="1" set="method" line="168"><f a="e">
+		<handleClick public="1" set="method" line="192"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></handleClick>
-		<handleOver public="1" set="method" line="173"><f a="e">
+		<handleOver public="1" set="method" line="197"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></handleOver>
-		<handleOut public="1" set="method" line="178"><f a="e">
+		<handleOut public="1" set="method" line="202"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></handleOut>
-		<handlePress public="1" set="method" line="183"><f a="e">
+		<handlePress public="1" set="method" line="207"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></handlePress>
-		<new public="1" set="method" line="166"><f a="id">
+		<new public="1" set="method" line="190"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></new>
@@ -2574,6 +2687,208 @@
  * trace(CSSColor.color+', '+CSSColor.alpha);
  </haxe_doc>
 	</class>
+	<enum path="ValueType" params="" file="/usr/lib/haxe/std/flash9/_std/Type.hx" module="Type">
+		<TUnknown/>
+		<TObject/>
+		<TNull/>
+		<TInt/>
+		<TFunction/>
+		<TFloat/>
+		<TEnum a="e"><c path="Enum"><d/></c></TEnum>
+		<TClass a="c"><c path="Class"><d/></c></TClass>
+		<TBool/>
+	</enum>
+	<class path="Type" params="" file="/usr/lib/haxe/std/flash9/_std/Type.hx">
+		<getClass public="1" params="T" set="method" line="40" static="1">
+			<f a="o">
+				<c path="getClass.T"/>
+				<c path="Class"><c path="getClass.T"/></c>
+			</f>
+			<haxe_doc>
+		Returns the class of a value or [null] if this value is not a Class instance.
+	</haxe_doc>
+		</getClass>
+		<getEnum public="1" set="method" line="52" static="1">
+			<f a="o">
+				<d/>
+				<c path="Enum"><d/></c>
+			</f>
+			<haxe_doc>
+		Returns the enum of a value or [null] if this value is not an Enum instance.
+	</haxe_doc>
+		</getEnum>
+		<getSuperClass public="1" set="method" line="66" static="1">
+			<f a="c">
+				<c path="Class"><d/></c>
+				<c path="Class"><d/></c>
+			</f>
+			<haxe_doc>
+		Returns the super-class of a class, or null if no super class.
+	</haxe_doc>
+		</getSuperClass>
+		<getClassName public="1" set="method" line="73" static="1">
+			<f a="c">
+				<c path="Class"><d/></c>
+				<c path="String"/>
+			</f>
+			<haxe_doc>
+		Returns the complete name of a class.
+	</haxe_doc>
+		</getClassName>
+		<getEnumName public="1" set="method" line="86" static="1">
+			<f a="e">
+				<c path="Enum"><d/></c>
+				<c path="String"/>
+			</f>
+			<haxe_doc>
+		Returns the complete name of an enum.
+	</haxe_doc>
+		</getEnumName>
+		<resolveClass public="1" set="method" line="90" static="1">
+			<f a="name">
+				<c path="String"/>
+				<c path="Class"><d/></c>
+			</f>
+			<haxe_doc>
+		Evaluates a class from a name. The class must have been compiled
+		to be accessible.
+	</haxe_doc>
+		</resolveClass>
+		<resolveEnum public="1" set="method" line="111" static="1">
+			<f a="name">
+				<c path="String"/>
+				<c path="Enum"><d/></c>
+			</f>
+			<haxe_doc>
+		Evaluates an enum from a name. The enum must have been compiled
+		to be accessible.
+	</haxe_doc>
+		</resolveEnum>
+		<createInstance public="1" params="T" set="method" line="128" static="1">
+			<f a="cl:args">
+				<c path="Class"><c path="createInstance.T"/></c>
+				<c path="Array"><d/></c>
+				<c path="createInstance.T"/>
+			</f>
+			<haxe_doc>
+		Creates an instance of the given class with the list of constructor arguments.
+	</haxe_doc>
+		</createInstance>
+		<createEmptyInstance public="1" params="T" set="method" line="149" static="1">
+			<f a="cl">
+				<c path="Class"><c path="createEmptyInstance.T"/></c>
+				<c path="createEmptyInstance.T"/>
+			</f>
+			<haxe_doc>
+		Similar to [Reflect.createInstance] excepts that the constructor is not called.
+		This enables you to create an instance without any side-effect.
+	</haxe_doc>
+		</createEmptyInstance>
+		<createEnum public="1" params="T" set="method" line="162" static="1">
+			<f a="e:constr:?params">
+				<c path="Enum"><c path="createEnum.T"/></c>
+				<c path="String"/>
+				<c path="Array"><d/></c>
+				<c path="createEnum.T"/>
+			</f>
+			<haxe_doc>
+		Create an instance of an enum by using a constructor name and parameters.
+	</haxe_doc>
+		</createEnum>
+		<createEnumIndex public="1" params="T" set="method" line="174" static="1">
+			<f a="e:index:?params">
+				<c path="Enum"><c path="createEnumIndex.T"/></c>
+				<c path="Int"/>
+				<c path="Array"><d/></c>
+				<c path="createEnumIndex.T"/>
+			</f>
+			<haxe_doc>
+		Create an instance of an enum by using a constructor index and parameters.
+	</haxe_doc>
+		</createEnumIndex>
+		<describe set="method" line="180" static="1"><f a="t:fact">
+	<d/>
+	<e path="Bool"/>
+	<c path="Array"><c path="String"/></c>
+</f></describe>
+		<getInstanceFields public="1" set="method" line="197" static="1">
+			<f a="c">
+				<c path="Class"><d/></c>
+				<c path="Array"><c path="String"/></c>
+			</f>
+			<haxe_doc>
+		Returns the list of instance fields.
+	</haxe_doc>
+		</getInstanceFields>
+		<getClassFields public="1" set="method" line="201" static="1">
+			<f a="c">
+				<c path="Class"><d/></c>
+				<c path="Array"><c path="String"/></c>
+			</f>
+			<haxe_doc>
+		Returns the list of a class static fields.
+	</haxe_doc>
+		</getClassFields>
+		<getEnumConstructs public="1" set="method" line="208" static="1">
+			<f a="e">
+				<c path="Enum"><d/></c>
+				<c path="Array"><c path="String"/></c>
+			</f>
+			<haxe_doc>
+		Returns all the available constructor names for an enum.
+	</haxe_doc>
+		</getEnumConstructs>
+		<typeof public="1" set="method" line="213" static="1">
+			<f a="v">
+				<d/>
+				<e path="ValueType"/>
+			</f>
+			<haxe_doc>
+		Returns the runtime type of a value.
+	</haxe_doc>
+		</typeof>
+		<enumEq public="1" params="T" set="method" line="245" static="1">
+			<f a="a:b">
+				<c path="enumEq.T"/>
+				<c path="enumEq.T"/>
+				<e path="Bool"/>
+			</f>
+			<haxe_doc>
+		Recursively compare two enums constructors and parameters.
+	</haxe_doc>
+		</enumEq>
+		<enumConstructor public="1" set="method" line="262" static="1">
+			<f a="e">
+				<d/>
+				<c path="String"/>
+			</f>
+			<haxe_doc>
+		Returns the constructor of an enum
+	</haxe_doc>
+		</enumConstructor>
+		<enumParameters public="1" set="method" line="266" static="1">
+			<f a="e">
+				<d/>
+				<c path="Array"><d/></c>
+			</f>
+			<haxe_doc>
+		Returns the parameters of an enum
+	</haxe_doc>
+		</enumParameters>
+		<enumIndex public="1" get="inline" set="null" line="270" static="1">
+			<f a="e">
+				<d/>
+				<c path="Int"/>
+			</f>
+			<haxe_doc>
+		Returns the index of the constructor of an enum
+	</haxe_doc>
+		</enumIndex>
+		<haxe_doc>
+	The haXe Reflection API enables you to retreive informations about any value,
+	Classes and Enums at runtime.
+</haxe_doc>
+	</class>
 	<class path="flash.net.NetStreamPlayOptions" params="" file="/usr/lib/haxe/std/flash9/net/NetStreamPlayOptions.hx" extern="1">
 		<extends path="flash.events.EventDispatcher"/>
 		<len public="1"><c path="Float"/></len>
@@ -3063,6 +3378,15 @@
 		<FULL_SCREEN_INTERACTIVE/>
 		<FULL_SCREEN/>
 	</enum>
+	<class path="flash.utils.Namespace" params="" file="/usr/lib/haxe/std/flash9/utils/Namespace.hx" extern="1">
+		<prefix public="1" set="null"><d/></prefix>
+		<uri public="1" set="null"><c path="String"/></uri>
+		<new public="1" set="method"><f a="?prefix:?uri">
+	<d/>
+	<d/>
+	<e path="Void"/>
+</f></new>
+	</class>
 	<class path="flash.events.UncaughtErrorEvents" params="" file="/usr/lib/haxe/std/flash9/events/UncaughtErrorEvents.hx" extern="1">
 		<extends path="flash.events.EventDispatcher"/>
 		<new public="1"><f a=""><e path="Void"/></f></new>
@@ -4025,7 +4349,7 @@
 	 * @param Array The arguments for the corresponding EaselJS method
 	 </haxe_doc>
 		</drawArc>
-		<watchBitmapData get="inline" set="null" line="448" static="1">
+		<watchBitmapData get="inline" set="null" line="447" static="1">
 			<f a="target:bmpd">
 				<c path="display.GraphicsFl"/>
 				<c path="interfaces.IBitmapData"/>
@@ -4050,7 +4374,7 @@
 		<activePath><e path="Bool"/></activePath>
 		<commands><c path="Array"><d/></c></commands>
 		<bitmapDatas><c path="Array"><c path="interfaces.IBitmapData"/></c></bitmapDatas>
-		<link public="1" get="inline" set="null" line="490">
+		<link public="1" get="inline" set="null" line="489">
 			<f a="g">
 				<c path="flash.display.Graphics"/>
 				<e path="Void"/>
@@ -4060,7 +4384,7 @@
 	 * @param Graphics
 	 </haxe_doc>
 		</link>
-		<handleRedraw set="method" line="498">
+		<handleRedraw set="method" line="497">
 			<f a="e">
 				<d/>
 				<e path="Void"/>
@@ -4070,14 +4394,14 @@
 	 * has changed.
 	 </haxe_doc>
 		</handleRedraw>
-		<checkFreshPath get="inline" set="null" line="509">
+		<checkFreshPath get="inline" set="null" line="508">
 			<f a=""><e path="Void"/></f>
 			<haxe_doc>
 	 * Store the first coordinates in a path, so that
 	 * when closePath is called, it can be fulfilled
 	 </haxe_doc>
 		</checkFreshPath>
-		<checkFreshFill get="inline" set="null" line="524">
+		<checkFreshFill get="inline" set="null" line="523">
 			<f a=""><e path="Void"/></f>
 			<haxe_doc>
 	 * When drawing successive shapes without calling beginFill/endFill,
@@ -4085,7 +4409,7 @@
 	 * EaselJS will simply fill them. 
 	 </haxe_doc>
 		</checkFreshFill>
-		<exec public="1" get="inline" set="null" line="539">
+		<exec public="1" get="inline" set="null" line="537">
 			<f a="method:?arguments">
 				<c path="String"/>
 				<d/>
@@ -4097,7 +4421,7 @@
 	 * @param Array arguments for the method
 	 </haxe_doc>
 		</exec>
-		<new public="1" set="method" line="479"><f a=""><e path="Void"/></f></new>
+		<new public="1" set="method" line="478"><f a=""><e path="Void"/></f></new>
 	</class>
 	<enum path="flash.display3D.Context3DCompareMode" params="" file="/usr/lib/haxe/std/flash9/display3D/Context3DCompareMode.hx">
 		<NOT_EQUAL/>
@@ -4726,6 +5050,127 @@
 		<readUnsignedByte public="1" set="method"><f a=""><t path="UInt"/></f></readUnsignedByte>
 		<readUnsignedInt public="1" set="method"><f a=""><t path="UInt"/></f></readUnsignedInt>
 		<readUnsignedShort public="1" set="method"><f a=""><t path="UInt"/></f></readUnsignedShort>
+	</class>
+	<class path="flash.xml.XML" params="" file="/usr/lib/haxe/std/flash9/xml/XML.hx" extern="1">
+		<ignoreComments public="1" static="1"><e path="Bool"/></ignoreComments>
+		<ignoreProcessingInstructions public="1" static="1"><e path="Bool"/></ignoreProcessingInstructions>
+		<ignoreWhitespace public="1" static="1"><e path="Bool"/></ignoreWhitespace>
+		<prettyIndent public="1" static="1"><c path="Int"/></prettyIndent>
+		<prettyPrinting public="1" static="1"><e path="Bool"/></prettyPrinting>
+		<defaultSettings public="1" set="method" static="1"><f a=""><d/></f></defaultSettings>
+		<setSettings public="1" set="method" static="1"><f a="?o">
+	<d/>
+	<e path="Void"/>
+</f></setSettings>
+		<settings public="1" set="method" static="1"><f a=""><d/></f></settings>
+		<addNamespace public="1" set="method"><f a="ns">
+	<d/>
+	<c path="flash.xml.XML"/>
+</f></addNamespace>
+		<appendChild public="1" set="method"><f a="child">
+	<d/>
+	<c path="flash.xml.XML"/>
+</f></appendChild>
+		<attribute public="1" set="method"><f a="arg">
+	<d/>
+	<c path="flash.xml.XMLList"/>
+</f></attribute>
+		<attributes public="1" set="method"><f a=""><c path="flash.xml.XMLList"/></f></attributes>
+		<child public="1" set="method"><f a="propertyName">
+	<d/>
+	<c path="flash.xml.XMLList"/>
+</f></child>
+		<childIndex public="1" set="method"><f a=""><c path="Int"/></f></childIndex>
+		<children public="1" set="method"><f a=""><c path="flash.xml.XMLList"/></f></children>
+		<comments public="1" set="method"><f a=""><c path="flash.xml.XMLList"/></f></comments>
+		<contains public="1" set="method"><f a="value">
+	<d/>
+	<e path="Bool"/>
+</f></contains>
+		<copy public="1" set="method"><f a=""><c path="flash.xml.XML"/></f></copy>
+		<descendants public="1" set="method"><f a="?name">
+	<d/>
+	<c path="flash.xml.XMLList"/>
+</f></descendants>
+		<elements public="1" set="method"><f a="?name">
+	<d/>
+	<c path="flash.xml.XMLList"/>
+</f></elements>
+		<hasComplexContent public="1" set="method"><f a=""><e path="Bool"/></f></hasComplexContent>
+		<hasSimpleContent public="1" set="method"><f a=""><e path="Bool"/></f></hasSimpleContent>
+		<inScopeNamespaces public="1" set="method"><f a=""><c path="Array"><d/></c></f></inScopeNamespaces>
+		<insertChildAfter public="1" set="method"><f a="child1:child2">
+	<d/>
+	<d/>
+	<d/>
+</f></insertChildAfter>
+		<insertChildBefore public="1" set="method"><f a="child1:child2">
+	<d/>
+	<d/>
+	<d/>
+</f></insertChildBefore>
+		<length public="1" set="method"><f a=""><c path="Int"/></f></length>
+		<localName public="1" set="method"><f a=""><d/></f></localName>
+		<name public="1" set="method"><f a=""><d/></f></name>
+		<namespace public="1" set="method"><f a="?prefix">
+	<d/>
+	<c path="flash.utils.Namespace"/>
+</f></namespace>
+		<namespaceDeclarations public="1" set="method"><f a=""><c path="Array"><d/></c></f></namespaceDeclarations>
+		<nodeKind public="1" set="method"><f a=""><c path="String"/></f></nodeKind>
+		<normalize public="1" set="method"><f a=""><c path="flash.xml.XML"/></f></normalize>
+		<notification public="1" set="method"><f a=""><d/></f></notification>
+		<parent public="1" set="method"><f a=""><c path="flash.xml.XML"/></f></parent>
+		<prependChild public="1" set="method"><f a="value">
+	<d/>
+	<c path="flash.xml.XML"/>
+</f></prependChild>
+		<processingInstructions public="1" set="method"><f a="?name">
+	<d/>
+	<c path="flash.xml.XMLList"/>
+</f></processingInstructions>
+		<removeNamespace public="1" set="method"><f a="ns">
+	<d/>
+	<c path="flash.xml.XML"/>
+</f></removeNamespace>
+		<replace public="1" set="method"><f a="propertyName:value">
+	<d/>
+	<d/>
+	<c path="flash.xml.XML"/>
+</f></replace>
+		<setChildren public="1" set="method"><f a="value">
+	<d/>
+	<c path="flash.xml.XML"/>
+</f></setChildren>
+		<setLocalName public="1" set="method"><f a="name">
+	<d/>
+	<e path="Void"/>
+</f></setLocalName>
+		<setName public="1" set="method"><f a="name">
+	<d/>
+	<e path="Void"/>
+</f></setName>
+		<setNamespace public="1" set="method"><f a="ns">
+	<d/>
+	<e path="Void"/>
+</f></setNamespace>
+		<setNotification public="1" set="method"><f a="f">
+	<d/>
+	<d/>
+</f></setNotification>
+		<text public="1" set="method"><f a=""><c path="flash.xml.XMLList"/></f></text>
+		<toJSON public="1"><f a="k">
+	<c path="String"/>
+	<d/>
+</f></toJSON>
+		<toString public="1" set="method"><f a=""><c path="String"/></f></toString>
+		<toXMLString public="1" set="method"><f a=""><c path="String"/></f></toXMLString>
+		<valueOf public="1" set="method"><f a=""><c path="flash.xml.XML"/></f></valueOf>
+		<new public="1" set="method"><f a="?value">
+	<d/>
+	<e path="Void"/>
+</f></new>
+		<haxe_dynamic><c path="flash.xml.XMLList"/></haxe_dynamic>
 	</class>
 	<class path="flash.geom.Vector3D" params="" file="/usr/lib/haxe/std/flash9/geom/Vector3D.hx" extern="1">
 		<X_AXIS public="1" static="1"><c path="flash.geom.Vector3D"/></X_AXIS>

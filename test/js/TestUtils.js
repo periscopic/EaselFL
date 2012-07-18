@@ -88,8 +88,6 @@ var ScriptLoader = {
         swap.setAttribute('onclick', 'TestUtils.swapRenderMethod(); return false;');
         swap.innerHTML = swapLabel;
         doc.body.appendChild(swap);
-        
-        
     }
     
     
@@ -126,6 +124,7 @@ var ScriptLoader = {
                 '../js/easelfl/display/SpriteSheet.js',
                 '../js/easelfl/display/BitmapAnimation.js',
                 '../js/easelfl/display/Text.js',
+                '../js/easelfl/display/Shadow.js',
                 '../js/easelfl/events/MouseEvent.js',
                 '../js/easelfl/utils/Ticker.js'
             ], init)

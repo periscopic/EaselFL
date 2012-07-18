@@ -1,11 +1,9 @@
-<!-- Easel rendering encoded drawing commands
-such as those from an authoring tool -->
+<!-- Renders bitmaps drawn using various methods -->
 
 <html>
 <head>
 
 <script type="text/javascript" src="js/TestUtils.js"></script>
-<script type="text/javascript" src="js/EncodePath.js"></script>
 
 <link rel='stylesheet' type='text/css' href='css/test.css' />
 
@@ -20,6 +18,7 @@ window.onload = function(){
 }
 
 //-- Start it up!
+
 function init(){
 	var canvas = document.createElement('canvas');
 	canvas.setAttribute('width', 600);
@@ -32,31 +31,20 @@ function init(){
 	Ticker.addListener(myStage);
 	
 	//-- specific test code
+	var img = new Image();
+	img.src = 'img/testImage.png';
 	
-	var ep = new EncodePath();
-	var shape = new Shape();
-	var g = shape.graphics;
-	g.setStrokeStyle(1);
-	g.beginStroke('#3399E9');
-	
-	ep.moveTo(-200, 75).lineTo(200, 75).code;
-	g.decodePath(ep.code); // A/QLuMA+gAAA
-	
-	ep.clear();
-	
-	ep.moveTo(-100, 35).quadraticCurveTo(0, -15, 100, 35);
-	g.decodePath(ep.code); // AvoFeQPon0PoH0
-	
-	ep.clear();
-	
-	ep.moveTo(-150, 200).bezierCurveTo(-150, -100, 150, -100, 150, 200);
-	g.decodePath(ep.code); // A3cfQcAAAgu4Au4AAAAAAAu4
-	
-	g.endStroke();
-	
-	shape.x = 300;
-	shape.y = 50;
-	myStage.addChild(shape);
+	//-- shadow
+	var shp, g;
+	shp = new Shape();
+	shp.x = 300;
+	shp.y = 200;
+	g = shp.graphics;
+	g.beginBitmapFill(img);
+	g.drawCircle(0, 0, 100);
+	g.endFill();
+	shp.shadow = new Shadow('#2895AE', 0, 0, 8);
+	myStage.addChild(shp);
 }
 
 </script>

@@ -381,18 +381,17 @@ class GraphicsFl implements IExec{
         var clockwise:Bool = args[5]==null ? true : args[5];
        
        //-- graphics on which to render
-            var g:flash.display.Graphics = target.graphics;
-            
-            var segAngle:Float;
-            var angle:Float;
-            var angleMid:Float;
-            var numSegs:Int;
-            var cx:Float;
-            var cy:Float;
-            var cRadius:Float;
-
+        var g:flash.display.Graphics = target.graphics;
+     	
+        var segAngle:Float;
+        var angle:Float;
+        var angleMid:Float;
+        var numSegs:Int;
+        var cx:Float;
+        var cy:Float;
+        var cRadius:Float;
  
-            //-- line to start
+        //-- line to start
         g.lineTo(bx, by);
 
         //-- draw only full circle if more than that is specified
@@ -419,22 +418,22 @@ class GraphicsFl implements IExec{
 		//-- calculate and render segments
 		
         for( i in 0...numSegs) {
-                //-- increment the angle
-                angle += segAngle;
-                
-                //-- angle halfway between the last and this
-                angleMid = angle - (segAngle / 2);
-                
-                //-- find the end pt
-                bx = ax + Math.cos(angle) * radius;
-                by = ay + Math.sin(angle) * radius;
-                
-                //-- find the control pt
-                cx = ax + Math.cos(angleMid) * cRadius;
-                cy = ay + Math.sin(angleMid) * cRadius;
-				
-                //-- render segment
-                g.curveTo(cx, cy, bx, by);
+            //-- increment the angle
+            angle += segAngle;
+            
+            //-- angle halfway between the last and this
+            angleMid = angle - (segAngle / 2);
+            
+            //-- find the end pt
+            bx = ax + Math.cos(angle) * radius;
+            by = ay + Math.sin(angle) * radius;
+            
+            //-- find the control pt
+            cx = ax + Math.cos(angleMid) * cRadius;
+            cy = ay + Math.sin(angleMid) * cRadius;
+			
+            //-- render segment
+            g.curveTo(cx, cy, bx, by);
         }
     
     	//-- store current drawing point
@@ -522,7 +521,6 @@ class GraphicsFl implements IExec{
 	 * EaselJS will simply fill them. 
 	 */
 	inline private function checkFreshFill():Void{
-		//...being called at beginning of path causes issue...
 		if(activeFill && fillMethod!=null) {
 			this.graphics.endFill();
 			fillMethod(this, fillArgs);

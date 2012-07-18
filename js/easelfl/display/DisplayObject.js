@@ -1,4 +1,9 @@
 /*
+ * EaselFL is EaselJS rendering to Flash
+ * @author Brett Johnson, periscopic.com
+ */
+
+/*
 * DisplayObject
 * Visit http://createjs.com/ for documentation, updates and examples.
 *
@@ -48,9 +53,7 @@ var DisplayObject = function() {
 }
 var p = DisplayObject.prototype;
 
-	p._flChange = null;
-	p._flCache = false;
-	p._flCached = false;
+
 
 	/**
 	 * Suppresses errors generated when using features like hitTest, onPress/onClick, and getObjectsUnderPoint with cross
@@ -366,19 +369,7 @@ var p = DisplayObject.prototype;
 	 **/
 	p._matrix = null;
 
-// constructor:
-	// separated so it can be easily addressed in subclasses:
 
-	/**
-	 * Initialization method.
-	 * @method initialize
-	 * @protected
-	*/
-	p.initialize = function() {
-		this.id = UID.get();
-		this._matrix = new Matrix2D();
-		this._flChange = [];
-	}
 
 // public methods:
 	/**
@@ -392,79 +383,7 @@ var p = DisplayObject.prototype;
 		return this.visible && this.alpha > 0 && this.scaleX != 0 && this.scaleY != 0;
 	}
 
-	/**
-	 * Draws the display object into the specified context ignoring it's visible, alpha, shadow, and transform.
-	 * Returns true if the draw was handled (useful for overriding functionality).
-	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
-	 * @method draw
-	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
-	 * @param {Boolean} ignoreCache Indicates whether the draw operation should ignore any current cache.
-	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
-	 * into itself).
-	 **/
-	p.draw = function(ctx, ignoreCache) {
-		this._flSyncProps();
-		
-		if(this._flChange.length){
-			for(var i=0, l=this._flChange.length; i<l; ++i) {
-				ctx._flChange.push(this._flChange[i]);
-			}
-			this._flChange = [];
-		}
-	}
 	
-	/**
-	 * Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
-	 **/
-	p._flRunCreate = function(ctx){
-	  throw 'prototype._flRunCreate must be overriden for all DisplayObject subclasses';
-	}
-	
-	
-
-	/**
-	 * Draws the display object into a new canvas, which is then used for subsequent draws. For complex content
-	 * that does not change frequently (ex. a Sprite with many children that do not move, or a complex vector Shape),
-	 * this can provide for much faster rendering because the content does not need to be re-rendered each tick. The
-	 * cached display object can be moved, rotated, faded, etc freely, however if it's content changes, you must manually
-	 * update the cache by calling updateCache() or cache() again. You must specify the cache area via the x, y, w,
-	 * and h parameters. This defines the rectangle that will be rendered and cached using this display object's
-	 * coordinates. For example if you defined a Shape that drew a circle at 0, 0 with a radius of 25, you could call
-	 * myShape.cache(-25, -25, 50, 50) to cache the full shape.
-	 * @method cache
-	 * @param {Number} x The x coordinate origin for the cache region.
-	 * @param {Number} y The y coordinate origin for the cache region.
-	 * @param {Number} width The width of the cache region.
-	 * @param {Number} height The height of the cache region.
-	 **/
-	p.cache = function(x, y, width, height) {
-	  //-- In EaselFl cache currently only prevents redraw
-	  this._flCache = true;
-	  this._flCached = false;
-	}
-
-	/**
-	 * Redraws the display object to its cache. Calling updateCache without an active cache will throw an error.
-	 * If compositeOperation is null the current cache will be cleared prior to drawing. Otherwise the display object
-	 * will be drawn over the existing cache using the specified compositeOperation.
-	 * @method updateCache
-	 * @param {String} compositeOperation The compositeOperation to use, or null to clear the cache and redraw it.
-	 * <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#compositing">
-	 * whatwg spec on compositing</a>.
-	 **/
-	p.updateCache = function(compositeOperation) {
-	  //-- In EaselFl cache currently only prevents redraw
-	  this._flCache = true;
-	  this._flCached = false;
-	}
-
-	/**
-	 * Clears the current cache. See cache() for more information.
-	 * @method uncache
-	 **/
-	p.uncache = function() {
-	  this._flCache = this._flCached = false;
-	}
 	
 	/**
 	* Returns a data URL for the cache, or null if this display object is not cached.
@@ -472,7 +391,7 @@ var p = DisplayObject.prototype;
 	* @method getCacheDataURL.
 	**/
 	p.getCacheDataURL = function() {
-		if(CanvasFl.THROW_UNIMPLEMENTED) throw "EaselFl::DisplayObject.getCacheDataURL not yet implemented";
+		if(Stage.FL_THROW_UNIMPLEMENTED) throw "EaselFl::DisplayObject.getCacheDataURL not yet implemented";
 		/*if (!this.cacheCanvas) { return null; }
 		if (this.cacheID != this._cacheDataURLID) { this._cacheDataURL = this.cacheCanvas.toDataURL(); }
 		return this._cacheDataURL;*/
@@ -598,25 +517,6 @@ var p = DisplayObject.prototype;
 	}
 
 	/**
-	 * Tests whether the display object intersects the specified local point (ie. draws a pixel with alpha > 0 at
-	 * the specified position). This ignores the alpha, shadow and compositeOperation of the display object, and all
-	 * transform properties including regX/Y.
-	 * @method hitTest
-	 * @param {Number} x The x position to check in the display object's local coordinates.
-	 * @param {Number} y The y position to check in the display object's local coordinates.
-	 * @return {Boolean} A Boolean indicting whether a visible portion of the DisplayObject intersect the specified
-	 * local Point.
-	*/
-	
-	p.hitTest = function(x, y) {
-		if(this._flCtx){
-		 var val =  this._flCtx.flInvoke (this.id, 'htp', [x, y]);//'002','hitTestPoint',[100, 100]);
-		  return val;
-		}
-		return false;
-	}
-
-	/**
 	 * Returns a clone of this DisplayObject. Some properties that are specific to this instance's current context are
 	 * reverted to their defaults (for example .parent).
 	 * @method clone
@@ -664,7 +564,6 @@ var p = DisplayObject.prototype;
 		o.mouseEnabled = this.mouseEnabled;
 		o.compositeOperation = this.compositeOperation;
 		
-		//-- TODO : make sure caching gets cloned in Flash version
 		//--if (this.cacheCanvas) {
 		//--	o.cacheCanvas = this.cacheCanvas.cloneNode(true);
 		//--	o.cacheCanvas.getContext("2d").putImageData(this.cacheCanvas.getContext("2d").getImageData(0,0,this.cacheCanvas.width,this.cacheCanvas.height),0,0);
@@ -686,35 +585,193 @@ var p = DisplayObject.prototype;
 		ctx.shadowBlur = shadow.blur;*/
 	}
 	
+	/**** Begin EaselFL specific code ****/
 	
-	//-- TODO : move these to properties section
+	
+	/**
+	 * The synced X value
+	 * @private
+	 * @property _flX
+	 * @type Number
+	 **/
 	p._flX = 0;
+	
+	/**
+	 * The synced y value
+	 * @private
+	 * @property _flY
+	 * @type Number
+	 **/
 	p._flY = 0;
+	
+	/**
+	 * The synced scaleX value
+	 * @private
+	 * @property _flScaleX
+	 * @type Number
+	 **/
 	p._flScaleX = 1;
+	
+	/**
+	 * The synced scaleY value
+	 * @private
+	 * @property _flScaleY
+	 * @type Number
+	 **/
 	p._flScaleY = 1;
+	
+	/**
+	 * The synced rotation value
+	 * @private
+	 * @property _flRotation
+	 * @type Number
+	 **/
 	p._flRotation = 0;
+	
+	/**
+	 * The synced skewX value
+	 * @private
+	 * @property _flSkewX
+	 * @type Number
+	 **/
 	p._flSkewX = 0;
+	
+	/**
+	 * The synced skewY value
+	 * @private
+	 * @property _flSkewY
+	 * @type Number
+	 **/
 	p._flSkewY = 0;
+	
+	/**
+	 * The synced regX value
+	 * @private
+	 * @property _flRegX
+	 * @type Number
+	 **/
 	p._flRegX = 0;
+	
+	/**
+	 * The synced regY value
+	 * @private
+	 * @property _flRegX
+	 * @type Number
+	 **/
 	p._flRegY = 0;
 	
+	/**
+	 * The synced visible value
+	 * @private
+	 * @property _flVisible
+	 * @type Boolean
+	 **/
 	p._flVisible = true;
+	
+	/**
+	 * The synced alpha value
+	 * @private
+	 * @property _flAlpha
+	 * @type Number
+	 **/
 	p._flAlpha = 1;
+	
+	/**
+	 * The synced mouseEnabled value
+	 * @private
+	 * @property _flMouseEnabled
+	 * @type Number
+	 **/
 	p._flMouseEnabled = true;
-	p._flMouseOver =
-	p._flMouseOut =
+	
+	/**
+	 * The synced onMouseOver method
+	 * @private
+	 * @property _flMouseOver
+	 * @type function
+	 **/
+	p._flMouseOver = null;
+	
+	/**
+	 * The synced onMouseOut method
+	 * @private
+	 * @property _flMouseOut
+	 * @type function
+	 **/
+	p._flMouseOut = null;
+	
+	/**
+	 * The synced onClick method
+	 * @private
+	 * @property _flClick
+	 * @type function
+	 **/
 	p._flClick =
+	
+	/**
+	 * The synced onPress method
+	 * @private
+	 * @property _flPress
+	 * @type function
+	 **/
 	p._flPress = null;
 	
+	/**
+	 * The synced mask display object
+	 * @private
+	 * @property _flMask
+	 * @type DisplayObject
+	 **/
+	p._flMask = null;
+	p.mask = null;
+	
+	
+	//TODO : figure out if shadow sync is used
 	p._flShadow = null;
 	
-	//-- Not part of the original EaselJS api
+	/**
+	 * NOTE : not part of the original EaselJS api
+	 * The synced useHandCursor value
+	 * @private
+	 * @property _flUseHandCursor
+	 * @type Boolean
+	 **/
 	p._flUseHandCursor = false;
+	
+	/**
+	 * NOTE : not part of the original EaselJS api
+	 * The synced buttonMode value
+	 * @private
+	 * @property _flButtonMode
+	 * @type Boolean
+	 **/
 	p._flButtonMode = false;
 	
-	//-- Static
-	DisplayObject._flTempMtx = new Matrix2D();
+	/**
+	 * Commands that will be pushed to Flash on each render cycle when this
+	 * is in the display list.
+	 * @private
+	 * @property _flChange
+	 * @type Array
+	 **/
+	p._flChange = null;
 	
+	/**
+	 * Whether to this should be cached
+	 * @private
+	 * @property _flCache
+	 * @type Boolean
+	 **/
+	p._flCache = false;
+	
+	/**
+	 * Whether this is cached
+	 * @private
+	 * @property _flCached
+	 * @type Boolean
+	 **/
+	p._flCached = false;
+
 	/**
 	 * @method _flSyncProps
 	 * @protected
@@ -790,7 +847,12 @@ var p = DisplayObject.prototype;
 			this._flShadow = this.shadow;
 			this._flChange.push([this.id, 'sh', this.shadow]);
 		}
-
+		
+		//-- Synchronize Mask
+		if(this.mask !== this._flMask) {
+			this._flMask = this.mask;
+			this._flChange.push([this.id, 'msk', this.mask ? this.mask.id : null]);
+		}
 
 		//-- Synchronize tranform
 		if(	this.x !== this._flX ||
@@ -866,7 +928,6 @@ var p = DisplayObject.prototype;
 	 * @method _applyFilters
 	 * @protected
 	 **/
-	//-- TODO : verify this is unnecessary in flash version
 	/*p._applyFilters = function() {
 		if (!this.filters || this.filters.length == 0 || !this.cacheCanvas) { return; }
 		var l = this.filters.length;
@@ -877,6 +938,127 @@ var p = DisplayObject.prototype;
 			this.filters[i].applyFilter(ctx, 0, 0, w, h);
 		}
 	}*/
+	
+
+	
+	// constructor:
+	// separated so it can be easily addressed in subclasses:
+
+	/**
+	 * Initialization method.
+	 * @method initialize
+	 * @protected
+	*/
+	p.initialize = function() {
+		this.id = UID.get();
+		this._matrix = new Matrix2D();
+		this._flChange = [];
+	}
+	
+	/**
+	 * Draws the display object into the specified context ignoring it's visible, alpha, shadow, and transform.
+	 * Returns true if the draw was handled (useful for overriding functionality).
+	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
+	 * @method draw
+	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
+	 * @param {Boolean} ignoreCache Indicates whether the draw operation should ignore any current cache.
+	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
+	 * into itself).
+	 **/
+	p.draw = function(ctx, ignoreCache) {
+		this._flSyncProps();
+		
+		if(this._flChange.length){
+			for(var i=0, l=this._flChange.length; i<l; ++i) {
+				ctx._flChange.push(this._flChange[i]);
+			}
+			this._flChange = [];
+		}
+	}
+	
+	/**
+	 * Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
+	 **/
+	p._flRunCreate = function(ctx){
+	  throw 'prototype._flRunCreate must be overriden for all DisplayObject subclasses';
+	}
+	
+	
+
+	/**
+	 * Draws the display object into a new canvas, which is then used for subsequent draws. For complex content
+	 * that does not change frequently (ex. a Sprite with many children that do not move, or a complex vector Shape),
+	 * this can provide for much faster rendering because the content does not need to be re-rendered each tick. The
+	 * cached display object can be moved, rotated, faded, etc freely, however if it's content changes, you must manually
+	 * update the cache by calling updateCache() or cache() again. You must specify the cache area via the x, y, w,
+	 * and h parameters. This defines the rectangle that will be rendered and cached using this display object's
+	 * coordinates. For example if you defined a Shape that drew a circle at 0, 0 with a radius of 25, you could call
+	 * myShape.cache(-25, -25, 50, 50) to cache the full shape.
+	 * @method cache
+	 * @param {Number} x The x coordinate origin for the cache region.
+	 * @param {Number} y The y coordinate origin for the cache region.
+	 * @param {Number} width The width of the cache region.
+	 * @param {Number} height The height of the cache region.
+	 **/
+	p.cache = function(x, y, width, height) {
+	  //-- In EaselFl cache currently only prevents redraw
+	  this._flCache = true;
+	  this._flCached = false;
+	}
+
+	/**
+	 * Redraws the display object to its cache. Calling updateCache without an active cache will throw an error.
+	 * If compositeOperation is null the current cache will be cleared prior to drawing. Otherwise the display object
+	 * will be drawn over the existing cache using the specified compositeOperation.
+	 * @method updateCache
+	 * @param {String} compositeOperation The compositeOperation to use, or null to clear the cache and redraw it.
+	 * <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#compositing">
+	 * whatwg spec on compositing</a>.
+	 **/
+	p.updateCache = function(compositeOperation) {
+	  //-- In EaselFl cache currently only prevents redraw
+	  this._flCache = true;
+	  this._flCached = false;
+	}
+
+	/**
+	 * Clears the current cache. See cache() for more information.
+	 * @method uncache
+	 **/
+	p.uncache = function() {
+	  this._flCache = this._flCached = false;
+	}
+	
+	/**
+	 * Tests whether the display object intersects the specified local point (ie. draws a pixel with alpha > 0 at
+	 * the specified position). This ignores the alpha, shadow and compositeOperation of the display object, and all
+	 * transform properties including regX/Y.
+	 * @method hitTest
+	 * @param {Number} x The x position to check in the display object's local coordinates.
+	 * @param {Number} y The y position to check in the display object's local coordinates.
+	 * @return {Boolean} A Boolean indicting whether a visible portion of the DisplayObject intersect the specified
+	 * local Point.
+	*/
+	
+	p.hitTest = function(x, y) {
+		if(this._flCtx){
+		 var val =  this._flCtx.flInvoke (this.id, 'htp', [x, y]);//'002','hitTestPoint',[100, 100]);
+		  return val;
+		}
+		return false;
+	}
+	
+	//-- Static
+	/**
+	 * Matrix2D for reuse
+	 * @static
+	 * @protected
+	 * @type Matrix2D
+	 **/
+	DisplayObject._flTempMtx = new Matrix2D();
+
+	/**** End EaselFL specific code ****/
+	
 
 window.DisplayObject = DisplayObject;
 }(window));

@@ -21,6 +21,8 @@ window.onload = function(){
 
 function init(){
 	var canvas = document.createElement('canvas');
+	//-- NOTE: could set EaselFL canvas to opaque (white) like this
+	//canvas.setAttribute('transparent', false);
 	canvas.setAttribute('width', 600);
 	canvas.setAttribute('height', 400);
 	canvas.setAttribute('fl_swf_url', '../haxe/bin/EaselFl.swf');
@@ -37,8 +39,6 @@ function init(){
 	container.rotation = 45;
 	container.x = 300;
 	container.y = -55;
-	
-
 	
 	var shp, g, shapes = [];
 	

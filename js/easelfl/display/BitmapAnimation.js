@@ -1,4 +1,9 @@
 /*
+ * EaselFL is EaselJS rendering to Flash
+ * @author Brett Johnson, periscopic.com
+ */
+
+/*
 * BitmapAnimation
 * Visit http://createjs.com/ for documentation, updates and examples.
 *
@@ -45,7 +50,6 @@ var BitmapAnimation = function(spriteSheet) {
 }
 var p = BitmapAnimation.prototype = new DisplayObject();
 
-	p._flFrame = null;
 
 // public properties:
 
@@ -174,6 +178,13 @@ var p = BitmapAnimation.prototype = new DisplayObject();
 	 **/
 	p.DisplayObject_draw = p.draw;
 
+
+	/**** Begin EaselFL specific code ****/
+
+	p._flFrame = null;
+
+
+	/**** Draw method is modified in EaselFL ****/
 /**
 	 * Draws the display object into the specified context ignoring it's visible, alpha, shadow, and transform.
 	 * Returns true if the draw was handled (useful for overriding functionality).
@@ -194,7 +205,6 @@ var p = BitmapAnimation.prototype = new DisplayObject();
 			FrameFl.watch(o);
 			o.__fl.sync(ctx);
 			this._flFrame = o;
-			//console.log(this.id, o.__fl.id);
 			ctx._flChange.push([this.id, 'frm', o.__fl.id]);
 		}
 		
@@ -209,15 +219,12 @@ var p = BitmapAnimation.prototype = new DisplayObject();
 	 **/
 	p._flRunCreate = function(ctx){
 	  if(this._flCtx!==ctx){
-		this._flCtx = ctx;
-		ctx._flCreate.push(['ban', this]);
-		
-		//we have a context, so we can update smoothing
-		//this.flSetSmoothing(this.flSmoothing);		
+			this._flCtx = ctx;
+			ctx._flCreate.push(['ban', this]);		
 	  }
 	}
 	
-	
+	/**** End EaselFL specific code ****/	
 
 	//Note, the doc sections below document using the specified APIs (from DisplayObject)  from
 	//Bitmap. This is why they have no method implementations.

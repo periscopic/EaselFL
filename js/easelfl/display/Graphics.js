@@ -470,7 +470,7 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.beginLinearGradientFill = function(colors, ratios, x0, y0, x1, y1) {
-		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.beginLinearGradientFill currently not implemented';
+		if(Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.beginLinearGradientFill currently not implemented';
 		//this._flChange.push([this.id, 'lgf', [colors, ratios, x0, y0, x1, y1]]); //-- needs implementation on Flash side
 		return this;
 	}
@@ -493,7 +493,7 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.beginRadialGradientFill = function(colors, ratios, x0, y0, r0, x1, y1, r1) {
-		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.beginRadialGradientFill currently not implemented';
+		if(Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.beginRadialGradientFill currently not implemented';
 		//this._flChange.push([this.id, 'rgf', [colors, ratios, x0, y0, r0, x1, y1, r1]]); //-- needs implementation on Flash side
 		return this;
 	}
@@ -507,6 +507,8 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.beginBitmapFill = function(image, repetition) {
+		if(Stage.FL_LOG_PART_IMPLEMENTED && (repetition && repetition==='repeat-x' || repetition==='repeat-y')) console.log('EaselFl:Graphics.beginBitmapFill currently does not implement repeat-x or repeat-y');
+
 		ImageFl.watch(image);
 		this._flChildImages.push(image.__fl);
 		this._flChange.push([this.id, 'bf', [image.__fl.id, repetition]])
@@ -534,6 +536,7 @@ var p = Graphics.prototype;
 	 **/
 	p.setStrokeStyle = function(thickness, caps, joints, miterLimit) {
 		//TODO : implement caps, joints, miterLimit in Flash
+		if(Stage.FL_LOG_PART_IMPLEMENTED && (caps || joints || miterLimit)) console.log('EaselFl:Graphics.setStrokeStyle currently does not implement caps, joints, or miterLimit');
 		this._flChange.push([this.id, 'ss',[thickness, caps, joints, miterLimit]]);
 		return this;
 	}
@@ -560,7 +563,7 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
 	p.beginLinearGradientStroke = function(colors, ratios, x0, y0, x1, y1) {
-		if(CanvasFl.THROW_UNIMPLEMENTED)  throw 'EaselFl:Graphics.beginLinearGradientStroke currently not implemented';
+		if(Stage.FL_THROW_UNIMPLEMENTED)  throw 'EaselFl:Graphics.beginLinearGradientStroke currently not implemented';
 		/*if (this._active) { this._newPath(); }
 		var o = this._ctx.createLinearGradient(x0, y0, x1, y1);
 		for (var i=0, l=colors.length; i<l; i++) {
@@ -585,7 +588,7 @@ var p = Graphics.prototype;
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)	
 	 **/
 	p.beginRadialGradientStroke = function(colors, ratios, x0, y0, r0, x1, y1, r1) {
-		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.beginRadialGradientStroke currently not implemented';
+		if(Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.beginRadialGradientStroke currently not implemented';
 		/*if (this._active) { this._newPath(); }
 		var o = this._ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);
 		for (var i=0, l=colors.length; i<l; i++) {
@@ -796,7 +799,7 @@ var p = Graphics.prototype;
 	 @return {Graphics} A clone of the current Graphics instance.
 	 **/
 	p.clone = function() {
-		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.clone currently not implemented';
+		if(Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.clone currently not implemented';
 		/*var o = new Graphics();
 		o._instructions = this._instructions.slice();
 		o._activeInstructions = this._activeInstructions.slice();

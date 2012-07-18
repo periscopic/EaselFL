@@ -1,4 +1,9 @@
 /*
+ * EaselFL is EaselJS rendering to Flash
+ * @author Brett Johnson, periscopic.com
+ */
+
+/*
 * Bitmap
 * Visit http://createjs.com/ for documentation, updates and examples.
 *
@@ -40,20 +45,7 @@ var Bitmap = function(imageOrUri) {
 }
 var p = Bitmap.prototype = new DisplayObject();
 
-	p._flCtx = null;
-	p._flImg = null;
-	p._flSourceRect = null;
-	p._flSmoothing = false;
-	p.flSmoothing = false;
-	
-	p.flSetSmoothing = function(smooth) {
-		if(this._flCtx && smooth!==this._flSmoothing){
-			this.flSmoothing = this._flSmoothing = smooth;
-			this._flCtx._flChange.push([this.id, 'smth', smooth]);	
-		}else{
-			this.flSmoothing = smooth;
-		}
-	}
+
 
 // public properties:
 	/**
@@ -123,54 +115,6 @@ var p = Bitmap.prototype = new DisplayObject();
 	 * @private
 	 **/
 	p.DisplayObject_draw = p.draw;
-	
-	/**
-	 * Draws the display object into the specified context ignoring it's visible, alpha, shadow, and transform.
-	 * Returns true if the draw was handled (useful for overriding functionality).
-	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
-	 * @method draw
-	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
-	 * @param {Boolean} ignoreCache Indicates whether the draw operation should ignore any current cache. 
-	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
-	 * into itself).
-	 **/
-	p.draw = function(ctx, ignoreCache) {
-	
-		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
-
-		if(this.image) {
-			if(this.image!==this._flImg) {
-				this._flImg = this.image;
-				ImageFl.watch(this.image);
-				
-				if(this.sourceRect) {
-					this.sourceRect._flSync(ctx);
-				}
-				
-				if(this.sourceRect!==this._flSourceRect) {
-					this._flSourceRect = this.sourceRect;
-					ctx._flChange.push([this.id, 'rct', this.sourceRect ? this.sourceRect.id : null]);
-				}
-				ctx._flChange.push([this.id, 'img', this.image.__fl.id]);
-			}
-			
-			this.image.__fl.sync(ctx);
-		}
-		return true;
-	}
-	
-	/**
-	 * Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
-	 **/
-	p._flRunCreate = function(ctx){
-	  if(this._flCtx!==ctx){
-		this._flCtx = ctx;
-		ctx._flCreate.push(['bmp', this]);
-		
-		//we have a context, so we can update smoothing
-		this.flSetSmoothing(this.flSmoothing);		
-	  }
-	}
 
 	//Note, the doc sections below document using the specified APIs (from DisplayObject)  from
 	//Bitmap. This is why they have no method implementations.
@@ -212,6 +156,79 @@ var p = Bitmap.prototype = new DisplayObject();
 	p.toString = function() {
 		return "[Bitmap (name="+  this.name +")]";
 	}
+	
+	
+	/**** Begin EaselFL specific code ****/
+	
+	p._flCtx = null;
+	p._flImg = null;
+	p._flSourceRect = null;
+	p._flSmoothing = false;
+	p.flSmoothing = false;
+	
+	p.flSetSmoothing = function(smooth) {
+		if(this._flCtx && smooth!==this._flSmoothing){
+			this.flSmoothing = this._flSmoothing = smooth;
+			this._flCtx._flChange.push([this.id, 'smth', smooth]);	
+		}else{
+			this.flSmoothing = smooth;
+		}
+	}
+
+	/**
+	 * Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
+	 * @protected
+	 * @param Object The CanvasFl context
+	 **/
+	p._flRunCreate = function(ctx){
+	  if(this._flCtx!==ctx){
+		this._flCtx = ctx;
+		ctx._flCreate.push(['bmp', this]);
+		
+		//we have a context, so we can update smoothing
+		this.flSetSmoothing(this.flSmoothing);		
+	  }
+	}
+
+	/**** Draw method is modified in EaselFL ****/	
+	
+	/**
+	 * Draws the display object into the specified context ignoring it's visible, alpha, shadow, and transform.
+	 * Returns true if the draw was handled (useful for overriding functionality).
+	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
+	 * @method draw
+	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
+	 * @param {Boolean} ignoreCache Indicates whether the draw operation should ignore any current cache. 
+	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
+	 * into itself).
+	 **/
+	p.draw = function(ctx, ignoreCache) {
+	
+		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
+
+		if(this.image) {
+			if(this.image!==this._flImg) {
+				this._flImg = this.image;
+				ImageFl.watch(this.image);
+				
+				if(this.sourceRect) {
+					this.sourceRect._flSync(ctx);
+				}
+				
+				if(this.sourceRect!==this._flSourceRect) {
+					this._flSourceRect = this.sourceRect;
+					ctx._flChange.push([this.id, 'rct', this.sourceRect ? this.sourceRect.id : null]);
+				}
+				ctx._flChange.push([this.id, 'img', this.image.__fl.id]);
+			}
+			
+			this.image.__fl.sync(ctx);
+		}
+		return true;
+	}
+
+
+	/**** End EaselFL specific code ****/
 
 // private methods:
 

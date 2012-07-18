@@ -1,4 +1,4 @@
-package display;
+/* TEST */package display;
 
 import flash.display.Sprite;
 import flash.display.DisplayObjectContainer;
@@ -8,6 +8,7 @@ import interfaces.IDisplayable;
 
 import flash.geom.Matrix;
 import flash.filters.DropShadowFilter;
+import utils.CSSColor;
 
 class DisplayObjectFl implements IDisplayable {	
 	
@@ -27,6 +28,7 @@ class DisplayObjectFl implements IDisplayable {
 		execs.set('smen', setMouseEnabled);
 		execs.set('scrs', setHandCursor);
 		execs.set('sbtn', setButtonMode);
+		execs.set('msk', setMask);
 		
 		//-- has callback
 		execs.set('htp',hitTestPoint);
@@ -104,10 +106,29 @@ class DisplayObjectFl implements IDisplayable {
 		target.display.buttonMode = isOn;
 	}
 	
+	inline static private function setMask(target:DisplayObjectFl, maskID:Dynamic):Void{
+		var msk = Control.displays.get(maskID);
+		
+		//-- hack to make transparent bitmaps work as masks
+		if(target.display.mask!=null){
+			target.display.cacheAsBitmap = target.display.mask.cacheAsBitmap = false;
+		}
+		
+		if(msk!=null && Type.getClass(msk) == BitmapFl) {
+			target.display.cacheAsBitmap = msk.display.cacheAsBitmap = true;
+		}
+		//-- end hack
+		
+		target.display.mask = msk.display;
+	}
+	
 	inline static private function shadow(target:DisplayObjectFl, params:Dynamic):Void{
+		CSSColor.parse(params.color);
+		
 		if(!target._shadow) {
 			target._shadow = {
-				color:params.color,
+				color:CSSColor.color,
+				alpha:CSSColor.alpha,
 				blur:params.blur,
 				offsetX:params.offsetX,
 				offsetY:params.offsetY			
@@ -117,11 +138,14 @@ class DisplayObjectFl implements IDisplayable {
 		}
 		else {
 			target._shadow.color = params.color;
+			target._shadow.alpha = params.alpha;
 			target._shadow.blur = params.blur;
 			target._shadow.offsetX = params.offsetX;
 			target._shadow.offsetY = params.offsetY;
 		}
+	
 		target.display.filters[0].color = target._shadow.color;
+		target.display.filters[0].alpha = target._shadow.alpha;
 		target.display.filters[0].blurX = target.display.filters[0].blurX = target._shadow.blur;
 		target.display.filters[0].angle = getAngleFromOffsets(target._shadow.offsetX, target._shadow.offsetY);
 		target.display.filters[0].distance = -(-target._shadow.offsetX - target._shadow.offsetY);	

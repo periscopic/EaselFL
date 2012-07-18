@@ -1,74 +1,134 @@
-/**
- * Current known shortcomings:
- * -Garbage collection will not remove EaselFl objects either from
- * Flash or JS due to stage level index of items. This could be
- * remedied by storing all commands passed to flash for a specific
- * object, removing it from flash and from the index whenever it is
- * removed from the display list. A new instance would then be created
- * again in Flash when added to the display list.
- * -Event handlers are not applied in Flash synchronously
- * -MouseOver, MouseOut, MouseClick tested using shape of
- * display object, not alpha of pixel as in EaselJS
- * -Graphics have lineScaleMode set to 'none' which prevents issue of lines
- * scaling when only scaling horizontal or vertical, but causes lines not
- * to scale proportionately, as they would in EaselJS.
- **/
+/*
+ * EaselFL is EaselJS rendering to Flash
+ * @author Brett Johnson, periscopic.com
+ */
+
+/*
+* CanvasFl
+*
+* Copyright (c) 2012 periscopic, inc
+* 
+* Permission is hereby granted, free of charge, to any person
+* obtaining a copy of this software and associated documentation
+* files (the "Software"), to deal in the Software without
+* restriction, including without limitation the rights to use,
+* copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the
+* Software is furnished to do so, subject to the following
+* conditions:
+* 
+* The above copyright notice and this permission notice shall be
+* included in all copies or substantial portions of the Software.
+* 
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+* OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+* NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+* HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+* OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+/*
+ * CanvasFl is transparently used by the EaselFL Stage
+ * and does not require direct instantiation in normal usage.
+ *
+ * This file code contains two classes, CanvasFl, a compatability
+ * layer that shares some attributes with the HTML5 canvas,
+ * and ContextFl, a compatability layer that shares some
+ * attributes with the HTML5 2D rendering context. ContextFl
+ * is the interface through which all the EaselFL / Flash
+ * communication occurs.
+ */
 
 (function(window) {
 
+   /*-------------------------/
+    
+   /******** ContextFl ********/
+   
+   /**
+    * @constructor
+    * @class ContextFl
+    * @param HTML element
+    **/
    function ContextFl(thecanvas){
-	  this.initialize(thecanvas); 
+      this.initialize(thecanvas); 
    }
+   
    var p = ContextFl.prototype;
    
-   
-	   
    /**
 	* @property _flCommandQueues
-	* @protected
+	* @internal
 	* @type Object
 	**/
    p._flCommandQueues = null;
    
    /**
 	* @property _flInstance
-	* @protected
+	* @internal
 	* @type Flash Movie
 	**/
    p._flInstance = null;	
 
    /**
-	* @property _flInstanceID
-	* @protected
-	* @type String
-	**/
+   * @property _flInstanceID
+   * @internal
+   * @type String
+   **/
    p._flInstanceID = null;
    
+   /**
+   * The queue of commands to send to Flash at the end
+   * of the render cycle that relate to modification of
+   * objects properties.
+   * @property _flChange
+   * @internal
+   * @type Array
+   **/
    p._flChange = null;
+   
+   /**
+   * The queue of commands to send to Flash at the end
+   * of the render cycle that relate to creation of
+   * Flash counterparts to JS objects.
+   * @property _flCreate
+   * @internal
+   * @type Array
+   **/
    p._flCreate = null;
+   
+   /**
+   * Array of Easel objects keyed by their ID numbers.
+   * @property _flIndex
+   * @private
+   * @type Array
+   **/
    p._flItemIndex = null;
    
    /**
 	* The MouseEvent corresponding to an onPress that
 	* has not yet been completed by corresponding onMouseUp
 	* @property _flCurPressEvent
-	* @protected
+	* @private
 	* @type MouseEvent
 	**/
    p._flCurPressEvent = null;
 	
    /**
 	 * @property _flCanvas
-	 * @private
+	 * @internal
 	 * @type CanvasFl
 	 **/
    p._flCanvas = null;
 
 
    /**
-    * Send any queued commands to Flash
-    * @protected
-    **/
+   * Send all queued commands to Flash
+   * @internal
+   **/
    p._flFlush = function() {		
       if(this.flReady){
          var inst = this._flInstance;
@@ -80,7 +140,7 @@
             var creates = this._flCreate, item, index = this._flItemIndex;
 
             for(var i=0, l=creates.length; i<l; ++i) {    
-			   item = creates[i][1];         
+               item = creates[i][1];         
                creates[i][1] = item.id;
                index[item.id] = item;	
             }
@@ -101,17 +161,17 @@
    }
    
    /**
-    * Invoke a function in flash
+    * Synchronously invoke a method in Flash
     * @method flInvoke
+    * @internal
     * @param Dynamic
     * @return Dynamic
     **/
    p.flInvoke = function(id, methodId, args) {	 
-	  if(this._flInstance){
-		 //return this._flInstance.sendInvoke(arguments);
-		 return this._flInstance.sendInvoke([id, methodId, args]);
-	  }
-	  return null;
+      if(this._flInstance){
+       return this._flInstance.sendInvoke([id, methodId, args]);
+      }
+      return null;
    }   
     
    /**
@@ -119,27 +179,30 @@
 	 * @method _flOnReady
 	 * @protected
 	 **/
-	p._flOnReady = function() {
-	  this._flInstance = ContextFl._flGetInstance( this._flInstanceID );
-	  this.flReady = true;
-	  this._flFlush();
+   p._flOnReady = function() {
+      this._flInstance = ContextFl._flGetInstance( this._flInstanceID );
+      this.flReady = true;
+      this._flFlush();
 		
       if(this._flCanvas._stage && this._flCanvas._stage.flOnReady){
-		 this._flCanvas._stage.flReady = true;
+         this._flCanvas._stage.flReady = true;
          this._flCanvas._stage.flOnReady(this._flCanvas._stage);
       }
    }
     
-    p.initialize = function(thecanvas){
+   /**
+   * Initialize the CanvasFl with an HTML element
+   * @private
+   * @param HTML element
+   **/ 
+   p.initialize = function(thecanvas){
       
       var myID, self = this;
 	  
       var cnvID = thecanvas.getAttribute('id'),
-     // cnvWd = thecanvas.getAttribute('width') || CanvasFl.FL_WIDTH,
-     // cnvHt = thecanvas.getAttribute('height') || CanvasFl.FL_HEIGHT,
       fl_swf_url = thecanvas.getAttribute('fl_swf_url') || CanvasFl.FL_URL;
       
-	  //-- Handle dispatches from Flash
+      //-- Handle dispatches from Flash
       function handleEvents(obj) {
          var evt, item, target;
          //-- Mouse events
@@ -166,12 +229,13 @@
                item = target = self._flItemIndex[obj.id];
             }
             
+            //-- Dispatch the event
             if(item && item[obj.type]){
                evt =  new MouseEvent(obj.type, obj.stageX, obj.stageY, target, null);
                item[obj.type](evt);
                
+               //-- Set as current press event and dispatch onMouseMove and onMouseUp to this event
                if(obj.type==='onPress'){
-                  //--Set as current press event and dispatch onMouseMove and onMouseUp to this
                   self._flCurPressEvent = evt;
                }
             }
@@ -190,9 +254,9 @@
       myID = 'EaselFl_'+ContextFl._flCount++;
       this._flInstanceID = cnvID || myID;
 	  
-	  if(cnvID!==this._flInstanceID){
-		 thecanvas.setAttribute('id', myID);
-	  }
+      if(cnvID!==this._flInstanceID){
+         thecanvas.setAttribute('id', myID);
+      }
 	  
 	          
       //-- Create proxy of function to be called when Flash Movie is ready
@@ -203,10 +267,15 @@
       }
      
       //-- Embed and initial loading of Flash Movie
-     // ContextFl._flLoadInstance(myID, cnvWd, cnvHt, this._flInstanceID, fl_swf_url);
-      ContextFl._flLoadInstance(myID, thecanvas.width, thecanvas.height, this._flInstanceID, fl_swf_url);
+      ContextFl._flLoadInstance(myID, thecanvas.width, thecanvas.height, thecanvas.transparent, this._flInstanceID, fl_swf_url);
    }
     
+   /**
+   * Increment of number of contexts created.
+   * @private
+   * @property
+   * @type Integer
+   **/
    ContextFl._flCount = 0;
   
    /**
@@ -215,22 +284,23 @@
   * @param {int} id             ID of the container
   * @param {int} width          Width of the container to load the swf into
   * @param {int} height         Height of the container to load the swf into
+  * @param {bool} transparent   If the rendering context should be transparent
   * @param {String} elementId   Unique instance ID of this CanvasFl
-  * @param {String} swfUrl      The name and location of the EaselFl.swf file.  Defaults to :
+  * @param {String} swfUrl      The name and location of the EaselFl.swf file.
   **/
-   ContextFl._flLoadInstance = function(id, width, height, elementId, swfUrl) {
+   ContextFl._flLoadInstance = function(id, width, height, transparent, elementId, swfUrl) {
 	
-	  var flashvars = {
-		 id : id
-	  }
-	  
-	  var params = {
-		 scale : 'noscale',
-		 salign : 'TL',
-		 wmode : (CanvasFl.FL_TRANSPARENT?'transparent':'opaque')
-	  }
- 
-	 swfobject.embedSWF(swfUrl, elementId, width.toString(), height.toString(), '9.0.0', false, flashvars, params)
+      var flashvars = {
+       id : id
+      };
+      
+      var params = {
+         scale : 'noscale',
+         salign : 'TL',
+         wmode : (transparent?'transparent':'opaque')
+      };
+   
+     swfobject.embedSWF(swfUrl, elementId, width.toString(), height.toString(), '9.0.0', false, flashvars, params);
    }   
 
    //-- Get the movie object by id
@@ -241,27 +311,72 @@
 			   return document[id];
 	   }
    }
+   
+   /*-------------------*/
+   
+   /***** CanvasFl ******/
 
-   function CanvasFl(thecanvas, fl_url){
-	  thecanvas.width = parseFloat(thecanvas.getAttribute('width') || CanvasFl.FL_WIDTH);
+   /**
+    * Create a new CanvasFl instance. This is handled internally
+    * by the EaselFL Stage class.
+    * @constructor
+    * @param HTML element
+    */
+   function CanvasFl(thecanvas){
+      var trans;
+      
+      thecanvas.width = parseFloat(thecanvas.getAttribute('width') || CanvasFl.FL_WIDTH);
       thecanvas.height = parseFloat(thecanvas.getAttribute('height') || CanvasFl.FL_HEIGHT);
+      
+      trans = thecanvas.getAttribute('transparent');
+      thecanvas.transparent = !trans || trans===true || trans.toLowerCase()==='true';
 	  
-	   this._ctx = new ContextFl(thecanvas);
-	   this._ctx._flCanvas = this;
-	   this.width = thecanvas.width;
-	   this.height = thecanvas.height;
+      this._ctx = new ContextFl(thecanvas);
+      this._ctx._flCanvas = this;
+      this.width = thecanvas.width;
+      this.height = thecanvas.height;
    }
    
    var p = CanvasFl.prototype;
 
-   p._ctx = null;   
+   /**
+   * @internal
+   * @property _ctx
+   * @type ContextFl
+   **/
+   p._ctx = null;
+   
+   /**
+    * @private
+    * @property _stage
+    * @type Stage
+    **/
    p._stage = null;
+   
+   /**
+   * @READ-ONLY The width of the CanvasFl
+   * @property width
+   * @type Number
+   **/
    p.width = 0;
+   
+   /**
+   * @READ-ONLY The height of the CanvasFl
+   * @property height
+   * @type Number
+   **/
    p.height = 0;
    
    /**
+   * @READ-ONLY If the CanvasFl context is transparent
+   * @property transparent
+   * @type Boolean
+   **/
+   p.transparent = true;
+   
+   /**
 	* READ-ONLY Used for testing type in Stage.js
-	* @property
+	* @property isFl
 	* @type Boolean
 	**/
    p.isFl = true;
@@ -275,14 +390,9 @@
 
    //-- Static	
    //-- Defaults
-
    CanvasFl.FL_URL = 'EaselFl.swf';
-   CanvasFl.FL_TRANSPARENT = true;
    CanvasFl.FL_WIDTH = '400';
    CanvasFl.FL_HEIGHT= '400';
-   CanvasFl.LOG_PART_IMPLEMENTED = true; //--log warning notes for partial implementations
-   CanvasFl.THROW_UNIMPLEMENTED = true; //--log unimplemented features
-   
 
    //-- Object on which 'ready' callback is exposed to Flash Movie
    CanvasFl._flHooks = {};

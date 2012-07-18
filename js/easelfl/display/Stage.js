@@ -313,7 +313,7 @@ var p = Stage.prototype = new Container();
 	 * @method clear
 	 **/
 	p.clear = function() {
-		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaseFl:Stage.clear not yet implemented';
+		if(Stage.FL_THROW_UNIMPLEMENTED) throw 'EaseFl:Stage.clear not yet implemented';
 	
 		/*if (!this.canvas) { return; }
 		var ctx = this.canvas.getContext("2d");
@@ -332,7 +332,7 @@ var p = Stage.prototype = new Container();
 	 * @return {String} a Base64 encoded image.
 	 **/
 	p.toDataURL = function(backgroundColor, mimeType) {
-		if(CanvasFl.THROW_UNIMPLEMENTED) throw "Stage.toDataURL not implemented in EaselFl";
+		if(Stage.FL_THROW_UNIMPLEMENTED) throw "Stage.toDataURL not implemented in EaselFl";
 		/*if(!mimeType) {
 			mimeType = "image/png";
 		}
@@ -567,6 +567,9 @@ var p = Stage.prototype = new Container();
 			}
 		}*/
 	}
+	
+	Stage.FL_THROW_UNIMPLEMENTED = true; //--throw error on use of unimplemented features
+	Stage.FL_LOG_PART_IMPLEMENTED = true; //--log warning notes for partial implementations
 
 window.Stage = Stage;
 }(window));

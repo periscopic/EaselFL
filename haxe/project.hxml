@@ -2,4 +2,4 @@
 -swf-header 100:100:60:FFFFFF
 -main Main
 -cp src
--D debug
+# -D debug

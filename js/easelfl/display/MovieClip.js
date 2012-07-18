@@ -44,7 +44,6 @@
  * @param {Object} labels A hash of labels to pass to the timeline instance associated with this MovieClip.
  **/
 var MovieClip = function(mode, startPosition, loop, labels) {
-	throw 'EaselFl:MovieClip currently not implemented';
   this.initialize(mode, startPosition, loop, labels);
 }
 var p = MovieClip.prototype = new Container();
