@@ -783,8 +783,9 @@ var p = DisplayObject.prototype;
 	/**
 	 * @method _flSyncProps
 	 * @protected
+	 * @param ContextFl
 	 **/
-	p._flSyncProps = function() {
+	p._flSyncProps = function(ctx) {
 
 		//-- Synchronize Visibility		
 		if( this.visible !== this._flVisible) {			
@@ -851,10 +852,14 @@ var p = DisplayObject.prototype;
 		}
 		
 		//-- Synchronize Shadow
+		if(this.shadow) {
+			this.shadow._flSyncProps(ctx);
+		}
 		if( this.shadow !== this._flShadow) {
 			this._flShadow = this.shadow;
-			this._flChange.push([this.id, 'sh', this.shadow]);
+			this._flChange.push([this.id, 'shd', this.shadow.id]);
 		}
+		
 		
 		//-- Synchronize Mask
 		if(this.mask !== this._flMask) {
@@ -974,7 +979,7 @@ var p = DisplayObject.prototype;
 	 * into itself).
 	 **/
 	p.draw = function(ctx, ignoreCache) {
-		this._flSyncProps();
+		this._flSyncProps(ctx);
 		
 		if(this._flChange.length){
 			for(var i=0, l=this._flChange.length; i<l; ++i) {

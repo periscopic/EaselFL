@@ -45,6 +45,11 @@ function init(){
 	g.endFill();
 	shp.shadow = new Shadow('#2895AE', 0, 0, 8);
 	myStage.addChild(shp);
+	
+	setTimeout(function(){
+		shp.shadow.color = '#F00';
+		shp.shadow.blur = 16;
+	}, 3000)
 }
 
 </script>

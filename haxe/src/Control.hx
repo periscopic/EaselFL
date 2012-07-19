@@ -13,6 +13,7 @@ import display.GraphicsFl;
 import display.ImageFl;
 import display.FrameFl;
 import display.TextFl;
+import display.ShadowFl;
 import geom.RectangleFl;
 
 import utils.CSSFont;
@@ -29,6 +30,7 @@ class Control {
 	static public var rectangles:IntHash<RectangleFl>;
 	static public var frames:IntHash<FrameFl>;
 	static public var texts:IntHash<TextFl>;
+	static public var shadows:IntHash<ShadowFl>;
 	static public var makers:Hash<Int->Void>;
 	static public var stageFl:StageFl;
 	
@@ -46,6 +48,7 @@ class Control {
 		rectangles = new IntHash<RectangleFl>();
 		frames = new IntHash<FrameFl>();
 		texts = new IntHash<TextFl>();
+		shadows = new IntHash<ShadowFl>();
 		makers = new Hash<Int->Void>();
 		
 		makers.set('img', image);
@@ -57,6 +60,7 @@ class Control {
 		makers.set('stg', stage);
 		makers.set('rct', rectangle);
 		makers.set('frm', frame);
+		makers.set('shd', shadow);
 		makers.set('txt', text);
 		
 		ImageFl.init();
@@ -68,11 +72,8 @@ class Control {
 		BitmapAnimationFl.init();
 		FrameFl.init();
 		TextFl.init();
+		ShadowFl.init();
 		StageFl.init();
-		
-		//CSSFont.parse('36px Arial Bold');
-		//trace(CSSFont);
-		
 	}
 	
 	/*
@@ -159,6 +160,12 @@ class Control {
 		displays.set(id, txt);
 		texts.set(id, txt);
 		items.set(id, txt);
+	}
+	
+	inline static private function shadow(id:Int):Void{
+		var sh:ShadowFl = new ShadowFl(id);
+		shadows.set(id, sh);
+		items.set(id, sh);
 	}
 	
 	inline static private function stage(id:Int):Void{

@@ -1,4 +1,4 @@
-/* TEST */package display;
+package display;
 
 import flash.display.Sprite;
 import flash.display.DisplayObjectContainer;
@@ -15,7 +15,7 @@ class DisplayObjectFl implements IDisplayable {
 	static public function mapMethods(execs:Hash<Dynamic>){
 		execs.set('op',opacity);
 		execs.set('vs',visible);
-		execs.set('sh', shadow);
+		execs.set('shd', shadow);
 		execs.set('mtx', setMatrix);		
 		execs.set('amck', addClickHandler);
 		execs.set('amot', addOutHandler);
@@ -112,39 +112,31 @@ class DisplayObjectFl implements IDisplayable {
 		target.display.mask = Control.displays.exists(maskID) ? Control.displays.get(maskID).display : null;
 	}
 	
-	inline static private function shadow(target:DisplayObjectFl, params:Dynamic):Void{
-		CSSColor.parse(params.color);
+	inline static private function shadow(target:DisplayObjectFl, id:Dynamic):Void{
+		var flt = Control.shadows.get(id);
 		
-		if(!target._shadow) {
-			target._shadow = {
-				color:CSSColor.color,
-				alpha:CSSColor.alpha,
-				blur:params.blur,
-				offsetX:params.offsetX,
-				offsetY:params.offsetY			
-			};
-			var ds:DropShadowFilter =  new DropShadowFilter(-(-target._shadow.offsetX - target._shadow.offsetY), getAngleFromOffsets(target._shadow.offsetX, target._shadow.offsetY), target._shadow.color, 1, target._shadow.blur, target._shadow.blur, 1, 2);
-			target.display.filters = [ds];
+		if(target._shadow!=null) {
+			target._shadow.unwatch(target.handleShadowUpdate);
+		}else {
+			var filters = target.display.filters;
+			filters[ShadowFl.INDEX] = new DropShadowFilter();
+			target.display.filters = filters;
 		}
-		else {
-			target._shadow.color = params.color;
-			target._shadow.alpha = params.alpha;
-			target._shadow.blur = params.blur;
-			target._shadow.offsetX = params.offsetX;
-			target._shadow.offsetY = params.offsetY;
+		
+		target._shadow = flt;
+		
+		if(flt==null) {
+			var filters = target.display.filters;
+			filters[ShadowFl.INDEX] = null;
+			target.display.filters = filters;
+		} else {
+			flt.watch(target.handleShadowUpdate);
+			target.handleShadowUpdate();
 		}
-	
-		target.display.filters[0].color = target._shadow.color;
-		target.display.filters[0].alpha = target._shadow.alpha;
-		target.display.filters[0].blurX = target.display.filters[0].blurX = target._shadow.blur;
-		target.display.filters[0].angle = getAngleFromOffsets(target._shadow.offsetX, target._shadow.offsetY);
-		target.display.filters[0].distance = -(-target._shadow.offsetX - target._shadow.offsetY);	
+		
 	}
 	
-	inline private static function getAngleFromOffsets(ox:Float, oy:Float):Float {
-		var angle = Math.atan2(oy,ox) * 180/Math.PI;
-		return angle;
-	}
+
 	
 	//TODO: decide if these should be moved to a Stage specific class
 	
@@ -175,7 +167,7 @@ class DisplayObjectFl implements IDisplayable {
 	public var display:Sprite;
 	public var id:Int;
 	// stores the shadow props
-	private var _shadow:Dynamic;
+	private var _shadow:ShadowFl;
 	
 	public function new( id:Int ){ this.id = id;}
 	
@@ -205,6 +197,15 @@ class DisplayObjectFl implements IDisplayable {
 		Main.dispatch(evt);	
 	}
 	
-	
-	
+	public function handleShadowUpdate(?e:Dynamic):Void {
+
+		var filters = display.filters;
+		filters[ShadowFl.INDEX].color = _shadow.color;
+		filters[ShadowFl.INDEX].alpha = _shadow.alpha;
+		filters[ShadowFl.INDEX].blurX = _shadow.blur;
+		filters[ShadowFl.INDEX].blurY = _shadow.blur;
+		filters[ShadowFl.INDEX].angle = _shadow.angle;
+		filters[ShadowFl.INDEX].distance = _shadow.distance;
+		display.filters = filters;
+	}
 }

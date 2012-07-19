@@ -156,6 +156,36 @@
 	<e path="Void"/>
 </f></new>
 	</class>
+	<class path="interfaces.IWatchable" params="" file="src/interfaces/IWatchable.hx" interface="1">
+		<watch public="1" set="method"><f a="method">
+	<f a="">
+		<d/>
+		<e path="Void"/>
+	</f>
+	<e path="Void"/>
+</f></watch>
+		<unwatch public="1" set="method"><f a="method">
+	<f a="">
+		<d/>
+		<e path="Void"/>
+	</f>
+	<e path="Void"/>
+</f></unwatch>
+		<haxe_doc>
+ * Implemented by objects upon which others are dependent 
+ * and need to trigger changes when the dependent object changes.
+ </haxe_doc>
+	</class>
+	<class path="interfaces.IBitmapData" params="" file="src/interfaces/IBitmapData.hx" interface="1">
+		<implements path="interfaces.IWatchable"/>
+		<bitmapData public="1" set="null"><c path="flash.display.BitmapData"/></bitmapData>
+		<ready public="1" set="null"><e path="Bool"/></ready>
+	</class>
+	<class path="interfaces.IExec" params="" file="src/interfaces/IExec.hx" interface="1"><exec public="1" set="method"><f a="method:?arguments">
+	<c path="String"/>
+	<d/>
+	<d/>
+</f></exec></class>
 	<class path="flash.events.IEventDispatcher" params="" file="/usr/lib/haxe/std/flash9/events/IEventDispatcher.hx" extern="1" interface="1">
 		<addEventListener public="1" set="method"><f a="type:listener:?useCapture:?priority:?useWeakReference">
 	<c path="String"/>
@@ -230,90 +260,6 @@
 	<e path="Void"/>
 </f></new>
 	</class>
-	<class path="flash.media.Camera" params="" file="/usr/lib/haxe/std/flash9/media/Camera.hx" extern="1">
-		<extends path="flash.events.EventDispatcher"/>
-		<isSupported public="1" static="1"><e path="Bool"/></isSupported>
-		<names public="1" set="null" static="1"><c path="Array"><d/></c></names>
-		<_scanHardware public="1" static="1"><f a=""><e path="Void"/></f></_scanHardware>
-		<getCamera public="1" set="method" static="1"><f a="?name">
-	<c path="String"/>
-	<c path="flash.media.Camera"/>
-</f></getCamera>
-		<activityLevel public="1" set="null"><c path="Float"/></activityLevel>
-		<bandwidth public="1" set="null"><c path="Int"/></bandwidth>
-		<currentFPS public="1" set="null"><c path="Float"/></currentFPS>
-		<fps public="1" set="null"><c path="Float"/></fps>
-		<height public="1" set="null"><c path="Int"/></height>
-		<index public="1" set="null"><c path="Int"/></index>
-		<keyFrameInterval public="1" set="null"><c path="Int"/></keyFrameInterval>
-		<loopback public="1" set="null"><e path="Bool"/></loopback>
-		<motionLevel public="1" set="null"><c path="Int"/></motionLevel>
-		<motionTimeout public="1" set="null"><c path="Int"/></motionTimeout>
-		<muted public="1" set="null"><e path="Bool"/></muted>
-		<name public="1" set="null"><c path="String"/></name>
-		<quality public="1" set="null"><c path="Int"/></quality>
-		<width public="1" set="null"><c path="Int"/></width>
-		<setCursor public="1" set="method"><f a="value">
-	<e path="Bool"/>
-	<e path="Void"/>
-</f></setCursor>
-		<setKeyFrameInterval public="1" set="method"><f a="keyFrameInterval">
-	<c path="Int"/>
-	<e path="Void"/>
-</f></setKeyFrameInterval>
-		<setLoopback public="1" set="method"><f a="?compress">
-	<e path="Bool"/>
-	<e path="Void"/>
-</f></setLoopback>
-		<setMode public="1" set="method"><f a="width:height:fps:?favorArea">
-	<c path="Int"/>
-	<c path="Int"/>
-	<c path="Float"/>
-	<e path="Bool"/>
-	<e path="Void"/>
-</f></setMode>
-		<setMotionLevel public="1" set="method"><f a="motionLevel:?timeout">
-	<c path="Int"/>
-	<c path="Int"/>
-	<e path="Void"/>
-</f></setMotionLevel>
-		<setQuality public="1" set="method"><f a="bandwidth:quality">
-	<c path="Int"/>
-	<c path="Int"/>
-	<e path="Void"/>
-</f></setQuality>
-		<new public="1" set="method"><f a=""><e path="Void"/></f></new>
-	</class>
-	<class path="interfaces.IWatchable" params="" file="src/interfaces/IWatchable.hx" interface="1">
-		<watch public="1" set="method"><f a="method">
-	<f a="">
-		<d/>
-		<e path="Void"/>
-	</f>
-	<e path="Void"/>
-</f></watch>
-		<unwatch public="1" set="method"><f a="method">
-	<f a="">
-		<d/>
-		<e path="Void"/>
-	</f>
-	<e path="Void"/>
-</f></unwatch>
-		<haxe_doc>
- * Implemented by objects upon which others are dependent 
- * and need to trigger changes when the dependent object changes.
- </haxe_doc>
-	</class>
-	<class path="interfaces.IBitmapData" params="" file="src/interfaces/IBitmapData.hx" interface="1">
-		<implements path="interfaces.IWatchable"/>
-		<bitmapData public="1" set="null"><c path="flash.display.BitmapData"/></bitmapData>
-		<ready public="1" set="null"><e path="Bool"/></ready>
-	</class>
-	<class path="interfaces.IExec" params="" file="src/interfaces/IExec.hx" interface="1"><exec public="1" set="method"><f a="method:?arguments">
-	<c path="String"/>
-	<d/>
-	<d/>
-</f></exec></class>
 	<class path="display.ImageFl" params="" file="src/display/ImageFl.hx">
 		<implements path="interfaces.IWatchable"/>
 		<implements path="interfaces.IBitmapData"/>
@@ -390,6 +336,60 @@
 	<c path="Int"/>
 	<e path="Void"/>
 </f></new>
+	</class>
+	<class path="flash.media.Camera" params="" file="/usr/lib/haxe/std/flash9/media/Camera.hx" extern="1">
+		<extends path="flash.events.EventDispatcher"/>
+		<isSupported public="1" static="1"><e path="Bool"/></isSupported>
+		<names public="1" set="null" static="1"><c path="Array"><d/></c></names>
+		<_scanHardware public="1" static="1"><f a=""><e path="Void"/></f></_scanHardware>
+		<getCamera public="1" set="method" static="1"><f a="?name">
+	<c path="String"/>
+	<c path="flash.media.Camera"/>
+</f></getCamera>
+		<activityLevel public="1" set="null"><c path="Float"/></activityLevel>
+		<bandwidth public="1" set="null"><c path="Int"/></bandwidth>
+		<currentFPS public="1" set="null"><c path="Float"/></currentFPS>
+		<fps public="1" set="null"><c path="Float"/></fps>
+		<height public="1" set="null"><c path="Int"/></height>
+		<index public="1" set="null"><c path="Int"/></index>
+		<keyFrameInterval public="1" set="null"><c path="Int"/></keyFrameInterval>
+		<loopback public="1" set="null"><e path="Bool"/></loopback>
+		<motionLevel public="1" set="null"><c path="Int"/></motionLevel>
+		<motionTimeout public="1" set="null"><c path="Int"/></motionTimeout>
+		<muted public="1" set="null"><e path="Bool"/></muted>
+		<name public="1" set="null"><c path="String"/></name>
+		<quality public="1" set="null"><c path="Int"/></quality>
+		<width public="1" set="null"><c path="Int"/></width>
+		<setCursor public="1" set="method"><f a="value">
+	<e path="Bool"/>
+	<e path="Void"/>
+</f></setCursor>
+		<setKeyFrameInterval public="1" set="method"><f a="keyFrameInterval">
+	<c path="Int"/>
+	<e path="Void"/>
+</f></setKeyFrameInterval>
+		<setLoopback public="1" set="method"><f a="?compress">
+	<e path="Bool"/>
+	<e path="Void"/>
+</f></setLoopback>
+		<setMode public="1" set="method"><f a="width:height:fps:?favorArea">
+	<c path="Int"/>
+	<c path="Int"/>
+	<c path="Float"/>
+	<e path="Bool"/>
+	<e path="Void"/>
+</f></setMode>
+		<setMotionLevel public="1" set="method"><f a="motionLevel:?timeout">
+	<c path="Int"/>
+	<c path="Int"/>
+	<e path="Void"/>
+</f></setMotionLevel>
+		<setQuality public="1" set="method"><f a="bandwidth:quality">
+	<c path="Int"/>
+	<c path="Int"/>
+	<e path="Void"/>
+</f></setQuality>
+		<new public="1" set="method"><f a=""><e path="Void"/></f></new>
 	</class>
 	<class path="flash.text.TextFormat" params="" file="/usr/lib/haxe/std/flash9/text/TextFormat.hx" extern="1">
 		<align public="1"><e path="flash.text.TextFormatAlign"/></align>
@@ -2004,22 +2004,17 @@
 	<d/>
 	<e path="Void"/>
 </f></setMask>
-		<shadow get="inline" set="null" line="115" static="1"><f a="target:params">
+		<shadow get="inline" set="null" line="115" static="1"><f a="target:id">
 	<c path="display.DisplayObjectFl"/>
 	<d/>
 	<e path="Void"/>
 </f></shadow>
-		<getAngleFromOffsets get="inline" set="null" line="144" static="1"><f a="ox:oy">
-	<c path="Float"/>
-	<c path="Float"/>
-	<c path="Float"/>
-</f></getAngleFromOffsets>
-		<lastMoveEvtTime line="152" static="1"><c path="Float"/></lastMoveEvtTime>
-		<handleStageMove set="method" line="154" static="1"><f a="e">
+		<lastMoveEvtTime line="144" static="1"><c path="Float"/></lastMoveEvtTime>
+		<handleStageMove set="method" line="146" static="1"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></handleStageMove>
-		<handleStageUp set="method" line="164" static="1"><f a="e">
+		<handleStageUp set="method" line="156" static="1"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></handleStageUp>
@@ -2028,24 +2023,28 @@
 			<haxe_doc> Instance </haxe_doc>
 		</display>
 		<id public="1"><c path="Int"/></id>
-		<_shadow><d/></_shadow>
-		<handleClick public="1" set="method" line="182"><f a="e">
+		<_shadow><c path="display.ShadowFl"/></_shadow>
+		<handleClick public="1" set="method" line="174"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></handleClick>
-		<handleOver public="1" set="method" line="187"><f a="e">
+		<handleOver public="1" set="method" line="179"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></handleOver>
-		<handleOut public="1" set="method" line="192"><f a="e">
+		<handleOut public="1" set="method" line="184"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></handleOut>
-		<handlePress public="1" set="method" line="197"><f a="e">
+		<handlePress public="1" set="method" line="189"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></handlePress>
-		<new public="1" set="method" line="180"><f a="id">
+		<handleShadowUpdate public="1" set="method" line="200"><f a="?e">
+	<d/>
+	<e path="Void"/>
+</f></handleShadowUpdate>
+		<new public="1" set="method" line="172"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></new>
@@ -2877,61 +2876,66 @@
 		<rectangles public="1" static="1"><c path="IntHash"><c path="geom.RectangleFl"/></c></rectangles>
 		<frames public="1" static="1"><c path="IntHash"><c path="display.FrameFl"/></c></frames>
 		<texts public="1" static="1"><c path="IntHash"><c path="display.TextFl"/></c></texts>
+		<shadows public="1" static="1"><c path="IntHash"><c path="display.ShadowFl"/></c></shadows>
 		<makers public="1" static="1"><c path="Hash"><f a="">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></c></makers>
 		<stageFl public="1" static="1"><c path="display.StageFl"/></stageFl>
-		<init public="1" set="method" line="39" static="1"><f a=""><e path="Void"/></f></init>
-		<createItems public="1" get="inline" set="null" line="81" static="1"><f a="a">
+		<init public="1" set="method" line="41" static="1"><f a=""><e path="Void"/></f></init>
+		<createItems public="1" get="inline" set="null" line="82" static="1"><f a="a">
 	<c path="Array"><c path="Array"><d/></c></c>
 	<e path="Void"/>
 </f></createItems>
-		<changeItems public="1" get="inline" set="null" line="92" static="1"><f a="a">
+		<changeItems public="1" get="inline" set="null" line="93" static="1"><f a="a">
 	<c path="Array"><c path="Array"><d/></c></c>
 	<e path="Void"/>
 </f></changeItems>
-		<invoke public="1" get="inline" set="null" line="103" static="1"><f a="cmd">
+		<invoke public="1" get="inline" set="null" line="104" static="1"><f a="cmd">
 	<d/>
 	<d/>
 </f></invoke>
-		<image get="inline" set="null" line="107" static="1"><f a="id">
+		<image get="inline" set="null" line="108" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></image>
-		<bitmap get="inline" set="null" line="113" static="1"><f a="id">
+		<bitmap get="inline" set="null" line="114" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></bitmap>
-		<bitmapAnimation get="inline" set="null" line="119" static="1"><f a="id">
+		<bitmapAnimation get="inline" set="null" line="120" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></bitmapAnimation>
-		<shape get="inline" set="null" line="126" static="1"><f a="id">
+		<shape get="inline" set="null" line="127" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></shape>
-		<graphics get="inline" set="null" line="132" static="1"><f a="id">
+		<graphics get="inline" set="null" line="133" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></graphics>
-		<container get="inline" set="null" line="138" static="1"><f a="id">
+		<container get="inline" set="null" line="139" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></container>
-		<rectangle get="inline" set="null" line="145" static="1"><f a="id">
+		<rectangle get="inline" set="null" line="146" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></rectangle>
-		<frame get="inline" set="null" line="151" static="1"><f a="id">
+		<frame get="inline" set="null" line="152" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></frame>
-		<text get="inline" set="null" line="157" static="1"><f a="id">
+		<text get="inline" set="null" line="158" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></text>
-		<stage get="inline" set="null" line="164" static="1"><f a="id">
+		<shadow get="inline" set="null" line="165" static="1"><f a="id">
+	<c path="Int"/>
+	<e path="Void"/>
+</f></shadow>
+		<stage get="inline" set="null" line="171" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></stage>
@@ -3639,6 +3643,83 @@
 	<c path="flash.utils.ByteArray"/>
 	<e path="Void"/>
 </f></upload>
+	</class>
+	<class path="display.ShadowFl" params="" file="src/display/ShadowFl.hx">
+		<implements path="interfaces.IWatchable"/>
+		<implements path="interfaces.IExec"/>
+		<INDEX public="1" get="inline" set="null" line="14" static="1"><c path="Int"/></INDEX>
+		<SHADOW_CHANGE get="inline" set="null" line="16" static="1"><c path="String"/></SHADOW_CHANGE>
+		<dispatcher line="17" static="1"><c path="flash.events.EventDispatcher"/></dispatcher>
+		<execs static="1"><c path="Hash"><d/></c></execs>
+		<init public="1" set="method" line="20" static="1"><f a=""><e path="Void"/></f></init>
+		<updateShadow get="inline" set="null" line="31" static="1">
+			<f a="target:args">
+				<c path="display.ShadowFl"/>
+				<d/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Change the source url of an ImageFl
+	 * @param ImageFl
+	 * @param String the URL
+	 </haxe_doc>
+		</updateShadow>
+		<getAngleFromOffsets get="inline" set="null" line="49" static="1"><f a="ox:oy">
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+</f></getAngleFromOffsets>
+		<eventID><c path="String"/></eventID>
+		<colorString><c path="String"/></colorString>
+		<color public="1" set="null"><c path="Int"/></color>
+		<offsetX public="1" set="null"><c path="Float"/></offsetX>
+		<offsetY public="1" set="null"><c path="Float"/></offsetY>
+		<alpha public="1" set="null"><c path="Float"/></alpha>
+		<blur public="1" set="null"><c path="Float"/></blur>
+		<angle public="1" set="null"><c path="Float"/></angle>
+		<distance public="1" set="null"><c path="Float"/></distance>
+		<watch public="1" get="inline" set="null" line="78">
+			<f a="method">
+				<f a="">
+					<d/>
+					<e path="Void"/>
+				</f>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Add method to be called when bitmapdata changes
+	 * @param Method
+	 </haxe_doc>
+		</watch>
+		<unwatch public="1" get="inline" set="null" line="86">
+			<f a="method">
+				<f a="">
+					<d/>
+					<e path="Void"/>
+				</f>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Remove method to be called when bitmapdata changes
+	 * @param Method
+	 </haxe_doc>
+		</unwatch>
+		<exec public="1" get="inline" set="null" line="95">
+			<f a="method:?arguments">
+				<c path="String"/>
+				<d/>
+				<d/>
+			</f>
+			<haxe_doc>
+	 * Execute a method on this ShadowFl object
+	 * @param String key corresponding to the method
+	 * @param Array arguments for the method
+	 </haxe_doc>
+		</exec>
+		<new public="1" set="method" line="66"><f a="id">
+	<c path="Int"/>
+	<e path="Void"/>
+</f></new>
 	</class>
 	<class path="flash.media.StageVideo" params="" file="/usr/lib/haxe/std/flash9/media/StageVideo.hx" extern="1">
 		<extends path="flash.events.EventDispatcher"/>

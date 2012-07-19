@@ -22,10 +22,10 @@ that are completely transparent.
 
 
 ---- Rendering ----
--Only system fonts are currently available in Flash, this could
-be rendered by implementing dynamic font loading.
+-Only system fonts are currently available in Flash; this could
+be remedied by implementing dynamic font loading.
 
--Videos and displayobject caches cannot be used to render either
+-Videos and displayobject caches cannot yet be used to render either
 bitmaps or fills.
 
 -Masking is not implemented.
