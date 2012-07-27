@@ -91,6 +91,8 @@ var ScriptLoader = {
     }
     
     
+    //-- temporarily allow use without namespace
+    window.createjs = window;
     
     return {
         useCanvas : window.location.search.toUpperCase().indexOf('CANVAS')>=0,	
@@ -98,7 +100,29 @@ var ScriptLoader = {
         loadWithEaselJS : function(init) {
             usingCanvas = true;
             buildHTML('Canvas + EaselJS', 'view in Flash with EaselFL');
-            ScriptLoader.load('js/easeljs-0.4.2.min.js', init);
+             ScriptLoader.loadInOrder([
+                'js/easeljs/geom/Matrix2D.js',
+                'js/easeljs/geom/Point.js',
+                'js/easeljs/geom/Rectangle.js',
+                'js/easeljs/utils/UID.js',
+                'js/easeljs/display/DisplayObject.js',
+                'js/easeljs/display/Container.js',
+                'js/easeljs/display/Stage.js',
+                'js/easeljs/display/Graphics.js',
+                'js/easeljs/display/Shape.js',
+                'js/easeljs/display/Bitmap.js',
+                'js/easeljs/display/SpriteSheet.js',
+                'js/easeljs/display/BitmapAnimation.js',
+                'js/easeljs/display/Text.js',
+                'js/easeljs/display/Shadow.js',
+                'js/easeljs/filters/Filter.js',
+                'js/easeljs/filters/ColorMatrix.js',
+                'js/easeljs/filters/ColorMatrixFilter.js',
+                'js/easeljs/events/MouseEvent.js',
+                'js/easeljs/utils/Ticker.js'
+                ], init)
+             
+           // ScriptLoader.load('js/easeljs-0.4.2.min.js', init);
         },
       
         loadWithEaselFL : function(init) {
@@ -125,6 +149,9 @@ var ScriptLoader = {
                 '../js/easelfl/display/BitmapAnimation.js',
                 '../js/easelfl/display/Text.js',
                 '../js/easelfl/display/Shadow.js',
+                '../js/easelfl/filters/Filter.js',
+                '../js/easelfl/filters/ColorMatrix.js',
+                '../js/easelfl/filters/ColorMatrixFilter.js',
                 '../js/easelfl/events/MouseEvent.js',
                 '../js/easelfl/utils/Ticker.js'
             ], init)

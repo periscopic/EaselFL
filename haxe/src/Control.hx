@@ -4,6 +4,7 @@ import flash.Lib;
 import interfaces.IExec;
 import interfaces.IDisplayable;
 import interfaces.IBitmapData;
+import interfaces.IBitmapFilter;
 import display.StageFl;
 import display.ContainerFl;
 import display.BitmapFl;
@@ -14,6 +15,7 @@ import display.ImageFl;
 import display.FrameFl;
 import display.TextFl;
 import display.ShadowFl;
+import filters.ColorMatrixFilterFl;
 import geom.RectangleFl;
 
 import utils.CSSFont;
@@ -31,6 +33,7 @@ class Control {
 	static public var frames:IntHash<FrameFl>;
 	static public var texts:IntHash<TextFl>;
 	static public var shadows:IntHash<ShadowFl>;
+	static public var filters:IntHash<IBitmapFilter>;
 	static public var makers:Hash<Int->Void>;
 	static public var stageFl:StageFl;
 	
@@ -49,6 +52,7 @@ class Control {
 		frames = new IntHash<FrameFl>();
 		texts = new IntHash<TextFl>();
 		shadows = new IntHash<ShadowFl>();
+		filters = new IntHash<IBitmapFilter>();
 		makers = new Hash<Int->Void>();
 		
 		makers.set('img', image);
@@ -61,6 +65,8 @@ class Control {
 		makers.set('rct', rectangle);
 		makers.set('frm', frame);
 		makers.set('shd', shadow);
+		makers.set('shd', shadow);
+		makers.set('cmtxfl', colorMatrixFilter);
 		makers.set('txt', text);
 		
 		ImageFl.init();
@@ -73,6 +79,7 @@ class Control {
 		FrameFl.init();
 		TextFl.init();
 		ShadowFl.init();
+		ColorMatrixFilterFl.init();
 		StageFl.init();
 	}
 	
@@ -166,6 +173,12 @@ class Control {
 		var sh:ShadowFl = new ShadowFl(id);
 		shadows.set(id, sh);
 		items.set(id, sh);
+	}
+	
+	inline static private function colorMatrixFilter(id:Int):Void{
+		var flt:ColorMatrixFilterFl = new ColorMatrixFilterFl(id);
+		filters.set(id, flt);
+		items.set(id, flt);
 	}
 	
 	inline static private function stage(id:Int):Void{

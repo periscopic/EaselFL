@@ -5,6 +5,8 @@ import flash.display.DisplayObjectContainer;
 import flash.display.DisplayObject;
 import flash.events.MouseEvent;
 import interfaces.IDisplayable;
+import interfaces.IBitmapFilter;
+import flash.filters.BitmapFilter;
 
 import flash.geom.Matrix;
 import flash.filters.DropShadowFilter;
@@ -15,7 +17,8 @@ class DisplayObjectFl implements IDisplayable {
 	static public function mapMethods(execs:Hash<Dynamic>){
 		execs.set('op',opacity);
 		execs.set('vs',visible);
-		execs.set('shd', shadow);
+		execs.set('shd', setShadow);
+		execs.set('flts', setFilters);
 		execs.set('mtx', setMatrix);		
 		execs.set('amck', addClickHandler);
 		execs.set('amot', addOutHandler);
@@ -112,31 +115,46 @@ class DisplayObjectFl implements IDisplayable {
 		target.display.mask = Control.displays.exists(maskID) ? Control.displays.get(maskID).display : null;
 	}
 	
-	inline static private function shadow(target:DisplayObjectFl, id:Dynamic):Void{
+	inline static private function setShadow(target:DisplayObjectFl, id:Dynamic):Void{
 		var flt = Control.shadows.get(id);
 		
 		if(target._shadow!=null) {
-			target._shadow.unwatch(target.handleShadowUpdate);
-		}else {
 			var filters = target.display.filters;
-			filters[ShadowFl.INDEX] = new DropShadowFilter();
+			filters.pop();
 			target.display.filters = filters;
-		}
+			target._shadow.unwatch(target.handleShadowUpdate);
+		} 
 		
 		target._shadow = flt;
 		
-		if(flt==null) {
+		if(target._shadow!=null) {
 			var filters = target.display.filters;
-			filters[ShadowFl.INDEX] = null;
+			filters.push(flt.filter);
 			target.display.filters = filters;
-		} else {
+			
 			flt.watch(target.handleShadowUpdate);
 			target.handleShadowUpdate();
-		}
-		
+		}	
 	}
 	
-
+	inline static private function setFilters(target:DisplayObjectFl, ids:Array<Dynamic>):Void{		
+		var filterFls = [];
+		var filters:Array<BitmapFilter> = [];
+		
+		for(id in ids) {
+			var flt = Control.filters.get(id);
+			filterFls.push(flt);
+			filters.push(flt.filter);
+		}
+		
+		//-- preserve shadow if present
+		if(target._shadow!=null) {
+			filters.push(target._shadow.filter);
+		}
+		
+		target._filterFls = filterFls;
+		target.display.filters = filters;
+	}
 	
 	//TODO: decide if these should be moved to a Stage specific class
 	
@@ -168,6 +186,7 @@ class DisplayObjectFl implements IDisplayable {
 	public var id:Int;
 	// stores the shadow props
 	private var _shadow:ShadowFl;
+	private var _filterFls:Array<IBitmapFilter>;
 	
 	public function new( id:Int ){ this.id = id;}
 	
@@ -198,14 +217,8 @@ class DisplayObjectFl implements IDisplayable {
 	}
 	
 	public function handleShadowUpdate(?e:Dynamic):Void {
-
 		var filters = display.filters;
-		filters[ShadowFl.INDEX].color = _shadow.color;
-		filters[ShadowFl.INDEX].alpha = _shadow.alpha;
-		filters[ShadowFl.INDEX].blurX = _shadow.blur;
-		filters[ShadowFl.INDEX].blurY = _shadow.blur;
-		filters[ShadowFl.INDEX].angle = _shadow.angle;
-		filters[ShadowFl.INDEX].distance = _shadow.distance;
+		filters[filters.length-1] = _shadow.filter;
 		display.filters = filters;
 	}
 }

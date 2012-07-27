@@ -24,26 +24,23 @@ class ShadowFl implements IExec, implements IWatchable{
 	}
 	
 	/**
-	 * Change the source url of an ImageFl
-	 * @param ImageFl
-	 * @param String the URL
+	 * Change the shadows attributes
+	 * @param ShadowFl
+	 * @param Array
 	 */
 	inline static private function updateShadow(target:ShadowFl, args:Dynamic){
+		
 		if(args[0]!=target.colorString) {
 			CSSColor.parse(args[0]);
-			target.alpha = CSSColor.alpha;
-			target.color = CSSColor.color;
+			target.filter.alpha = CSSColor.alpha;
+			target.filter.color = CSSColor.color;
 		}
 		
-		target.offsetX = args[1];
-		target.offsetY = args[2];
-		target.blur = args[3];
-		target.angle = getAngleFromOffsets(args[1], args[2]);
-		target.distance = args[1] + args[2];
+		target.filter.blurX = target.filter.blurY = args[3];
+		target.filter.angle = getAngleFromOffsets(args[1], args[2]);
+		target.filter.distance = args[1] + args[2];
 
 		dispatcher.dispatchEvent(new Event(target.eventID));
-		
-		
 	}
 	
 	inline private static function getAngleFromOffsets(ox:Float, oy:Float):Float {
@@ -53,22 +50,12 @@ class ShadowFl implements IExec, implements IWatchable{
 	
 	private var eventID:String;
 	private var colorString:String;
-		
-	public var color(default, null):Int;
-	public var offsetX(default, null):Float;
-	public var offsetY(default, null):Float;
-	public var alpha(default, null):Float;
-	public var blur(default, null):Float;
-	public var angle(default, null):Float;
-	public var distance(default, null):Float;
-	//public var filter(default,null):DropShadowFilter;
+	public var filter(default,null):DropShadowFilter;
 	
 	public function new(id:Int){		
 		eventID = SHADOW_CHANGE + id;
-		colorString = null;		
-		color = 0;
-		offsetX = offsetY = alpha = blur = angle = distance = 0;	
-		//filter = new DropShadowFilter();	
+		colorString = null;				
+		filter = new DropShadowFilter(0, 0, 0, 0);
 	}
 	
 	/**

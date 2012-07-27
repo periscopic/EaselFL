@@ -26,7 +26,7 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(window) {
+(function(ns) {
 	
 	/**
 	 * Provides helper functions for assembling a matrix for use with the ColorMatrixFilter.
@@ -247,12 +247,7 @@
 	 * @return {Array} An array holding this matrix's values.
 	 **/
 	p.toArray = function() {
-		//return this.slice(0,ColorMatrix.LENGTH);
-		var a = [];
-		for(var i=0, l=ColorMatrix.LENGTH; i<l; ++i) {
-			a[i] = this[i];
-		}
-		return a;
+		return this.slice(0,ColorMatrix.LENGTH);
 	};
 	
 	/**
@@ -316,6 +311,7 @@
 		return matrix;
 	};
 	
-	window.ColorMatrix = ColorMatrix;
-	
-}(window));
+	ns.ColorMatrix = ColorMatrix;
+
+}(createjs||(createjs={})));
+var createjs;

@@ -26,19 +26,19 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(window) {
+(function(ns) {
 
 /**
-* Applies color transforms.
+* Allows you to carry out complex color operations such as modifying saturation, brightness, or inverting.
 * @class ColorMatrixFilter
 * @constructor
 * @augments Filter
-* @param {Number} blurX
+* @param matrix A 4x5 matrix describing the color operation to perform. See also the ColorMatrix class.
 **/
 var ColorMatrixFilter = function(matrix) {
   this.initialize(matrix);
 }
-var p = ColorMatrixFilter.prototype = new Filter();
+var p = ColorMatrixFilter.prototype = new ns.Filter();
 
 // public properties:
 	p.matrix = null;
@@ -46,17 +46,12 @@ var p = ColorMatrixFilter.prototype = new Filter();
 // constructor:
 	// TODO: detailed docs.
 	/** 
-	 * Allows you to carry out complex color operations such as modifying saturation, brightness, or inverting.
 	 * @method initialize
 	 * @protected
 	 * @param matrix A 4x5 matrix describing the color operation to perform.
 	 **/
 	p.initialize = function(matrix) {
 		this.matrix = matrix;
-		
-		// EaselFL specific
-		this._flMatrix = [];
-		this.id = UID.get();
 	}
 	
 // public methods:
@@ -73,7 +68,7 @@ var p = ColorMatrixFilter.prototype = new Filter();
 	 * @param targetY Optional. The y position to draw the result to. Defaults to the value passed to y.
 	 **/
 	p.applyFilter = function(ctx, x, y, width, height, targetCtx, targetX, targetY) {
-	/*	targetCtx = targetCtx || ctx;
+		targetCtx = targetCtx || ctx;
 		if (targetX == null) { targetX = x; }
 		if (targetY == null) { targetY = y; }
 		try {
@@ -104,7 +99,6 @@ var p = ColorMatrixFilter.prototype = new Filter();
 		imageData.data = data;
 		targetCtx.putImageData(imageData, targetX, targetY);
 		return true;
-	*/
 	}
 
 	/**
@@ -126,55 +120,6 @@ var p = ColorMatrixFilter.prototype = new Filter();
 		return new ColorMatrixFilter(this.matrix);
 	}
 	
-	
-	/***** EaselFL specific code *****/
-	
-	//-- FL synchronize properties
-	p._flSyncProps = function(ctx) {
-		
-		if(!this._flCtx) {
-				this._flCtx = ctx;
-				ctx._flCreate.push(['cmtxfl', this]);
-		}
-		
-		var mtx = this.matrix;
-		var flmtx = this._flMatrix;
-		
-		if(
-			 mtx[0] !== flmtx[0] ||
-			 mtx[1] !== flmtx[1] ||
-			 mtx[2] !== flmtx[2] ||
-			 mtx[3] !== flmtx[3] ||
-			 mtx[4] !== flmtx[4] ||
-			 mtx[5] !== flmtx[5] ||
-			 mtx[6] !== flmtx[6] ||
-			 mtx[7] !== flmtx[7] ||
-			 mtx[8] !== flmtx[8] ||
-			 mtx[9] !== flmtx[9] ||
-			 mtx[10] !== flmtx[10] ||
-			 mtx[11] !== flmtx[11] ||
-			 mtx[12] !== flmtx[12] ||
-			 mtx[13] !== flmtx[13] ||
-			 mtx[14] !== flmtx[14] ||
-			 mtx[15] !== flmtx[15] ||
-			 mtx[16] !== flmtx[16] ||
-			 mtx[17] !== flmtx[17] ||
-			 mtx[18] !== flmtx[18] ||
-			 mtx[19] !== flmtx[19] )
-			{
-				var copy = this._flMatrix = mtx.toArray();
-				this._flCtx._flChange.push([this.id, 'flt', copy]);
-		}
-	}
-	
-	p._flCtx = null;
-	p._flMatrix = null;
-	p.id = null;
-
-	
-	
-	/**** end EaselFL specific code ******/
-	
-	
-window.ColorMatrixFilter = ColorMatrixFilter;
-}(window));
+ns.ColorMatrixFilter = ColorMatrixFilter;
+}(createjs||(createjs={})));
+var createjs;
