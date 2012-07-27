@@ -429,8 +429,9 @@ var p = Stage.prototype = new Container();
 	  
 	
 	  var o = this;
-	  var evtTarget = window.addEventListener ? window : document;
-	  evtTarget.addEventListener("mousemove", function(e) { o._handleMouseMove(e); }, false);
+	  var evtBindMethod = window.addEventListener || document.addEventListener ? 'addEventListener' : 'attachEvent';
+	  var evtTarget = window[evtBindMethod] ? window : document;
+	  evtTarget[evtBindMethod]("mousemove", function(e) { o._handleMouseMove(e); }, false);
 	  
 		/*var o = this;
 		var evtTarget = window.addEventListener ? window : document;
