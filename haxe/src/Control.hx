@@ -16,6 +16,7 @@ import display.FrameFl;
 import display.TextFl;
 import display.ShadowFl;
 import filters.ColorMatrixFilterFl;
+import filters.ColorFilterFl;
 import geom.RectangleFl;
 
 import utils.CSSFont;
@@ -36,9 +37,6 @@ class Control {
 	static public var filters:IntHash<IBitmapFilter>;
 	static public var makers:Hash<Int->Void>;
 	static public var stageFl:StageFl;
-	
-	//static private var valid:Bool = true;
-	//inline static var UPDATE_INTERVAL:Int = 17; //check every 5ms
 	
 	
 	static public function init(){
@@ -67,6 +65,7 @@ class Control {
 		makers.set('shd', shadow);
 		makers.set('shd', shadow);
 		makers.set('cmtxfl', colorMatrixFilter);
+		makers.set('clrfl', colorFilter);
 		makers.set('txt', text);
 		
 		ImageFl.init();
@@ -80,6 +79,7 @@ class Control {
 		TextFl.init();
 		ShadowFl.init();
 		ColorMatrixFilterFl.init();
+		ColorFilterFl.init();
 		StageFl.init();
 	}
 	
@@ -181,15 +181,19 @@ class Control {
 		items.set(id, flt);
 	}
 	
+	inline static private function colorFilter(id:Int):Void{
+		var flt:ColorFilterFl = new ColorFilterFl(id);
+		filters.set(id, flt);
+		items.set(id, flt);
+	}
+	
 	inline static private function stage(id:Int):Void{
 		//-- Alias another container as Stage
 		//-- by assigning to an already created ContainerFl
 		//-- The EaselFl 'stage' is a child of the Flash stage
 		//-- (Flash stage itself doesn't not have all the interactive object
 		//-- characteristics necessary for Easel stage)
-		/*var cnt = containers.get(id);		
-		Lib.current.stage.addChild(cnt.display);
-		stageFl = cnt;*/
+
 		var stg = new StageFl(id, Lib.current.stage);
 		containers.set(id, stg);
 		displays.set(id, stg);

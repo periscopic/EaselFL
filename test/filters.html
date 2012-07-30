@@ -58,23 +58,48 @@ function init(){
 	myStage.addChild(bmp);
 	
 	//-- shadow
-	var shp = new Shape();
-	shp.graphics.beginFill('#FFF');
-	shp.graphics.drawCircle(0, 0, 50);
-	shp.graphics.endFill();
-	shp.x = 200;
-	shp.y = 230;
-	shp.shadow = new Shadow('#2895AE', 0, 0, 8);
-	myStage.addChild(shp);
+	var shd = new Shape();
+	shd.graphics.beginFill('#FFF');
+	shd.graphics.drawCircle(0, 0, 30);
+	shd.graphics.endFill();
+	shd.x = 200;
+	shd.y = 230;
+	shd.shadow = new Shadow('#2895AE', 0, 0, 8);
+	myStage.addChild(shd);
+	
+	
+	//--
+	var clr = new Shape();
+	clr.graphics.beginFill('#888');
+	clr.graphics.drawCircle(0, 0, 30);
+	clr.graphics.endFill();
+	clr.filters = [new ColorFilter(1.78, 1.93, 1.15, 1, 0, 0, 0, 0)];
+	clr.cache(-30, -30, 60, 60);
+	clr.x = 100;
+	clr.y = 230;
+	myStage.addChild(clr);
 	
 	//-- animate
 	var seed = 0;
 	
 	setInterval(function(){
-		bmp.filters[0].matrix.adjustHue(10);
+		var flt;
+		seed+=0.15;
+		
+		shd.shadow.blur =  (1 + Math.sin( seed )) * 8;
+		
+		flt = bmp.filters[0];
+		flt.matrix.adjustHue(4);
 		bmp.updateCache();
-		shp.shadow.blur = (1 + Math.sin( seed+=0.4 )) * 8;
-	}, 250);	
+		
+		flt = clr.filters[0];
+		flt.redMultiplier = (1 + Math.sin( seed + Math.PI*2/3 ));
+		flt.greenMultiplier = (1 + Math.sin( seed + Math.PI/3 ));
+		flt.blueMultiplier = (1 + Math.sin( seed ));
+	
+		clr.updateCache();
+				
+	}, 100);	
 }
 
 </script>

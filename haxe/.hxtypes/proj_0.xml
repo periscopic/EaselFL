@@ -2165,6 +2165,45 @@
 	<e path="Void"/>
 </f></new>
 	</class>
+	<class path="interfaces.IBitmapFilter" params="" file="src/interfaces/IBitmapFilter.hx" interface="1"><filter public="1" set="null"><c path="flash.filters.BitmapFilter"/></filter></class>
+	<class path="filters.ColorFilterFl" params="" file="src/filters/ColorFilterFl.hx">
+		<implements path="interfaces.IBitmapFilter"/>
+		<implements path="interfaces.IExec"/>
+		<execs static="1"><c path="Hash"><d/></c></execs>
+		<init public="1" set="method" line="16" static="1"><f a=""><e path="Void"/></f></init>
+		<updateFilter get="inline" set="null" line="38" static="1">
+			<f a="target:a">
+				<c path="filters.ColorFilterFl"/>
+				<d/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Change the filter's attributes
+	 * @param ColorFilterFl
+	 * @param Array
+	 </haxe_doc>
+		</updateFilter>
+		<eventID><c path="String"/></eventID>
+		<colorString><c path="String"/></colorString>
+		<filter public="1" set="null"><c path="flash.filters.BitmapFilter"/></filter>
+		<_filter><c path="flash.filters.ColorMatrixFilter"/></_filter>
+		<exec public="1" get="inline" set="null" line="58">
+			<f a="method:?arguments">
+				<c path="String"/>
+				<d/>
+				<d/>
+			</f>
+			<haxe_doc>
+	 * Execute a method on this ColorFilterFl object
+	 * @param String key corresponding to the method
+	 * @param Array arguments for the method
+	 </haxe_doc>
+		</exec>
+		<new public="1" set="method" line="27"><f a="id">
+	<c path="Int"/>
+	<e path="Void"/>
+</f></new>
+	</class>
 	<class path="flash.accessibility.AccessibilityProperties" params="" file="/usr/lib/haxe/std/flash9/accessibility/AccessibilityProperties.hx" extern="1">
 		<description public="1"><c path="String"/></description>
 		<forceSimple public="1"><e path="Bool"/></forceSimple>
@@ -2626,7 +2665,6 @@
 </f></new>
 		<haxe_dynamic><d/></haxe_dynamic>
 	</class>
-	<class path="interfaces.IBitmapFilter" params="" file="src/interfaces/IBitmapFilter.hx" interface="1"><filter public="1" set="null"><c path="flash.filters.BitmapFilter"/></filter></class>
 	<class path="filters.ColorMatrixFilterFl" params="" file="src/filters/ColorMatrixFilterFl.hx">
 		<implements path="interfaces.IBitmapFilter"/>
 		<implements path="interfaces.IExec"/>
@@ -2941,7 +2979,7 @@
 	<e path="Void"/>
 </f></c></makers>
 		<stageFl public="1" static="1"><c path="display.StageFl"/></stageFl>
-		<init public="1" set="method" line="44" static="1"><f a=""><e path="Void"/></f></init>
+		<init public="1" set="method" line="42" static="1"><f a=""><e path="Void"/></f></init>
 		<createItems public="1" get="inline" set="null" line="89" static="1"><f a="a">
 	<c path="Array"><c path="Array"><d/></c></c>
 	<e path="Void"/>
@@ -2998,7 +3036,11 @@
 	<c path="Int"/>
 	<e path="Void"/>
 </f></colorMatrixFilter>
-		<stage get="inline" set="null" line="184" static="1"><f a="id">
+		<colorFilter get="inline" set="null" line="184" static="1"><f a="id">
+	<c path="Int"/>
+	<e path="Void"/>
+</f></colorFilter>
+		<stage get="inline" set="null" line="190" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></stage>

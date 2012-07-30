@@ -119,6 +119,10 @@ var p = ColorFilter.prototype = new Filter();
 		this.greenOffset = greenOffset || 0;
 		this.blueOffset = blueOffset || 0;
 		this.alphaOffset = alphaOffset || 0;
+		
+		//-- EaselFl Specific code
+		this.id = UID.get();
+		this._flProps = [1, 1, 1, 1, 0, 0, 0, 0];
 	}
 
 // public methods:
@@ -135,7 +139,7 @@ var p = ColorFilter.prototype = new Filter();
 	 * @param targetY Optional. The y position to draw the result to. Defaults to the value passed to y.
 	 **/
 	p.applyFilter = function(ctx, x, y, width, height, targetCtx, targetX, targetY) {
-		targetCtx = targetCtx || ctx;
+		/*targetCtx = targetCtx || ctx;
 		if (targetX == null) { targetX = x; }
 		if (targetY == null) { targetY = y; }
 		try {
@@ -153,9 +157,59 @@ var p = ColorFilter.prototype = new Filter();
 			data[i+3] = data[i+3]*this.alphaMultiplier+this.alphaOffset;
 		}
 		imageData.data = data;
-		targetCtx.putImageData(imageData, targetX, targetY);
+		targetCtx.putImageData(imageData, targetX, targetY);*/
 		return true;
 	}
+	
+	
+	/***** EaselFL specific code *****/
+	
+	//-- FL synchronize properties
+	p._flSyncProps = function(ctx) {
+		//--TODO 
+		if(!this._flCtx) {
+				this._flCtx = ctx;
+				ctx._flCreate.push(['clrfl', this]);
+		}
+		
+		var mtx = this.matrix;
+		var props = this._flProps;
+		
+		if(
+			this.redMultiplier !== props[0] ||
+			this.greenMultiplier !== props[1] ||
+			this.blueMultiplier !== props[2] ||
+			this.alphaMultiplier !== props[3] ||
+			this.redOffset !== props[4] ||
+			this.greenOffset !== props[5] ||
+			this.blueOffset !== props[6] ||
+			this.alphaOffset !== props[7]
+			)
+			{
+				
+				props[0] = this.redMultiplier;
+				props[1] = this.greenMultiplier;
+				props[2] = this.blueMultiplier;
+				props[3] = this.alphaMultiplier;
+				props[4] = this.redOffset;
+				props[5] = this.greenOffset;
+				props[6] = this.blueOffset;
+				props[7] = this.alphaOffset;
+				
+				this._flCtx._flChange.push([this.id, 'flt', props]);
+		}
+	}
+	
+	p._flCtx = null;
+	p._flProps = null;
+	p.id = null;
+
+	
+	
+	/**** end EaselFL specific code ******/
+	
+	
+	
 
 	/**
 	 * Returns a string representation of this object.
