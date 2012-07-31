@@ -27,13 +27,13 @@ function init(){
 	canvas.setAttribute('id', 'testContainer');
 	document.getElementById('testContainer').appendChild(canvas);
 	
-	var myStage = new Stage(canvas);
-	Ticker.addListener(myStage);
+	var myStage = new createjs.Stage(canvas);
+	createjs.Ticker.addListener(myStage);
 	
 	//-- specific test code
 	var g;
 	
-	var shp = new Shape();
+	var shp = new createjs.Shape();
 	shp.x = 185;
 	shp.y = 20;
 	

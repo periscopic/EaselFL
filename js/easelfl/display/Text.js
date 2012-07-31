@@ -26,7 +26,7 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(window) {
+(function(ns) {
 	
 /**
 * Allows you to display one or more lines of dynamic text (not user editable) in the display list.
@@ -45,7 +45,7 @@
 var Text = function(text, font, color) {
   this.initialize(text, font, color);
 }
-var p = Text.prototype = new DisplayObject();
+var p = Text.prototype = new ns.DisplayObject();
 
 	p._flFont = null;
 	p._flText = "";
@@ -365,5 +365,7 @@ var p = Text.prototype = new DisplayObject();
 		
 	}
 
-window.Text = Text;
-}(window));
+ns.Text = Text;
+
+}(createjs||(createjs={})));
+var createjs;

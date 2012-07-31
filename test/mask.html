@@ -27,8 +27,8 @@ function init(){
 	canvas.setAttribute('id', 'testContainer');
 	document.getElementById('testContainer').appendChild(canvas);
 	
-	var myStage = new Stage(canvas);
-	Ticker.addListener(myStage);
+	var myStage = new createjs.Stage(canvas);
+	createjs.Ticker.addListener(myStage);
 	
 	//-- specific test code
 	var img = new Image();
@@ -36,10 +36,10 @@ function init(){
 	
 	var bmp, msk, g;
 	
-	bmp= new Bitmap(img);
+	bmp= new createjs.Bitmap(img);
 	myStage.addChild(bmp);
 	
-	msk = new Shape();
+	msk = new createjs.Shape();
 	g = msk.graphics;
 	g.beginFill('#000');
 	g.drawPolyStar(39, 39, 30, 5, 0.5, 0);

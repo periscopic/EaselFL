@@ -26,7 +26,7 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(window) {
+(function(ns) {
 
 /**
 * A stage is the root level Container for a display list. Each time its tick method is called, it will render its display
@@ -42,7 +42,7 @@ var Stage = function(canvas) {
 
 Stage.isEaselFl = true;
 
-var p = Stage.prototype = new Container();
+var p = Stage.prototype = new ns.Container();
 
 	/**
 	 * @protected
@@ -243,7 +243,7 @@ var p = Stage.prototype = new Container();
 		}
 		else {
 		  //-- Not a CanvasFl
-		  this.canvas = new CanvasFl(canvas);
+		  this.canvas = new ns.CanvasFl(canvas);
 		}
 		
 		this.canvas._stage = this;
@@ -515,12 +515,12 @@ var p = Stage.prototype = new Container();
 	 **/
 	p._handleMouseDown = function(e) {
 	/*	if (this.onMouseDown) {
-			this.onMouseDown(new MouseEvent("onMouseDown", this.mouseX, this.mouseY, this, e));
+			this.onMouseDown(new ns.MouseEvent("onMouseDown", this.mouseX, this.mouseY, this, e));
 		}
 		var target = this._getObjectsUnderPoint(this.mouseX, this.mouseY, null, (this._mouseOverIntervalID ? 3 : 1));
 		if (target) {
 			if (target.onPress instanceof Function) {
-				var evt = new MouseEvent("onPress", this.mouseX, this.mouseY, target, e);
+				var evt = new ns.MouseEvent("onPress", this.mouseX, this.mouseY, target, e);
 				target.onPress(evt);
 				if (evt.onMouseMove || evt.onMouseUp) { this._activeMouseEvent = evt; }
 			}
@@ -543,10 +543,10 @@ var p = Stage.prototype = new Container();
 
 		if (this._mouseOverTarget != target) {
 			if (this._mouseOverTarget && this._mouseOverTarget.onMouseOut) {
-				this._mouseOverTarget.onMouseOut(new MouseEvent("onMouseOut", this.mouseX, this.mouseY, this._mouseOverTarget));
+				this._mouseOverTarget.onMouseOut(new ns.MouseEvent("onMouseOut", this.mouseX, this.mouseY, this._mouseOverTarget));
 			}
 			if (target && target.onMouseOver) {
-				target.onMouseOver(new MouseEvent("onMouseOver", this.mouseX, this.mouseY, target));
+				target.onMouseOver(new ns.MouseEvent("onMouseOver", this.mouseX, this.mouseY, target));
 			}
 			this._mouseOverTarget = target;
 		}*/
@@ -559,12 +559,12 @@ var p = Stage.prototype = new Container();
 	 **/
 	p._handleDoubleClick = function(e) {
 		/*if (this.onDoubleClick) {
-			this.onDoubleClick(new MouseEvent("onDoubleClick", this.mouseX, this.mouseY, this, e));
+			this.onDoubleClick(new ns.MouseEvent("onDoubleClick", this.mouseX, this.mouseY, this, e));
 		}
 		var target = this._getObjectsUnderPoint(this.mouseX, this.mouseY, null, (this._mouseOverIntervalID ? 3 : 1));
 		if (target) {
 			if (target.onDoubleClick instanceof Function) {
-				target.onDoubleClick(new MouseEvent("onPress", this.mouseX, this.mouseY, target, e));
+				target.onDoubleClick(new ns.MouseEvent("onPress", this.mouseX, this.mouseY, target, e));
 			}
 		}*/
 	}
@@ -572,5 +572,6 @@ var p = Stage.prototype = new Container();
 	Stage.FL_THROW_UNIMPLEMENTED = true; //--throw error on use of unimplemented features
 	Stage.FL_LOG_PART_IMPLEMENTED = true; //--log warning notes for partial implementations
 
-window.Stage = Stage;
-}(window));
+ns.Stage = Stage;
+
+}(createjs||(createjs={})));

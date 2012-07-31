@@ -38,7 +38,7 @@
 * @module EaselJS
 **/
 
-(function(window) {
+(function(ns) {
 
 
 /**
@@ -400,7 +400,7 @@ var p = DisplayObject.prototype;
 	* @method getCacheDataURL.
 	**/
 	p.getCacheDataURL = function() {
-		if(Stage.FL_THROW_UNIMPLEMENTED) throw "EaselFl::DisplayObject.getCacheDataURL not yet implemented";
+		if(ns.Stage.FL_THROW_UNIMPLEMENTED) throw "EaselFl::DisplayObject.getCacheDataURL not yet implemented";
 		/*if (!this.cacheCanvas) { return null; }
 		if (this.cacheID != this._cacheDataURLID) { this._cacheDataURL = this.cacheCanvas.toDataURL(); }
 		return this._cacheDataURL;*/
@@ -417,7 +417,7 @@ var p = DisplayObject.prototype;
 		while (o.parent) {
 			o = o.parent;
 		}
-		if (o instanceof Stage) { return o; }
+		if (o instanceof ns.Stage) { return o; }
 		return null;
 	}
 
@@ -436,7 +436,7 @@ var p = DisplayObject.prototype;
 		var mtx = this.getConcatenatedMatrix(this._matrix);
 		if (mtx == null) { return null; }
 		mtx.append(1, 0, 0, 1, x, y);
-		return new Point(mtx.tx, mtx.ty);
+		return new ns.Point(mtx.tx, mtx.ty);
 	}
 
 	/**
@@ -455,7 +455,7 @@ var p = DisplayObject.prototype;
 		if (mtx == null) { return null; }
 		mtx.invert();
 		mtx.append(1, 0, 0, 1, x, y);
-		return new Point(mtx.tx, mtx.ty);
+		return new ns.Point(mtx.tx, mtx.ty);
 	}
 
 	/**
@@ -514,7 +514,7 @@ var p = DisplayObject.prototype;
 	 **/
 	p.getConcatenatedMatrix = function(mtx) {
 		if (mtx) { mtx.identity(); }
-		else { mtx = new Matrix2D(); }
+		else { mtx = new ns.Matrix2D(); }
 		var target = this;
 		while (target != null) {
 			mtx.prependTransform(target.x, target.y, target.scaleX, target.scaleY, target.rotation, target.skewX,
@@ -988,8 +988,8 @@ var p = DisplayObject.prototype;
 	 * @protected
 	*/
 	p.initialize = function() {
-		this.id = UID.get();
-		this._matrix = new Matrix2D();
+		this.id = ns.UID.get();
+		this._matrix = new ns.Matrix2D();
 		this._flChange = [];
 	}
 	
@@ -1094,10 +1094,10 @@ var p = DisplayObject.prototype;
 	 * @protected
 	 * @type Matrix2D
 	 **/
-	DisplayObject._flTempMtx = new Matrix2D();
+	DisplayObject._flTempMtx = new ns.Matrix2D();
 
 	/**** End EaselFL specific code ****/
 	
-
-window.DisplayObject = DisplayObject;
-}(window));
+ns.DisplayObject = DisplayObject;
+}(createjs||(createjs={})));
+var createjs;

@@ -28,13 +28,13 @@ function init(){
 	canvas.setAttribute('id', 'testContainer');
 	document.getElementById('testContainer').appendChild(canvas);
 	
-	var myStage = new Stage(canvas);
-	Ticker.addListener(myStage);
+	var myStage = new createjs.Stage(canvas);
+	createjs.Ticker.addListener(myStage);
 	
 	//-- specific test code
 	
 	var ep = new EncodePath();
-	var shape = new Shape();
+	var shape = new createjs.Shape();
 	var g = shape.graphics;
 	g.setStrokeStyle(1);
 	g.beginStroke('#3399E9');

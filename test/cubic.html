@@ -27,18 +27,18 @@ function init(){
 	canvas.setAttribute('id', 'testContainer');
 	document.getElementById('testContainer').appendChild(canvas);
 	
-	var myStage = new Stage(canvas);
-	Ticker.addListener(myStage);
+	var myStage = new createjs.Stage(canvas);
+	createjs.Ticker.addListener(myStage);
 	
 	//-- specific test code
-	var bg = new Shape();
+	var bg = new createjs.Shape();
 	//Flash doesn't recieve mousemove's on a perfectly transparent stage
 	bg.graphics.beginFill('rgba(255, 255, 255, 0.5)');
 	bg.graphics.drawRect(0, 0, 600, 400);
 	bg.graphics.endFill();
 	myStage.addChild(bg);
 
-	var curve = new Shape();
+	var curve = new createjs.Shape();
 	myStage.addChild(curve);
 	
 	var a1 = createNode(200, 300, '#AAA', myStage);
@@ -71,7 +71,7 @@ function init(){
 
 	
 	function createNode(x, y, color, container) {
-		var shp = new Shape();
+		var shp = new createjs.Shape();
 		shp.graphics.beginFill(color);
 		shp.graphics.drawRect(0, 0, 8, 8);
 		shp.graphics.endFill();

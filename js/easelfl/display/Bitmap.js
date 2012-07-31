@@ -31,7 +31,7 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(window) {
+(function(ns) {
 
 /**
 * A Bitmap represents an Image, Canvas, or Video in the display list.
@@ -43,7 +43,7 @@
 var Bitmap = function(imageOrUri) {	
   this.initialize(imageOrUri);
 }
-var p = Bitmap.prototype = new DisplayObject();
+var p = Bitmap.prototype = new ns.DisplayObject();
 
 
 
@@ -209,7 +209,7 @@ var p = Bitmap.prototype = new DisplayObject();
 		if(this.image) {
 			if(this.image!==this._flImg) {
 				this._flImg = this.image;
-				ImageFl.watch(this.image);
+				ns.ImageFl.watch(this.image);
 				
 				if(this.sourceRect) {
 					this.sourceRect._flSync(ctx);
@@ -231,6 +231,7 @@ var p = Bitmap.prototype = new DisplayObject();
 	/**** End EaselFL specific code ****/
 
 // private methods:
+ns.Bitmap = Bitmap;
 
-window.Bitmap = Bitmap;
-}(window));
+}(createjs||(createjs={})));
+var createjs;

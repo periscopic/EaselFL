@@ -26,7 +26,7 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(window) {
+(function(ns) {
 
 /**
  * The MovieClip class associates a TweenJS Timeline with an EaselJS Container. It allows you to create objects which
@@ -46,7 +46,7 @@
 var MovieClip = function(mode, startPosition, loop, labels) {
   this.initialize(mode, startPosition, loop, labels);
 }
-var p = MovieClip.prototype = new Container();
+var p = MovieClip.prototype = new ns.Container();
 
 	/**
 	 * Read-only. The MovieClip will advance independently of its parent, even if its parent is paused.
@@ -339,7 +339,7 @@ var p = MovieClip.prototype = new Container();
 			if (target == this) { continue; } // TODO: this assumes this is the actions tween. Valid?
 			var offset = tween._stepPosition;
 			
-			if (target instanceof DisplayObject) {
+			if (target instanceof ns.DisplayObject) {
 				// motion tween.
 				this._addManagedChild(target, offset);
 			} else {
@@ -389,10 +389,9 @@ var p = MovieClip.prototype = new Container();
 	}
 	
 
-window.MovieClip = MovieClip;
-}(window));
+ns.MovieClip = MovieClip;
 
-(function() {
+
 	/**
 	 * This plugin works with TweenJS to prevent the startPosition property from tweening.
 	 * @private
@@ -435,4 +434,6 @@ window.MovieClip = MovieClip;
 	}
 
 	MovieClipPlugin.install();
-}());
+
+}(createjs||(createjs={})));
+var createjs;

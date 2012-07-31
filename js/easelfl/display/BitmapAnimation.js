@@ -31,7 +31,7 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(window) {
+(function(ns) {
 	
 /**
 * Displays frames or sequences of frames (ie. animations) from a sprite sheet image. A sprite sheet is a series of images
@@ -48,7 +48,7 @@
 var BitmapAnimation = function(spriteSheet) {
   this.initialize(spriteSheet);
 }
-var p = BitmapAnimation.prototype = new DisplayObject();
+var p = BitmapAnimation.prototype = new ns.DisplayObject();
 
 
 // public properties:
@@ -202,7 +202,7 @@ var p = BitmapAnimation.prototype = new DisplayObject();
 		if (o == null) { return false; }
 		
 		if(o!==this._flFrame) {
-			FrameFl.watch(o);
+			ns.FrameFl.watch(o);
 			o.__fl.sync(ctx);
 			this._flFrame = o;
 			ctx._flChange.push([this.id, 'frm', o.__fl.id]);
@@ -402,5 +402,7 @@ var p = BitmapAnimation.prototype = new DisplayObject();
 		}
 	}
 
-window.BitmapAnimation = BitmapAnimation;
-}(window));
+ns.BitmapAnimation = BitmapAnimation;
+
+}(createjs||(createjs={})));
+var createjs;

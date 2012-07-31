@@ -27,8 +27,8 @@ function init(){
 	canvas.setAttribute('id', 'testContainer');
 	document.getElementById('testContainer').appendChild(canvas);
 	
-	var myStage = new Stage(canvas);
-	Ticker.addListener(myStage);
+	var myStage = new createjs.Stage(canvas);
+	createjs.Ticker.addListener(myStage);
 	
 	//-- specific test code
 	var img = new Image();
@@ -50,30 +50,30 @@ function init(){
 	
 	
 	//-- color matrix
-	var bmp = new Bitmap(img);
-	bmp.filters = [new ColorMatrixFilter(new ColorMatrix(0, 0, 0, 0))];
+	var bmp = new createjs.Bitmap(img);
+	bmp.filters = [new createjs.ColorMatrixFilter(new createjs.ColorMatrix(0, 0, 0, 0))];
 	bmp.cache(-100, -100, 200, 200);
 	bmp.x = 300;
 	bmp.y = 200;
 	myStage.addChild(bmp);
 	
 	//-- shadow
-	var shd = new Shape();
+	var shd = new createjs.Shape();
 	shd.graphics.beginFill('#FFF');
 	shd.graphics.drawCircle(0, 0, 30);
 	shd.graphics.endFill();
 	shd.x = 200;
 	shd.y = 230;
-	shd.shadow = new Shadow('#2895AE', 0, 0, 8);
+	shd.shadow = new createjs.Shadow('#2895AE', 0, 0, 8);
 	myStage.addChild(shd);
 	
 	
 	//--
-	var clr = new Shape();
+	var clr = new createjs.Shape();
 	clr.graphics.beginFill('#888');
 	clr.graphics.drawCircle(0, 0, 30);
 	clr.graphics.endFill();
-	clr.filters = [new ColorFilter(1.78, 1.93, 1.15, 1, 0, 0, 0, 0)];
+	clr.filters = [new createjs.ColorFilter(1.78, 1.93, 1.15, 1, 0, 0, 0, 0)];
 	clr.cache(-30, -30, 60, 60);
 	clr.x = 100;
 	clr.y = 230;

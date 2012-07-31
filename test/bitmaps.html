@@ -27,20 +27,20 @@ function init(){
 	canvas.setAttribute('id', 'testContainer');
 	document.getElementById('testContainer').appendChild(canvas);
 	
-	var myStage = new Stage(canvas);
-	Ticker.addListener(myStage);
+	var myStage = new createjs.Stage(canvas);
+	createjs.Ticker.addListener(myStage);
 	
 	//-- specific test code
 	var img = new Image();
 	img.src = 'img/testImage.png';
 	
-	var bmp = new Bitmap(img);
-	bmp.sourceRect = new Rectangle(0, 30, 78, 38);
+	var bmp = new createjs.Bitmap(img);
+	bmp.sourceRect = new createjs.Rectangle(0, 30, 78, 38);
 	myStage.addChild(bmp);
 	bmp.x = 110;
 	bmp.y = 180;
 	
-	var shp = new Shape();
+	var shp = new createjs.Shape();
 	shp.x = 300;
 	shp.y = 200;
 	var g = shp.graphics;

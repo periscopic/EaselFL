@@ -30,7 +30,7 @@
 
 
 
-(function(window) {
+(function(ns) {
 
 /**
  * Add methods necessary for core Easel functionality to work in Internet Explorer 8.
@@ -54,5 +54,6 @@
 	}
 
 	
-}(window))
+}(createjs||(createjs={})));
+var createjs;
 

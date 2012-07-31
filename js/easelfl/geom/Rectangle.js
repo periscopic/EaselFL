@@ -26,7 +26,7 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(window) {
+(function(ns) {
 
 /**
 * Represents a rectangle as defined by the points (x, y) and (x+width, y+height).
@@ -42,6 +42,8 @@ var Rectangle = function(x, y, width, height) {
 }
 var p = Rectangle.prototype;
 	
+		/**** Begin EaselFL specific code ****/
+		
 	p._flX = 0,
 	p._flY = 0,
 	p._flWidth = 0,
@@ -51,7 +53,7 @@ var p = Rectangle.prototype;
 	
 	p._flSync = function(ctx){
 		if(!this._flCtx){
-				this.id = UID.get();
+				this.id = ns.UID.get();
 				this._flCtx = ctx;
 				
 				ctx._flCreate.push(['rct', this]);
@@ -65,6 +67,9 @@ var p = Rectangle.prototype;
 				this._flCtx._flChange.push([this.id, 'dim', [this.x, this.y, this.width, this.height]]);
 		}
 	}
+	
+		/**** End EaselFL specific code ****/
+
 	
 // public properties:
 	/** 
@@ -127,5 +132,6 @@ var p = Rectangle.prototype;
 		return "[Rectangle (x="+this.x+" y="+this.y+" width="+this.width+" height="+this.height+")]";
 	}
 	
-window.Rectangle = Rectangle;
-}(window));
+ns.Rectangle = Rectangle;
+}(createjs||(createjs={})));
+var createjs;

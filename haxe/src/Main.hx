@@ -70,15 +70,9 @@ class Main {
 		ExternalInterface.addCallback('sendChange', Control.changeItems);
 		ExternalInterface.addCallback('sendInvoke', Control.invoke);	
 		//-- Notify JS the module is ready
-		callbackMethod = 'CanvasFl._flHooks.'+id;
+		callbackMethod = 'createjs.CanvasFl._flHooks.'+id;
 		ExternalInterface.call(callbackMethod);		
 	}
-	
-	//static public function invoke():Dynamic{
-	/*inline static public function invoke( d:Dynamic ):Dynamic{
-		trace('hello');
-		return true;
-	}*/
 }
 
 

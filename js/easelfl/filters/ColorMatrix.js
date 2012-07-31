@@ -26,7 +26,7 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(window) {
+(function(ns) {
 	
 	/**
 	 * Provides helper functions for assembling a matrix for use with the ColorMatrixFilter.
@@ -316,6 +316,7 @@
 		return matrix;
 	};
 	
-	window.ColorMatrix = ColorMatrix;
+	ns.ColorMatrix = ColorMatrix;
 	
-}(window));
+}(createjs||(createjs={})));
+var createjs;

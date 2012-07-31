@@ -29,8 +29,8 @@ function init(){
 	canvas.setAttribute('id', 'testContainer');
 	document.getElementById('testContainer').appendChild(canvas);
 	
-	var myStage = new Stage(canvas);
-	Ticker.addListener(myStage);
+	var myStage = new createjs.Stage(canvas);
+	createjs.Ticker.addListener(myStage);
 	
 	//-- specific test code
 
@@ -40,7 +40,7 @@ function init(){
 	
 	function handleImageLoad(event) {
 		// create spritesheet and assign the associated data.
-		var spriteSheet  = new SpriteSheet({
+		var spriteSheet  = new createjs.SpriteSheet({
 			images: [img],
 			frames: {width:64, height:68, regX:32, regY:34},
 			animations: {
@@ -54,7 +54,7 @@ function init(){
 		var bmpAnim;
 		
 		for(var i=0; i<96; ++i) {
-			bmpAnim= new BitmapAnimation(spriteSheet);
+			bmpAnim= new createjs.BitmapAnimation(spriteSheet);
 		
 			// start playing the first sequence:
 			bmpAnim.gotoAndPlay("walkRt");		//animate

@@ -42,7 +42,7 @@
  * communication occurs.
  */
 
-(function(window) {
+(function(ns) {
 
    /*-------------------------/
     
@@ -231,7 +231,7 @@
             
             //-- Dispatch the event
             if(item && item[obj.type]){
-               evt =  new MouseEvent(obj.type, obj.stageX, obj.stageY, target, null);
+               evt =  new ns.MouseEvent(obj.type, obj.stageX, obj.stageY, target, null);
                item[obj.type](evt);
                
                //-- Set as current press event and dispatch onMouseMove and onMouseUp to this event
@@ -396,8 +396,8 @@
 
    //-- Object on which 'ready' callback is exposed to Flash Movie
    CanvasFl._flHooks = {};
-	
   
-   window.CanvasFl = CanvasFl;
+   ns.CanvasFl = CanvasFl;
         
-}(window));        
+}(createjs||(createjs={})));
+var createjs;       

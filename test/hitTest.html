@@ -27,24 +27,24 @@ function init(){
 	canvas.setAttribute('id', 'testContainer');
 	document.getElementById('testContainer').appendChild(canvas);
 	
-	var myStage = new Stage(canvas);
-	Ticker.addListener(myStage);
+	var myStage = new createjs.Stage(canvas);
+	createjs.Ticker.addListener(myStage);
 	
 	//-- specific test code
 	var trace = document.getElementById('trace');
 	
-	var container = new Container();
+	var container = new createjs.Container();
 	myStage.addChild(container);
 
 	//Flash doesn't receive mouseevents on 100% transparent
-	var bg = new Shape();
+	var bg = new createjs.Shape();
 	bg.alpha = 0.3;
 	bg.graphics.beginFill('#FFF');
 	bg.graphics.drawRect(0, 0, 600, 400);
 	bg.graphics.endFill();
 	container.addChild(bg);
 	
-	var targ = new Shape();
+	var targ = new createjs.Shape();
 	targ.graphics.beginFill('#F00');
 	
 	for(var i=0, l=12; i<l; ++i) {

@@ -29,11 +29,11 @@ function init(){
 	canvas.setAttribute('id', 'testContainer');
 	document.getElementById('testContainer').appendChild(canvas);
 	
-	var myStage = new Stage(canvas);
-	Ticker.addListener(myStage);
+	var myStage = new createjs.Stage(canvas);
+	createjs.Ticker.addListener(myStage);
 	
 	//-- specific test code
-	var container = new Container();
+	var container = new createjs.Container();
 	myStage.addChild(container);
 
 	container.rotation = 45;
@@ -43,7 +43,7 @@ function init(){
 	var shp, g, shapes = [];
 	
 	for(var i=0; i<100; ++i){
-		shp = new Shape();
+		shp = new createjs.Shape();
 		g = shp.graphics;
 		g.beginFill('#FF0000');
 		g.drawRect(0, 0, 20, 20);

@@ -38,7 +38,7 @@
  */
 
 
-(function(window) {
+(function(ns) {
 
     /**
      * @constructor
@@ -46,7 +46,7 @@
      * @param HTMLImageElement
      **/
     var ImageFl = function(img){
-        this.id = UID.get();
+        this.id = ns.UID.get();
         this._img = img;
     }
     
@@ -118,5 +118,7 @@
         return false;
     }
 
-window.ImageFl = ImageFl;
-}(window));
+ns.ImageFl = ImageFl;
+
+}(createjs||(createjs={})));
+var createjs;

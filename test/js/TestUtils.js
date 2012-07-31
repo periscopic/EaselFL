@@ -92,7 +92,7 @@ var ScriptLoader = {
     
     
     //-- temporarily allow use without namespace
-    window.createjs = window;
+    //window.createjs = window;
     
     return {
         useCanvas : window.location.search.toUpperCase().indexOf('CANVAS')>=0,	

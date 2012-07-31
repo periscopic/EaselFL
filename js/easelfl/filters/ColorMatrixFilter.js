@@ -26,7 +26,7 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(window) {
+(function(ns) {
 
 /**
 * Applies color transforms.
@@ -38,7 +38,7 @@
 var ColorMatrixFilter = function(matrix) {
   this.initialize(matrix);
 }
-var p = ColorMatrixFilter.prototype = new Filter();
+var p = ColorMatrixFilter.prototype = new ns.Filter();
 
 // public properties:
 	p.matrix = null;
@@ -56,7 +56,7 @@ var p = ColorMatrixFilter.prototype = new Filter();
 		
 		// EaselFL specific
 		this._flMatrix = [];
-		this.id = UID.get();
+		this.id = ns.UID.get();
 	}
 	
 // public methods:
@@ -171,10 +171,9 @@ var p = ColorMatrixFilter.prototype = new Filter();
 	p._flMatrix = null;
 	p.id = null;
 
+	/**** end EaselFL specific code ******/	
 	
-	
-	/**** end EaselFL specific code ******/
-	
-	
-window.ColorMatrixFilter = ColorMatrixFilter;
-}(window));
+ns.ColorMatrixFilter = ColorMatrixFilter;
+
+}(createjs||(createjs={})));
+var createjs;
