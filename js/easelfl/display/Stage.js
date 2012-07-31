@@ -427,12 +427,11 @@ var p = Stage.prototype = new ns.Container();
 	 **/
 	p._enableMouseEvents = function() {
 	  
-	
 	  var o = this;
-	  var evtBindMethod = window.addEventListener || document.addEventListener ? 'addEventListener' : 'attachEvent';
-	  var evtTarget = window[evtBindMethod] ? window : document;
-	  evtTarget[evtBindMethod]("mousemove", function(e) { o._handleMouseMove(e); }, false);
-	  
+	  var evtBindMethod = Stage.__MS_BINDING? 'attachEvent' : 'addEventListener';
+	  var evtTarget = document[evtBindMethod] ? document : window; //prefer document since IE8 window has 'attachEvent' but fails to call after binding
+	  evtTarget[evtBindMethod]( (Stage.__MS_BINDING ? "onmousemove" : "mousemove"), function(e) { o._handleMouseMove(e); }, false);
+	  	  
 		/*var o = this;
 		var evtTarget = window.addEventListener ? window : document;
 		evtTarget.addEventListener("mouseup", function(e) { o._handleMouseUp(e); }, false);
@@ -448,23 +447,32 @@ var p = Stage.prototype = new ns.Container();
 	 * @param {MouseEvent} e
 	 **/
 	p._handleMouseMove = function(e) {
-	
-
+	  
 		if (!this.canvas) {
 			this.mouseX = this.mouseY = null;
 			return;
 		}
 		
 		if(!e){ e = window.event; }
-
-		var inBounds = this.mouseInBounds;
-		this._updateMousePosition(e.pageX, e.pageY);
+		
+		var inBounds = this.mouseInBounds;		
+		
+		if(Stage.__MS_BINDING) {
+		  this._updateMousePosition(
+			e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft,
+			e.clientY + document.body.scrollTop + document.documentElement.scrollTop
+		  );
+									
+		} else {
+		  this._updateMousePosition(e.pageX, e.pageY);
+		}		
+		
 		if (!inBounds && !this.mouseInBounds) { return; }
-
-		/*var evt = new MouseEvent("onMouseMove", this.mouseX, this.mouseY, this, e);
+		
+		var evt = new MouseEvent("onMouseMove", this.mouseX, this.mouseY, this, e);
 
 		if (this.onMouseMove) { this.onMouseMove(evt); }
-		if (this._activeMouseEvent && this._activeMouseEvent.onMouseMove) { this._activeMouseEvent.onMouseMove(evt); }*/
+		if (this._activeMouseEvent && this._activeMouseEvent.onMouseMove) { this._activeMouseEvent.onMouseMove(evt); }
 	}
 
 	/**
@@ -483,7 +491,7 @@ var p = Stage.prototype = new ns.Container();
 		  } while (o = o.offsetParent);		  
 		  
 		  this.mouseInBounds = (pageX >= 0 && pageY >= 0 && pageX < this.canvas.width && pageY < this.canvas.height);
-		  //console.log(pageX+','+pageY);
+		
 		  if (this.mouseInBounds) {
 			  this.mouseX = pageX;
 			  this.mouseY = pageY;
@@ -568,6 +576,8 @@ var p = Stage.prototype = new ns.Container();
 			}
 		}*/
 	}
+	
+	Stage.__MS_BINDING = window.addEventListener || document.addEventListener ? false : true;
 	
 	Stage.FL_THROW_UNIMPLEMENTED = true; //--throw error on use of unimplemented features
 	Stage.FL_LOG_PART_IMPLEMENTED = true; //--log warning notes for partial implementations

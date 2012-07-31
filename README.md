@@ -10,15 +10,19 @@ Key shortcomings & inconsistencies:
 ---- Events ----
 -Event handlers are not applied in Flash synchronously
 
--MouseOver, MouseOut, MouseClick (etc) are tested using shape of
-displayobject, not alpha of pixel as in EaselJS (partially transparent
-will behave differntly).
+-MouseOver, MouseOut, MouseClick (etc) are tested using the shape of a
+displayobject, not alpha of pixel as in EaselJS (partially or fully transparent
+areas may behave differently).
 
 -Flash will not capture mouse events on areas of its stage
 that are completely transparent.
 
+-Flash does not receive mouse events through overlayed html objects
+(although the stage.onMouseMove handler will fire, and stage.mouseX, and
+stage.mouseY are updated).
+
 -Both children and parents are able to receive the same mouseevent
-(in EaselJS, mouseevents are currently captured by the outermost parent).
+(in EaselJS, mouse events are currently captured by the outermost parent).
 
 
 ---- Rendering ----
