@@ -17,6 +17,7 @@ import display.TextFl;
 import display.ShadowFl;
 import filters.ColorMatrixFilterFl;
 import filters.ColorFilterFl;
+import filters.BoxBlurFilterFl;
 import geom.RectangleFl;
 
 import utils.CSSFont;
@@ -66,6 +67,7 @@ class Control {
 		makers.set('shd', shadow);
 		makers.set('cmtxfl', colorMatrixFilter);
 		makers.set('clrfl', colorFilter);
+		makers.set('bxblr', boxBlurFilter);
 		makers.set('txt', text);
 		
 		ImageFl.init();
@@ -80,6 +82,7 @@ class Control {
 		ShadowFl.init();
 		ColorMatrixFilterFl.init();
 		ColorFilterFl.init();
+		BoxBlurFilterFl.init();
 		StageFl.init();
 	}
 	
@@ -183,6 +186,12 @@ class Control {
 	
 	inline static private function colorFilter(id:Int):Void{
 		var flt:ColorFilterFl = new ColorFilterFl(id);
+		filters.set(id, flt);
+		items.set(id, flt);
+	}
+	
+	inline static private function boxBlurFilter(id:Int):Void{
+		var flt:BoxBlurFilterFl = new BoxBlurFilterFl(id);
 		filters.set(id, flt);
 		items.set(id, flt);
 	}

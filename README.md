@@ -34,7 +34,9 @@ bitmaps or fills.
 
 -Masking is not implemented.
 
--Filters are not fully implemented.
+-AlphaMask and AlphaMap filters are not yet implemented. BoxBlur filter
+is implemented using flash.filters.BlurFilter, and may vary in
+pattern and clear color from EaselJS.
 
 -DisplayObject compositeOperation is not implemented.
 

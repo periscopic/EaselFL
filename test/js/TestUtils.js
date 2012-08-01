@@ -119,6 +119,7 @@ var ScriptLoader = {
                 'js/easeljs/filters/ColorFilter.js',
                 'js/easeljs/filters/ColorMatrix.js',
                 'js/easeljs/filters/ColorMatrixFilter.js',
+                'js/easeljs/filters/BoxBlurFilter.js',
                 'js/easeljs/events/MouseEvent.js',
                 'js/easeljs/utils/Ticker.js'
                 ], init)
@@ -154,6 +155,7 @@ var ScriptLoader = {
                 '../js/easelfl/filters/ColorFilter.js',
                 '../js/easelfl/filters/ColorMatrix.js',
                 '../js/easelfl/filters/ColorMatrixFilter.js',
+                '../js/easelfl/filters/BoxBlurFilter.js',
                 '../js/easelfl/events/MouseEvent.js',
                 '../js/easelfl/utils/Ticker.js'
             ], init)

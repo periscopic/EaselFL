@@ -166,7 +166,7 @@ var p = ColorFilter.prototype = new ns.Filter();
 	
 	//-- FL synchronize properties
 	p._flSyncProps = function(ctx) {
-		//--TODO 
+
 		if(!this._flCtx) {
 				this._flCtx = ctx;
 				ctx._flCreate.push(['clrfl', this]);
