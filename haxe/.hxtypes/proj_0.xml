@@ -2871,6 +2871,18 @@
 	<e path="Void"/>
 </f></new>
 	</class>
+	<class path="flash.filters.BlurFilter" params="" file="/usr/lib/haxe/std/flash9/filters/BlurFilter.hx" extern="1">
+		<extends path="flash.filters.BitmapFilter"/>
+		<blurX public="1"><c path="Float"/></blurX>
+		<blurY public="1"><c path="Float"/></blurY>
+		<quality public="1"><c path="Int"/></quality>
+		<new public="1" set="method"><f a="?blurX:?blurY:?quality">
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Int"/>
+	<e path="Void"/>
+</f></new>
+	</class>
 	<class path="display.TextFl" params="" file="src/display/TextFl.hx">
 		<extends path="display.DisplayObjectFl"/>
 		<implements path="interfaces.IExec"/>
@@ -2979,68 +2991,72 @@
 	<e path="Void"/>
 </f></c></makers>
 		<stageFl public="1" static="1"><c path="display.StageFl"/></stageFl>
-		<init public="1" set="method" line="42" static="1"><f a=""><e path="Void"/></f></init>
-		<createItems public="1" get="inline" set="null" line="89" static="1"><f a="a">
+		<init public="1" set="method" line="43" static="1"><f a=""><e path="Void"/></f></init>
+		<createItems public="1" get="inline" set="null" line="92" static="1"><f a="a">
 	<c path="Array"><c path="Array"><d/></c></c>
 	<e path="Void"/>
 </f></createItems>
-		<changeItems public="1" get="inline" set="null" line="100" static="1"><f a="a">
+		<changeItems public="1" get="inline" set="null" line="103" static="1"><f a="a">
 	<c path="Array"><c path="Array"><d/></c></c>
 	<e path="Void"/>
 </f></changeItems>
-		<invoke public="1" get="inline" set="null" line="111" static="1"><f a="cmd">
+		<invoke public="1" get="inline" set="null" line="114" static="1"><f a="cmd">
 	<d/>
 	<d/>
 </f></invoke>
-		<image get="inline" set="null" line="115" static="1"><f a="id">
+		<image get="inline" set="null" line="118" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></image>
-		<bitmap get="inline" set="null" line="121" static="1"><f a="id">
+		<bitmap get="inline" set="null" line="124" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></bitmap>
-		<bitmapAnimation get="inline" set="null" line="127" static="1"><f a="id">
+		<bitmapAnimation get="inline" set="null" line="130" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></bitmapAnimation>
-		<shape get="inline" set="null" line="134" static="1"><f a="id">
+		<shape get="inline" set="null" line="137" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></shape>
-		<graphics get="inline" set="null" line="140" static="1"><f a="id">
+		<graphics get="inline" set="null" line="143" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></graphics>
-		<container get="inline" set="null" line="146" static="1"><f a="id">
+		<container get="inline" set="null" line="149" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></container>
-		<rectangle get="inline" set="null" line="153" static="1"><f a="id">
+		<rectangle get="inline" set="null" line="156" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></rectangle>
-		<frame get="inline" set="null" line="159" static="1"><f a="id">
+		<frame get="inline" set="null" line="162" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></frame>
-		<text get="inline" set="null" line="165" static="1"><f a="id">
+		<text get="inline" set="null" line="168" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></text>
-		<shadow get="inline" set="null" line="172" static="1"><f a="id">
+		<shadow get="inline" set="null" line="175" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></shadow>
-		<colorMatrixFilter get="inline" set="null" line="178" static="1"><f a="id">
+		<colorMatrixFilter get="inline" set="null" line="181" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></colorMatrixFilter>
-		<colorFilter get="inline" set="null" line="184" static="1"><f a="id">
+		<colorFilter get="inline" set="null" line="187" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></colorFilter>
-		<stage get="inline" set="null" line="190" static="1"><f a="id">
+		<boxBlurFilter get="inline" set="null" line="193" static="1"><f a="id">
+	<c path="Int"/>
+	<e path="Void"/>
+</f></boxBlurFilter>
+		<stage get="inline" set="null" line="199" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></stage>
@@ -3177,6 +3193,42 @@
 		<FULL_SCREEN_INTERACTIVE/>
 		<FULL_SCREEN/>
 	</enum>
+	<class path="filters.BoxBlurFilterFl" params="" file="src/filters/BoxBlurFilterFl.hx">
+		<implements path="interfaces.IBitmapFilter"/>
+		<implements path="interfaces.IExec"/>
+		<execs static="1"><c path="Hash"><d/></c></execs>
+		<init public="1" set="method" line="16" static="1"><f a=""><e path="Void"/></f></init>
+		<updateFilter get="inline" set="null" line="35" static="1">
+			<f a="target:a">
+				<c path="filters.BoxBlurFilterFl"/>
+				<d/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Change the filter's attributes
+	 * @param ColorFilterFl
+	 * @param Array
+	 </haxe_doc>
+		</updateFilter>
+		<filter public="1" set="null"><c path="flash.filters.BitmapFilter"/></filter>
+		<_filter><c path="flash.filters.BlurFilter"/></_filter>
+		<exec public="1" get="inline" set="null" line="46">
+			<f a="method:?arguments">
+				<c path="String"/>
+				<d/>
+				<d/>
+			</f>
+			<haxe_doc>
+	 * Execute a method on this BoxBlurFilterFl object
+	 * @param String key corresponding to the method
+	 * @param Array arguments for the method
+	 </haxe_doc>
+		</exec>
+		<new public="1" set="method" line="25"><f a="id">
+	<c path="Int"/>
+	<e path="Void"/>
+</f></new>
+	</class>
 	<class path="flash.events.UncaughtErrorEvents" params="" file="/usr/lib/haxe/std/flash9/events/UncaughtErrorEvents.hx" extern="1">
 		<extends path="flash.events.EventDispatcher"/>
 		<new public="1"><f a=""><e path="Void"/></f></new>

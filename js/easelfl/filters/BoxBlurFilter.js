@@ -26,7 +26,7 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(window) {
+(function(ns) {
 
 /**
 * BoxBlurFilter applies a box blur to DisplayObjects
@@ -40,7 +40,8 @@
 var BoxBlurFilter = function( blurX, blurY, quality ) {
   this.initialize( blurX, blurY, quality );
 }
-var p = BoxBlurFilter.prototype = new Filter();
+
+var p = BoxBlurFilter.prototype = new ns.Filter();
 
 // constructor:
 	/** @ignore */
@@ -51,6 +52,9 @@ var p = BoxBlurFilter.prototype = new Filter();
 		this.blurY = blurY | 0;
 		if ( isNaN(quality) || quality < 1  ) quality = 1;
 		this.quality = quality | 0;
+		
+		// EaselFL specific
+		this.id = ns.UID.get();
 	}
 
 // public properties:
@@ -103,7 +107,7 @@ var p = BoxBlurFilter.prototype = new Filter();
 	 * @param targetY Optional. The y position to draw the result to. Defaults to the value passed to y.
 	 **/
 	p.applyFilter = function(ctx, x, y, width, height, targetCtx, targetX, targetY) {
-		targetCtx = targetCtx || ctx;
+	/*	targetCtx = targetCtx || ctx;
 		if (targetX == null) { targetX = x; }
 		if (targetY == null) { targetY = y; }
 		try {
@@ -230,7 +234,7 @@ var p = BoxBlurFilter.prototype = new Filter();
 			}
 		}
 
-		targetCtx.putImageData(imageData, targetX, targetY);
+		targetCtx.putImageData(imageData, targetX, targetY);*/
 		return true;
 	}
 
@@ -247,10 +251,44 @@ var p = BoxBlurFilter.prototype = new Filter();
 	p.toString = function() {
 		return "[BoxBlurFilter (name="+  this.name +")]";
 	}
+	
+	
+	/***** EaselFL specific code *****/
+	
+	p._flBlurX = p.blurX;
+	p._flBlurY = p.blurY;
+	p._flQuality = p.quality;
+	p._flCtx = null;
+	p.id = null;
+	
+	//-- FL synchronize properties
+	p._flSyncProps = function(ctx) {
+		
+		if(!this._flCtx) {
+				this._flCtx = ctx;
+				ctx._flCreate.push(['bxblr', this]);
+		}
+		
+		if(
+			this.blurX !== this._flBlurX ||
+			this.blurY !== this._flBlurY ||
+			this.quality !== this._flQuality
+			)
+			{
+				
+				this._flBlurX = this.blurX;
+				this._flBlurY = this.blurY;
+				this._flQuality = this.quality;
+				
+				this._flCtx._flChange.push([this.id, 'flt', [this.blurX, this.blurY, this.quality * 2.5]]);
+		}
+	}
+	
+	/**** end EaselFL specific code ******/	
+
 
 // private methods:
 
-
-
-window.BoxBlurFilter = BoxBlurFilter;
-}(window));
+ns.BoxBlurFilter = BoxBlurFilter;
+}(createjs||(createjs={})));
+var createjs;
