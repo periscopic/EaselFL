@@ -133,11 +133,11 @@ var ScriptLoader = {
             
             ScriptLoader.loadInOrder([
                 '../js/swfobject.js',
+                '../js/easelfl/utils/ContextConfig.js',
                 '../js/easelfl/geom/Matrix2D.js',
                 '../js/easelfl/geom/Point.js',
                 '../js/easelfl/geom/Rectangle.js',
                 '../js/easelfl/utils/UID.js',
-                '../js/easelfl/utils/CrossBrowser.js',
                 '../js/easelfl/display/CanvasFl.js',
                 '../js/easelfl/display/DisplayObject.js',
                 '../js/easelfl/display/Container.js',

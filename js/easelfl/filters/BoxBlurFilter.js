@@ -1,4 +1,9 @@
 /*
+ * EaselFL is EaselJS rendering to Flash
+ * @author Brett Johnson, periscopic.com
+ */
+
+/*
 * BoxBlurFilter
 * Visit http://createjs.com/ for documentation, updates and examples.
 *
@@ -40,11 +45,21 @@
 var BoxBlurFilter = function( blurX, blurY, quality ) {
   this.initialize( blurX, blurY, quality );
 }
-
 var p = BoxBlurFilter.prototype = new ns.Filter();
 
 // constructor:
 	/** @ignore */
+	/*
+	 //-- EaselJS
+	p.initialize = function( blurX, blurY, quality ) {
+		if ( isNaN(blurX) || blurX < 0 ) blurX = 0;
+		this.blurX = blurX | 0;
+		if ( isNaN(blurY) || blurY < 0 ) blurY = 0;
+		this.blurY = blurY | 0;
+		if ( isNaN(quality) || quality < 1  ) quality = 1;
+		this.quality = quality | 0;
+	}
+	*/
 	p.initialize = function( blurX, blurY, quality ) {
 		if ( isNaN(blurX) || blurX < 0 ) blurX = 0;
 		this.blurX = blurX | 0;
@@ -91,7 +106,7 @@ var p = BoxBlurFilter.prototype = new ns.Filter();
 	 **/
 	p.getBounds = function() {
 		// TODO: this doesn't properly account for blur quality.
-		return new Rectangle(-this.blurX,-this.blurY,2*this.blurX,2*this.blurY);
+		return new ns.Rectangle(-this.blurX,-this.blurY,2*this.blurX,2*this.blurY);
 	}
 
 	/**
@@ -106,8 +121,10 @@ var p = BoxBlurFilter.prototype = new ns.Filter();
 	 * @param targetX Optional. The x position to draw the result to. Defaults to the value passed to x.
 	 * @param targetY Optional. The y position to draw the result to. Defaults to the value passed to y.
 	 **/
+	/*
+	 //-- EaselJS
 	p.applyFilter = function(ctx, x, y, width, height, targetCtx, targetX, targetY) {
-	/*	targetCtx = targetCtx || ctx;
+		targetCtx = targetCtx || ctx;
 		if (targetX == null) { targetX = x; }
 		if (targetY == null) { targetY = y; }
 		try {
@@ -234,7 +251,12 @@ var p = BoxBlurFilter.prototype = new ns.Filter();
 			}
 		}
 
-		targetCtx.putImageData(imageData, targetX, targetY);*/
+		targetCtx.putImageData(imageData, targetX, targetY);
+		return true;
+	}
+	*/
+	p.applyFilter = function(ctx, x, y, width, height, targetCtx, targetX, targetY) {
+		if(ns.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:BoxBlurFilter.applyFilter currently not implemented';
 		return true;
 	}
 
@@ -249,7 +271,7 @@ var p = BoxBlurFilter.prototype = new ns.Filter();
 	 * Returns a string representation of this object.
 	 **/
 	p.toString = function() {
-		return "[BoxBlurFilter (name="+  this.name +")]";
+		return "[BoxBlurFilter]";
 	}
 	
 	
@@ -275,7 +297,6 @@ var p = BoxBlurFilter.prototype = new ns.Filter();
 			this.quality !== this._flQuality
 			)
 			{
-				
 				this._flBlurX = this.blurX;
 				this._flBlurY = this.blurY;
 				this._flQuality = this.quality;
@@ -286,8 +307,9 @@ var p = BoxBlurFilter.prototype = new ns.Filter();
 	
 	/**** end EaselFL specific code ******/	
 
-
 // private methods:
+
+
 
 ns.BoxBlurFilter = BoxBlurFilter;
 }(createjs||(createjs={})));

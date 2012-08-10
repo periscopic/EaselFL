@@ -50,7 +50,6 @@ var BitmapAnimation = function(spriteSheet) {
 }
 var p = BitmapAnimation.prototype = new ns.DisplayObject();
 
-
 // public properties:
 
 	/**
@@ -178,13 +177,6 @@ var p = BitmapAnimation.prototype = new ns.DisplayObject();
 	 **/
 	p.DisplayObject_draw = p.draw;
 
-
-	/**** Begin EaselFL specific code ****/
-
-	p._flFrame = null;
-
-
-	/**** Draw method is modified in EaselFL ****/
 /**
 	 * Draws the display object into the specified context ignoring it's visible, alpha, shadow, and transform.
 	 * Returns true if the draw was handled (useful for overriding functionality).
@@ -195,6 +187,19 @@ var p = BitmapAnimation.prototype = new ns.DisplayObject();
 	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
 	 * into itself).
 	 **/
+	/*
+	 //-- EaselJS
+	p.draw = function(ctx, ignoreCache) {
+		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
+		this._normalizeFrame();
+		var o = this.spriteSheet.getFrame(this.currentFrame);
+		if (o == null) { return; }
+		var rect = o.rect;
+		// TODO: implement snapToPixel on regX/Y?
+		ctx.drawImage(o.image, rect.x, rect.y, rect.width, rect.height, -o.regX, -o.regY, rect.width, rect.height);
+		return true;
+	}
+	*/
 	p.draw = function(ctx, ignoreCache) {
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
 		this._normalizeFrame();
@@ -208,23 +213,8 @@ var p = BitmapAnimation.prototype = new ns.DisplayObject();
 			ctx._flChange.push([this.id, 'frm', o.__fl.id]);
 		}
 		
-		/*var rect = o.rect;
-		// TODO: implement snapToPixel on regX/Y?
-		ctx.drawImage(o.image, rect.x, rect.y, rect.width, rect.height, -o.regX, -o.regY, rect.width, rect.height);*/
 		return true;
 	}
-	
-	/**
-	 * Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
-	 **/
-	p._flRunCreate = function(ctx){
-	  if(this._flCtx!==ctx){
-			this._flCtx = ctx;
-			ctx._flCreate.push(['ban', this]);		
-	  }
-	}
-	
-	/**** End EaselFL specific code ****/	
 
 	//Note, the doc sections below document using the specified APIs (from DisplayObject)  from
 	//Bitmap. This is why they have no method implementations.
@@ -401,8 +391,23 @@ var p = BitmapAnimation.prototype = new ns.DisplayObject();
 			this.currentFrame = frameOrAnimation;
 		}
 	}
+	
+	/**** Begin EaselFL specific code ****/
+
+	p._flFrame = null;
+	
+	/**
+	 * Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
+	 **/
+	p._flRunCreate = function(ctx){
+	  if(this._flCtx!==ctx){
+			this._flCtx = ctx;
+			ctx._flCreate.push(['ban', this]);		
+	  }
+	}
+
+	/**** End EaselFL specific code ****/
 
 ns.BitmapAnimation = BitmapAnimation;
-
 }(createjs||(createjs={})));
 var createjs;

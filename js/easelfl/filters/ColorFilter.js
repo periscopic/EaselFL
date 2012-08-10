@@ -1,4 +1,9 @@
 /*
+ * EaselFL is EaselJS rendering to Flash
+ * @author Brett Johnson, periscopic.com
+ */
+
+/*
 * ColorFilter
 * Visit http://createjs.com/ for documentation, updates and examples.
 *
@@ -110,6 +115,19 @@ var p = ColorFilter.prototype = new ns.Filter();
 	 * @method initialize
 	 * @protected
 	 **/
+	/*
+	 //-- EaselJS
+	p.initialize = function(redMultiplier, greenMultiplier, blueMultiplier, alphaMultiplier, redOffset, greenOffset, blueOffset, alphaOffset) {
+		this.redMultiplier = redMultiplier != null ? redMultiplier : 1;
+		this.greenMultiplier = greenMultiplier != null ? greenMultiplier : 1;
+		this.blueMultiplier = blueMultiplier != null ? blueMultiplier : 1;
+		this.alphaMultiplier = alphaMultiplier != null ? alphaMultiplier : 1;
+		this.redOffset = redOffset || 0;
+		this.greenOffset = greenOffset || 0;
+		this.blueOffset = blueOffset || 0;
+		this.alphaOffset = alphaOffset || 0;
+	}
+	*/
 	p.initialize = function(redMultiplier, greenMultiplier, blueMultiplier, alphaMultiplier, redOffset, greenOffset, blueOffset, alphaOffset) {
 		this.redMultiplier = redMultiplier != null ? redMultiplier : 1;
 		this.greenMultiplier = greenMultiplier != null ? greenMultiplier : 1;
@@ -138,8 +156,10 @@ var p = ColorFilter.prototype = new ns.Filter();
 	 * @param targetX Optional. The x position to draw the result to. Defaults to the value passed to x.
 	 * @param targetY Optional. The y position to draw the result to. Defaults to the value passed to y.
 	 **/
+	/*
+	 //-- EaselJS
 	p.applyFilter = function(ctx, x, y, width, height, targetCtx, targetX, targetY) {
-		/*targetCtx = targetCtx || ctx;
+		targetCtx = targetCtx || ctx;
 		if (targetX == null) { targetX = x; }
 		if (targetY == null) { targetY = y; }
 		try {
@@ -157,10 +177,33 @@ var p = ColorFilter.prototype = new ns.Filter();
 			data[i+3] = data[i+3]*this.alphaMultiplier+this.alphaOffset;
 		}
 		imageData.data = data;
-		targetCtx.putImageData(imageData, targetX, targetY);*/
+		targetCtx.putImageData(imageData, targetX, targetY);
+		return true;
+	}
+	*/
+	p.applyFilter = function(ctx, x, y, width, height, targetCtx, targetX, targetY) {
+		if(ns.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:ColorFilter.applyFilter currently not implemented';
 		return true;
 	}
 	
+	/**
+	 * Returns a string representation of this object.
+	 * @method toString
+	 * @return {String} a string representation of the instance.
+	 **/
+	p.toString = function() {
+		return "[ColorFilter]";
+	}
+
+
+	/**
+	 * Returns a clone of this ColorFilter instance.
+	 * @method clone
+	 @return {ColorFilter} A clone of the current ColorFilter instance.
+	 **/
+	p.clone = function() {
+		return new ColorFilter(this.redMultiplier, this.greenMultiplier, this.blueMultiplier, this.alphaMultiplier, this.redOffset, this.greenOffset, this.blueOffset, this.alphaOffset);
+	}
 	
 	/***** EaselFL specific code *****/
 	
@@ -204,33 +247,8 @@ var p = ColorFilter.prototype = new ns.Filter();
 	p._flProps = null;
 	p.id = null;
 
-	
-	
 	/**** end EaselFL specific code ******/
-	
-	
-	
-
-	/**
-	 * Returns a string representation of this object.
-	 * @method toString
-	 * @return {String} a string representation of the instance.
-	 **/
-	p.toString = function() {
-		return "[ColorFilter]";
-	}
-
-
-	/**
-	 * Returns a clone of this ColorFilter instance.
-	 * @method clone
-	 @return {ColorFilter} A clone of the current ColorFilter instance.
-	 **/
-	p.clone = function() {
-		return new ColorFilter(this.redMultiplier, this.greenMultiplier, this.blueMultiplier, this.alphaMultiplier, this.redOffset, this.greenOffset, this.blueOffset, this.alphaOffset);
-	}
 
 ns.ColorFilter = ColorFilter;
-
 }(createjs||(createjs={})));
 var createjs;

@@ -40,12 +40,10 @@
 * @constructor
 * @param {Image | HTMLCanvasElement | HTMLVideoElement | String} imageOrUri The source object or URI to an image to display. This can be either an Image, Canvas, or Video object, or a string URI to an image file to load and use. If it is a URI, a new Image object will be constructed and assigned to the .image property.
 **/
-var Bitmap = function(imageOrUri) {	
+var Bitmap = function(imageOrUri) {
   this.initialize(imageOrUri);
 }
 var p = Bitmap.prototype = new ns.DisplayObject();
-
-
 
 // public properties:
 	/**
@@ -87,7 +85,6 @@ var p = Bitmap.prototype = new ns.DisplayObject();
 	 **/
 	p.initialize = function(imageOrUri) {
 		this.DisplayObject_initialize();
-		
 		if (typeof imageOrUri == "string") {
 			this.image = new Image();
 			this.image.src = imageOrUri;
@@ -115,6 +112,54 @@ var p = Bitmap.prototype = new ns.DisplayObject();
 	 * @private
 	 **/
 	p.DisplayObject_draw = p.draw;
+	
+	/**
+	 * Draws the display object into the specified context ignoring it's visible, alpha, shadow, and transform.
+	 * Returns true if the draw was handled (useful for overriding functionality).
+	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
+	 * @method draw
+	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
+	 * @param {Boolean} ignoreCache Indicates whether the draw operation should ignore any current cache. 
+	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
+	 * into itself).
+	 **/
+	/*
+	 //-- EaselJS
+	p.draw = function(ctx, ignoreCache) {
+		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
+		var rect = this.sourceRect;
+		if (rect) {
+			ctx.drawImage(this.image, rect.x, rect.y, rect.width, rect.height, 0, 0, rect.width, rect.height);
+		} else {
+			ctx.drawImage(this.image, 0, 0);
+		}
+		return true;
+	}
+	*/
+	p.draw = function(ctx, ignoreCache) {
+	
+		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
+
+		if(this.image) {
+			if(this.image!==this._flImg) {
+				this._flImg = this.image;
+				ns.ImageFl.watch(this.image);
+				
+				if(this.sourceRect) {
+					this.sourceRect._flSync(ctx);
+				}
+				
+				if(this.sourceRect!==this._flSourceRect) {
+					this._flSourceRect = this.sourceRect;
+					ctx._flChange.push([this.id, 'rct', this.sourceRect ? this.sourceRect.id : null]);
+				}
+				ctx._flChange.push([this.id, 'img', this.image.__fl.id]);
+			}
+			
+			this.image.__fl.sync(ctx);
+		}
+		return true;
+	}
 
 	//Note, the doc sections below document using the specified APIs (from DisplayObject)  from
 	//Bitmap. This is why they have no method implementations.
@@ -190,48 +235,10 @@ var p = Bitmap.prototype = new ns.DisplayObject();
 	  }
 	}
 
-	/**** Draw method is modified in EaselFL ****/	
-	
-	/**
-	 * Draws the display object into the specified context ignoring it's visible, alpha, shadow, and transform.
-	 * Returns true if the draw was handled (useful for overriding functionality).
-	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
-	 * @method draw
-	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
-	 * @param {Boolean} ignoreCache Indicates whether the draw operation should ignore any current cache. 
-	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
-	 * into itself).
-	 **/
-	p.draw = function(ctx, ignoreCache) {
-	
-		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
-
-		if(this.image) {
-			if(this.image!==this._flImg) {
-				this._flImg = this.image;
-				ns.ImageFl.watch(this.image);
-				
-				if(this.sourceRect) {
-					this.sourceRect._flSync(ctx);
-				}
-				
-				if(this.sourceRect!==this._flSourceRect) {
-					this._flSourceRect = this.sourceRect;
-					ctx._flChange.push([this.id, 'rct', this.sourceRect ? this.sourceRect.id : null]);
-				}
-				ctx._flChange.push([this.id, 'img', this.image.__fl.id]);
-			}
-			
-			this.image.__fl.sync(ctx);
-		}
-		return true;
-	}
-
-
 	/**** End EaselFL specific code ****/
 
 // private methods:
-ns.Bitmap = Bitmap;
 
+ns.Bitmap = Bitmap;
 }(createjs||(createjs={})));
 var createjs;

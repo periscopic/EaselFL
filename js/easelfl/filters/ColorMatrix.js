@@ -1,4 +1,9 @@
 /*
+ * EaselFL is EaselJS rendering to Flash
+ * @author Brett Johnson, periscopic.com
+ */
+
+/*
 * ColorMatrix
 * Visit http://createjs.com/ for documentation, updates and examples.
 *
@@ -246,8 +251,14 @@
 	 * Return a length 25 (5x5) array instance containing this matrix's values.
 	 * @return {Array} An array holding this matrix's values.
 	 **/
+	/*
+	 //-- EaselJS
 	p.toArray = function() {
-		//return this.slice(0,ColorMatrix.LENGTH);
+		return this.slice(0,ColorMatrix.LENGTH);
+	};
+	*/
+	p.toArray = function() {
+		//-- slicing doesn't appear to work when extending array prototype	
 		var a = [];
 		for(var i=0, l=ColorMatrix.LENGTH; i<l; ++i) {
 			a[i] = this[i];
@@ -317,6 +328,6 @@
 	};
 	
 	ns.ColorMatrix = ColorMatrix;
-	
+
 }(createjs||(createjs={})));
 var createjs;

@@ -1,4 +1,9 @@
 /*
+ * EaselFL is EaselJS rendering to Flash
+ * @author Brett Johnson, periscopic.com
+ */
+
+/*
 * Shape
 * Visit http://createjs.com/ for documentation, updates and examples.
 *
@@ -40,25 +45,6 @@ var Shape = function(graphics) {
   this.initialize(graphics);
 }
 var p = Shape.prototype = new ns.DisplayObject();
-
-	/**
-	 * The ContextFl of the display list to which this is attached
-	 * @private
-	 **/
-	p._flCtx = null;
-
-	/**
-	* Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
-	* @param {ContextFl} ctx The EaselFl context as defined in CanvasFl.js
-	**/
-	p._flRunCreate = function(ctx){
-	  if(this._flCtx!==ctx){
-			this._flCtx = ctx;
-			ctx._flCreate.push(['shp', this]);
-			ctx._flCreate.push(['gfx', this.graphics]); //-- create the graphics		
-			ctx._flChange.push([this.id, 'gfx', [this.graphics.id]]) //-- link the graphics
-	  }
-	}	
 
 // public properties:
 	/**
@@ -115,6 +101,14 @@ var p = Shape.prototype = new ns.DisplayObject();
 	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
 	 * into itself).
 	 **/
+	/*
+	 //-- EaselJS
+	 p.draw = function(ctx, ignoreCache) {
+		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
+		this.graphics.draw(ctx);
+		return true;
+	}
+	*/
 	p.draw = function(ctx, ignoreCache) {
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
 		
@@ -133,12 +127,17 @@ var p = Shape.prototype = new ns.DisplayObject();
 	 * @param {Boolean} recursive If true, this Shape's Graphics instance will also be cloned. If false, the Graphics instance 
 	 * will be shared with the new Shape.
 	 **/
+	/*
+	 //-- EaselJS
+	 p.clone = function(recursive) {
+		var o = new Shape((recursive && this.graphics) ? this.graphics.clone() : this.graphics);
+		this.cloneProps(o);
+		return o;
+	}
+	*/	
 	p.clone = function(recursive) {
 		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Shape.clone currently not implemented';
-	
-		//var o = new Shape((recursive && this.graphics) ? this.graphics.clone() : this.graphics);
-		//this.cloneProps(o);
-		return o;
+		return null;
 	}
 		
 	/**
@@ -149,6 +148,28 @@ var p = Shape.prototype = new ns.DisplayObject();
 	p.toString = function() {
 		return "[Shape (name="+  this.name +")]";
 	}
+	
+	/**** Begin EaselFL specific code ****/
+	
+	/**
+	 * The ContextFl of the display list to which this is attached
+	 * @private
+	 **/
+	p._flCtx = null;
+
+	/**
+	* Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
+	* @param {ContextFl} ctx The EaselFl context as defined in CanvasFl.js
+	**/
+	p._flRunCreate = function(ctx){
+	  if(this._flCtx!==ctx){
+			this._flCtx = ctx;
+			ctx._flCreate.push(['shp', this]);
+			ctx._flCreate.push(['gfx', this.graphics]); //-- create the graphics		
+			ctx._flChange.push([this.id, 'gfx', [this.graphics.id]]) //-- link the graphics
+	  }
+	}
+	/**** End EaselFL specific code ****/
 
 ns.Shape = Shape;
 

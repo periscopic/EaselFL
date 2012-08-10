@@ -1,4 +1,9 @@
 /*
+ * EaselFL is EaselJS rendering to Flash
+ * @author Brett Johnson, periscopic.com
+ */
+
+/*
 * Shadow
 * Visit http://createjs.com/ for documentation, updates and examples.
 *
@@ -41,10 +46,6 @@ var Shadow = function(color, offsetX, offsetY, blur) {
   this.initialize(color, offsetX, offsetY, blur);
 }
 var p = Shadow.prototype;
-
-	//-- EaselFL only
-	p.id = null;
-	p._flChange = null;
 	
 // static public properties:
 	/**
@@ -95,13 +96,21 @@ var p = Shadow.prototype;
 	 * @param {Number} offsetY The y offset of the shadow.
 	 * @param {Number} blur The size of the blurring effect.
 	 **/
+	/*
+	 //-- EaselJS
+	p.initialize = function(color, offsetX, offsetY, blur) {
+		this.color = color;
+		this.offsetX = offsetX;
+		this.offsetY = offsetY;
+		this.blur = blur;
+	}
+	*/
 	p.initialize = function(color, offsetX, offsetY, blur) {
 		this.color = color;
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
 		this.blur = blur;
 		
-		//-- EaselFL only
 		this.id = ns.UID.get();
 	}
 	
@@ -125,7 +134,16 @@ var p = Shadow.prototype;
 		return new Shadow(this.color, this.offsetX, this.offsetY, this.blur);
 	}
 	
-	//-- FL synchronize properties
+	/***** EaselFL specific code *****/
+	p.id = null;
+	p._flChange = null;
+	p._flCtx = null;
+	p._flColor = null;
+	p._flOffsetX = 0;
+	p._flOffsetY = 0;
+	p._flBlur = 0;
+	
+		//-- synchronize properties
 	p._flSyncProps = function(ctx) {
 		if(!this._flCtx) {
 				this._flCtx = ctx;
@@ -146,11 +164,7 @@ var p = Shadow.prototype;
 		}
 	}
 	
-	p._flCtx = null;
-	p._flColor = null;
-	p._flOffsetX = 0;
-	p._flOffsetY = 0;
-	p._flBlur = 0;
+	/****** End EaselFL specific code *****/
 
 	
 	// this has to be populated after the class is defined:
@@ -158,6 +172,5 @@ var p = Shadow.prototype;
 	Shadow.identity = new Shadow("transparent", 0, 0, 0);
 	
 ns.Shadow = Shadow;
-
 }(createjs||(createjs={})));
 var createjs;

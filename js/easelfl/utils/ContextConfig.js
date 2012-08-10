@@ -28,14 +28,26 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
+/**
+ * Setup the context to such that EaselFL will have necessary objects
+ * and methods in place to function properly in targeted browsers
+ * and for parity with corresponding EaselJS release build.
+ */
 
+(function() {
 
-(function(ns) {
-
+/**
+ * Set 'createjs' namespace equal to window for parity with EaselJS 0.4.2
+ */
+	// TODO : remove this once EaselJS stable release no adds namespacing
+	if(!createjs) {
+		window.createjs = window;
+	}
+	
 /**
  * Add methods necessary for core Easel functionality to work in Internet Explorer 8.
  */
-
+	//-- fix Array.indexOf
 	if(!Array.prototype.indexOf) {
 		Array.prototype.indexOf = function(item){
 			for (var i = 0, l = this.length; i < l; i++){
@@ -47,13 +59,12 @@
 		}
 	}
 	
+	//-- fix Date.now
 	if(!Date.now){
 		Date.now = function(){
 			return new Date().valueOf();
 		}
 	}
 
-	
-}(createjs||(createjs={})));
-var createjs;
+}());
 

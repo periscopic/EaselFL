@@ -1,4 +1,9 @@
 /*
+ * EaselFL is EaselJS rendering to Flash
+ * @author Brett Johnson, periscopic.com
+ */
+
+/*
 * ColorMatrixFilter
 * Visit http://createjs.com/ for documentation, updates and examples.
 *
@@ -29,11 +34,11 @@
 (function(ns) {
 
 /**
-* Applies color transforms.
+* Allows you to carry out complex color operations such as modifying saturation, brightness, or inverting.
 * @class ColorMatrixFilter
 * @constructor
 * @augments Filter
-* @param {Number} blurX
+* @param matrix A 4x5 matrix describing the color operation to perform. See also the ColorMatrix class.
 **/
 var ColorMatrixFilter = function(matrix) {
   this.initialize(matrix);
@@ -46,15 +51,18 @@ var p = ColorMatrixFilter.prototype = new ns.Filter();
 // constructor:
 	// TODO: detailed docs.
 	/** 
-	 * Allows you to carry out complex color operations such as modifying saturation, brightness, or inverting.
 	 * @method initialize
 	 * @protected
 	 * @param matrix A 4x5 matrix describing the color operation to perform.
 	 **/
+	/*
+	 //-- EaselJS
 	p.initialize = function(matrix) {
 		this.matrix = matrix;
-		
-		// EaselFL specific
+	}
+	*/
+	p.initialize = function(matrix) {
+		this.matrix = matrix;		
 		this._flMatrix = [];
 		this.id = ns.UID.get();
 	}
@@ -72,8 +80,10 @@ var p = ColorMatrixFilter.prototype = new ns.Filter();
 	 * @param targetX Optional. The x position to draw the result to. Defaults to the value passed to x.
 	 * @param targetY Optional. The y position to draw the result to. Defaults to the value passed to y.
 	 **/
+	/*
+	 //-- EaselJS
 	p.applyFilter = function(ctx, x, y, width, height, targetCtx, targetX, targetY) {
-	/*	targetCtx = targetCtx || ctx;
+		targetCtx = targetCtx || ctx;
 		if (targetX == null) { targetX = x; }
 		if (targetY == null) { targetY = y; }
 		try {
@@ -104,7 +114,11 @@ var p = ColorMatrixFilter.prototype = new ns.Filter();
 		imageData.data = data;
 		targetCtx.putImageData(imageData, targetX, targetY);
 		return true;
+	}
 	*/
+	p.applyFilter = function(ctx, x, y, width, height, targetCtx, targetX, targetY) {
+		if(ns.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:ColorMatrixFilter.applyFilter currently not implemented';
+		return true;
 	}
 
 	/**
@@ -174,6 +188,5 @@ var p = ColorMatrixFilter.prototype = new ns.Filter();
 	/**** end EaselFL specific code ******/	
 	
 ns.ColorMatrixFilter = ColorMatrixFilter;
-
 }(createjs||(createjs={})));
 var createjs;

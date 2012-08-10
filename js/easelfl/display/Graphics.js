@@ -1,4 +1,9 @@
 /*
+ * EaselFL is EaselJS rendering to Flash
+ * @author Brett Johnson, periscopic.com
+ */
+
+/*
 * Graphics
 * Visit http://createjs.com/ for documentation, updates and examples.
 *
@@ -37,16 +42,23 @@
 * @for Graphics
 * @constructor
 **/
-function Command(f, params) {
+/*
+//-- EaselJS
+function Command(f, params, path) {
 	this.f = f;
 	this.params = params;
+	this.path = path==null ? true : path;
 }
+*/
 
 /**
 * @method exec
 * @param {Object} scope
 **/
+/*
+//-- EaselJS
 Command.prototype.exec = function(scope) { this.f.apply(scope, this.params); }
+*/
 
 /**
 * The Graphics class exposes an easy to use API for generating vector drawing instructions and drawing them to a specified context.
@@ -76,9 +88,6 @@ var Graphics = function() {
 	this.initialize();
 }
 var p = Graphics.prototype;
-
-	p._flChange = null;
-	p._flChildImages = null;
 
 // static public methods:
 	
@@ -174,7 +183,10 @@ var p = Graphics.prototype;
 	 * @protected
 	 * @type CanvasRenderingContext2D
 	 **/
-	Graphics._ctx = null;//document.createElement("canvas").getContext("2d");
+	/*
+	//-- EaselJS
+	Graphics._ctx = document.createElement("canvas").getContext("2d");
+	*/
 	
 	/**
 	 * @property beginCmd
@@ -182,7 +194,10 @@ var p = Graphics.prototype;
 	 * @protected
 	 * @type Command
 	 **/
-	Graphics.beginCmd = null;// new Command(Graphics._ctx.beginPath, []);
+	/*
+	//-- EaselJS
+	Graphics.beginCmd = new Command(Graphics._ctx.beginPath, [], false);
+	*/
 	
 	/**
 	 * @property fillCmd
@@ -190,7 +205,10 @@ var p = Graphics.prototype;
 	 * @protected
 	 * @type Command
 	 **/
-	Graphics.fillCmd = null;//new Command(Graphics._ctx.fill, []);
+	/*
+	//-- EaselJS
+	Graphics.fillCmd = new Command(Graphics._ctx.fill, [], false);
+	*/
 	
 	/**
 	 * @property strokeCmd
@@ -198,8 +216,14 @@ var p = Graphics.prototype;
 	 * @protected
 	 * @type Command
 	 **/
-	Graphics.strokeCmd = null;//new Command(Graphics._ctx.stroke, []);
+	/*
+	//-- EaselJS
+	Graphics.strokeCmd = new Command(Graphics._ctx.stroke, [], false);
+	*/
+	
+// public properties
 
+// private properties
 	/**
 	 * @property _strokeInstructions
 	 * @protected
@@ -258,22 +282,19 @@ var p = Graphics.prototype;
 	 **/
 	p._dirty = false;
 	
-	
-	/**
-	* NOTE : EaselFl only
-	 * @property id
-	 * @protected
-	 * @type Number
-	 * @default -1
-	 **/
-	p.id = -1;
-	
 	/** 
 	 * Initialization method.
 	 * @method initialize
 	 * @protected
 	 * @param {String} instructions
 	 **/
+	/*
+	//-- EaselJS
+	p.initialize = function() {
+		this.clear();
+		this._ctx = Graphics._ctx;
+	}
+	*/
 	p.initialize = function() {
 		this.id = ns.UID.get();
 		this._flChange = [];
@@ -287,6 +308,16 @@ var p = Graphics.prototype;
 	 * @method draw
 	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
 	 **/
+	/*
+	//-- EaselJS
+	p.draw = function(ctx) {
+		if (this._dirty) { this._updateInstructions(); }
+		var instr = this._instructions;
+		for (var i=0, l=instr.length; i<l; i++) {
+			instr[i].exec(ctx);
+		}
+	}
+	*/
 	p.draw = function(ctx) {
 		//--make sure images drawn (e.g. using bitmapBitmapStroke) are added to Flash 
 		while(this._flChildImages.length){
@@ -302,6 +333,25 @@ var p = Graphics.prototype;
 		}
 	}
 	
+	/**
+	 * Draws only the path described for this Graphics instance, skipping any
+	 * non-path instructions, including fill and stroke descriptions.
+	 * Used by DisplayObject.clippingPath to draw the clipping path, for example.
+	 * @method drawAsPath
+	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
+	 **/
+	/*
+	 //-- EaselJS
+	p.drawAsPath = function(ctx) {
+		if (this._dirty) { this._updateInstructions(); }
+		var instr, instrs = this._instructions;
+		for (var i=0, l=instrs.length; i<l; i++) {
+			// the first command is always a beginPath command.
+			if ((instr = instrs[i]).path || i==0) { instr.exec(ctx); }
+		}
+	}
+	*/
+	
 // public methods that map directly to context 2D calls:
 	/**
 	 * Moves the drawing point to the specified position.
@@ -310,6 +360,13 @@ var p = Graphics.prototype;
 	 * @param {Number} y The y coordinate the drawing point should move to.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
+	p.moveTo = function(x, y) {
+		this._activeInstructions.push(new Command(this._ctx.moveTo, [x, y]));
+		return this;
+	}
+	*/
 	p.moveTo = function(x, y) {
 		this._flChange.push([this.id, 'mt', [x, y]]);
 		return this;
@@ -325,6 +382,14 @@ var p = Graphics.prototype;
 	 * @param {Number} y The y coordinate the drawing point should draw to.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
+	p.lineTo = function(x, y) {
+		this._dirty = this._active = true;
+		this._activeInstructions.push(new Command(this._ctx.lineTo, [x, y]));
+		return this;
+	}
+	*/
 	p.lineTo = function(x, y) {
 		this._flChange.push([this.id, 'lt', [x, y]]);
 		return this;
@@ -342,6 +407,14 @@ var p = Graphics.prototype;
 	 * @param {Number} radius
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
+	p.arcTo = function(x1, y1, x2, y2, radius) {
+		this._dirty = this._active = true;
+		this._activeInstructions.push(new Command(this._ctx.arcTo, [x1, y1, x2, y2, radius]));
+		return this;
+	}
+	*/
 	p.arcTo = function(x1, y1, x2, y2, radius) {
 		this._flChange.push([this.id, 'at', [x1, y1, x2, y2, radius]]); //-- need implementation Flash side		
 		return this;
@@ -361,6 +434,15 @@ var p = Graphics.prototype;
 	 * @param {Boolean} anticlockwise
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
+	p.arc = function(x, y, radius, startAngle, endAngle, anticlockwise) {
+		this._dirty = this._active = true;
+		if (anticlockwise == null) { anticlockwise = false; }
+		this._activeInstructions.push(new Command(this._ctx.arc, [x, y, radius, startAngle, endAngle, anticlockwise]));
+		return this;
+	}
+	*/
 	p.arc = function(x, y, radius, startAngle, endAngle, anticlockwise) {
 		if (anticlockwise == null) { anticlockwise = false; }
 		this._flChange.push([this.id, 'a', [x, y, radius, startAngle, endAngle, anticlockwise]]);
@@ -378,6 +460,14 @@ var p = Graphics.prototype;
 	 * @param {Number} y
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
+	p.quadraticCurveTo = function(cpx, cpy, x, y) {
+		this._dirty = this._active = true;
+		this._activeInstructions.push(new Command(this._ctx.quadraticCurveTo, [cpx, cpy, x, y]));
+		return this;
+	}
+	*/
 	p.quadraticCurveTo = function(cpx, cpy, x, y) {
 		this._flChange.push([this.id, 'qt', [cpx, cpy, x, y]]);
 		return this;
@@ -397,6 +487,14 @@ var p = Graphics.prototype;
 	 * @param {Number} y
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
+	p.bezierCurveTo = function(cp1x, cp1y, cp2x, cp2y, x, y) {
+		this._dirty = this._active = true;
+		this._activeInstructions.push(new Command(this._ctx.bezierCurveTo, [cp1x, cp1y, cp2x, cp2y, x, y]));
+		return this;
+	}
+	*/
 	p.bezierCurveTo = function(cp1x, cp1y, cp2x, cp2y, x, y) {
 		this._flChange.push([this.id, 'bt', [cp1x, cp1y, cp2x, cp2y, x, y]]);
 		return this;
@@ -414,6 +512,14 @@ var p = Graphics.prototype;
 	 * @param {Number} h Height of the rectangle
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
+	p.rect = function(x, y, w, h) {
+		this._dirty = this._active = true;
+		this._activeInstructions.push(new Command(this._ctx.rect, [x, y, w, h]));
+		return this;
+	}
+	*/
 	p.rect = function(x, y, w, h) {
 		this._flChange.push([this.id, 'dr', [x, y, w, h]]);
 		return this;
@@ -425,6 +531,16 @@ var p = Graphics.prototype;
 	 * @method closePath
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
+	p.closePath = function() {
+		if (this._active) {
+			this._dirty = true;
+			this._activeInstructions.push(new Command(this._ctx.closePath, []));
+		}
+		return this;
+	}
+	*/
 	p.closePath = function() {
 			this._flChange.push([this.id, 'cp']);
 			return this;
@@ -437,6 +553,17 @@ var p = Graphics.prototype;
 	 * @method clear
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
+	p.clear = function() {
+		this._instructions = [];
+		this._oldInstructions = [];
+		this._activeInstructions = [];
+		this._strokeStyleInstructions = this._strokeInstructions = this._fillInstructions = null;
+		this._active = this._dirty = false;
+		return this;
+	}
+	*/
 	p.clear = function() {
 		this._flChange.push([this.id, 'c']);
 		return this;
@@ -449,6 +576,14 @@ var p = Graphics.prototype;
 	 * result in no fill.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
+	p.beginFill = function(color) {
+		if (this._active) { this._newPath(); }
+		this._fillInstructions = color ? [new Command(this._setProp, ["fillStyle", color], false)] : null;
+		return this;
+	}
+	*/
 	p.beginFill = function(color) {
 		this._flChange.push([this.id, 'f', [color]]);
 		return this;
@@ -469,9 +604,20 @@ var p = Graphics.prototype;
 	 * @param {Number} y1 The position of the second point defining the line that defines the gradient direction and size.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
+	p.beginLinearGradientFill = function(colors, ratios, x0, y0, x1, y1) {
+		if (this._active) { this._newPath(); }
+		var o = this._ctx.createLinearGradient(x0, y0, x1, y1);
+		for (var i=0, l=colors.length; i<l; i++) {
+			o.addColorStop(ratios[i], colors[i]);
+		}
+		this._fillInstructions = [new Command(this._setProp, ["fillStyle", o], false)];
+		return this;
+	}
+	*/
 	p.beginLinearGradientFill = function(colors, ratios, x0, y0, x1, y1) {
 		if(ns.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.beginLinearGradientFill currently not implemented';
-		//this._flChange.push([this.id, 'lgf', [colors, ratios, x0, y0, x1, y1]]); //-- needs implementation on Flash side
 		return this;
 	}
 	
@@ -492,9 +638,20 @@ var p = Graphics.prototype;
 	 * @param {Number} r1 Radius of the outer circle that defines the gradient.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
+	p.beginRadialGradientFill = function(colors, ratios, x0, y0, r0, x1, y1, r1) {
+		if (this._active) { this._newPath(); }
+		var o = this._ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);
+		for (var i=0, l=colors.length; i<l; i++) {
+			o.addColorStop(ratios[i], colors[i]);
+		}
+		this._fillInstructions = [new Command(this._setProp, ["fillStyle", o], false)];
+		return this;
+	}
+	*/
 	p.beginRadialGradientFill = function(colors, ratios, x0, y0, r0, x1, y1, r1) {
 		if(ns.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.beginRadialGradientFill currently not implemented';
-		//this._flChange.push([this.id, 'rgf', [colors, ratios, x0, y0, r0, x1, y1, r1]]); //-- needs implementation on Flash side
 		return this;
 	}
 	
@@ -506,6 +663,16 @@ var p = Graphics.prototype;
 	 * "repeat-y", or "no-repeat". Defaults to "repeat".
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
+	p.beginBitmapFill = function(image, repetition) {
+		if (this._active) { this._newPath(); }
+		repetition = repetition || "";
+		var o = this._ctx.createPattern(image, repetition);
+		this._fillInstructions = [new Command(this._setProp, ["fillStyle", o], false)];
+		return this;
+	}
+	*/
 	p.beginBitmapFill = function(image, repetition) {
 		if(ns.Stage.FL_LOG_PART_IMPLEMENTED && (repetition && repetition==='repeat-x' || repetition==='repeat-y')) console.log('EaselFl:Graphics.beginBitmapFill currently does not implement repeat-x or repeat-y');
 
@@ -519,21 +686,40 @@ var p = Graphics.prototype;
 	 * Ends the current subpath, and begins a new one with no fill. Functionally identical to beginFill(null).
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
+	p.endFill = function() {
+		return this.beginFill();
+	}
+	*/
 	p.endFill = function() {
 		this._flChange.push([this.id, 'ef']);
 		return this;
 	}
 	
-
 	/**
 	 * Sets the stroke style for the current subpath. Like all drawing methods, this can be chained, so you can define the stroke style and color in a single line of code like so:
 	 * myGraphics.setStrokeStyle(8,"round").beginStroke("#F00");
+	 * @method setStrokeStyle
 	 * @param thickness The width of the stroke.
 	 * @param caps Optional. Indicates the type of caps to use at the end of lines. One of butt, round, or square. Defaults to "butt". Also accepts the values 0 (butt), 1 (round), and 2 (square) for use with the tiny API.
 	 * @param joints Optional. Specifies the type of joints that should be used where two lines meet. One of bevel, round, or miter. Defaults to "miter". Also accepts the values 0 (miter), 1 (round), and 2 (bevel) for use with the tiny API.
 	 * @param miter Optional. If joints is set to "miter", then you can specify a miter limit ratio which controls at what point a mitered joint will be clipped.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
+	p.setStrokeStyle = function(thickness, caps, joints, miterLimit) {
+		if (this._active) { this._newPath(); }
+		this._strokeStyleInstructions = [
+			new Command(this._setProp, ["lineWidth", (thickness == null ? "1" : thickness)], false),
+			new Command(this._setProp, ["lineCap", (caps == null ? "butt" : (isNaN(caps) ? caps : Graphics.STROKE_CAPS_MAP[caps]))], false),
+			new Command(this._setProp, ["lineJoin", (joints == null ? "miter" : (isNaN(joints) ? joints : Graphics.STROKE_JOINTS_MAP[joints]))], false),
+			new Command(this._setProp, ["miterLimit", (miterLimit == null ? "10" : miterLimit)], false)
+			];
+		return this;
+	}
+	*/
 	p.setStrokeStyle = function(thickness, caps, joints, miterLimit) {
 		//TODO : implement caps, joints, miterLimit in Flash
 		if(ns.Stage.FL_LOG_PART_IMPLEMENTED && (caps || joints || miterLimit)) console.log('EaselFl:Graphics.setStrokeStyle currently does not implement caps, joints, or miterLimit');
@@ -543,9 +729,18 @@ var p = Graphics.prototype;
 	
 	/**
 	 * Begins a stroke with the specified color. This ends the current subpath.
+	 * @method beginStroke
 	 * @param color A CSS compatible color value (ex. "#FF0000" or "rgba(255,0,0,0.5)"). Setting to null will result in no stroke.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
+	p.beginStroke = function(color) {
+		if (this._active) { this._newPath(); }
+		this._strokeInstructions = color ? [new Command(this._setProp, ["strokeStyle", color], false)] : null;
+		return this;
+	}
+	*/
 	p.beginStroke = function(color) {
 		this._flChange.push([this.id, 's', color]);
 		return this;
@@ -554,6 +749,7 @@ var p = Graphics.prototype;
 	/**
 	 * Begins a linear gradient stroke defined by the line (x0, y0) to (x1, y1). This ends the current subpath. For example, the following code defines a black to white vertical gradient ranging from 20px to 120px, and draws a square to display it:<br/>
 	 * myGraphics.setStrokeStyle(10).beginLinearGradientStroke(["#000","#FFF"], [0, 1], 0, 20, 0, 120).drawRect(20, 20, 120, 120);
+	 * @method beginLinearGradientStroke
 	 * @param colors An array of CSS compatible color values. For example, ["#F00","#00F"] would define a gradient drawing from red to blue.
 	 * @param ratios An array of gradient positions which correspond to the colors. For example, [0.1, 0.9] would draw the first color to 10% then interpolating to the second color at 90%.
 	 * @param x0 The position of the first point defining the line that defines the gradient direction and size.
@@ -562,14 +758,20 @@ var p = Graphics.prototype;
 	 * @param y1 The position of the second point defining the line that defines the gradient direction and size.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
 	p.beginLinearGradientStroke = function(colors, ratios, x0, y0, x1, y1) {
-		if(ns.Stage.FL_THROW_UNIMPLEMENTED)  throw 'EaselFl:Graphics.beginLinearGradientStroke currently not implemented';
-		/*if (this._active) { this._newPath(); }
+		if (this._active) { this._newPath(); }
 		var o = this._ctx.createLinearGradient(x0, y0, x1, y1);
 		for (var i=0, l=colors.length; i<l; i++) {
 			o.addColorStop(ratios[i], colors[i]);
 		}
-		this._strokeInstructions = [new Command(this._setProp, ["strokeStyle", o])];*/
+		this._strokeInstructions = [new Command(this._setProp, ["strokeStyle", o], false)];
+		return this;
+	}
+	*/
+	p.beginLinearGradientStroke = function(colors, ratios, x0, y0, x1, y1) {
+		if(ns.Stage.FL_THROW_UNIMPLEMENTED)  throw 'EaselFl:Graphics.beginLinearGradientStroke currently not implemented';
 		return this;
 	}
 	
@@ -577,6 +779,7 @@ var p = Graphics.prototype;
 	/**
 	 * Begins a radial gradient stroke. This ends the current subpath. For example, the following code defines a red to blue radial gradient centered at (100, 100), with a radius of 50, and draws a rectangle to display it:<br/>
 	 * myGraphics.setStrokeStyle(10).beginRadialGradientStroke(["#F00","#00F"], [0, 1], 100, 100, 0, 100, 100, 50).drawRect(50, 90, 150, 110);
+	 * @method beginRadialGradientStroke
 	 * @param colors An array of CSS compatible color values. For example, ["#F00","#00F"] would define a gradient drawing from red to blue.
 	 * @param ratios An array of gradient positions which correspond to the colors. For example, [0.1, 0.9] would draw the first color to 10% then interpolating to the second color at 90%, then draw the second color to 100%.
 	 * @param x0 Center position of the inner circle that defines the gradient.
@@ -587,24 +790,40 @@ var p = Graphics.prototype;
 	 * @param r1 Radius of the outer circle that defines the gradient.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)	
 	 **/
+	/*
+	 //-- EaselJS
 	p.beginRadialGradientStroke = function(colors, ratios, x0, y0, r0, x1, y1, r1) {
-		if(ns.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.beginRadialGradientStroke currently not implemented';
-		/*if (this._active) { this._newPath(); }
+		if (this._active) { this._newPath(); }
 		var o = this._ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);
 		for (var i=0, l=colors.length; i<l; i++) {
 			o.addColorStop(ratios[i], colors[i]);
 		}
-		this._strokeInstructions = [new Command(this._setProp, ["strokeStyle", o])];*/
+		this._strokeInstructions = [new Command(this._setProp, ["strokeStyle", o], false)];
+		return this;
+	}
+	*/
+	p.beginRadialGradientStroke = function(colors, ratios, x0, y0, r0, x1, y1, r1) {
+		if(ns.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.beginRadialGradientStroke currently not implemented';
 		return this;
 	}
 	
 	/**
 	 * Begins a pattern fill using the specified image. This ends the current subpath.
+	 * @method beginBitmapStroke
 	 * @param {Image | HTMLCanvasElement | HTMLVideoElement} image The Image, Canvas, or Video object to use as the pattern.
 	 * @param {String} repetition Optional. Indicates whether to repeat the image in the fill area. One of "repeat", "repeat-x",
 	 * "repeat-y", or "no-repeat". Defaults to "repeat".
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)	
 	 **/
+	/*
+	 //-- EaselJS
+	p.beginBitmapStroke = function(image, repetition) {
+		if (this._active) { this._newPath(); }
+		var o = this._ctx.createPattern(image, repetition || "");
+		this._strokeInstructions = [new Command(this._setProp, ["strokeStyle", o], false)];
+		return this;
+	}
+	*/
 	p.beginBitmapStroke = function(image, repetition) {
 		//-- make sure image has been loaded into flash
 		ns.ImageFl.watch(image);
@@ -613,11 +832,19 @@ var p = Graphics.prototype;
 		return this;
 	}
 	
+	
 	/**
 	 * Ends the current subpath, and begins a new one with no stroke. Functionally identical to beginStroke(null).
 	 * @method endStroke
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
+	p.endStroke = function() {
+		this.beginStroke();
+		return this;
+	}
+	*/
 	p.endStroke = function() {
 		this._flChange.push([this.id, 'es']);
 		return this;
@@ -647,6 +874,13 @@ var p = Graphics.prototype;
 	 * @param {Number} radius Corner radius.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
+	p.drawRoundRect = function(x, y, w, h, radius) {
+		this.drawRoundRectComplex(x, y, w, h, radius, radius, radius, radius);
+		return this;
+	}
+	*/
 	p.drawRoundRect = function(x, y, w, h, radius) {
 		this._flChange.push([this.id, 'rr', [x, y, w, h, radius]]);
 		return this;
@@ -665,6 +899,34 @@ var p = Graphics.prototype;
 	 * @param {Number} radiusBL Bottom left corner radius.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
+	p.drawRoundRectComplex = function(x, y, w, h, radiusTL, radiusTR, radiusBR, radiusBL) {
+		this._dirty = this._active = true;
+		var pi = Math.PI, arc=this._ctx.arc, lineTo=this._ctx.lineTo;
+		
+		this._activeInstructions.push(
+			new Command(this._ctx.moveTo, [x+radiusTL, y]),
+			new Command(lineTo, [x+w-radiusTR, y]),
+			(radiusTR>=0) ?
+				new Command(arc, [x+w-radiusTR, y+radiusTR, radiusTR, -pi/2, 0]) :
+				new Command(arc, [x+w, y, -radiusTR, pi, pi/2, true]) ,
+			new Command(lineTo, [x+w, y+h-radiusBR]),
+			(radiusBL>=0) ?
+				new Command(arc, [x+w-radiusBR, y+h-radiusBR, radiusBR, 0, pi/2]) :
+				new Command(arc, [x+w, y+h, -radiusBR, -pi/2, pi, true]) ,
+			new Command(lineTo, [x+radiusBL, y+h]),
+			(radiusBL>=0) ?
+				new Command(arc, [x+radiusBL, y+h-radiusBL, radiusBL, pi/2, pi]) :
+				new Command(arc, [x, y+h, -radiusBL, 0, -pi/2, true]) ,
+			new Command(lineTo, [x, y+radiusTL]),
+			(radiusTL>=0) ?
+				new Command(arc, [x+radiusTL, y+radiusTL, radiusTL, pi, -pi/2]) :
+				new Command(arc, [x, y, -radiusTL, pi/2, 0, true])
+		);
+		return this;
+	}
+	*/
 	p.drawRoundRectComplex = function(x, y, w, h, radiusTL, radiusTR, radiusBR, radiusBL) {
 		this._flChange.push([this.id, 'rc', [x, y, w, h, radiusTL, radiusTR, radiusBR, radiusBL]]);
 		return this;
@@ -691,6 +953,13 @@ var p = Graphics.prototype;
 	 * @param {Number} radius Radius of circle.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
+	p.drawCircle = function(x, y, radius) {
+		this.arc(x, y, radius, 0, Math.PI*2);
+		return this;
+	}
+	*/
 	p.drawCircle = function(x, y, radius) {
 		this._flChange.push([this.id, 'dc', [x, y, radius]]);
 		return this;
@@ -705,6 +974,28 @@ var p = Graphics.prototype;
 	 * @param {Number} h
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
+	p.drawEllipse = function(x, y, w, h) {
+		this._dirty = this._active = true;
+		var k = 0.5522848;
+		var ox = (w / 2) * k;
+		var oy = (h / 2) * k;
+		var xe = x + w;
+		var ye = y + h;
+		var xm = x + w / 2;
+		var ym = y + h / 2;
+			
+		this._activeInstructions.push(
+			new Command(this._ctx.moveTo, [x, ym]),
+			new Command(this._ctx.bezierCurveTo, [x, ym-oy, xm-ox, y, xm, y]),
+			new Command(this._ctx.bezierCurveTo, [xm+ox, y, xe, ym-oy, xe, ym]),
+			new Command(this._ctx.bezierCurveTo, [xe, ym+oy, xm+ox, ye, xm, ye]),
+			new Command(this._ctx.bezierCurveTo, [xm-ox, ye, x, ym+oy, x, ym])
+		);
+		return this;
+	}
+	*/
 	p.drawEllipse = function(x, y, w, h) {
 		this._flChange.push([this.id, 'de',[x, y, w, h]]);
 		return this;
@@ -725,6 +1016,28 @@ var p = Graphics.prototype;
 	 * right of the center.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
+	/*
+	 //-- EaselJS
+	p.drawPolyStar = function(x, y, radius, sides, pointSize, angle) {
+		this._dirty = this._active = true;
+		if (pointSize == null) { pointSize = 0; }
+		pointSize = 1-pointSize;
+		if (angle == null) { angle = 0; }
+		else { angle /= 180/Math.PI; }
+		var a = Math.PI/sides;
+		
+		this._activeInstructions.push(new Command(this._ctx.moveTo, [x+Math.cos(angle)*radius, y+Math.sin(angle)*radius]));
+		for (var i=0; i<sides; i++) {
+			angle += a;
+			if (pointSize != 1) {
+				this._activeInstructions.push(new Command(this._ctx.lineTo, [x+Math.cos(angle)*radius*pointSize, y+Math.sin(angle)*radius*pointSize]));
+			}
+			angle += a;
+			this._activeInstructions.push(new Command(this._ctx.lineTo, [x+Math.cos(angle)*radius, y+Math.sin(angle)*radius]));
+		}
+		return this;
+	}
+	*/
 	p.drawPolyStar = function(x, y, radius, sides, pointSize, angle) {
 		this._flChange.push([this.id, 'dp',[x, y, radius, sides, pointSize, angle]]);
 		return this;
@@ -798,9 +1111,10 @@ var p = Graphics.prototype;
 	 * @method clone
 	 @return {Graphics} A clone of the current Graphics instance.
 	 **/
+	/*
+	 //-- EaselJS
 	p.clone = function() {
-		if(ns.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.clone currently not implemented';
-		/*var o = new Graphics();
+		var o = new Graphics();
 		o._instructions = this._instructions.slice();
 		o._activeInstructions = this._activeInstructions.slice();
 		o._oldInstructions = this._oldInstructions.slice();
@@ -808,7 +1122,13 @@ var p = Graphics.prototype;
 		if (this._strokeInstructions) { o._strokeInstructions = this._strokeInstructions.slice(); }
 		if (this._strokeStyleInstructions) { o._strokeStyleInstructions = this._strokeStyleInstructions.slice(); }
 		o._active = this._active;
-		o._dirty = this._dirty;*/
+		o._dirty = this._dirty;
+		o.drawAsPath = this.drawAsPath;
+		return o;
+	}
+	*/
+	p.clone = function() {
+		if(ns.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.clone currently not implemented';
 		return o;
 	}
 		
@@ -820,8 +1140,8 @@ var p = Graphics.prototype;
 	p.toString = function() {
 		return "[Graphics]";
 	}
-	
-	
+
+
 // tiny API:
 	/** Shortcut to moveTo.
 	 * @property mt
@@ -1012,7 +1332,79 @@ var p = Graphics.prototype;
 	 **/
 	p.p = p.decodePath;
 	
+	
+// private methods:
+	/**
+	 * @method _updateInstructions
+	 * @protected
+	 **/
+	/*
+	 //-- EaselJS
+	p._updateInstructions = function() {
+		this._instructions = this._oldInstructions.slice();
+		this._instructions.push(Graphics.beginCmd);
+		 
+		if (this._fillInstructions) { this._instructions.push.apply(this._instructions, this._fillInstructions); }
+		if (this._strokeInstructions) {
+			this._instructions.push.apply(this._instructions, this._strokeInstructions);
+			if (this._strokeStyleInstructions) {
+				this._instructions.push.apply(this._instructions, this._strokeStyleInstructions);
+			}
+		}
+		
+		this._instructions.push.apply(this._instructions, this._activeInstructions);
+		
+		if (this._fillInstructions) { this._instructions.push(Graphics.fillCmd); }
+		if (this._strokeInstructions) { this._instructions.push(Graphics.strokeCmd); }
+	}
+	*/
+	
+	/**
+	 * @method _newPath
+	 * @protected
+	 **/
+	/*
+	 //-- EaselJS
+	p._newPath = function() {
+		if (this._dirty) { this._updateInstructions(); }
+		this._oldInstructions = this._instructions;
+		this._activeInstructions = [];
+		this._active = this._dirty = false;
+	}
+	*/
+	
+	// used to create Commands that set properties:
+	/**
+	 * used to create Commands that set properties
+	 * @method _setProp
+	 * @param {String} name
+	 * @param {String} value
+	 * @protected
+	 **/
+	/*
+	 //-- EaselJS
+	p._setProp = function(name, value) {
+		this[name] = value;
+	}
+	*/
 
+	
+/***** begin EaselFL specific code *****/
+	
+	p._flChange = null;
+	p._flChildImages = null;
+	
+	/**
+	 * @property id
+	 * @protected
+	 * @type Number
+	 * @default -1
+	 **/
+	p.id = -1;
+	
+/***** end EaselFL sepcific code *****/
+	
+	
 ns.Graphics = Graphics;
 
 }(createjs||(createjs={})));

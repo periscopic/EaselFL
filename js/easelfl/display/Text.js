@@ -1,4 +1,9 @@
 /*
+ * EaselFL is EaselJS rendering to Flash
+ * @author Brett Johnson, periscopic.com
+ */
+
+/*
 * Text
 * Visit http://createjs.com/ for documentation, updates and examples.
 *
@@ -47,32 +52,16 @@ var Text = function(text, font, color) {
 }
 var p = Text.prototype = new ns.DisplayObject();
 
-	p._flFont = null;
-	p._flText = "";
-	p._flColor = null;
-	p._flTextAlign = null;
-	p._flTextBaseline = null;
-	p._flOutline = false;
-	p._flLineHeight = null;
-	p._flLineWidth = null;
-	
-	/**
-	 * Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
-	 **/
-	p._flRunCreate = function(ctx){
-	  if(this._flCtx!==ctx){
-			this._flCtx = ctx;
-			ctx._flCreate.push(['txt', this]);
-	  }
-	}
-	
 
 	/**
 	 * @property _workingContext
 	 * @type CanvasRenderingContext2D
 	 * @private
 	 **/
-	//Text._workingContext = document.createElement("canvas").getContext("2d");
+	/*
+	 //-- EaselJS
+	Text._workingContext = document.createElement("canvas").getContext("2d");
+	*/
 
 // public properties:
 	/**
@@ -130,12 +119,12 @@ var p = Text.prototype = new ns.DisplayObject();
 	 **/
 	p.outline = false;
 	
-	/** Indicates the line height (vertical distance between baselines) for multi-line text. If null, 
+	/** Indicates the line height (vertical distance between baselines) for multi-line text. If null or 0, 
 	 * the value of getMeasuredLineHeight is used.
 	 * @property lineHeight
 	 * @type Number
 	 **/
-	p.lineHeight = null;
+	p.lineHeight = 0;
 	
 	/**
 	 * Indicates the maximum width for a line of text before it is wrapped to multiple lines. If null, 
@@ -173,8 +162,8 @@ var p = Text.prototype = new ns.DisplayObject();
 	 * @return {Boolean} Boolean indicating whether the display object would be visible if drawn to a canvas
 	 **/
 	p.isVisible = function() {
-		return Boolean(this.visible && this.alpha > 0 && 
-						this.scaleX != 0 && this.scaleY != 0 && this.text != null && this.text != "");
+		// Note: this.text = "0" will evaluate to false in JS.
+		return Boolean(this.visible && this.alpha > 0 && this.scaleX != 0 && this.scaleY != 0 && this.text != null && this.text !== "");
 	}
 
 	/**
@@ -194,6 +183,21 @@ var p = Text.prototype = new ns.DisplayObject();
 	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
 	 * into itself).
 	 **/
+	/*
+	 //-- EaselJS
+	p.draw = function(ctx, ignoreCache) {
+		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
+		
+		if (this.outline) { ctx.strokeStyle = this.color; }
+		else { ctx.fillStyle = this.color; }
+		ctx.font = this.font;
+		ctx.textAlign = this.textAlign||"start";
+		ctx.textBaseline = this.textBaseline||"alphabetic";
+
+		this._drawText(ctx);
+		return true;
+	}
+	*/
 	p.draw = function(ctx, ignoreCache) {
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
 		
@@ -228,7 +232,8 @@ var p = Text.prototype = new ns.DisplayObject();
 		}
 		
 		if(this.lineHeight!==this._flLineHeight) {
-			ctx._flChange.push([this.id, 'lht', this.lineHeight]);
+			//-- pass null to flash if lineheight equals 0
+			ctx._flChange.push([this.id, 'lht', !this.lineHeight===0 ? null : this.lineHeight]);
 			this._flLineHeight = this.lineHeight;
 		}
 		
@@ -237,41 +242,6 @@ var p = Text.prototype = new ns.DisplayObject();
 			this._flOutline = this.outline;
 		}
 		
-		/*
-		if (this.outline) { ctx.strokeStyle = this.color; }
-		else { ctx.fillStyle = this.color; }
-		ctx.font = this.font;
-		ctx.textAlign = this.textAlign ? this.textAlign : "start";
-		ctx.textBaseline = this.textBaseline ? this.textBaseline : "alphabetic";
-
-		var lines = String(this.text).split(/(?:\r\n|\r|\n)/);
-		var lineHeight = (this.lineHeight == null) ? this.getMeasuredLineHeight() : this.lineHeight;
-		var y = 0;
-		for (var i=0, l=lines.length; i<l; i++) {
-			var w = ctx.measureText(lines[i]).width;
-			if (this.lineWidth == null || w < this.lineWidth) {
-				this._drawTextLine(ctx, lines[i], y);
-				y += lineHeight;
-				continue;
-			}
-
-			// split up the line
-			var words = lines[i].split(/(\s)/);
-			var str = words[0];
-			for (var j=1, jl=words.length; j<jl; j+=2) {
-				// Line needs to wrap:
-				if (ctx.measureText(str + words[j] + words[j+1]).width > this.lineWidth) {
-					this._drawTextLine(ctx, str, y);
-					y += lineHeight;
-					str = words[j+1];
-				} else {
-					str += words[j] + words[j+1];
-				}
-			}
-			this._drawTextLine(ctx, str, y); // Draw remaining text
-			y += lineHeight;
-		}
-		*/
 		return true;
 	}
 	
@@ -280,9 +250,20 @@ var p = Text.prototype = new ns.DisplayObject();
 	 * @method getMeasuredWidth
 	 * @return {Number} The measured, untransformed width of the text.
 	 **/
-	p.getMeasuredWidth = function() {
+	/*
+	 //-- EaselJS
+	 p.getMeasuredWidth = function() {
 		return this._getWorkingContext().measureText(this.text).width;
 	}
+	*/
+	p.getMeasuredWidth = function() {
+		if(ns.Stage.FL_THROW_UNIMPLEMENTED) {
+			throw 'EaseFl:Text.getMeasuredWidth not yet implemented';
+		}
+		return null;
+	}
+	
+
 
 	/**
 	 * Returns an approximate line height of the text, ignoring the lineHeight property. This is based 
@@ -291,8 +272,37 @@ var p = Text.prototype = new ns.DisplayObject();
 	 * @return {Number} an approximate line height of the text, ignoring the lineHeight property. This is 
 	 * based on the measured width of a "M" character multiplied by 1.2, which approximates em for most fonts.
 	 **/
+	/*
+	 //-- EaselJS
 	p.getMeasuredLineHeight = function() {
 		return this._getWorkingContext().measureText("M").width*1.2;
+	}
+	*/
+	p.getMeasuredLineHeight = function() {
+		if(ns.Stage.FL_THROW_UNIMPLEMENTED) {
+			throw 'EaseFl:Text.getMeasuredLineHeight not yet implemented';
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns the approximate height of multiline text by multiplying the number of lines against
+	 * either the lineHeight (if specified) or getMeasuredLineHeight(). Note that this operation
+	 * requires the text flowing logic to run, which has an associated CPU cost.
+	 * @method getMeasuredHeight
+	 * @return {Number} The approximate height of the drawn multiline text.
+	 **/
+	/*
+	 //-- EaselJS
+	p.getMeasuredHeight = function() {
+		return this._drawText()*(this.lineHeight||this.getMeasuredLineHeight());
+	}
+	*/
+	p.getMeasuredHeight = function() {
+		if(ns.Stage.FL_THROW_UNIMPLEMENTED) {
+			throw 'EaseFl:Text.getMeasuredHeight not yet implemented';
+		}
+		return null;
 	}
 	
 	/**
@@ -343,13 +353,16 @@ var p = Text.prototype = new ns.DisplayObject();
 	 * @method _getWorkingContext
 	 * @protected 
 	 **/
+	/*
+	 //-- EaselJS
 	p._getWorkingContext = function() {
 		var ctx = Text._workingContext;
 		ctx.font = this.font;
-		ctx.textAlign = this.textAlign ? this.textAlign : "start";
-		ctx.textBaseline = this.textBaseline ? this.textBaseline : "alphabetic";
+		ctx.textAlign = this.textAlign||"start";
+		ctx.textBaseline = this.textBaseline||"alphabetic";
 		return ctx;
 	}
+	*/
 	
 	/** 
 	 * @method _drawTextLine
@@ -358,12 +371,39 @@ var p = Text.prototype = new ns.DisplayObject();
 	 * @param {Number} y
 	 * @protected 
 	 **/
+	/*
+	 //-- EaselJS
 	p._drawTextLine = function(ctx, text, y) {
 		// Chrome 17 will fail to draw the text if the last param is included but null, so we feed it a large value instead:
-			if (this.outline) { ctx.strokeText(text, 0, y, this.maxWidth)||0xFFFF; }
+			if (this.outline) { ctx.strokeText(text, 0, y, this.maxWidth||0xFFFF); }
 			else { ctx.fillText(text, 0, y, this.maxWidth||0xFFFF); }
 		
 	}
+	*/
+	
+	/**** Begin EaselFL specific code ****/
+	
+	p._flFont = null;
+	p._flText = "";
+	p._flColor = null;
+	p._flTextAlign = null;
+	p._flTextBaseline = null;
+	p._flOutline = false;
+	p._flLineHeight = 0;
+	p._flLineWidth = null;
+	
+	/**
+	 * Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
+	 **/
+	p._flRunCreate = function(ctx){
+	  if(this._flCtx!==ctx){
+			this._flCtx = ctx;
+			ctx._flCreate.push(['txt', this]);
+	  }
+	}
+	
+	/**** End EaselFL specific code ****/
+	
 
 ns.Text = Text;
 

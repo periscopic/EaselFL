@@ -48,7 +48,6 @@
 var Container = function() {
   this.initialize();
 }
-
 var p = Container.prototype = new ns.DisplayObject();
 
 // public properties:
@@ -100,6 +99,152 @@ var p = Container.prototype = new ns.DisplayObject();
 	 **/
 	p.DisplayObject_draw = p.draw;
 
+/**
+	 * Draws the display object into the specified context ignoring it's visible, alpha, shadow, and transform.
+	 * Returns true if the draw was handled (useful for overriding functionality).
+	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
+	 * @method draw
+	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
+	 * @param {Boolean} ignoreCache Indicates whether the draw operation should ignore any current cache.
+	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
+	 * into itself).
+	 **/
+	/*
+	 //-- EaselJS
+	p.draw = function(ctx, ignoreCache, matrix) {
+		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
+		
+		// this ensures we don't have issues with display list changes that occur during a draw:
+		var list = this.children.slice(0);
+		for (var i=0,l=list.length; i<l; i++) {
+			var child = list[i];
+			if (!child.isVisible()) { continue; }
+			
+			// draw the child:
+			ctx.save();
+			child.updateContext(ctx);
+			child.draw(ctx);
+			ctx.restore();
+		}
+		return true;
+	}
+	*/
+	p.draw = function(ctx, ignoreCache, _mtx) {
+		var snap = ns.Stage._snapToPixelEnabled;
+		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
+		_mtx = _mtx || this._matrix.reinitialize(1,0,0,1,0,0,this.alpha, this.shadow, this.compositeOperation);
+
+		//don't sync children if not visible or if cached
+		if (this._flCached || !this.isVisible()) { return true;}		
+		
+		this._flCached = this._flCache;		
+		
+		var l = this.children.length;
+		// this ensures we don't have issues with display list changes that occur during a draw:
+		var list = this.children.slice(0);
+		for (var i=0; i<l; i++) {
+			var child = list[i];
+			var shadow = false;
+			var mtx = child._matrix.reinitialize(_mtx.a,_mtx.b,_mtx.c,_mtx.d,_mtx.tx,_mtx.ty,_mtx.alpha,_mtx.shadow,_mtx.compositeOperation);
+			mtx.appendTransform(child.x, child.y, child.scaleX, child.scaleY, child.rotation, child.skewX, child.skewY,
+									child.regX, child.regY);
+			mtx.appendProperties(child.alpha, child.shadow, child.compositeOperation);		
+			child.draw(ctx, false, mtx);
+			if (shadow) { this.applyShadow(ctx); } //-- TODO : make sure shadow gets applied
+		}
+		return true;
+	}
+	
+	/**
+	 * Adds a child to the top of the display list. You can also add multiple children, such as "addChild(child1, child2, ...);".
+	 * Returns the child that was added, or the last child if multiple children were added.
+	 * @method addChild
+	 * @param {DisplayObject} child The display object to add.
+	 * @return {DisplayObject} The child that was added, or the last child if multiple children were added.
+	 **/
+	/*
+	 //-- EaselJS
+	 p.addChild = function(child) {
+		if (child == null) { return child; }
+		var l = arguments.length;
+		if (l > 1) {
+			for (var i=0; i<l; i++) { this.addChild(arguments[i]); }
+			return arguments[l-1];
+		}
+		if (child.parent) { child.parent.removeChild(child); }
+		child.parent = this;
+		this.children.push(child);
+		return child;
+	}
+	*/
+	p.addChild = function(child) {
+		if (child == null) { return child; }
+		var l = arguments.length;
+		if (l > 1) {
+			for (var i=0; i<l; i++) { this.addChild(arguments[i]); }
+			return arguments[l-1];
+		}
+		if (child.parent) { child.parent.removeChild(child); }
+		child.parent = this;
+		this.children.push(child);
+		
+		if(this._flCtx){
+		  child._flRunCreate(this._flCtx);
+		}
+		
+		this._flChange.push([this.id, 'ac', child.id]);
+		
+		return child;
+	}
+
+	/**
+	 * Adds a child to the display list at the specified index, bumping children at equal or greater indexes up one, and setting
+	 * its parent to this Container. You can also add multiple children, such as "addChildAt(child1, child2, ..., index);". The
+	 * index must be between 0 and numChildren. For example, to add myShape under otherShape in the display list, you could use:
+	 * container.addChildAt(myShape, container.getChildIndex(otherShape)). This would also bump otherShape's index up by one.
+	 * Returns the last child that was added, or the last child if multiple children were added. Fails silently if the index 
+	 * is out of range.
+	 * @method addChildAt
+	 * @param {DisplayObject} child The display object to add.
+	 * @param {Number} index The index to add the child at.
+	 * @return {DisplayObject} The child that was added, or the last child if multiple children were added.
+	 **/
+	/*
+	 //-- EaselJS
+	p.addChildAt = function(child, index) {
+		var l = arguments.length;
+		var indx = arguments[l-1]; // can't use the same name as the index param or it replaces arguments[1]
+		if (indx < 0 || indx > this.children.length) { return arguments[l-2]; }
+		if (l > 2) {
+			for (var i=0; i<l-1; i++) { this.addChildAt(arguments[i], indx+i); }
+			return arguments[l-2];
+		}
+		if (child.parent) { child.parent.removeChild(child); }
+		child.parent = this;
+		this.children.splice(index, 0, child);
+		return child;
+	}
+	*/
+	p.addChildAt = function(child, index) {
+		var l = arguments.length;
+		if (l > 2) {
+			index = arguments[i-1];
+			for (var i=0; i<l-1; i++) { this.addChildAt(arguments[i], index+i); }
+			return arguments[l-2];
+		}
+		if (child.parent) { child.parent.removeChild(child); }
+		child.parent = this;
+		this.children.splice(index, 0, child);
+		
+		if(this._flCtx){
+		  child._flRunCreate(this._flCtx);
+		}
+		
+		this._flChange.push([this.id, 'aca', [child.id, index]]);
+		
+		return child;
+	}
+	
 	/**
 	 * Removes the specified child from the display list. Note that it is faster to use removeChildAt() if the index is already
 	 * known. You can also remove multiple children, such as "removeChild(child1, child2, ...);". Returns true if the child
@@ -115,8 +260,71 @@ var p = Container.prototype = new ns.DisplayObject();
 			for (var i=0; i<l; i++) { good = good && this.removeChild(arguments[i]); }
 			return good;
 		}
-		
 		return this.removeChildAt(this.children.indexOf(child));
+	}
+	
+	/**
+	 * Removes the child at the specified index from the display list, and sets its parent to null. You can also remove multiple
+	 * children, such as "removeChildAt(2, 7, ...);". Returns true if the child (or children) was removed, or false if any index
+	 * was out of range.
+	 * @param {Number} index The index of the child to remove.
+	 * @return true if the child (or children) was removed, or false if any index was out of range.
+	 **/
+	/*
+	 //-- EaselJS
+	p.removeChildAt = function(index) {
+		var l = arguments.length;
+		if (l > 1) {
+			var a = [];
+			for (var i=0; i<l; i++) { a[i] = arguments[i]; }
+			a.sort(function(a, b) { return b-a; });
+			var good = true;
+			for (i=0; i<l; i++) { good = good && this.removeChildAt(a[i]); }
+			return good;
+		}
+		if (index < 0 || index > this.children.length-1) { return false; }
+		var child = this.children[index];
+		if (child) { child.parent = null; }
+		this.children.splice(index, 1);
+		return true;
+	}
+	*/
+	p.removeChildAt = function(index) {
+		var l = arguments.length;
+		if (l > 1) {
+			var a = [];
+			for (var i=0; i<l; i++) { a[i] = arguments[i]; }
+			a.sort(function(a, b) { return b-a; })
+			var good = true;
+			for (var i=0; i<l; i++) { good = good && this.removeChildAt(a[i]); }
+			return good;
+		}
+		if (index < 0 || index > this.children.length-1) { return false; }
+		var child = this.children[index];
+		if (child != null) { child.parent = null; }
+		this.children.splice(index, 1);
+		
+		this._flChange.push([this.id, 'rca', index]);
+		
+		return true;
+	}
+
+	/**
+	 * Removes all children from the display list.
+	 * @method removeAllChildren
+	 **/
+	/*
+	 //-- EaselJS
+	p.removeAllChildren = function() {
+		var kids = this.children;
+		while (kids.length) { kids.pop().parent = null; }
+	}
+	*/
+	p.removeAllChildren = function() {
+		var kids = this.children;
+		while (kids.length) { kids.pop().parent = null; }
+		
+		this._flChange.push([this.id, 'rac']);
 	}
 
 	/**
@@ -135,8 +343,13 @@ var p = Container.prototype = new ns.DisplayObject();
 	 * @param {Function} sortFunction the function to use to sort the child list. See javascript's Array.sort documentation
 	 * for details.
 	 **/
+	/*
+	//-- EaselJS
 	p.sortChildren = function(sortFunction) {
 		this.children.sort(sortFunction);
+	}
+	*/
+	p.sortChildren = function(sortFunction) {
 		if(ns.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Container.sortChildren not yet implemented';
 	}
 
@@ -169,7 +382,7 @@ var p = Container.prototype = new ns.DisplayObject();
 		var kids = this.children;
 		var o1 = kids[index1];
 		var o2 = kids[index2];
-		if (!o1 || !o2) { return; } // TODO: throw error?
+		if (!o1 || !o2) { return; }
 		kids[index1] = o2;
 		kids[index2] = o1;
 	}
@@ -199,19 +412,24 @@ var p = Container.prototype = new ns.DisplayObject();
 	 * @param index
 	 * @method setChildIndex
 	 **/
-	p.setChildIndex = function(child, index) {
-		if(ns.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Container.setChildIndex not yet implemented';
-	
-		var kids = this.children;
-		for (var i=0,l=kids.length;i<l;i++) {
+	/*
+	 //-- EaselJS
+	 p.setChildIndex = function(child, index) {
+		var kids = this.children, l=kids.length;
+		if (child.parent != this || index < 0 || index >= l) { return; }
+		for (var i=0;i<l;i++) {
 			if (kids[i] == child) { break; }
 		}
-		if (i==l || index < 0 || index > l || i == index) { return; }
-		kids.splice(index,1);
-		if (index<i) { i--; }
-		kids.splice(child,i,0); // TODO: test.
+		if (i==l || i == index) { return; }
+		kids.splice(i,1);
+		if (index<i) { index--; }
+		kids.splice(index,0,child);
 	}
-
+	*/
+	p.setChildIndex = function(child, index) {
+		if(ns.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Container.setChildIndex not yet implemented';
+	}
+	
 	/**
 	 * Returns true if the specified display object either is this container or is a descendent.
 	 * (child, grandchild, etc) of this container.
@@ -227,6 +445,25 @@ var p = Container.prototype = new ns.DisplayObject();
 		return false;
 	}
 
+	/**
+	 * Tests whether the display object intersects the specified local point (ie. draws a pixel with alpha > 0 at the specified
+	 * position). This ignores the alpha, shadow and compositeOperation of the display object, and all transform properties
+	 * including regX/Y.
+	 * @method hitTest
+	 * @param x The x position to check in the display object's local coordinates.
+	 * @param y The y position to check in the display object's local coordinates.
+	 * @return {Boolean} A Boolean indicating whether there is a visible section of a DisplayObject that overlaps the specified
+	 * coordinates.
+	 **/
+	/*
+	 //-- EaselJS
+	 p.hitTest = function(x, y) {
+		// TODO: optimize to use the fast cache check where possible.
+		return (this.getObjectUnderPoint(x, y) != null);
+	}
+	*/
+	//-- EaselFL implementation on DisplayObject
+	
 	/**
 	 * Returns an array of all display objects under the specified coordinates that are in this container's display list.
 	 * This routine ignores any display objects with mouseEnabled set to false. The array will be sorted in order of visual
@@ -300,7 +537,7 @@ var p = Container.prototype = new ns.DisplayObject();
 		}
 		if (this.onTick) { this.onTick(data); }
 	}
-
+	
 	/**
 	 * @method _getObjectsUnderPoint
 	 * @param {Number} x
@@ -311,15 +548,18 @@ var p = Container.prototype = new ns.DisplayObject();
 	 * @return {Array[DisplayObject]}
 	 * @protected
 	 **/
-	p._getObjectsUnderPoint = function(x, y, arr, mouseEvents) {
-		var ctx = ns.DisplayObject._hitTestContext;
-		var canvas = ns.DisplayObject._hitTestCanvas;
+	/*
+	 //-- EaselJS
+	 p._getObjectsUnderPoint = function(x, y, arr, mouseEvents) {
+		var ctx = createjs.DisplayObject._hitTestContext;
+		var canvas = createjs.DisplayObject._hitTestCanvas;
 		var mtx = this._matrix;
 		var hasHandler = (mouseEvents&1 && (this.onPress || this.onClick || this.onDoubleClick)) || (mouseEvents&2 &&
 																(this.onMouseOver || this.onMouseOut));
 
-		// if we have a cache handy, we can use it to do a quick check:
-		if (this.cacheCanvas) {
+		// if we have a cache handy & this has a handler, we can use it to do a quick check.
+		// we can't use the cache for screening children, because they might have hitArea set.
+		if (this.cacheCanvas && hasHandler) {
 			this.getConcatenatedMatrix(mtx);
 			ctx.setTransform(mtx.a,  mtx.b, mtx.c, mtx.d, mtx.tx-x, mtx.ty-y);
 			ctx.globalAlpha = mtx.alpha;
@@ -327,9 +567,7 @@ var p = Container.prototype = new ns.DisplayObject();
 			if (this._testHit(ctx)) {
 				canvas.width = 0;
 				canvas.width = 1;
-				if (hasHandler) { return this; }
-			} else {
-				return null;
+				return this;
 			}
 		}
 
@@ -349,12 +587,18 @@ var p = Container.prototype = new ns.DisplayObject();
 					result = child._getObjectsUnderPoint(x, y, arr, mouseEvents);
 					if (!arr && result) { return result; }
 				}
-			} else if (!mouseEvents || hasHandler || (mouseEvents&1 && (child.onPress || child.onClick || child.onDoubleClick)) ||
-														(mouseEvents&2 && (child.onMouseOver || child.onMouseOut))) {
+			} else if (!mouseEvents || hasHandler || (mouseEvents&1 && (child.onPress || child.onClick || child.onDoubleClick)) || (mouseEvents&2 && (child.onMouseOver || child.onMouseOut))) {
+				var hitArea = child.hitArea;
 				child.getConcatenatedMatrix(mtx);
-				ctx.setTransform(mtx.a,  mtx.b, mtx.c, mtx.d, mtx.tx-x, mtx.ty-y);
+				
+				if (hitArea) {
+					mtx.appendTransform(hitArea.x+child.regX, hitArea.y+child.regY, hitArea.scaleX, hitArea.scaleY, hitArea.rotation, hitArea.skewX, hitArea.skewY, hitArea.regX, hitArea.regY);
+					mtx.alpha *= hitArea.alpha/child.alpha;
+				}
+				
 				ctx.globalAlpha = mtx.alpha;
-				child.draw(ctx);
+				ctx.setTransform(mtx.a,  mtx.b, mtx.c, mtx.d, mtx.tx-x, mtx.ty-y);
+				(hitArea||child).draw(ctx);
 				if (!this._testHit(ctx)) { continue; }
 				canvas.width = 0;
 				canvas.width = 1;
@@ -365,6 +609,10 @@ var p = Container.prototype = new ns.DisplayObject();
 		}
 		return null;
 	}
+	*/
+	p._getObjectsUnderPoint = function(x, y, arr, mouseEvents) {
+		if(ns.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Container._getObjectsUnderPoint not yet implemented';
+	}
 	
 	/**** Begin EaselFL specific code ****/
 	
@@ -374,139 +622,6 @@ var p = Container.prototype = new ns.DisplayObject();
 	 * @type ContextFl
 	 **/
 	p._flCtx = null;
-	
-	/**
-	 * Adds a child to the display list at the specified index, bumping children at equal or greater indexes up one, and setting
-	 * its parent to this Container. You can also add multiple children, such as "addChildAt(child1, child2, ..., index);". The
-	 * index must be between 0 and numChildren. For example, to add myShape under otherShape in the display list, you could use:
-	 * container.addChildAt(myShape, container.getChildIndex(otherShape)). This would also bump otherShape's index up by one.
-	 * Returns the last child that was added, or the last child if multiple children were added.
-	 * @method addChildAt
-	 * @param {DisplayObject} child The display object to add.
-	 * @param {Number} index The index to add the child at.
-	 * @return {DisplayObject} The child that was added, or the last child if multiple children were added.
-	 **/
-	p.addChildAt = function(child, index) {
-		var l = arguments.length;
-		if (l > 2) {
-			index = arguments[i-1];
-			for (var i=0; i<l-1; i++) { this.addChildAt(arguments[i], index+i); }
-			return arguments[l-2];
-		}
-		if (child.parent) { child.parent.removeChild(child); }
-		child.parent = this;
-		this.children.splice(index, 0, child);
-		
-		if(this._flCtx){
-		  child._flRunCreate(this._flCtx);
-		}
-		
-		this._flChange.push([this.id, 'aca', [child.id, index]]);
-		
-		return child;
-	}
-	
-	
-	/**
-	 * Draws the display object into the specified context ignoring it's visible, alpha, shadow, and transform.
-	 * Returns true if the draw was handled (useful for overriding functionality).
-	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
-	 * @method draw
-	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
-	 * @param {Boolean} ignoreCache Indicates whether the draw operation should ignore any current cache.
-	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
-	 * into itself).
-	 **/
-	p.draw = function(ctx, ignoreCache, _mtx) {
-		var snap = ns.Stage._snapToPixelEnabled;
-		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
-		_mtx = _mtx || this._matrix.reinitialize(1,0,0,1,0,0,this.alpha, this.shadow, this.compositeOperation);
-
-		//don't sync children if not visible or if cached
-		if (this._flCached || !this.isVisible()) { return true;}		
-		
-		this._flCached = this._flCache;		
-		
-		var l = this.children.length;
-		// this ensures we don't have issues with display list changes that occur during a draw:
-		var list = this.children.slice(0);
-		for (var i=0; i<l; i++) {
-			var child = list[i];
-			var shadow = false;
-			var mtx = child._matrix.reinitialize(_mtx.a,_mtx.b,_mtx.c,_mtx.d,_mtx.tx,_mtx.ty,_mtx.alpha,_mtx.shadow,_mtx.compositeOperation);
-			mtx.appendTransform(child.x, child.y, child.scaleX, child.scaleY, child.rotation, child.skewX, child.skewY,
-									child.regX, child.regY);
-			mtx.appendProperties(child.alpha, child.shadow, child.compositeOperation);		
-			child.draw(ctx, false, mtx);
-			if (shadow) { this.applyShadow(ctx); } //-- TODO : make sure shadow gets applied
-		}
-		return true;
-	}
-
-	/**
-	 * Adds a child to the top of the display list. You can also add multiple children, such as "addChild(child1, child2, ...);".
-	 * Returns the child that was added, or the last child if multiple children were added.
-	 * @method addChild
-	 * @param {DisplayObject} child The display object to add.
-	 * @return {DisplayObject} The child that was added, or the last child if multiple children were added.
-	 **/
-	p.addChild = function(child) {
-		if (child == null) { return child; }
-		var l = arguments.length;
-		if (l > 1) {
-			for (var i=0; i<l; i++) { this.addChild(arguments[i]); }
-			return arguments[l-1];
-		}
-		if (child.parent) { child.parent.removeChild(child); }
-		child.parent = this;
-		this.children.push(child);
-		
-		if(this._flCtx){
-		  child._flRunCreate(this._flCtx);
-		}
-		
-		this._flChange.push([this.id, 'ac', child.id]);
-		
-		return child;
-	}
-	
-	/**
-	 * Removes the child at the specified index from the display list, and sets its parent to null. You can also remove multiple
-	 * children, such as "removeChildAt(2, 7, ...);". Returns true if the child (or children) was removed, or false if any index
-	 * was out of range.
-	 * @param {Number} index The index of the child to remove.
-	 * @return true if the child (or children) was removed, or false if any index was out of range.
-	 **/
-	p.removeChildAt = function(index) {
-		var l = arguments.length;
-		if (l > 1) {
-			var a = [];
-			for (var i=0; i<l; i++) { a[i] = arguments[i]; }
-			a.sort(function(a, b) { return b-a; })
-			var good = true;
-			for (var i=0; i<l; i++) { good = good && this.removeChildAt(a[i]); }
-			return good;
-		}
-		if (index < 0 || index > this.children.length-1) { return false; }
-		var child = this.children[index];
-		if (child != null) { child.parent = null; }
-		this.children.splice(index, 1);
-		
-		this._flChange.push([this.id, 'rca', index]);
-		
-		return true;
-	}
-
-	/**
-	 * Removes all children from the display list.
-	 * @method removeAllChildren
-	 **/
-	p.removeAllChildren = function() {
-		var kids = this.children;
-		while (kids.length) { kids.pop().parent = null; }
-		
-		this._flChange.push([this.id, 'rac']);
-	}
 	
 	/**
 	 * Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
@@ -522,25 +637,8 @@ var p = Container.prototype = new ns.DisplayObject();
 	  }
 	}
 	
-	/**** Container.hitTest is delegated to DisplayObject in EaselFl ****/
-		/**
-	 * Tests whether the display object intersects the specified local point (ie. draws a pixel with alpha > 0 at the specified
-	 * position). This ignores the alpha, shadow and compositeOperation of the display object, and all transform properties
-	 * including regX/Y.
-	 * @method hitTest
-	 * @param x The x position to check in the display object's local coordinates.
-	 * @param y The y position to check in the display object's local coordinates.
-	 * @return {Boolean} A Boolean indicating whether there is a visible section of a DisplayObject that overlaps the specified
-	 * coordinates.
-	 **/
-	/*p.hitTest = function(x, y) {
-		// TODO: optimize to use the fast cache check where possible.
-		return (this.getObjectUnderPoint(x, y) != null);
-	}*/
-	
 	/**** End EaselFL specific code ****/
 
 ns.Container = Container;
-
 }(createjs||(createjs={})));
 var createjs;

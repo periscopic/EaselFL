@@ -1,4 +1,9 @@
 /*
+ * EaselFL is EaselJS rendering to Flash
+ * @author Brett Johnson, periscopic.com
+ */
+
+/*
 * Rectangle
 * Visit http://createjs.com/ for documentation, updates and examples.
 *
@@ -41,35 +46,6 @@ var Rectangle = function(x, y, width, height) {
   this.initialize(x, y, width, height);
 }
 var p = Rectangle.prototype;
-	
-		/**** Begin EaselFL specific code ****/
-		
-	p._flX = 0,
-	p._flY = 0,
-	p._flWidth = 0,
-	p._flHeight = 0,
-	p._flCtx = 
-	p.id = null;
-	
-	p._flSync = function(ctx){
-		if(!this._flCtx){
-				this.id = ns.UID.get();
-				this._flCtx = ctx;
-				
-				ctx._flCreate.push(['rct', this]);
-		}
-		
-		if(this._flX!==this.x || this._flY!==this.y || this._flWidth!==this.width || this._flHeight!==this.height){
-				this._flX = this.x;
-				this._flY = this.y;
-				this._flWidth = this.width;
-				this._flHeight = this.height;
-				this._flCtx._flChange.push([this.id, 'dim', [this.x, this.y, this.width, this.height]]);
-		}
-	}
-	
-		/**** End EaselFL specific code ****/
-
 	
 // public properties:
 	/** 
@@ -132,6 +108,36 @@ var p = Rectangle.prototype;
 		return "[Rectangle (x="+this.x+" y="+this.y+" width="+this.width+" height="+this.height+")]";
 	}
 	
+	/**** Begin EaselFL specific code ****/
+		
+	p._flX = 0;
+	p._flY = 0;
+	p._flWidth = 0;
+	p._flHeight = 0;
+	p._flCtx = null;
+	p.id = null;
+	
+	//-- sync rectangle to flash context 
+	p._flSync = function(ctx){
+		//-- create flash counterpart
+		if(!this._flCtx){
+				this.id = ns.UID.get();
+				this._flCtx = ctx;
+				ctx._flCreate.push(['rct', this]);
+		}
+		
+		//-- sync properties
+		if(this._flX!==this.x || this._flY!==this.y || this._flWidth!==this.width || this._flHeight!==this.height){
+				this._flX = this.x;
+				this._flY = this.y;
+				this._flWidth = this.width;
+				this._flHeight = this.height;
+				this._flCtx._flChange.push([this.id, 'dim', [this.x, this.y, this.width, this.height]]);
+		}
+	}
+	
+	/**** End EaselFL specific code ****/
+
 ns.Rectangle = Rectangle;
 }(createjs||(createjs={})));
 var createjs;

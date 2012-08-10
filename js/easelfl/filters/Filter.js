@@ -1,4 +1,9 @@
 /*
+ * EaselFL is EaselJS rendering to Flash
+ * @author Brett Johnson, periscopic.com
+ */
+
+/*
 * Filter
 * Visit http://createjs.com/ for documentation, updates and examples.
 *
@@ -92,6 +97,5 @@ var p = Filter.prototype;
 	}
 	
 ns.Filter = Filter;
-
 }(createjs||(createjs={})));
 var createjs;
