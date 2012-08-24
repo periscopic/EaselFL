@@ -1,0 +1,62 @@
+<!-- Renders bitmaps drawn using various methods -->
+
+<html>
+<head>
+
+<script type="text/javascript" src="js/TestUtils.js"></script>
+
+<link rel='stylesheet' type='text/css' href='css/test.css' />
+
+<script type="text/javascript">
+
+window.onload = function(){
+	if(TestUtils.useCanvas){
+		TestUtils.loadWithEaselJS(init);
+	}else{
+		TestUtils.loadWithEaselFL(init);
+	}
+}
+
+//-- Start it up!
+
+function init(){
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('width', 600);
+	canvas.setAttribute('height', 400);
+	canvas.setAttribute('fl_swf_url', '../haxe/bin/EaselFl.swf');
+	canvas.setAttribute('id', 'testContainer');
+	document.getElementById('testContainer').appendChild(canvas);
+	
+	var myStage = new createjs.Stage(canvas);
+	createjs.Ticker.addListener(myStage);
+	
+	//-- specific test code
+	var img = new Image();
+	img.src = 'img/testImage.png';
+	
+	var shp = new createjs.Shape();
+	shp.x = shp.y = 50;
+	var g = shp.graphics;
+
+	g.setStrokeStyle(6);
+	g.beginStroke('rgba(255, 0, 0, 0.5)');
+	g.drawRect(0, 0, 50, 50);
+	g.endStroke();
+	
+	g.beginBitmapStroke(img);
+	g.drawRect(100, 0, 50, 50);
+	g.endStroke();
+
+	g.beginRadialGradientStroke(['#F00', '#00F'], [ 0, 1], 225, 25, 0, 225, 25, 50);
+	g.drawRect(200, 0, 50, 50);
+	g.endStroke();
+
+	myStage.addChild(shp);
+	
+}
+
+</script>
+</head>
+<body>
+</body>
+</html>

@@ -17,11 +17,24 @@ class FrameFl implements IExec, implements IWatchable {
 	static private var dispatcher:EventDispatcher = new EventDispatcher();
 	static private var tmpMtx:Matrix = new Matrix();
 	static private var tmpRect:Rectangle = new Rectangle();
+	static private var execs:Hash<Dynamic>;
 
 	static public function init() {
 		//currently only one executable method implemented; nothing to do	
+		execs = new Hash();
+		execs.set('init', sInit);
+		//execs.set('morph', sMorph);
+		
 	}
 
+	static inline function sInit(targ:FrameFl, args:Dynamic):Void {
+		targ.initialize(args);
+	}
+	/*
+	static inline function sMorph(targ:FrameFl, args:Dynamic):Void {
+		targ.morph(args);
+	}
+*/
 
 	//-- instance
 	
@@ -70,6 +83,11 @@ class FrameFl implements IExec, implements IWatchable {
 		}
 	}
 	
+	/*
+	function morph(args:Dynamic):Void{
+		
+	}
+	*/
 	function updateBitmap(?e:Event=null):Void{
 		if(!_img.ready){
 				//-- clear old bitmapdata
@@ -100,6 +118,7 @@ class FrameFl implements IExec, implements IWatchable {
 	inline public function exec(method:String, ?arguments:Dynamic=null):Dynamic{
 		//-- currently there is nothing you can do except set the dimension
 		//-- so do that instead of looking up the method and then executing
-		return this.initialize(arguments);
+		//return this.initialize(arguments);
+		return execs.get(method)( this, arguments);
 	}
 }

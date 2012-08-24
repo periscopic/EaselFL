@@ -4,8 +4,12 @@ import flash.display.Graphics;
 import flash.display.DisplayObject;
 import flash.display.BitmapData;
 import flash.display.LineScaleMode;
+import flash.display.GradientType;
+import flash.display.SpreadMethod;
+import flash.display.InterpolationMethod;
 import flash.events.Event;
 import flash.geom.Point;
+import flash.geom.Matrix;
 import Control;
 import utils.Geometry;
 import utils.CSSColor;
@@ -31,6 +35,7 @@ class GraphicsFl implements IExec{
 		execs = new Hash();
 		execs.set('f', beginFill );		
 		execs.set('bf', beginBitmapFill );		
+		execs.set('rf', beginRadialGradientFill );		
 		execs.set('ef', endFill );		
 		execs.set('mt', moveTo );		
 		execs.set('lt', lineTo );		
@@ -47,6 +52,7 @@ class GraphicsFl implements IExec{
 		execs.set('c', clear );		
 		execs.set('ss', setStrokeStyle);
 		execs.set('s', beginStroke);
+		execs.set('rs', beginRadialGradientStroke);
 		execs.set('bs', beginBitmapStroke);
 		execs.set('es', endStroke);
 		execs.set('cp', closePath);
@@ -57,7 +63,6 @@ class GraphicsFl implements IExec{
 
 
 	static private function beginFill(target:GraphicsFl, color:String):Void{
-		
 		CSSColor.parse(color);
 		target.graphics.beginFill(CSSColor.color, CSSColor.alpha);
 		
@@ -81,6 +86,73 @@ class GraphicsFl implements IExec{
 		target.fillArgs = args;
 	}
 	
+	
+	static private function beginRadialGradientFill(target:GraphicsFl, args:Array<Dynamic>):Void{
+		applyGradientFillOrStroke(target.graphics.beginGradientFill, args);
+		target.activePath = false;
+		
+		//-- these are necessary due to difference in winding rules between canvas/flash
+		target.fillMethod = beginRadialGradientFill;
+		target.fillArgs = args;
+	}
+	
+	inline static private function applyGradientFillOrStroke(method:Dynamic, args:Dynamic) {
+		var cssColors:Array<String> = args[0];
+		var colors:Array<Int> = [];
+		var alphas:Array<Float> = [];
+		// copy so that original args are not modified, which causes issues if redraw
+		// is forced by bmp load
+		var ratios:Array<Float> = args[1].copy();
+		var x0:Float = args[2];
+		var y0:Float = args[3];
+		var r0:Float = args[4];
+		var x1:Float = args[5];
+		var y1:Float = args[6];
+		var r1:Float = args[7];
+		var radRatio:Float;
+		var invRadRatio:Float;
+		var focalPointRatio:Float;
+		
+		for(colorString in cssColors) {
+			CSSColor.parse(colorString);
+			colors.push(CSSColor.color);
+			alphas.push(CSSColor.alpha);
+		}
+		
+		if(r1<r0) {
+			var temp;
+			temp = r1;
+			r1 = r0;
+			r0 = temp;
+			temp = x1;
+			x1 = x0;
+			x0 = temp;
+			temp = y1;
+			y1 = y0;
+			y0 = temp;
+			
+			for(i in 0...ratios.length) {
+				 ratios[i] = (1-ratios[i]);				
+			}
+			ratios.reverse();
+		}
+		
+		radRatio = r0/r1;
+		invRadRatio = 1 - radRatio;
+		
+		//convert ratios to 0-255
+		for(i in 0...ratios.length) {
+			ratios[i] = (radRatio + invRadRatio * ratios[i])*255;
+		}
+
+		var dx = x0-x1;
+		var dy = y0-y1;
+		var mtx = new Matrix();
+		mtx.createGradientBox(r1*2, r1*2, Math.atan2(y0-y1, x0-x1), x1-r1, y1-r1);
+		focalPointRatio = Math.sqrt(dx*dx + dy*dy) / r1;
+		method(GradientType.RADIAL, colors, alphas, ratios, mtx, SpreadMethod.PAD, InterpolationMethod.RGB, focalPointRatio);
+	}
+	
 	inline static private function setStrokeStyle(target:GraphicsFl, args:Array<Dynamic>):Void{
 		//TODO map : caps, joints, miterLimit
 		target.activePath = false;
@@ -100,6 +172,12 @@ class GraphicsFl implements IExec{
 		target.graphics.lineStyle(target.strokeThickness);	
 		target.graphics.lineBitmapStyle(img.bitmapData, null, args[1]!='no-repeat', false);
 		watchBitmapData(target, img);
+	}
+	
+	static private function beginRadialGradientStroke(target:GraphicsFl, args:Array<Dynamic>):Void{
+		target.activePath = false;
+		target.graphics.lineStyle(target.strokeThickness);
+		applyGradientFillOrStroke(target.graphics.lineGradientStyle, args);
 	}
 	
 	inline static private function endStroke(target:GraphicsFl, ?nada:Dynamic):Void{

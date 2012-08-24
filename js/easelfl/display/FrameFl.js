@@ -55,14 +55,27 @@
             
             var f = this._frame;
             
-            //-- verify image is pushed to flash
-            ns.ImageFl.watch(f.image); 
-            f.image.__fl.sync(ctx);
-            
-            //-- push frame to flash
-            this._flCtx = ctx;
-            ctx._flCreate.push(['frm', this]);
-            ctx._flChange.push([this.id, 'init', [f.image.__fl.id, f.rect.x, f.rect.y, f.rect.width, f.rect.height, f.regX, f.regY]]);
+            if(f._flMorph) {
+                var m = f._flMorph;
+                //-- this is a copy of another frame
+                //-- make sure original is synced up
+                m.original.sync(ctx);
+                
+                //-- push frame to flash
+                this._flCtx = ctx;
+                ctx._flCreate.push(['frm', this]);
+                ctx._flChange.push([this, 'morphInit', [m.original.id, m.flip, m.rotation]])
+                
+            } else { 
+                //-- verify image is pushed to flash
+                ns.ImageFl.watch(f.image); 
+                f.image.__fl.sync(ctx);
+                
+                //-- push frame to flash
+                this._flCtx = ctx;
+                ctx._flCreate.push(['frm', this]);
+                ctx._flChange.push([this.id, 'init', [f.image.__fl.id, f.rect.x, f.rect.y, f.rect.width, f.rect.height, f.regX, f.regY]]);
+            }
         }
     }
     

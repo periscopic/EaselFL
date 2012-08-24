@@ -618,7 +618,13 @@
 		<dispatcher line="17" static="1"><c path="flash.events.EventDispatcher"/></dispatcher>
 		<tmpMtx line="18" static="1"><c path="flash.geom.Matrix"/></tmpMtx>
 		<tmpRect line="19" static="1"><c path="flash.geom.Rectangle"/></tmpRect>
-		<init public="1" set="method" line="21" static="1"><f a=""><e path="Void"/></f></init>
+		<execs static="1"><c path="Hash"><d/></c></execs>
+		<init public="1" set="method" line="22" static="1"><f a=""><e path="Void"/></f></init>
+		<sInit get="inline" set="null" line="30" static="1"><f a="targ:args">
+	<c path="display.FrameFl"/>
+	<d/>
+	<e path="Void"/>
+</f></sInit>
 		<bitmapData public="1"><c path="flash.display.BitmapData"/></bitmapData>
 		<x public="1" set="null"><c path="Float"/></x>
 		<y public="1" set="null"><c path="Float"/></y>
@@ -629,29 +635,29 @@
 		<_img><c path="interfaces.IBitmapData"/></_img>
 		<_eventID><c path="String"/></_eventID>
 		<_initialized><e path="Bool"/></_initialized>
-		<watch public="1" get="inline" set="null" line="44"><f a="method">
+		<watch public="1" get="inline" set="null" line="57"><f a="method">
 	<f a="">
 		<d/>
 		<e path="Void"/>
 	</f>
 	<e path="Void"/>
 </f></watch>
-		<unwatch public="1" get="inline" set="null" line="48"><f a="method">
+		<unwatch public="1" get="inline" set="null" line="61"><f a="method">
 	<f a="">
 		<d/>
 		<e path="Void"/>
 	</f>
 	<e path="Void"/>
 </f></unwatch>
-		<initialize set="method" line="52"><f a="args">
+		<initialize set="method" line="65"><f a="args">
 	<d/>
 	<e path="Void"/>
 </f></initialize>
-		<updateBitmap set="method" line="73"><f a="?e">
+		<updateBitmap set="method" line="91"><f a="?e">
 	<c path="flash.events.Event"/>
 	<e path="Void"/>
 </f></updateBitmap>
-		<exec public="1" get="inline" set="null" line="100">
+		<exec public="1" get="inline" set="null" line="118">
 			<f a="method:?arguments">
 				<c path="String"/>
 				<d/>
@@ -663,7 +669,7 @@
 	 * @param Array arguments for the method
 	 </haxe_doc>
 		</exec>
-		<new public="1" set="method" line="40"><f a="id">
+		<new public="1" set="method" line="53"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></new>
@@ -4090,54 +4096,69 @@
 	</class>
 	<class path="display.GraphicsFl" params="" file="src/display/GraphicsFl.hx">
 		<implements path="interfaces.IExec"/>
-		<QUART_PI get="inline" set="null" line="22" static="1"><c path="Float"/></QUART_PI>
-		<HALF_PI get="inline" set="null" line="23" static="1"><c path="Float"/></HALF_PI>
-		<TWO_PI get="inline" set="null" line="24" static="1"><c path="Float"/></TWO_PI>
-		<CUBIC_PRECISION get="inline" set="null" line="25" static="1"><c path="Float"/></CUBIC_PRECISION>
-		<IDENTITY_MATRIX get="inline" set="null" line="26" static="1"><c path="flash.geom.Matrix"/></IDENTITY_MATRIX>
+		<QUART_PI get="inline" set="null" line="26" static="1"><c path="Float"/></QUART_PI>
+		<HALF_PI get="inline" set="null" line="27" static="1"><c path="Float"/></HALF_PI>
+		<TWO_PI get="inline" set="null" line="28" static="1"><c path="Float"/></TWO_PI>
+		<CUBIC_PRECISION get="inline" set="null" line="29" static="1"><c path="Float"/></CUBIC_PRECISION>
+		<IDENTITY_MATRIX get="inline" set="null" line="30" static="1"><c path="flash.geom.Matrix"/></IDENTITY_MATRIX>
 		<execs static="1"><c path="Hash"><d/></c></execs>
-		<init public="1" set="method" line="30" static="1"><f a=""><e path="Void"/></f></init>
-		<beginFill set="method" line="59" static="1"><f a="target:color">
+		<init public="1" set="method" line="34" static="1"><f a=""><e path="Void"/></f></init>
+		<beginFill set="method" line="65" static="1"><f a="target:color">
 	<c path="display.GraphicsFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></beginFill>
-		<beginBitmapFill set="method" line="71" static="1"><f a="target:args">
+		<beginBitmapFill set="method" line="76" static="1"><f a="target:args">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></beginBitmapFill>
-		<setStrokeStyle get="inline" set="null" line="84" static="1"><f a="target:args">
+		<beginRadialGradientFill set="method" line="90" static="1"><f a="target:args">
+	<c path="display.GraphicsFl"/>
+	<c path="Array"><d/></c>
+	<e path="Void"/>
+</f></beginRadialGradientFill>
+		<applyGradientFillOrStroke get="inline" set="null" line="99" static="1"><f a="method:args">
+	<d/>
+	<d/>
+	<e path="Void"/>
+</f></applyGradientFillOrStroke>
+		<setStrokeStyle get="inline" set="null" line="156" static="1"><f a="target:args">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></setStrokeStyle>
-		<beginStroke get="inline" set="null" line="90" static="1"><f a="target:color">
+		<beginStroke get="inline" set="null" line="162" static="1"><f a="target:color">
 	<c path="display.GraphicsFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></beginStroke>
-		<beginBitmapStroke get="inline" set="null" line="96" static="1"><f a="target:args">
+		<beginBitmapStroke get="inline" set="null" line="168" static="1"><f a="target:args">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></beginBitmapStroke>
-		<endStroke get="inline" set="null" line="105" static="1"><f a="target:?nada">
+		<beginRadialGradientStroke set="method" line="177" static="1"><f a="target:args">
+	<c path="display.GraphicsFl"/>
+	<c path="Array"><d/></c>
+	<e path="Void"/>
+</f></beginRadialGradientStroke>
+		<endStroke get="inline" set="null" line="183" static="1"><f a="target:?nada">
 	<c path="display.GraphicsFl"/>
 	<d/>
 	<e path="Void"/>
 </f></endStroke>
-		<endFill get="inline" set="null" line="110" static="1"><f a="target:?nada">
+		<endFill get="inline" set="null" line="188" static="1"><f a="target:?nada">
 	<c path="display.GraphicsFl"/>
 	<d/>
 	<e path="Void"/>
 </f></endFill>
-		<closePath get="inline" set="null" line="118" static="1"><f a="target:?nada">
+		<closePath get="inline" set="null" line="196" static="1"><f a="target:?nada">
 	<c path="display.GraphicsFl"/>
 	<d/>
 	<e path="Void"/>
 </f></closePath>
-		<moveTo get="inline" set="null" line="129" static="1">
+		<moveTo get="inline" set="null" line="207" static="1">
 			<f a="target:xy">
 				<c path="display.GraphicsFl"/>
 				<c path="Array"><d/></c>
@@ -4148,17 +4169,17 @@
 	 * 
 	 </haxe_doc>
 		</moveTo>
-		<lineTo get="inline" set="null" line="137" static="1"><f a="target:xy">
+		<lineTo get="inline" set="null" line="215" static="1"><f a="target:xy">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></lineTo>
-		<cubicCurveTo get="inline" set="null" line="146" static="1"><f a="target:pts">
+		<cubicCurveTo get="inline" set="null" line="224" static="1"><f a="target:pts">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></cubicCurveTo>
-		<drawCubicApprox set="method" line="175" static="1">
+		<drawCubicApprox set="method" line="253" static="1">
 			<f a="target:bz:tolerance:recurseCount">
 				<c path="display.GraphicsFl"/>
 				<t path="utils.CubicBezier"/>
@@ -4170,27 +4191,27 @@
 	 * Approximation of Cubic bezier using Quadratic bezier segments	
 	 </haxe_doc>
 		</drawCubicApprox>
-		<quadraticCurveTo get="inline" set="null" line="210" static="1"><f a="target:pts">
+		<quadraticCurveTo get="inline" set="null" line="288" static="1"><f a="target:pts">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></quadraticCurveTo>
-		<drawRect get="inline" set="null" line="219" static="1"><f a="target:rct">
+		<drawRect get="inline" set="null" line="297" static="1"><f a="target:rct">
 	<c path="display.GraphicsFl"/>
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></drawRect>
-		<clear get="inline" set="null" line="225" static="1"><f a="target:?nada">
+		<clear get="inline" set="null" line="303" static="1"><f a="target:?nada">
 	<c path="display.GraphicsFl"/>
 	<d/>
 	<e path="Void"/>
 </f></clear>
-		<drawPolyStar get="inline" set="null" line="244" static="1"><f a="target:args">
+		<drawPolyStar get="inline" set="null" line="322" static="1"><f a="target:args">
 	<c path="display.GraphicsFl"/>
 	<d/>
 	<e path="Void"/>
 </f></drawPolyStar>
-		<drawRoundRect get="inline" set="null" line="282" static="1">
+		<drawRoundRect get="inline" set="null" line="360" static="1">
 			<f a="target:rect">
 				<c path="display.GraphicsFl"/>
 				<d/>
@@ -4202,7 +4223,7 @@
 	 * @param Array The arguments for the corresponding EaselJS method
 	 </haxe_doc>
 		</drawRoundRect>
-		<drawRoundRectComplex get="inline" set="null" line="292" static="1">
+		<drawRoundRectComplex get="inline" set="null" line="370" static="1">
 			<f a="target:rect">
 				<c path="display.GraphicsFl"/>
 				<c path="Array"><d/></c>
@@ -4214,7 +4235,7 @@
 	 * @param Array The arguments for the corresponding EaselJS method
 	 </haxe_doc>
 		</drawRoundRectComplex>
-		<drawCircle get="inline" set="null" line="302" static="1">
+		<drawCircle get="inline" set="null" line="380" static="1">
 			<f a="target:circ">
 				<c path="display.GraphicsFl"/>
 				<c path="Array"><d/></c>
@@ -4226,7 +4247,7 @@
 	 * @param Array The arguments for the corresponding EaselJS method
 	 </haxe_doc>
 		</drawCircle>
-		<drawEllipse get="inline" set="null" line="312" static="1">
+		<drawEllipse get="inline" set="null" line="390" static="1">
 			<f a="target:ell">
 				<c path="display.GraphicsFl"/>
 				<c path="Array"><d/></c>
@@ -4238,7 +4259,7 @@
 	 * @param Array The arguments for the corresponding EaselJS method
 	 </haxe_doc>
 		</drawEllipse>
-		<drawArcTo get="inline" set="null" line="322" static="1">
+		<drawArcTo get="inline" set="null" line="400" static="1">
 			<f a="target:args">
 				<c path="display.GraphicsFl"/>
 				<c path="Array"><d/></c>
@@ -4250,7 +4271,7 @@
 	 * @param Array The arguments for the corresponding EaselJS method
 	 </haxe_doc>
 		</drawArcTo>
-		<drawArc get="inline" set="null" line="365" static="1">
+		<drawArc get="inline" set="null" line="443" static="1">
 			<f a="target:args">
 				<c path="display.GraphicsFl"/>
 				<c path="Array"><d/></c>
@@ -4262,7 +4283,7 @@
 	 * @param Array The arguments for the corresponding EaselJS method
 	 </haxe_doc>
 		</drawArc>
-		<watchBitmapData get="inline" set="null" line="447" static="1">
+		<watchBitmapData get="inline" set="null" line="525" static="1">
 			<f a="target:bmpd">
 				<c path="display.GraphicsFl"/>
 				<c path="interfaces.IBitmapData"/>
@@ -4287,7 +4308,7 @@
 		<activePath><e path="Bool"/></activePath>
 		<commands><c path="Array"><d/></c></commands>
 		<bitmapDatas><c path="Array"><c path="interfaces.IBitmapData"/></c></bitmapDatas>
-		<link public="1" get="inline" set="null" line="489">
+		<link public="1" get="inline" set="null" line="567">
 			<f a="g">
 				<c path="flash.display.Graphics"/>
 				<e path="Void"/>
@@ -4297,7 +4318,7 @@
 	 * @param Graphics
 	 </haxe_doc>
 		</link>
-		<handleRedraw set="method" line="497">
+		<handleRedraw set="method" line="575">
 			<f a="e">
 				<d/>
 				<e path="Void"/>
@@ -4307,14 +4328,14 @@
 	 * has changed.
 	 </haxe_doc>
 		</handleRedraw>
-		<checkFreshPath get="inline" set="null" line="508">
+		<checkFreshPath get="inline" set="null" line="586">
 			<f a=""><e path="Void"/></f>
 			<haxe_doc>
 	 * Store the first coordinates in a path, so that
 	 * when closePath is called, it can be fulfilled
 	 </haxe_doc>
 		</checkFreshPath>
-		<checkFreshFill get="inline" set="null" line="523">
+		<checkFreshFill get="inline" set="null" line="601">
 			<f a=""><e path="Void"/></f>
 			<haxe_doc>
 	 * When drawing successive shapes without calling beginFill/endFill,
@@ -4322,7 +4343,7 @@
 	 * EaselJS will simply fill them. 
 	 </haxe_doc>
 		</checkFreshFill>
-		<exec public="1" get="inline" set="null" line="537">
+		<exec public="1" get="inline" set="null" line="615">
 			<f a="method:?arguments">
 				<c path="String"/>
 				<d/>
@@ -4334,7 +4355,7 @@
 	 * @param Array arguments for the method
 	 </haxe_doc>
 		</exec>
-		<new public="1" set="method" line="478"><f a=""><e path="Void"/></f></new>
+		<new public="1" set="method" line="556"><f a=""><e path="Void"/></f></new>
 	</class>
 	<enum path="flash.display3D.Context3DCompareMode" params="" file="/usr/lib/haxe/std/flash9/display3D/Context3DCompareMode.hx">
 		<NOT_EQUAL/>

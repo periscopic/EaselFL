@@ -651,7 +651,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.beginRadialGradientFill = function(colors, ratios, x0, y0, r0, x1, y1, r1) {
-		if(ns.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.beginRadialGradientFill currently not implemented';
+		this._flChange.push([this.id, 'rf', [colors, ratios, x0, y0, r0, x1, y1, r1]]);
 		return this;
 	}
 	
@@ -803,7 +803,8 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.beginRadialGradientStroke = function(colors, ratios, x0, y0, r0, x1, y1, r1) {
-		if(ns.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.beginRadialGradientStroke currently not implemented';
+		this._flChange.push([this.id, 'rs', [colors, ratios, x0, y0, r0, x1, y1, r1]]);
+		//if(ns.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.beginRadialGradientStroke currently not implemented';
 		return this;
 	}
 	

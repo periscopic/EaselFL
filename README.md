@@ -55,7 +55,11 @@ scaling when only scaling horizontal or vertical, but causes lines not
 to scale proportionately to container transformations, as they would
 in EaselJS.
 
--gradient fills and strokes are not implemented.
+-linear gradient fills and strokes are not implemented.
+
+-radial gradient fills and strokes do not identically to EaselJS 
+if the origins of the circular guides are different (x0!==x1 || y0!==y1) 
+and both have radiuses greater than 0 (r0>0 && r1>0).
 
 -beginBitmapFill implements repeat, no-repeat, but not repeat-x, or repeat-y
 
