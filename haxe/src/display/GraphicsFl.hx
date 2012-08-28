@@ -35,7 +35,8 @@ class GraphicsFl implements IExec{
 		execs = new Hash();
 		execs.set('f', beginFill );		
 		execs.set('bf', beginBitmapFill );		
-		execs.set('rf', beginRadialGradientFill );		
+		execs.set('rf', beginRadialGradientFill );	
+		execs.set('lf', beginLinearGradientFill );	
 		execs.set('ef', endFill );		
 		execs.set('mt', moveTo );		
 		execs.set('lt', lineTo );		
@@ -53,6 +54,7 @@ class GraphicsFl implements IExec{
 		execs.set('ss', setStrokeStyle);
 		execs.set('s', beginStroke);
 		execs.set('rs', beginRadialGradientStroke);
+		execs.set('ls', beginLinearGradientStroke);
 		execs.set('bs', beginBitmapStroke);
 		execs.set('es', endStroke);
 		execs.set('cp', closePath);
@@ -88,7 +90,7 @@ class GraphicsFl implements IExec{
 	
 	
 	static private function beginRadialGradientFill(target:GraphicsFl, args:Array<Dynamic>):Void{
-		applyGradientFillOrStroke(target.graphics.beginGradientFill, args);
+		applyRadialGradientFillOrStroke(target.graphics.beginGradientFill, args);
 		target.activePath = false;
 		
 		//-- these are necessary due to difference in winding rules between canvas/flash
@@ -96,7 +98,16 @@ class GraphicsFl implements IExec{
 		target.fillArgs = args;
 	}
 	
-	inline static private function applyGradientFillOrStroke(method:Dynamic, args:Dynamic) {
+	static private function beginLinearGradientFill(target:GraphicsFl, args:Array<Dynamic>):Void{
+		applyLinearGradientFillOrStroke( target.graphics.beginGradientFill, args );
+		target.activePath = false;
+		
+		//-- these are necessary due to difference in winding rules between canvas/flash
+		target.fillMethod = beginRadialGradientFill;
+		target.fillArgs = args;
+	}
+	
+	inline static private function applyRadialGradientFillOrStroke(method:Dynamic, args:Dynamic) {
 		var cssColors:Array<String> = args[0];
 		var colors:Array<Int> = [];
 		var alphas:Array<Float> = [];
@@ -153,6 +164,43 @@ class GraphicsFl implements IExec{
 		method(GradientType.RADIAL, colors, alphas, ratios, mtx, SpreadMethod.PAD, InterpolationMethod.RGB, focalPointRatio);
 	}
 	
+	inline static private function applyLinearGradientFillOrStroke(method:Dynamic, args:Dynamic) {
+		var cssColors:Array<String> = args[0];
+		var colors:Array<Int> = [];
+		var alphas:Array<Float> = [];
+		// copy so that original args are not modified, which causes issues if redraw
+		// is forced by bmp load
+		var ratios:Array<Float> = args[1].copy();
+		var x0:Float = args[2];
+		var y0:Float = args[3];
+		var x1:Float = args[4];
+		var y1:Float = args[5];
+		
+		// parse css colors to color + alpha
+		for(colorString in cssColors) {
+			CSSColor.parse(colorString);
+			colors.push(CSSColor.color);
+			alphas.push(CSSColor.alpha);
+		}
+		
+		// convert ratios to 0-255
+		for(i in 0...ratios.length) {
+			ratios[i] *= 255;
+		}
+		
+		// calculate matrix
+		var dx = x1-x0;
+		var dy = y1-y0;
+		var mtx = new Matrix();
+		var ang = Math.atan2(dy, dx);
+		var size = Math.max(Math.abs(dx), Math.abs(dy))/Math.max(Math.abs(Math.sin(ang)),Math.abs(Math.cos(ang)));
+		mtx.createGradientBox(size, size, ang, (x0+x1-size)*0.5, (y0+y1-size)*0.5);
+		
+		// apply gradient
+		method(GradientType.LINEAR, colors, alphas, ratios, mtx, SpreadMethod.PAD, InterpolationMethod.RGB);
+	}
+	
+	
 	inline static private function setStrokeStyle(target:GraphicsFl, args:Array<Dynamic>):Void{
 		//TODO map : caps, joints, miterLimit
 		target.activePath = false;
@@ -177,7 +225,13 @@ class GraphicsFl implements IExec{
 	static private function beginRadialGradientStroke(target:GraphicsFl, args:Array<Dynamic>):Void{
 		target.activePath = false;
 		target.graphics.lineStyle(target.strokeThickness);
-		applyGradientFillOrStroke(target.graphics.lineGradientStyle, args);
+		applyRadialGradientFillOrStroke(target.graphics.lineGradientStyle, args);
+	}
+	
+	static private function beginLinearGradientStroke(target:GraphicsFl, args:Array<Dynamic>):Void{
+		target.activePath = false;
+		target.graphics.lineStyle(target.strokeThickness);
+		applyLinearGradientFillOrStroke(target.graphics.lineGradientStyle, args);
 	}
 	
 	inline static private function endStroke(target:GraphicsFl, ?nada:Dynamic):Void{

@@ -35,8 +35,6 @@ be remedied by implementing dynamic font loading.
 -Videos and displayobject caches cannot yet be used to render either
 bitmaps or fills.
 
--Masking is not implemented.
-
 -AlphaMask and AlphaMap filters are not yet implemented. BoxBlur filter
 is implemented using flash.filters.BlurFilter, and may vary in
 pattern and clear color from EaselJS.
@@ -55,15 +53,14 @@ scaling when only scaling horizontal or vertical, but causes lines not
 to scale proportionately to container transformations, as they would
 in EaselJS.
 
--linear gradient fills and strokes are not implemented.
-
 -radial gradient fills and strokes do not identically to EaselJS 
 if the origins of the circular guides are different (x0!==x1 || y0!==y1) 
 and both have radiuses greater than 0 (r0>0 && r1>0).
 
 -beginBitmapFill implements repeat, no-repeat, but not repeat-x, or repeat-y
 
--setLineStyle does not implement caps, joints, or miterLimits
+-setLineStyle does not implement caps, joints, or miterLimits; caps and joints 
+do not yet match EaselJS defaults
 
 -there is 1/2 pixel difference in the placement of some lines compared
 to EaselJS

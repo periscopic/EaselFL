@@ -49,14 +49,11 @@ function init(){
 	g.drawRect(200, 0, 50, 50);
 	g.endFill();
 
-	/*
-	g.setStrokeStyle(1);
-	g.beginRadialGradientStroke(['#F00', '#00F'], [ 0, 1], 200, 100, 50, 200, 100, 100);
-	g.drawCircle(300, 100, 100);
- 	g.endStroke();
-	 */
-	myStage.addChild(shp);
-	
+	g.beginLinearGradientFill(['#F00', '#00F'], [ 0, 1], 300, 0, 350, 50);
+	g.drawRect(300, 0, 50, 50);
+	g.endStroke;
+
+	myStage.addChild(shp);	
 }
 
 </script>
