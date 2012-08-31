@@ -121,8 +121,9 @@ var ScriptLoader = {
                 'js/easeljs/filters/ColorMatrixFilter.js',
                 'js/easeljs/filters/BoxBlurFilter.js',
                 'js/easeljs/events/MouseEvent.js',
-                'js/easeljs/utils/Ticker.js'
-                ], init)
+                'js/easeljs/utils/Ticker.js',
+                'js/easeljs/utils/SpriteSheetUtils.js'
+                ], init);
              
            // ScriptLoader.load('js/easeljs-0.4.2.min.js', init);
         },
@@ -157,8 +158,9 @@ var ScriptLoader = {
                 '../js/easelfl/filters/ColorMatrixFilter.js',
                 '../js/easelfl/filters/BoxBlurFilter.js',
                 '../js/easelfl/events/MouseEvent.js',
-                '../js/easelfl/utils/Ticker.js'
-            ], init)
+                '../js/easelfl/utils/Ticker.js',
+                '../js/easelfl/utils/SpriteSheetUtils.js'
+            ], init);
         },
         
         swapRenderMethod : function() {

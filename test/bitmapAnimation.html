@@ -49,22 +49,25 @@ function init(){
 				walkRt:[41,59,"walkDnRt"]
 			}
 		});
+
+		createjs.SpriteSheetUtils.addFlippedFrames(spriteSheet, true, false, false);
+
+		console.log(spriteSheet);
 		
 		// create a BitmapAnimation instance to display and play back the sprite sheet:
 		var bmpAnim;
-		
+		var animKeys = ['walkRt', 'walkRt_h', 'walkRt_v', 'walkRt_hv'];
+
 		for(var i=0; i<96; ++i) {
 			bmpAnim= new createjs.BitmapAnimation(spriteSheet);
 		
 			// start playing the first sequence:
-			bmpAnim.gotoAndPlay("walkRt");		//animate
+			bmpAnim.gotoAndPlay(animKeys[i%4]);		//animate
 			
 			bmpAnim.x = ((i%12) + 1) * 45;
 			bmpAnim.y = (Math.floor(i/12) + 1) * 45;
 			myStage.addChild(bmpAnim);	
 		}
-		
-		
 	}
 }
 

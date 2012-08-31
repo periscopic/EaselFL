@@ -48,27 +48,29 @@
     var p = FrameFl.prototype;
     p.id = null;
     p._frame = null;
-    p._flCtx = null;    
+    p._flCtx = null;
     
     p.sync = function( ctx ){
         if(!this._flCtx){
             
             var f = this._frame;
             
-            if(f._flMorph) {
-                var m = f._flMorph;
+            if(f.flip) {
                 //-- this is a copy of another frame
-                //-- make sure original is synced up
-                m.original.sync(ctx);
+                //-- make sure source frame is synced to flash
+
+                FrameFl.watch(f.src);
+                f.src.__fl.sync(ctx);
+                console.log(f.src.__fl);
+
                 
                 //-- push frame to flash
                 this._flCtx = ctx;
                 ctx._flCreate.push(['frm', this]);
-                ctx._flChange.push([this, 'morphInit', [m.original.id, m.flip, m.rotation]])
-                
-            } else { 
+                ctx._flChange.push([this.id, 'flp', [f.src.__fl.id, f.h, f.v]]);
+            } else {
                 //-- verify image is pushed to flash
-                ns.ImageFl.watch(f.image); 
+                ns.ImageFl.watch(f.image);
                 f.image.__fl.sync(ctx);
                 
                 //-- push frame to flash
@@ -77,7 +79,7 @@
                 ctx._flChange.push([this.id, 'init', [f.image.__fl.id, f.rect.x, f.rect.y, f.rect.width, f.rect.height, f.regX, f.regY]]);
             }
         }
-    }
+    };
     
     /**
      * Create a FrameFl for a spritesheet frame if one does not already exist.

@@ -43,8 +43,8 @@ pattern and clear color from EaselJS.
 
 -DisplayObject getCacheDataURL is not implemented.
 
--SpriteSheetUtils cannot extract a specific frame as an image
-or flip a frame.
+-SpriteSheetUtils cannot extract a specific frame as an image (although they
+can flip frames for use in BitmapAnimations).
 
 
 ---- Graphics ----
@@ -53,7 +53,7 @@ scaling when only scaling horizontal or vertical, but causes lines not
 to scale proportionately to container transformations, as they would
 in EaselJS.
 
--radial gradient fills and strokes do not identically to EaselJS 
+-radial gradient fills and strokes do not interpolate identically to EaselJS 
 if the origins of the circular guides are different (x0!==x1 || y0!==y1) 
 and both have radiuses greater than 0 (r0>0 && r1>0).
 
@@ -87,3 +87,5 @@ is suggested.
 -createjs namespace is currently set equal to window in utils/ContextConfig.js
 This is so that it the builds of EaselFL will function without the namespace
 until a stable build of EaselJS that uses the namespace is released.
+
+-use of multiple stages is currently not supported.

@@ -20,21 +20,26 @@ class FrameFl implements IExec, implements IWatchable {
 	static private var execs:Hash<Dynamic>;
 
 	static public function init() {
-		//currently only one executable method implemented; nothing to do	
 		execs = new Hash();
 		execs.set('init', sInit);
-		//execs.set('morph', sMorph);
+		execs.set('flp', sFlip);
 		
 	}
 
+	/**
+	 * Initialize a FrameFl based on an image
+	 */
 	static inline function sInit(targ:FrameFl, args:Dynamic):Void {
 		targ.initialize(args);
 	}
-	/*
-	static inline function sMorph(targ:FrameFl, args:Dynamic):Void {
-		targ.morph(args);
+	
+	/**
+	 * Initialize a FrameFl based on flipping another FrameFl
+	 */
+	static inline function sFlip(targ:FrameFl, args:Dynamic):Void {
+		targ.initializeFlipFrame(args);
 	}
-*/
+
 
 	//-- instance
 	
@@ -50,8 +55,15 @@ class FrameFl implements IExec, implements IWatchable {
 	private var _eventID:String;
 	private var _initialized:Bool;
 	
+	private var _sourceFrame:FrameFl;
+	private var _sourceFlipHz:Bool;
+	private var _sourceFlipVt:Bool;
+	
+	public var isFlip(default,null):Bool;
+	
 	public function new(id:Int) {
 		_eventID = FRAME_CHANGE + id;
+		bitmapData = ImageFl.defaultData;	
 	}
 	
 	inline public function watch(method:Dynamic->Void):Void {
@@ -64,6 +76,7 @@ class FrameFl implements IExec, implements IWatchable {
 	
 	private function initialize(args:Dynamic):Void {
 		if(!this._initialized) {
+			this.isFlip = false;
 			this._initialized = true;
 			this._img = Control.bitmapDatas.get(args[0]);
 			this.x = args[1];
@@ -83,11 +96,9 @@ class FrameFl implements IExec, implements IWatchable {
 		}
 	}
 	
-	/*
-	function morph(args:Dynamic):Void{
-		
-	}
-	*/
+	/**
+	 * Handle update of image on which this FrameFl is based
+	 */
 	function updateBitmap(?e:Event=null):Void{
 		if(!_img.ready){
 				//-- clear old bitmapdata
@@ -98,6 +109,7 @@ class FrameFl implements IExec, implements IWatchable {
 				bitmapData = _img.bitmapData.clone();
 			}else{
 				var cropBmpd = new BitmapData(Std.int(width), Std.int(height), true, 0);
+				tmpMtx.identity();
 				tmpMtx.tx = -x;
 				tmpMtx.ty = -y;
 				tmpRect.width = width;
@@ -107,6 +119,54 @@ class FrameFl implements IExec, implements IWatchable {
 			}				
 		}	
 		
+		dispatcher.dispatchEvent(new Event(_eventID));
+	}
+	
+	
+	/**
+	 * Watches another frame and updates it's bitmapdata by flipping
+	 * another frames bitmapdata
+	 */
+	function initializeFlipFrame(args:Dynamic):Void{
+		if(!this._initialized) {
+			this.isFlip = true;
+			this._initialized = true;
+			
+			_sourceFrame = Control.frames.get(args[0]);
+			_sourceFlipHz = args[1];
+			_sourceFlipVt = args[2];
+			_img = _sourceFrame._img;
+			
+			x = _sourceFrame.x;
+			y = _sourceFrame.y;
+			width = _sourceFrame.width;
+			height = _sourceFrame.height;
+			regX = _sourceFlipHz ? width - _sourceFrame.regX : _sourceFrame.regX;
+			regY = _sourceFlipVt ? height - _sourceFrame.regX : _sourceFrame.regX;
+				
+			
+			if(_sourceFrame._img.ready) {
+				updateFromSourceFrame();
+			} else {
+				bitmapData = ImageFl.defaultData;
+			}
+			
+			_sourceFrame.watch(updateFromSourceFrame);
+		}
+	}
+	
+	/**
+	 * Handle the update of the BitmapData of another FrameFl
+	 * on which this one is based. 
+	 */
+	function updateFromSourceFrame(?e:Event=null):Void {
+		var flipBmpd:BitmapData;
+		tmpMtx.identity();
+		tmpMtx.scale(_sourceFlipHz?-1:1, _sourceFlipVt?-1:1);
+		tmpMtx.translate(_sourceFlipHz?width:0, _sourceFlipVt?height:0);
+		flipBmpd = new BitmapData(_sourceFrame.bitmapData.width, _sourceFrame.bitmapData.height, true, 0);
+		flipBmpd.draw(_sourceFrame.bitmapData, tmpMtx);
+		bitmapData = flipBmpd;
 		dispatcher.dispatchEvent(new Event(_eventID));
 	}
 	

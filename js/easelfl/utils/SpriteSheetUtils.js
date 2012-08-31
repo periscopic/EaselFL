@@ -92,6 +92,8 @@ var SpriteSheetUtils = function() {
 	 * name is specified, only the first frame of the animation will be extracted.
 	 * @return {Image} a single frame of the specified sprite sheet as a new PNG image.
 	*/
+	/*
+	//-- EaselJS
 	SpriteSheetUtils.extractFrame = function(spriteSheet, frame) {
 		if (isNaN(frame)) {
 			frame = spriteSheet.getAnimation(frame).frames[0];
@@ -107,45 +109,20 @@ var SpriteSheetUtils = function() {
 		img.src = canvas.toDataURL("image/png");
 		return img;
 	}
+	 */
+	SpriteSheetUtils.extractFrame = function(spriteSheet, frame) {
+		if(ns.Stage.FL_THROW_UNIMPLEMENTED) throw "EaselFl::SpriteSheetUtils.extractFramet not yet implemented";
+	}
 
 	
 // private static methods:
 	SpriteSheetUtils._flip = function(spriteSheet, count, h, v) {
-		var imgs = spriteSheet._images;
-		var canvas = SpriteSheetUtils._workingCanvas;
-		var ctx = SpriteSheetUtils._workingContext;
-		var il = imgs.length/count;
-		for (var i=0;i<il;i++) {
-			var src = imgs[i];
-			src.__tmp = i; // a bit hacky, but faster than doing indexOf below.
-			canvas.width = src.width;
-			canvas.height = src.height;
-			ctx.setTransform(h?-1:1, 0, 0, v?-1:1, h?src.width:0, v?src.height:0);
-			ctx.drawImage(src,0,0);
-			var img = new Image();
-			img.src = canvas.toDataURL("image/png");
-			// work around a strange bug in Safari:
-			img.width = src.width;
-			img.height = src.height;
-			imgs.push(img);
-		}
-		
+		var frame;
 		var frames = spriteSheet._frames;
 		var fl = frames.length/count;
 		for (i=0;i<fl;i++) {
 			src = frames[i];
-			var rect = src.rect.clone();
-			img = imgs[src.image.__tmp+il*count];
-			
-			var frame = {image:img,rect:rect,regX:src.regX,regY:src.regY};
-			if (h) {
-				rect.x = img.width-rect.x-rect.width; // update rect
-				frame.regX = rect.width-src.regX; // update registration point
-			}
-			if (v) {
-				rect.y = img.height-rect.y-rect.height;  // update rect
-				frame.regY = rect.height-src.regY; // update registration point
-			}
+			frame = {flip:true, src : src, h:h, v:v};
 			frames.push(frame);
 		}
 		
