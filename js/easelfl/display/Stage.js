@@ -469,7 +469,8 @@ var p = Stage.prototype = new ns.Container();
 		var inBounds = this.mouseInBounds;		
 		
 		if(Stage.__MS_BINDING) {
-		  this._updateMousePosition(
+		  this._updatePointerPosition(
+		  	-1,
 			e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft,
 			e.clientY + document.body.scrollTop + document.documentElement.scrollTop
 		  );

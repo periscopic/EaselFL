@@ -60,6 +60,8 @@ function init(){
 
 		for(var i=0; i<96; ++i) {
 			bmpAnim= new createjs.BitmapAnimation(spriteSheet);
+			bmpAnim.rotation = 45;
+			bmpAnim.flSetSmoothing(true);
 		
 			// start playing the first sequence:
 			bmpAnim.gotoAndPlay(animKeys[i%4]);		//animate

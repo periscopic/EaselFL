@@ -620,11 +620,26 @@
 		<tmpRect line="19" static="1"><c path="flash.geom.Rectangle"/></tmpRect>
 		<execs static="1"><c path="Hash"><d/></c></execs>
 		<init public="1" set="method" line="22" static="1"><f a=""><e path="Void"/></f></init>
-		<sInit get="inline" set="null" line="30" static="1"><f a="targ:args">
-	<c path="display.FrameFl"/>
-	<d/>
-	<e path="Void"/>
-</f></sInit>
+		<sInit get="inline" set="null" line="32" static="1">
+			<f a="targ:args">
+				<c path="display.FrameFl"/>
+				<d/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Initialize a FrameFl based on an image
+	 </haxe_doc>
+		</sInit>
+		<sFlip get="inline" set="null" line="39" static="1">
+			<f a="targ:args">
+				<c path="display.FrameFl"/>
+				<d/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Initialize a FrameFl based on flipping another FrameFl
+	 </haxe_doc>
+		</sFlip>
 		<bitmapData public="1"><c path="flash.display.BitmapData"/></bitmapData>
 		<x public="1" set="null"><c path="Float"/></x>
 		<y public="1" set="null"><c path="Float"/></y>
@@ -635,29 +650,58 @@
 		<_img><c path="interfaces.IBitmapData"/></_img>
 		<_eventID><c path="String"/></_eventID>
 		<_initialized><e path="Bool"/></_initialized>
-		<watch public="1" get="inline" set="null" line="57"><f a="method">
+		<_sourceFrame><c path="display.FrameFl"/></_sourceFrame>
+		<_sourceFlipHz><e path="Bool"/></_sourceFlipHz>
+		<_sourceFlipVt><e path="Bool"/></_sourceFlipVt>
+		<isFlip public="1" set="null"><e path="Bool"/></isFlip>
+		<watch public="1" get="inline" set="null" line="69"><f a="method">
 	<f a="">
 		<d/>
 		<e path="Void"/>
 	</f>
 	<e path="Void"/>
 </f></watch>
-		<unwatch public="1" get="inline" set="null" line="61"><f a="method">
+		<unwatch public="1" get="inline" set="null" line="73"><f a="method">
 	<f a="">
 		<d/>
 		<e path="Void"/>
 	</f>
 	<e path="Void"/>
 </f></unwatch>
-		<initialize set="method" line="65"><f a="args">
+		<initialize set="method" line="77"><f a="args">
 	<d/>
 	<e path="Void"/>
 </f></initialize>
-		<updateBitmap set="method" line="91"><f a="?e">
-	<c path="flash.events.Event"/>
-	<e path="Void"/>
-</f></updateBitmap>
-		<exec public="1" get="inline" set="null" line="118">
+		<updateBitmap set="method" line="102">
+			<f a="?e">
+				<c path="flash.events.Event"/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Handle update of image on which this FrameFl is based
+	 </haxe_doc>
+		</updateBitmap>
+		<initializeFlipFrame set="method" line="130">
+			<f a="args">
+				<d/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Watches another frame and updates it's bitmapdata by flipping
+	 * another frames bitmapdata
+	 </haxe_doc>
+		</initializeFlipFrame>
+		<updateFromSourceFrame set="method" line="162">
+			<f a="?e">
+				<c path="flash.events.Event"/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Handle the update of the BitmapData of another FrameFl
+	 * on which this one is based. 
+	 </haxe_doc>
+		</updateFromSourceFrame>
+		<exec public="1" get="inline" set="null" line="178">
 			<f a="method:?arguments">
 				<c path="String"/>
 				<d/>
@@ -669,7 +713,7 @@
 	 * @param Array arguments for the method
 	 </haxe_doc>
 		</exec>
-		<new public="1" set="method" line="53"><f a="id">
+		<new public="1" set="method" line="64"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></new>
