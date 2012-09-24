@@ -400,7 +400,6 @@ var p = BitmapAnimation.prototype = new ns.DisplayObject();
 	
 	p.flSetSmoothing = function(smooth) {
 		if(this._flCtx && smooth!==this._flSmoothing){
-			console.log(smooth);
 			this.flSmoothing = this._flSmoothing = smooth;
 			this._flCtx._flChange.push([this.id, 'smth', smooth]);	
 		}else{
