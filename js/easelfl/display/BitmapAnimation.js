@@ -395,6 +395,17 @@ var p = BitmapAnimation.prototype = new ns.DisplayObject();
 	/**** Begin EaselFL specific code ****/
 
 	p._flFrame = null;
+	p._flSmoothing = false;
+	p.flSmoothing = false;
+	
+	p.flSetSmoothing = function(smooth) {
+		if(this._flCtx && smooth!==this._flSmoothing){
+			this.flSmoothing = this._flSmoothing = smooth;
+			this._flCtx._flChange.push([this.id, 'smth', smooth]);	
+		}else{
+			this.flSmoothing = smooth;
+		}
+	}
 	
 	/**
 	 * Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
@@ -402,7 +413,10 @@ var p = BitmapAnimation.prototype = new ns.DisplayObject();
 	p._flRunCreate = function(ctx){
 	  if(this._flCtx!==ctx){
 			this._flCtx = ctx;
-			ctx._flCreate.push(['ban', this]);		
+			ctx._flCreate.push(['ban', this]);	
+
+		//we have a context, so we can update smoothing
+		this.flSetSmoothing(this.flSmoothing);		
 	  }
 	}
 
