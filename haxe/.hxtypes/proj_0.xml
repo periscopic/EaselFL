@@ -4330,10 +4330,11 @@
 	 * @param Array The arguments for the corresponding EaselJS method
 	 </haxe_doc>
 		</drawArcTo>
-		<drawArc get="inline" set="null" line="497" static="1">
-			<f a="target:args">
+		<drawArc get="inline" set="null" line="501" static="1">
+			<f a="target:args:?useLineTo">
 				<c path="display.GraphicsFl"/>
 				<c path="Array"><d/></c>
+				<e path="Bool"/>
 				<e path="Void"/>
 			</f>
 			<haxe_doc>
@@ -4342,7 +4343,7 @@
 	 * @param Array The arguments for the corresponding EaselJS method
 	 </haxe_doc>
 		</drawArc>
-		<watchBitmapData get="inline" set="null" line="579" static="1">
+		<watchBitmapData get="inline" set="null" line="603" static="1">
 			<f a="target:bmpd">
 				<c path="display.GraphicsFl"/>
 				<c path="interfaces.IBitmapData"/>
@@ -4367,7 +4368,7 @@
 		<activePath><e path="Bool"/></activePath>
 		<commands><c path="Array"><d/></c></commands>
 		<bitmapDatas><c path="Array"><c path="interfaces.IBitmapData"/></c></bitmapDatas>
-		<link public="1" get="inline" set="null" line="621">
+		<link public="1" get="inline" set="null" line="645">
 			<f a="g">
 				<c path="flash.display.Graphics"/>
 				<e path="Void"/>
@@ -4377,7 +4378,7 @@
 	 * @param Graphics
 	 </haxe_doc>
 		</link>
-		<handleRedraw set="method" line="629">
+		<handleRedraw set="method" line="653">
 			<f a="e">
 				<d/>
 				<e path="Void"/>
@@ -4387,14 +4388,14 @@
 	 * has changed.
 	 </haxe_doc>
 		</handleRedraw>
-		<checkFreshPath get="inline" set="null" line="640">
+		<checkFreshPath get="inline" set="null" line="664">
 			<f a=""><e path="Void"/></f>
 			<haxe_doc>
 	 * Store the first coordinates in a path, so that
 	 * when closePath is called, it can be fulfilled
 	 </haxe_doc>
 		</checkFreshPath>
-		<checkFreshFill get="inline" set="null" line="655">
+		<checkFreshFill get="inline" set="null" line="679">
 			<f a=""><e path="Void"/></f>
 			<haxe_doc>
 	 * When drawing successive shapes without calling beginFill/endFill,
@@ -4402,7 +4403,7 @@
 	 * EaselJS will simply fill them. 
 	 </haxe_doc>
 		</checkFreshFill>
-		<exec public="1" get="inline" set="null" line="669">
+		<exec public="1" get="inline" set="null" line="693">
 			<f a="method:?arguments">
 				<c path="String"/>
 				<d/>
@@ -4414,7 +4415,7 @@
 	 * @param Array arguments for the method
 	 </haxe_doc>
 		</exec>
-		<new public="1" set="method" line="610"><f a=""><e path="Void"/></f></new>
+		<new public="1" set="method" line="634"><f a=""><e path="Void"/></f></new>
 	</class>
 	<enum path="flash.display3D.Context3DCompareMode" params="" file="/usr/lib/haxe/std/flash9/display3D/Context3DCompareMode.hx">
 		<NOT_EQUAL/>
