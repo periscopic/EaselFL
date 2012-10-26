@@ -27,7 +27,7 @@ var SOURCE_FILES = [
 	"../js/easelfl/display/Text.js",
 	//"../js/easelfl/utils/SpriteSheetUtils.js",
 	//"../js/easelfl/utils/SpriteSheetBuilder.js",
-	//"../js/easelfl/display/DOMElement.js",
+	"../js/easelfl/display/DOMElement.js",
 	"../js/easelfl/filters/Filter.js",
 	"../js/easelfl/filters/BoxBlurFilter.js",
 	"../js/easelfl/filters/ColorFilter.js",
@@ -42,7 +42,7 @@ var JS_FILE_NAME = "easelfl-%VERSION%.min.js";
 var PROJECT_NAME = "EaselFl";
 
 // url for website or github repo for project:
-var PROJECT_URL = "";//http://createjs.com/";
+var PROJECT_URL = "";
 
 
 // name of directory for docs:

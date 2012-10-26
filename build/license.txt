@@ -1,4 +1,15 @@
 /*
+ * EaselFL
+ *
+ * EaselFL is EaselJS rendering to Flash and designed
+ * to work with browsers (including IE8) that have
+ * Adobe Flash Player 9 or higher.
+ * @author Brett Johnson, periscopic.com
+ * 
+ * Distributed under the terms of the MIT license.
+ */
+
+/*
 * EaselJS
 * Visit http://createjs.com/ for documentation, updates and examples.
 *

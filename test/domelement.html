@@ -1,0 +1,84 @@
+
+<!-- Sync dom elements in Easel -->
+
+<html>
+<head>
+
+<script type="text/javascript" src="js/TestUtils.js"></script>
+
+<link rel='stylesheet' type='text/css' href='css/test.css' />
+
+
+<script type="text/javascript">
+
+window.onload = function(){
+	if(TestUtils.useCanvas){
+		TestUtils.loadWithEaselJS(init);
+	}else{
+		TestUtils.loadWithEaselFL(init);
+	}
+}
+
+//-- Start it up!
+function init(){
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('width', 600);
+	canvas.setAttribute('height', 400);
+	canvas.setAttribute('fl_swf_url', '../haxe/bin/EaselFl.swf');
+	document.getElementById('testContainer').appendChild(canvas);
+
+	var myStage = new createjs.Stage(canvas);
+	createjs.Ticker.addListener(myStage);
+	
+	//-- specific test code
+
+
+	var htmlEl =  document.createElement('div');
+	htmlEl.innerHTML = 'hello world';
+	// necessary for positioning to sync in easeljs
+	// otherwise is relative
+	htmlEl.style.position = 'absolute';
+	htmlEl.style.left = '0';
+	htmlEl.style.top = '0';
+	//rotating, scaling, skewing dom element in old versions 
+	//of IE causes poor antialiasing unless background is solid.
+	htmlEl.style.background = '#FFF';
+	document.getElementById('testContainer').appendChild(htmlEl);
+	
+	var cont = new createjs.Container();
+	cont.x = 200;
+	cont.y = 200;
+
+
+	var domel = new createjs.DOMElement(htmlEl);
+	domel.x = 100;
+	domel.y = 100;	
+
+	cont.addChild(domel);	
+
+	var shp = new createjs.Shape();
+	shp.graphics.beginFill('rgba(255, 0, 0, 0.1)');
+	shp.graphics.drawRect(0, 0, 100, 100);
+	shp.graphics.endFill();
+	cont.addChild(shp);
+
+	myStage.addChild(cont);
+
+	// move, remove, add back in
+
+	var tickHook = {
+		tick: function() {cont.rotation +=0.5; cont.scaleX -=0.01;}
+	}
+
+	createjs.Ticker.addListener(tickHook);
+
+	setTimeout(function() {myStage.removeChild(cont);}, 2000)
+	setTimeout(function() {myStage.addChild(cont);}, 4000)
+}
+
+
+</script>
+</head>
+<body>
+</body>
+</html>

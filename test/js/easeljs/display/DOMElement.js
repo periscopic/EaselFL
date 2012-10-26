@@ -27,67 +27,6 @@
 */
 
 (function(ns) {
-
-//--EaselFL specific setup
-
-//-- Find transform property for this browser
-var transformProp, transformPropOrigin, transformUnit;
-
-transformUnit = (function(element) {
-        var properties = [
-            'transform',
-            'WebkitTransform',
-            'msTransform',
-            'MozTransform',
-            'OTransform',
-        	'filter'
-        ];
-        
-        var p;
-      
-      do {
-        p = properties.shift();
-        if (typeof element.style[p] != 'undefined') {
-            return p;
-            }
-      }while(properties.length)
-        return false;
-        })(document.createElement("div"));
-        
-                                       
-transformPropOrigin = transformProp+"Origin";
-transformUnit = transformProp==='MozTransform'?'px':'';
- 
-if(transformProp !== 'filter'){
-    var cumulativeVis = function(parent){
-        var obj = {visible:true, alpha:1};
-        while(parent && obj.visible){
-            obj.visible = parent.visible;
-            obj.alpha *= parent.alpha;
-            parent = parent.parent;
-        }
-        return obj;
-    }
-}else{
-    //force visibility false if alpha less than 50% in IE8, don't use alpha
-    var cumulativeVis = function(parent){
-        var obj = {visible:true, alpha:1};
-        while(parent && obj.visible){
-            obj.visible = parent.visible;
-            obj.alpha *= parent.alpha;
-            parent = parent.parent;
-        }
-        if(obj.alpha<0.5){
-            obj.visible = false;
-        }
-        obj.alpha = 1;
-        return obj;
-    }
-}
-
-//-- end EaselFL specific setup
-
-
 // TODO: fix problems with rotation.
 // TODO: exclude from getObjectsUnderPoint
 
@@ -114,25 +53,6 @@ var DOMElement = function(htmlElement) {
   this.initialize(htmlElement);
 }
 var p = DOMElement.prototype = new ns.DisplayObject();
-
-
-
-    p._flSimpleTransform = true;
-    p._flWidth = 0;
-    p._flHeight = 0;
-    p._flLastMtx = null;
-    p._flBx = 0;
-    p._flBy = 0;
-    p._flVisible = true;
-    p._flAlpha = 1;
-    p._flCumMtx = null;
-    p._flMsMtx = '';
-    p._flMsAlpha = '';
-    p._flMsCum = ' ';
-    p._flParent = null;
-    p._flCtx = null;
-
-
 
 // public properties:
 	/**
@@ -168,20 +88,9 @@ var p = DOMElement.prototype = new ns.DisplayObject();
 		this.mouseEnabled = false;
 		this.htmlElement = htmlElement;
 		if (htmlElement) {
-			var style = this._style = htmlElement.style;
-			style.position = "absolute";
-			//not in EaselJS version, but for this to work both in 
-			//<= IE8, since matrixes aren't usable for translation
-			//in that browser
-			style.top = 0;
-			style.left = 0;	
-			this._flLastMtx = {a:null, b:null, c:null, d:null, tx:null, ty:null};
-
-
-			if(transformProp) {
-				// a 'modern' browser
-				this._style[transformPropOrigin] = "0% 0%";
-			}
+			this._style = htmlElement.style;
+			this._style.position = "absolute";
+			this._style.transformOrigin = this._style.webkitTransformOrigin = this._style.msTransformOrigin = this._style.MozTransformOrigin = "0% 0%";
 		}
 	}
 
@@ -219,22 +128,6 @@ var p = DOMElement.prototype = new ns.DisplayObject();
 		o.style.visibility = this.visible ? "visible" : "hidden";
 		o.style.transform = o.style.webkitTransform = o.style.oTransform =  o.style.msTransform = ["matrix("+mtx.a,mtx.b,mtx.c,mtx.d,(mtx.tx+0.5|0),(mtx.ty+0.5|0)+")"].join(",");
 		o.style.MozTransform = ["matrix("+mtx.a,mtx.b,mtx.c,mtx.d,(mtx.tx+0.5|0)+"px",(mtx.ty+0.5|0)+"px)"].join(",");
-		
-
-
-
-	    if(this.htmlElement.parentNode){       
-	        this.updateBounds();
-	    }
-	  
-	    this._flCumMtx = mtx;
-	    
-  
-	    if(this.__visible){
-	      this.__syncTransform();
-	    }
-	  }
-
 		return true;
 	}
 

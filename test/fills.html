@@ -24,15 +24,13 @@ function init(){
 	canvas.setAttribute('width', 600);
 	canvas.setAttribute('height', 400);
 	canvas.setAttribute('fl_swf_url', '../haxe/bin/EaselFl.swf');
-	canvas.setAttribute('id', 'testContainer');
 	document.getElementById('testContainer').appendChild(canvas);
 	
 	var myStage = new createjs.Stage(canvas);
 	createjs.Ticker.addListener(myStage);
 	
 	//-- specific test code
-	var img = new Image();
-	img.src = 'img/testImage.png';
+
 	
 	var shp = new createjs.Shape();
 	shp.x = shp.y = 50;
@@ -41,9 +39,7 @@ function init(){
 	g.drawRect(0, 0, 50, 50);
 	g.endFill();
 	
-	g.beginBitmapFill(img);
-	g.drawRect(100, 0, 50, 50);
-	g.endFill();
+
 
 	g.beginRadialGradientFill(['#F00', '#00F'], [ 0, 1], 225, 25, 0, 225, 25, 35);
 	g.drawRect(200, 0, 50, 50);
@@ -54,6 +50,18 @@ function init(){
 	g.endStroke;
 
 	myStage.addChild(shp);	
+
+	var img = new Image();
+	img.src = 'img/testImage.png';
+	// in EaselJS you must wait for image to
+	// load before a texture for bitmap fill can
+	// be created.
+	img.onload = function() {
+		g.beginBitmapFill(img);
+		g.drawRect(100, 0, 50, 50);
+		g.endFill();
+	}
+	
 }
 
 </script>
