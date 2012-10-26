@@ -8,10 +8,12 @@ or greater installed. It has specifically been tested for use with IE8.
 
 ##Key shortcomings, inconsistencies, and notes:
 **Dependencies**
+
 *SWFObject (tested with 2.2) is the only dependency of EaseFL (other than Flash9). 
 It must be loaded prior to a createjs.Stage being constructed.
 
 **Events**
+
 *Event handlers are not applied in Flash synchronously
 
 *EaselFL currently does not handle multi-touch events
@@ -33,6 +35,7 @@ stage.mouseY are updated).
 *DisplayObject hitArea is not yet implemented.
 
 **Rendering**
+
 *Only system fonts are currently available in Flash; this could
 be remedied by implementing dynamic font loading.
 
@@ -52,6 +55,7 @@ can flip frames for use in BitmapAnimations).
 
 
 **Graphics**
+
 *Flash lineScaleMode is set to 'none' which prevents issue of lines
 scaling when only scaling horizontal or vertical, but causes lines not
 to scale proportionately to container transformations, as they would
@@ -72,6 +76,7 @@ to EaselJS
 *drawAsPath is not implemented (the primary use, masking, is implemented)
 
 **Memory Management**
+
 *Garbage collection will not remove EaselFl objects either from
 Flash or JS due to stage level index of items. This could be
 remedied by storing all commands passed to Flash for a specific
@@ -84,6 +89,7 @@ if large numbers of objects will be created, object reuse (pooling)
 is suggested.
 
 **Miscellaneous**
+
 *Clone methods are not implemented
 
 *use of multiple stages is untested.
