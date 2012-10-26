@@ -42,16 +42,20 @@ function init(){
 	var shp = new createjs.Shape();
 	shp.x = 300;
 	shp.y = 200;
-	var g = shp.graphics;
-	g.beginBitmapFill(img);
-	g.drawCircle(0, 0, 100);
-	g.endFill();
-		
-	g.setStrokeStyle(10);
-	g.beginBitmapStroke(img);
-	g.drawCircle(160, 0, 50);
-	g.endFill();
 	myStage.addChild(shp);
+
+	img.onload = function() {
+		var g = shp.graphics;
+		g.beginBitmapFill(img);
+		g.drawCircle(0, 0, 100);
+		g.endFill();
+			
+		g.setStrokeStyle(10);
+		g.beginBitmapStroke(img);
+		g.drawCircle(160, 0, 50);
+		g.endFill();
+	}
+
 	
 }
 

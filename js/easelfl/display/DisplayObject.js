@@ -1193,7 +1193,7 @@ var p = DisplayObject.prototype;
 				for (var i=0, l=this.filters.length; i<l; i++) {
 					var flt = this.filters[i];
 					flt._flSyncProps(ctx);
-					filterIDs[i] = flt.id
+					filterIDs[i] = flt.id;
 				}
 
 				this._flChange.push([this.id, 'flts', filterIDs]);
@@ -1201,6 +1201,11 @@ var p = DisplayObject.prototype;
 		}
 		
 		//-- Synchronize Mask
+		if(this.mask) {
+			this.mask._flRunCreate(ctx);
+			this.mask.draw(ctx);
+		}
+
 		if(this.mask !== this._flMask) {
 			this._flMask = this.mask;
 			this._flChange.push([this.id, 'msk', this.mask ? this.mask.id : null]);

@@ -6,6 +6,8 @@
  * Adobe Flash Player 9 or higher.
  * @author Brett Johnson, periscopic.com
  * 
+ * http://github.com/periscopic/EaselFL
+ * 
  * Distributed under the terms of the MIT license.
  */
 

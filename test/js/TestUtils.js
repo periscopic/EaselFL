@@ -97,7 +97,8 @@ var ScriptLoader = {
         loadWithEaselJS : function(init) {
             usingCanvas = true;
             buildHTML('Canvas + EaselJS', 'view in Flash with EaselFL');
-             ScriptLoader.loadInOrder([
+            
+             /*ScriptLoader.loadInOrder([
                 'js/easeljs/geom/Matrix2D.js',
                 'js/easeljs/geom/Point.js',
                 'js/easeljs/geom/Rectangle.js',
@@ -121,9 +122,11 @@ var ScriptLoader = {
                 'js/easeljs/events/MouseEvent.js',
                 'js/easeljs/utils/Ticker.js',
                 'js/easeljs/utils/SpriteSheetUtils.js'
-                ], init);
+                ], init);*/
              
-           // ScriptLoader.load('js/easeljs-0.4.2.min.js', init);
+            window.createjs = window;
+            //ScriptLoader.load('js/easeljs-0.4.2.min.js', init);
+             ScriptLoader.load('js/easeljs-0.5.0.min.js', init);
         },
       
         loadWithEaselFL : function(init) {
@@ -164,7 +167,7 @@ var ScriptLoader = {
             
             /*ScriptLoader.loadInOrder([
                 '../js/swfobject.js',
-                '../build/output/easelfl-0.1.12.min.js'               
+                '../build/output/easelfl-0.1.13.min.js'               
             ], init);*/
         },
         

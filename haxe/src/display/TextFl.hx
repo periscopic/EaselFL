@@ -126,7 +126,7 @@ class TextFl extends DisplayObjectFl, implements IExec {
 	
 		display = new Sprite();
 		display.addChild(tf);
-		baseline = 'alphabetic';
+		baseline = 'top';
 	}
 	
 	function updateBaseline():Void {
@@ -135,8 +135,8 @@ class TextFl extends DisplayObjectFl, implements IExec {
 		//TODO : 'hanging', 'ideographic' should be treated differently
 		switch(baseline) {
 			
-			case 'top', 'hanging': 
-				tf.y = -2;
+			case 'alphabetic', 'ideographic':				
+				tf.y = - (metrics.ascent + 2);
 				
 			case 'bottom':
 				tf.y = - (metrics.ascent + metrics.descent + 2);
@@ -144,8 +144,8 @@ class TextFl extends DisplayObjectFl, implements IExec {
 			case 'middle':
 				tf.y = - ((metrics.ascent + metrics.descent) * 0.5 +2);	
 			
-			default: //'alphabetic', 'ideographic', null
-				tf.y = - (metrics.ascent + 2);		
+			default: //'top', 'hanging', null 
+				tf.y = -2;	
 		}	
 	}
 	

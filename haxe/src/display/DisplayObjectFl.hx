@@ -109,10 +109,10 @@ class DisplayObjectFl implements IDisplayable {
 		target.display.buttonMode = isOn;
 	}
 	
-	inline static private function setMask(target:DisplayObjectFl, maskID:Dynamic):Void{
-		
+	inline static private function setMask(target:DisplayObjectFl, maskID:Dynamic):Void{		
 		//mask is a shape
-		target.display.mask = Control.displays.exists(maskID) ? Control.displays.get(maskID).display : null;
+		var msk = Control.displays.exists(maskID) ? Control.displays.get(maskID).display : null;
+		target.display.mask = msk;		
 	}
 	
 	inline static private function setShadow(target:DisplayObjectFl, id:Dynamic):Void{
