@@ -25,7 +25,7 @@ var SOURCE_FILES = [
 	"../js/easelfl/display/BitmapAnimation.js",
 	"../js/easelfl/display/Shape.js",
 	"../js/easelfl/display/Text.js",
-	//"../js/easelfl/utils/SpriteSheetUtils.js",
+	"../js/easelfl/utils/SpriteSheetUtils.js",
 	//"../js/easelfl/utils/SpriteSheetBuilder.js",
 	"../js/easelfl/display/DOMElement.js",
 	"../js/easelfl/filters/Filter.js",

@@ -90,10 +90,7 @@ var ScriptLoader = {
         doc.body.appendChild(swap);
     }
     
-    
-    //-- temporarily allow use without namespace
-    //window.createjs = window;
-    
+       
     return {
         useCanvas : window.location.search.toUpperCase().indexOf('CANVAS')>=0,	
     
@@ -131,8 +128,8 @@ var ScriptLoader = {
       
         loadWithEaselFL : function(init) {
             usingCanvas = false;
-            buildHTML('Flash + EaselFL', 'view in Canvas with EaselJS');
-            
+            buildHTML('Flash + EaselFL', 'view in Canvas with EaselJS');            
+                        
             ScriptLoader.loadInOrder([
                 '../js/swfobject.js',
                 '../js/easelfl/utils/ContextConfig.js',
@@ -163,6 +160,12 @@ var ScriptLoader = {
                 '../js/easelfl/utils/Ticker.js',
                 '../js/easelfl/utils/SpriteSheetUtils.js'
             ], init);
+             
+            
+            /*ScriptLoader.loadInOrder([
+                '../js/swfobject.js',
+                '../build/output/easelfl-0.1.12.min.js'               
+            ], init);*/
         },
         
         swapRenderMethod : function() {
