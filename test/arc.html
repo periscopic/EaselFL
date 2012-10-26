@@ -60,15 +60,14 @@ function init(){
 
 
 	var normArc = new createjs.Shape();
-	normArc.graphics.beginFill('#F00');
-	//normArc.graphics.setStrokeStyle(1);
-	//normArc.graphics.beginStroke('#F00');
-	normArc.graphics.arc(0, 0, 50, 0, 1, false);
-	normArc.graphics.arc(0, 0, 90, 1, 0, true);
-	//normArc.graphics.endStroke();
+	normArc.graphics.beginFill('rgba(0, 0, 0, 0.05)');
+	normArc.graphics.setStrokeStyle(1);
+	normArc.graphics.beginStroke('#AAA');
+	normArc.graphics.arc(0, 0, 50, -0.2, 0.2 - (Math.PI/2), true);
+	normArc.graphics.arc(0, 0, 90, 0.2 - (Math.PI/2), -0.2, false);
+	normArc.graphics.endStroke();
 	normArc.graphics.endFill();
-	normArc.x = 100;
-	normArc.y = 100;
+	normArc.y = 400;
 	myStage.addChild(normArc);
 	
 	var c1 = createNode(250, 100, '#3399E9', myStage, updateC2);

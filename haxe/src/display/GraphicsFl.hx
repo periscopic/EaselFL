@@ -483,14 +483,15 @@ class GraphicsFl implements IExec{
 		var sy:Float = Math.sin(angBisect) * distBisect * direction + y1;
 		
 		//-- start and end angle 
-		//var sAng = ang1 + HALF_PI * direction;
-		//var eAng = sAng + Math.PI * direction - angDif;
+		var sAng = ang1 + HALF_PI * direction;
+		var eAng = sAng + Math.PI * direction - angDif;
 		
-		//drawArc(target, [sx, sy, radius, sAng, eAng, direction==1 ], true);
+		//-- if line or fill, set start point a current head and
+		//-- make drawArc to a lineto from current point
+		target.checkFreshPath();
 		
-		var sAng = -(ang1 + HALF_PI * direction);
-		var eAng = sAng  + Math.PI * direction - angDif;
-		drawArc(target, [sx, sy, radius, sAng, eAng, direction==-1 ], true);
+		//-- draw the arc itself
+		drawArc(target, [sx, sy, radius, sAng, eAng, direction==-1 ]);
 	}
 	
 	/**
@@ -498,9 +499,8 @@ class GraphicsFl implements IExec{
 	 * @param GraphicsFl
 	 * @param Array The arguments for the corresponding EaselJS method
 	 */
-	inline static function drawArc(target:GraphicsFl, args:Array<Dynamic>, ?useLineTo:Bool):Void{
-        target.checkFreshPath();
-        
+	inline static function drawArc(target:GraphicsFl, args:Array<Dynamic>):Void{
+ 
        	//-- center of arc
        	var ax:Float = args[0]; 
         var ay:Float = args[1];
@@ -509,26 +509,13 @@ class GraphicsFl implements IExec{
        	var startAngle:Float = args[3];
        	var endAngle:Float = args[4];
         
-
-        
         //-- arc angle in radians
-        var arc:Float = startAngle - endAngle;
+        var arc:Float = endAngle - startAngle;
         var anticlockwise:Bool = args[5]==null ? true : args[5];
-        
-   
-        
-        if(arc>0) {
-        	
-        	anticlockwise = !anticlockwise;
-        	var tmp = startAngle;
-        	startAngle = endAngle;
-        	endAngle = tmp;
-        	arc = -arc;
-        }
         
         //-- start of segment
        	var bx:Float = ax + Math.cos(startAngle) * radius;
-       	var by:Float = ay - Math.sin(startAngle) * radius;
+       	var by:Float = ay + Math.sin(startAngle) * radius;
        	       
        //-- graphics on which to render
         var g:flash.display.Graphics = target.graphics;
@@ -542,10 +529,13 @@ class GraphicsFl implements IExec{
         var cRadius:Float;
  
         //-- line to start
-        if(useLineTo==true || target.activePath) {
+        if(target.activePath) {
         	g.lineTo(bx, by);
         } else {
         	g.moveTo(bx, by);
+        	target.curX = bx;
+        	target.curY = by;
+        	target.checkFreshPath();
         }
         
 
@@ -555,8 +545,8 @@ class GraphicsFl implements IExec{
                 arc = TWO_PI;
                 
         //-- or if necessary to flip direction of rendering        
-        }else if(arc!=0 && ((arc<0) == anticlockwise)) {
-        		arc = (TWO_PI - Math.abs(arc)) * (anticlockwise?1:-1);   		
+        }else if(arc!=0 && (anticlockwise != (arc<0))) {
+        	arc = (anticlockwise ? -1 : 1) * TWO_PI + arc;
         }
         
         //-- number of segments
@@ -572,7 +562,7 @@ class GraphicsFl implements IExec{
         angle = startAngle;
         
 		//-- calculate and render segments
-		
+	
         for( i in 0...numSegs) {
             //-- increment the angle
             angle += segAngle;
@@ -582,11 +572,11 @@ class GraphicsFl implements IExec{
             
             //-- find the end pt
             bx = ax + Math.cos(angle) * radius;
-            by = ay - Math.sin(angle) * radius;
+            by = ay + Math.sin(angle) * radius;
             
             //-- find the control pt
             cx = ax + Math.cos(angleMid) * cRadius;
-            cy = ay - Math.sin(angleMid) * cRadius;
+            cy = ay + Math.sin(angleMid) * cRadius;
 			
             //-- render segment
             g.curveTo(cx, cy, bx, by);
