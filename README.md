@@ -9,11 +9,9 @@ or EaselFL (if Flash9 is available and canvas is not). You can see it in use
 in these applications that we at <a href="http://periscopic.com">Periscopic</a> 
 have recently built.
 
-	<http://globalhandwashing.org/ghw/>
-	
-	<http://visualization.geblogs.com/visualization/jobs/
-	
-	<http://hewlett.org/grants-tool/index>
+<http://globalhandwashing.org/ghw/>	
+<http://visualization.geblogs.com/visualization/jobs/>	
+<http://hewlett.org/grants-tool/index>
 
 EaselFL is distributed under the terms of the MIT license.
 
