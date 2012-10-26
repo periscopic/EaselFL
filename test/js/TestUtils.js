@@ -89,8 +89,7 @@ var ScriptLoader = {
         swap.innerHTML = swapLabel;
         doc.body.appendChild(swap);
     }
-    
-       
+           
     return {
         useCanvas : window.location.search.toUpperCase().indexOf('CANVAS')>=0,	
     
@@ -98,7 +97,7 @@ var ScriptLoader = {
             usingCanvas = true;
             buildHTML('Canvas + EaselJS', 'view in Flash with EaselFL');
             
-             /*ScriptLoader.loadInOrder([
+             ScriptLoader.loadInOrder([
                 'js/easeljs/geom/Matrix2D.js',
                 'js/easeljs/geom/Point.js',
                 'js/easeljs/geom/Rectangle.js',
@@ -122,11 +121,11 @@ var ScriptLoader = {
                 'js/easeljs/events/MouseEvent.js',
                 'js/easeljs/utils/Ticker.js',
                 'js/easeljs/utils/SpriteSheetUtils.js'
-                ], init);*/
+                ], init);
              
-            window.createjs = window;
+            //window.createjs = window;
             //ScriptLoader.load('js/easeljs-0.4.2.min.js', init);
-             ScriptLoader.load('js/easeljs-0.5.0.min.js', init);
+            //ScriptLoader.load('js/easeljs-0.5.0.min.js', init);
         },
       
         loadWithEaselFL : function(init) {

@@ -30,26 +30,23 @@ function init(){
 	createjs.Ticker.addListener(myStage);
 	
 	//-- specific test code
+	//
+	//
+	//
 	var img = new Image();
 	img.src = 'img/testImage.png';
 	
-	
-	//-- shadow
+	/**
+	 * If testing against a built EaselJS version, note that
+	 * as of 0.4.2 they do not include the filter subclasses. 
+	 */
+
 	var obj, g;
-	/*shp = new Shape();
-	shp.x = 300;
-	shp.y = 200;
-	g = shp.graphics;
-	g.beginBitmapFill(img);
-	g.drawCircle(0, 0, 100);
-	g.endFill();
-	
-	myStage.addChild(shp);*/
-	
-	
 	
 	//-- color matrix
 	var bmp = new createjs.Bitmap(img);
+	console.log(createjs);
+
 	bmp.filters = [new createjs.ColorMatrixFilter(new createjs.ColorMatrix(0, 0, 0, 0)),
 								 new createjs.BoxBlurFilter(12, 0, 1)];
 	bmp.cache(-100, -100, 200, 200);
