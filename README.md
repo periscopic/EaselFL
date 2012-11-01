@@ -15,6 +15,12 @@ EaselFL is distributed under the terms of the MIT license.
 
 <http://www.opensource.org/licenses/mit-license.html>
 
+##Getting Started
+
+The <a href="blob/master/examples/setup.html">example setup</a> uses the FLSetup util to get up and 
+running quickly. There are also a series of <a href="blob/master/tests/">tests</a> that demonstrate
+various features and their consistency with EaselJS.
+
 ##Key shortcomings, inconsistencies, and notes:
 **Dependencies**
 
