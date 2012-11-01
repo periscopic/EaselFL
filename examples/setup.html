@@ -1,0 +1,59 @@
+<!-- A simplfied EaselJS || EaselFL setup example -->
+
+<html>
+<head>
+
+<script type="text/javascript" src="../js/FLSetup.js"></script>
+<script type="text/javascript">
+
+window.onload = function(){
+	var options = {
+		preferFlash: false,
+		EaselJS_url: '../test/js/easeljs-0.5.0.min.js',
+		EaselFL_url: '../build/output/easelfl-0.1.13.min.js',
+		SWFObject_url: '../js/swfobject.js',
+	}
+
+	// FLSetup.run will callback to success/failure synchronously
+	// if no options are provided, Easel is unsupported,
+	// or no necessary loads are included.
+	// If your app is including EaselJS & EaselJS in different
+	// built versions, then loading those can occur in the 
+	// success handler based on the 'isFL' boolean callback parameter.
+	createjs.FLSetup.run( onSetupSuccess, onSetupFailure, options);
+}
+
+function onSetupFailure() {
+	//handle lack of support for Easel
+}
+
+function onSetupSuccess(isFL){
+	// start it up
+	var canvas, stage, shape, gfx;
+	canvas = document.createElement('canvas');
+	
+	//width, height, and fl_swf_url must be set as attributes on
+	//the canvas for EaselFL to work properly
+	canvas.setAttribute('width', 600);
+	canvas.setAttribute('height', 400);
+	canvas.setAttribute('fl_swf_url', '../haxe/bin/EaselFl.swf');
+	document.body.appendChild(canvas);
+	
+	stage = new createjs.Stage(canvas);
+	createjs.Ticker.addListener(stage);
+
+	shape = new createjs.Shape();
+	gfx = shape.graphics;
+	gfx.beginFill('#000');
+	gfx.drawRect(100, 100, 50, 50);
+	gfx.drawRect(200, 100, 50, 50);
+	gfx.drawRect(100, 200, 150, 50);
+	gfx.endFill();
+
+	stage.addChild(shape);
+}
+</script>
+</head>
+<body>
+</body>
+</html>
