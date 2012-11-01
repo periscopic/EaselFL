@@ -18,7 +18,7 @@ EaselFL is distributed under the terms of the MIT license.
 ##Getting Started
 
 The <a href="blob/master/examples/setup.html">example setup</a> uses the FLSetup util to get up and 
-running quickly. There are also a series of <a href="blob/master/tests/">tests</a> that demonstrate
+running quickly. There are also a series of <a href="tree/master/test">tests</a> that demonstrate
 various features and their consistency with EaselJS.
 
 ##Key shortcomings, inconsistencies, and notes:
