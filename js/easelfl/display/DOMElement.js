@@ -167,6 +167,11 @@ var p = DOMElement.prototype = new ns.DisplayObject();
 		this.htmlElement = htmlElement;
 		this._flLastMtx = {a:null, b:null, c:null, d:null, tx:null, ty:null};
 
+        //start invisible
+        htmlElement.style.visibility = 'hidden';
+        this._flVisible = false;
+
+
 		if (htmlElement) {
 			var style = this._style = htmlElement.style;
 			style.position = "absolute";

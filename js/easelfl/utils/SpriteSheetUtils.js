@@ -47,7 +47,7 @@ var SpriteSheetUtils = function() {
 	 * @type HTMLCanvasElement
 	 * @protected
 	*/
-	SpriteSheetUtils._workingCanvas = document.createElement("canvas");
+	//SpriteSheetUtils._workingCanvas = document.createElement("canvas");
 
 	/**
 	 * @property _workingContext
@@ -55,7 +55,7 @@ var SpriteSheetUtils = function() {
 	 * @type CanvasRenderingContext2D
 	 * @protected
 	*/
-	SpriteSheetUtils._workingContext = SpriteSheetUtils._workingCanvas.getContext("2d");
+	//SpriteSheetUtils._workingContext = SpriteSheetUtils._workingCanvas.getContext("2d");
 
 // public static methods:
 	/**
