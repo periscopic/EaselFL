@@ -1,4 +1,4 @@
--swf9 bin/EaselFl.swf
+-swf9 bin/easelfl-cur.swf
 -swf-header 100:100:60:FFFFFF
 -main Main
 -cp src
