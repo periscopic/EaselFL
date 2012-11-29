@@ -720,7 +720,7 @@ var p = Stage.prototype = new ns.Container();
 	 p.flReady = false;
 
 	
-	Stage.isEaselFl = true;
+	Stage.isEaselFl = Stage.isEaselFL = true;
 	
 	Stage.__MS_BINDING = window.addEventListener || document.addEventListener ? false : true;
 	Stage.FL_THROW_UNIMPLEMENTED = true; //--throw error on use of unimplemented features

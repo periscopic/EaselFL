@@ -209,6 +209,11 @@ package utils;
         static public function parse(str:String) : Void//AlphaColor
         {
         	
+        	if(str==null) {
+        		str = 'transparent';
+        	}
+        	
+        	
 			str = (~/\s*$/).replace((~/^\s*/).replace(str.toLowerCase(),''), '');
 			
 

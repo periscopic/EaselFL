@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>CreateJS export from test</title>
+
+<!--
+When exported by the createjs toolkit, the libs are all loaded immediately and sequentially
+using script tags. When using EaselJS + EaselFL we need to know which to load - and that
+loading must occur before the exported JS file is run, since it utilizes the Easel classes
+for prototypes immediately.
+-->
+
+<!--<script src="http://code.createjs.com/easeljs-0.5.0.min.js"></script>-->
+<script src="http://code.createjs.com/preloadjs-0.2.0.min.js"></script>
+<!--<script src="toolkit.js"></script>-->
+
+<!-- added -->
+<script src="../../js/FLSetup.js"></script>
+
+<script>
+var canvas, stage, exportRoot;
+
+//added because the toolkit declares this within the exported JS file,
+//which is being loaded after init method is executed
+var images;
+
+function init() {
+	
+	//flags
+	var preloads = false, 
+	easel = false;
+
+	//handlers
+	function checkReady() {
+		if(preloads && easel) {
+			createjs.FLSetup.loadScripts('toolkit.js', handleComplete);
+		}
+	}
+
+	function handlePreloadsComplete() {
+		preloads = true;
+		checkReady();
+	}
+	
+	function onSetupSuccess() {
+		easel = true;
+		checkReady();
+	}
+
+	function onSetupFailure() {
+		//handle lack of support for Easel
+	}
+
+	//-- Toolkit exported init method with adjusted complete method
+	canvas = document.getElementById("canvas");
+	images = images||{};
+
+	var manifest = [
+		{src:"images/createjs.jpeg", id:"createjs"}
+	];
+
+	var loader = new createjs.PreloadJS(false);
+	loader.onFileLoad = handleFileLoad;
+	loader.onComplete = handlePreloadsComplete; //handleComplete;
+	loader.loadManifest(manifest);
+
+	//-- end Toolkit exported init method
+
+	//EaselJS/EaselFL agnostic setup
+	canvas.setAttribute('fl_swf_url', '../../haxe/bin/easelfl-cur.swf');
+
+	var options = {
+		preferFlash: true, //normally - false - in production
+		EaselJS_url: 'http://code.createjs.com/easeljs-0.5.0.min.js',
+		EaselFL_url: '../../build/output/easelfl-cur.min.js',
+		SWFObject_url: '../../js/swfobject.js',
+	};
+
+	createjs.FLSetup.run( onSetupSuccess, onSetupFailure, options);
+}
+
+
+function handleFileLoad(o) {
+	if (o.type == "image") { images[o.id] = o.result; }
+}
+
+function handleComplete() {
+	exportRoot = new lib.toolkit();
+
+	stage = new createjs.Stage(canvas);
+
+	//EaselFL currently doesn't watch the canvas background color
+	if(createjs.Stage.isEaselFL) {
+		var bg = new createjs.Shape();
+		bg.graphics.beginFill('#ffffff');
+		bg.graphics.drawRect(0, 0, 550, 400);
+		bg.graphics.endFill();
+		stage.addChild(bg);
+	}
+
+	stage.addChild(exportRoot);
+	stage.update();
+
+	createjs.Ticker.setFPS(24);
+	createjs.Ticker.addListener(stage); //Ticker must be added to stage for EaselFL to work
+}
+</script>
+</head>
+
+<body onload="init();" style="background-color:#D4D4D4">
+	<canvas id="canvas" width="550" height="400" style="background-color:#ffffff"></canvas>
+</body>
+</html>

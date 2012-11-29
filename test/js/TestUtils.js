@@ -166,7 +166,7 @@ var ScriptLoader = {
             
             /*ScriptLoader.loadInOrder([
                 '../js/swfobject.js',
-                '../build/output/easelfl-0.1.13.min.js'               
+                '../build/output/easelfl-cur.min.js'               
             ], init);*/
         },
         
