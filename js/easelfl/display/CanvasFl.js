@@ -140,7 +140,7 @@
             var creates = this._flCreate, item, index = this._flItemIndex;
 
             for(var i=0, l=creates.length; i<l; ++i) {    
-               item = creates[i][1];         
+               item = creates[i][1];        
                creates[i][1] = item.id;
                index[item.id] = item;	
             }
@@ -305,11 +305,7 @@
 
    //-- Get the movie object by id
    ContextFl._flGetInstance = function(id){
-	   if (/Explorer/.test(navigator.appName)) {
-			   return window[id];
-		   } else {
-			   return document[id];
-	   }
+    return document.getElementById(id);
    }
    
    /*-------------------*/

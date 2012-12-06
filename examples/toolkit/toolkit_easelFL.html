@@ -11,15 +11,18 @@ loading must occur before the exported JS file is run, since it utilizes the Eas
 for prototypes immediately.
 -->
 
+<!-- added -->
+<script src="../../js/FLSetup.js"></script>
+
 <!--<script src="http://code.createjs.com/easeljs-0.5.0.min.js"></script>-->
 <script src="http://code.createjs.com/preloadjs-0.2.0.min.js"></script>
 <!--<script src="toolkit.js"></script>-->
 
-<!-- added -->
-<script src="../../js/FLSetup.js"></script>
+
+
 
 <script>
-var canvas, stage, exportRoot;
+var myCanvas, stage, exportRoot;
 
 //added because the toolkit declares this within the exported JS file,
 //which is being loaded after init method is executed
@@ -52,8 +55,13 @@ function init() {
 		//handle lack of support for Easel
 	}
 
+	//patch issue with PreloadJS failing due to lack of audio tag in IE8
+	if(typeof window.HTMLAudioElement === 'undefined') {
+		window.HTMLAudioElement = function (){};
+	}
+
 	//-- Toolkit exported init method with adjusted complete method
-	canvas = document.getElementById("canvas");
+	myCanvas = document.getElementById("canvas");
 	images = images||{};
 
 	var manifest = [
@@ -68,7 +76,7 @@ function init() {
 	//-- end Toolkit exported init method
 
 	//EaselJS/EaselFL agnostic setup
-	canvas.setAttribute('fl_swf_url', '../../haxe/bin/easelfl-cur.swf');
+	myCanvas.setAttribute('fl_swf_url', '../../haxe/bin/easelfl-cur.swf');
 
 	var options = {
 		preferFlash: true, //normally - false - in production
@@ -88,7 +96,7 @@ function handleFileLoad(o) {
 function handleComplete() {
 	exportRoot = new lib.toolkit();
 
-	stage = new createjs.Stage(canvas);
+	stage = new createjs.Stage(myCanvas);
 
 	//EaselFL currently doesn't watch the canvas background color
 	if(createjs.Stage.isEaselFL) {
