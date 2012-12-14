@@ -151,23 +151,38 @@ var p = Shape.prototype = new ns.DisplayObject();
 	
 	/**** Begin EaselFL specific code ****/
 	
+	p._flType = 'shp';
+
 	/**
 	 * The ContextFl of the display list to which this is attached
 	 * @private
 	 **/
 	p._flCtx = null;
 
+	p._flDisplayObjectRetain = p._flRetain;
+
+	p._flRetain = function(ctx) {
+		this._flDisplayObjectRetain(ctx);
+		this.graphics._flRetain(ctx);
+	}
+
+	p._flDisplayObjectDeretain = p._flDeretain;
+
+	p._flDeretain = function() {
+		this._flDisplayObjectDeretain();
+		this.graphics._flDeretain();
+	}
+
+
 	/**
 	* Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
 	* @param {ContextFl} ctx The EaselFl context as defined in CanvasFl.js
 	**/
+	p._flDisplayObjectRunCreate = p._flRunCreate;
+
 	p._flRunCreate = function(ctx){
-	  if(this._flCtx!==ctx){
-			this._flCtx = ctx;
-			ctx._flCreate.push(['shp', this]);
-			ctx._flCreate.push(['gfx', this.graphics]); //-- create the graphics		
-			ctx._flChange.push([this.id, 'gfx', [this.graphics.id]]) //-- link the graphics
-	  }
+	  	this._flDisplayObjectRunCreate(ctx);
+		ctx._flChange.push([this._flId, 'gfx', [this.graphics._flId]]) //-- link the graphics
 	}
 	/**** End EaselFL specific code ****/
 

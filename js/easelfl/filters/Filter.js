@@ -95,6 +95,31 @@ var p = Filter.prototype;
 	p.clone = function() {
 		return new Filter();
 	}
+
+	/**** Begin EaselFL specific code ****/
+
+	p._flRefs = 0;
+	p._flCtx = null;
+	p._flId = null;
+	
+	// increment references binding to context
+	p._flRetain = function(ctx) {
+		//create in flash context
+		if(!this._flCtx) {
+			this._flCtx = ctx;
+			ctx._flCreate.push([this._flType, this]);
+		}
+		
+		this._flRefs++;
+	}
+
+	// decrement references binding to context
+	p._flDeretain = function() {
+		this._flRefs--;
+	}
+
+	/**** End EaselFL specific code ****/
+
 	
 ns.Filter = Filter;
 }(createjs||(createjs={})));

@@ -188,11 +188,11 @@ var p = Container.prototype = new ns.DisplayObject();
 		child.parent = this;
 		this.children.push(child);
 		
-		if(this._flCtx){
-		  child._flRunCreate(this._flCtx);
+		if(this._flCtx) {
+			child._flRetain(this._flCtx);
 		}
 		
-		this._flChange.push([this.id, 'ac', child.id]);
+		this._flDisplayListDirty = true;
 		
 		return child;
 	}
@@ -236,12 +236,12 @@ var p = Container.prototype = new ns.DisplayObject();
 		child.parent = this;
 		this.children.splice(index, 0, child);
 		
-		if(this._flCtx){
-		  child._flRunCreate(this._flCtx);
+		if(this._flCtx) {
+			child._flRetain(this._flCtx);
 		}
 		
-		this._flChange.push([this.id, 'aca', [child.id, index]]);
-		
+		this._flDisplayListDirty = true;
+
 		return child;
 	}
 	
@@ -299,13 +299,22 @@ var p = Container.prototype = new ns.DisplayObject();
 			for (var i=0; i<l; i++) { good = good && this.removeChildAt(a[i]); }
 			return good;
 		}
+
 		if (index < 0 || index > this.children.length-1) { return false; }
 		var child = this.children[index];
 		if (child != null) { child.parent = null; }
+
+		if (child != null) { 
+			child.parent = null; 
+			if(this._flCtx) {
+				child._flDeretain();
+			}
+		}
+
 		this.children.splice(index, 1);
 		
-		this._flChange.push([this.id, 'rca', index]);
-		
+		this._flDisplayListDirty = true;
+
 		return true;
 	}
 
@@ -321,10 +330,20 @@ var p = Container.prototype = new ns.DisplayObject();
 	}
 	*/
 	p.removeAllChildren = function() {
-		var kids = this.children;
-		while (kids.length) { kids.pop().parent = null; }
+		var kids, kid;
+		kids = this.children;
 		
-		this._flChange.push([this.id, 'rac']);
+		while (kids.length) { 
+			kid = kids.pop();
+			
+			if(this._flCtx) {
+				kid._flDeretain();
+			}
+
+			kid.parent = null; 
+		}
+		
+		this._flDisplayListDirty = true;
 	}
 
 	/**
@@ -615,27 +634,60 @@ var p = Container.prototype = new ns.DisplayObject();
 	}
 	
 	/**** Begin EaselFL specific code ****/
-	
+
+	p._flType = 'cnt';
+	p._flDisplayListDirty = false;
+
 	/**
 	 * @private
 	 * @property _flCtx
 	 * @type ContextFl
 	 **/
-	p._flCtx = null;
-	
-	/**
-	 * Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
-	 **/
-	p._flRunCreate = function(ctx){
-	  if(this._flCtx!==ctx){
-			this._flCtx = ctx;
-			ctx._flCreate.push(['cnt', this]);
+	p._flCtx = null;	
+
+	p._flDisplayObjectSyncProps = p._flSyncProps;
+
+	p._flSyncProps = function(ctx) {
+		this._flDisplayObjectSyncProps(ctx);
+
+		if(this._flDisplayListDirty) {
+			var list, children;
+
+			list = [];
+			children = this.children;
 			
-			for(var i=0, l=this.children.length; i<l; ++i) {
-				this.children[i]._flRunCreate(ctx);
+			for (var i = 0, l = children.length; i<l; ++i) {
+				list[i] = children[i]._flId;
 			}
-	  }
+			this._flChange.push([this._flId, 'dl', list]);
+			this._flDisplayListDirty = false;
+		}
 	}
+	
+	p._flDisplayObjectRetain = p._flRetain;
+
+	p._flRetain = function(ctx) {
+		this._flDisplayObjectRetain(ctx);
+		
+		if(this.children.length) {
+			for(var i=0, l=this.children.length; i<l; ++i) {
+				this.children[i]._flRetain(ctx);
+			}
+
+			this._flDisplayListDirty = true;
+		}
+	}
+
+	p._flDisplayObjectDeretain = p._flDeretain;
+
+	p._flDeretain = function() {
+		this._flDisplayObjectDeretain();
+
+		for (var i = 0, l = this.children.length; i<l; ++i) {
+		    this.children[i]._flDeretain();
+		}
+	}
+
 	
 	/**** End EaselFL specific code ****/
 

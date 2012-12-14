@@ -41,45 +41,62 @@
 (function(ns) {
 
     var FrameFl = function(frame){
-        this.id = ns.UID.get();
+        this._flId = ns.UID.get();
         this._frame = frame;
     }
     
     var p = FrameFl.prototype;
-    p.id = null;
+    p._flId = null;
     p._frame = null;
     p._flCtx = null;
-    
-    p.sync = function( ctx ){
+    p._flRefs = 0;
+    p._flType = 'frm';
+    p._flDep = null;
+
+    p.retain = function(ctx) {
+        this._flRefs ++;
+
         if(!this._flCtx){
             
             var f = this._frame;
-            
+            this._flCtx = ctx;
+            ctx._flCreate.push([this._flType, this]);
+
             if(f.flip) {
                 //-- this is a copy of another frame
                 //-- make sure source frame is synced to flash
-
                 FrameFl.watch(f.src);
-                f.src.__fl.sync(ctx);
-                console.log(f.src.__fl);
+                this._flDep = f.src.__fl;
+                this._flDep.retain(ctx);
 
-                
                 //-- push frame to flash
-                this._flCtx = ctx;
-                ctx._flCreate.push(['frm', this]);
-                ctx._flChange.push([this.id, 'flp', [f.src.__fl.id, f.h, f.v]]);
+                ctx._flChange.push([this._flId, 'flp', [this._flDep._flId, f.h, f.v]]);
             } else {
                 //-- verify image is pushed to flash
                 ns.ImageFl.watch(f.image);
-                f.image.__fl.sync(ctx);
+                this._flDep = f.image.__fl;
+                this._flDep.retain(ctx).sync();
                 
                 //-- push frame to flash
-                this._flCtx = ctx;
-                ctx._flCreate.push(['frm', this]);
-                ctx._flChange.push([this.id, 'init', [f.image.__fl.id, f.rect.x, f.rect.y, f.rect.width, f.rect.height, f.regX, f.regY]]);
+                ctx._flChange.push([this._flId, 'init', [this._flDep._flId, f.rect.x, f.rect.y, f.rect.width, f.rect.height, f.regX, f.regY]]);
             }
+        } else {
+            // retain frame or image on which this depends
+            this._flDep.retain(ctx); 
         }
-    };
+    }
+
+    p.deretain = function() {
+        this._flRefs --;
+
+        //_flDep should never be undefined here
+        this._flDep.deretain();
+    }
+
+    p._flResetProps = function() {
+        this._flCtx = 
+        this._flDep = null;
+    }
     
     /**
      * Create a FrameFl for a spritesheet frame if one does not already exist.

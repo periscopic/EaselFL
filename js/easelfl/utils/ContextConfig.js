@@ -35,14 +35,6 @@
  */
 
 (function() {
-
-/**
- * Set 'createjs' namespace equal to window for parity with EaselJS 0.4.2
- */
-	// TODO : remove this once EaselJS stable release no adds namespacing
-	/*if(!window.createjs) {
-		window.createjs = window;
-	}*/
 	
 /**
  * Add methods necessary for core Easel functionality to work in Internet Explorer 8.

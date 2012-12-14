@@ -140,24 +140,51 @@ var p = Bitmap.prototype = new ns.DisplayObject();
 	
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
 
-		if(this.image) {
-			if(this.image!==this._flImg) {
-				this._flImg = this.image;
-				ns.ImageFl.watch(this.image);
-				
-				if(this.sourceRect) {
-					this.sourceRect._flSync(ctx);
-				}
-				
-				if(this.sourceRect!==this._flSourceRect) {
-					this._flSourceRect = this.sourceRect;
-					ctx._flChange.push([this.id, 'rct', this.sourceRect ? this.sourceRect.id : null]);
-				}
-				ctx._flChange.push([this.id, 'img', this.image.__fl.id]);
+
+		// sync image to this
+		if(this.image!==this._flImg) {
+			//dereference image
+			if(this._flImg) {
+				this._flImg.__fl.deretain();
 			}
+
+			this._flImg = this.image;
 			
-			this.image.__fl.sync(ctx);
+			if(this.image) {
+				ns.ImageFl.watch(this.image);
+				//reference image
+				this._flImg.__fl.retain(ctx);
+				ctx._flChange.push([this._flId, 'img', this.image.__fl._flId]);
+			} else {
+				ctx._flChange.push([this._flId, 'img', null]);
+			}
 		}
+
+		//sync image properties
+		if(this.image) {
+			this.image.__fl.sync();
+		}
+			
+		//sync rect to this
+		if(this.sourceRect!==this._flSourceRect) {
+			if(this._flSourceRect) {
+				this._flSourceRect._flDeretain();
+			}
+
+			this._flSourceRect = this.sourceRect;
+			
+			if(this._flSourceRect) {
+				this._flSourceRect._flRetain(ctx);
+			}
+
+			ctx._flChange.push([this._flId, 'rct', this.sourceRect ? this.sourceRect._flId : null]);
+		}
+
+		//sync rect properties
+		if(this.sourceRect) {
+			this.sourceRect._flSync();
+		}
+		
 		return true;
 	}
 
@@ -205,6 +232,7 @@ var p = Bitmap.prototype = new ns.DisplayObject();
 	
 	/**** Begin EaselFL specific code ****/
 	
+	p._flType = 'bmp';
 	p._flCtx = null;
 	p._flImg = null;
 	p._flSourceRect = null;
@@ -214,7 +242,7 @@ var p = Bitmap.prototype = new ns.DisplayObject();
 	p.flSetSmoothing = function(smooth) {
 		if(this._flCtx && smooth!==this._flSmoothing){
 			this.flSmoothing = this._flSmoothing = smooth;
-			this._flCtx._flChange.push([this.id, 'smth', smooth]);	
+			this._flCtx._flChange.push([this._flId, 'smth', smooth]);	
 		}else{
 			this.flSmoothing = smooth;
 		}
@@ -225,15 +253,50 @@ var p = Bitmap.prototype = new ns.DisplayObject();
 	 * @protected
 	 * @param Object The CanvasFl context
 	 **/
+	p._flDisplayObjectRunCreate = p._flRunCreate;
+
 	p._flRunCreate = function(ctx){
-	  if(this._flCtx!==ctx){
-		this._flCtx = ctx;
-		ctx._flCreate.push(['bmp', this]);
-		
+		this._flDisplayObjectRunCreate(ctx);	
 		//we have a context, so we can update smoothing
 		this.flSetSmoothing(this.flSmoothing);		
-	  }
 	}
+
+	p._flDisplayObjectResetProps = p._flResetProps;
+
+	p._flResetProps = function() {
+		this._flDisplayObjectResetProps();
+		this._flSourceRect = 
+		this._flImg = null;
+	}
+
+	p._flDisplayObjectRetain = p._flRetain;
+
+	p._flRetain = function(ctx) {
+		this._flDisplayObjectRetain(ctx);
+
+		if(this._flSourceRect) {
+			this._flSourceRect._flRetain();
+		}
+
+		if(this._flImg) {
+			this._flImg.__fl.retain();
+		}
+	}
+
+	p._flDisplayObjectDeretain = p._flDeretain;
+
+	p._flDeretain = function() {
+		this._flDisplayObjectDeretain();
+		
+		if(this._flSourceRect) {
+			this._flSourceRect._flDeretain();
+		}
+
+		if(this._flImg) {
+			this._flImg.__fl.deretain();
+		}
+	}
+
 
 	/**** End EaselFL specific code ****/
 

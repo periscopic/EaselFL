@@ -82,6 +82,18 @@ class BitmapAnimationFl extends DisplayObjectFl, implements IExec {
 		}
 	}
 	
+	override public function destroy():Void {
+		super.destroy();
+		
+		if(_frame!=null) {
+			_frame.unwatch(updateBitmap);
+			_frame = null;
+		}
+		
+		bmp.bitmapData = null;
+		bmp = null;
+	}
+	
 	/**
 	 * Execute a method on this BitmapAnimationFl object
 	 * @param String key corresponding to the method

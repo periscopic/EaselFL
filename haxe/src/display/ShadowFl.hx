@@ -1,4 +1,4 @@
-package display;
+/* TEST */package display;
 
 import flash.display.DisplayObject;
 import flash.events.Event;
@@ -10,11 +10,6 @@ import utils.CSSColor;
 
 class ShadowFl implements IExec, implements IWatchable{
 
-
-	public inline static var INDEX:Int = 0;
-	
-	inline static var SHADOW_CHANGE:String = 'shadowChange';
-	static var dispatcher:EventDispatcher = new EventDispatcher();
 	static private var execs:Hash<Dynamic>;
 	
 	static public function init(){
@@ -40,38 +35,43 @@ class ShadowFl implements IExec, implements IWatchable{
 		target.filter.angle = getAngleFromOffsets(args[1], args[2]);
 		target.filter.distance = args[1] + args[2];
 
-		dispatcher.dispatchEvent(new Event(target.eventID));
+		target.notify();
 	}
 	
 	inline private static function getAngleFromOffsets(ox:Float, oy:Float):Float {
 		return  Math.atan2(oy,ox) * 180/Math.PI;
 	}
 	
-	
-	private var eventID:String;
 	private var colorString:String;
 	public var filter(default,null):DropShadowFilter;
-	
+	private var listeners:Array<Dynamic>;
+
 	public function new(id:Int){		
-		eventID = SHADOW_CHANGE + id;
 		colorString = null;				
 		filter = new DropShadowFilter(0, 0, 0, 0);
+		listeners = [];
 	}
 	
 	/**
-	 * Add method to be called when bitmapdata changes
+	 * Add method to be called when shadow changes
 	 * @param Method
 	 */
-	inline public function watch(method:Dynamic->Void):Void {
-		dispatcher.addEventListener(eventID, method, false, 0, true);
+	inline public function watch(method:Dynamic->Void):Void {	
+		listeners.push(method);
 	}
 	
 	/**
-	 * Remove method to be called when bitmapdata changes
+	 * Remove method to be called when shadow changes
 	 * @param Method
 	 */
 	inline public function unwatch(method:Dynamic->Void):Void {
-		dispatcher.removeEventListener(eventID, method, false);
+		listeners.remove(method);
+	}
+	
+	inline public function notify() {
+		for(i in 0...listeners.length) {
+			listeners[i]();
+		}
 	}
 	
 	/**
@@ -92,4 +92,5 @@ class ShadowFl implements IExec, implements IWatchable{
 			}
 		#end
 	}	
+	
 }

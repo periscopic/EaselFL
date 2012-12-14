@@ -109,20 +109,22 @@ class DisplayObjectFl implements IDisplayable {
 		target.display.buttonMode = isOn;
 	}
 	
-	inline static private function setMask(target:DisplayObjectFl, maskID:Dynamic):Void{		
+	inline static private function setMask(target:DisplayObjectFl, maskID:Dynamic):Void{
+		
 		//mask is a shape
-		var msk = Control.displays.exists(maskID) ? Control.displays.get(maskID).display : null;
-		target.display.mask = msk;		
+		target.display.mask = Control.displays.exists(maskID) ? Control.displays.get(maskID).display : null;
 	}
 	
-	inline static private function setShadow(target:DisplayObjectFl, id:Dynamic):Void{
+	
+	/*inline */static private function setShadow(target:DisplayObjectFl, id:Dynamic):Void{
+		
 		var flt = Control.shadows.get(id);
 		
 		if(target._shadow!=null) {
 			var filters = target.display.filters;
 			filters.pop();
 			target.display.filters = filters;
-			target._shadow.unwatch(target.handleShadowUpdate);
+			target._shadow.unwatch(target.handleShadowUpdate);	
 		} 
 		
 		target._shadow = flt;
@@ -131,9 +133,7 @@ class DisplayObjectFl implements IDisplayable {
 			var filters = target.display.filters;
 			filters.push(flt.filter);
 			target.display.filters = filters;
-			
 			flt.watch(target.handleShadowUpdate);
-			target.handleShadowUpdate();
 		}	
 	}
 	
@@ -216,9 +216,19 @@ class DisplayObjectFl implements IDisplayable {
 		Main.dispatch(evt);	
 	}
 	
-	public function handleShadowUpdate(?e:Dynamic):Void {
+	
+	public function handleShadowUpdate(?e:Dynamic):Void {	
 		var filters = display.filters;
 		filters[filters.length-1] = _shadow.filter;
 		display.filters = filters;
+	}
+	
+	public function destroy():Void {
+		if(_shadow!=null) {
+			_shadow.unwatch(handleShadowUpdate);
+		}
+		display.filters = null;
+		_filterFls = null;
+		_shadow = null;
 	}
 }

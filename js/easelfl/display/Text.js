@@ -392,14 +392,22 @@ var p = Text.prototype = new ns.DisplayObject();
 	p._flLineHeight = 0;
 	p._flLineWidth = null;
 	
-	/**
-	 * Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
-	 **/
-	p._flRunCreate = function(ctx){
-	  if(this._flCtx!==ctx){
-			this._flCtx = ctx;
-			ctx._flCreate.push(['txt', this]);
-	  }
+	p._flType = 'txt';
+
+	p._flDisplayObjectResetProps = p._flResetProps;
+
+	p._flResetProps = function() {
+		this._flDisplayObjectResetProps();
+
+		this._flFont = 
+		this._flColor =
+		this._flTextAlign =
+		this._flTextBaseline =
+		this._flLineWidth = null;
+
+		this._flText = '';
+		this._flOutline = false;
+		this._flLineHiehgt = 0;
 	}
 	
 	/**** End EaselFL specific code ****/

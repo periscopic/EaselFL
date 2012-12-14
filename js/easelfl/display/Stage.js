@@ -692,6 +692,11 @@ var p = Stage.prototype = new ns.Container();
 	/**** Begin EaselFL specific code ****/
 	
 	/**
+	 * @override
+	 */
+	p._flRefs = 1;
+	
+	/**
 	 * @protected
 	 * The CanvasFl context
 	 **/
@@ -719,7 +724,6 @@ var p = Stage.prototype = new ns.Container();
 		**/
 	 p.flReady = false;
 
-	
 	Stage.isEaselFl = Stage.isEaselFL = true;
 	
 	Stage.__MS_BINDING = window.addEventListener || document.addEventListener ? false : true;

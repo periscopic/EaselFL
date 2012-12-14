@@ -9,7 +9,7 @@ or EaselFL (if Flash9 is available and canvas is not). You can see it in use
 in these applications that we at <a href="http://periscopic.com">Periscopic</a> 
 have recently built.
 
-<http://globalhandwashing.org/ghw/> <br> <http://visualization.geblogs.com/visualization/jobs/> <br> <http://hewlett.org/grants-tool/index>
+<http://visualization.geblogs.com/visualization/jobs/> <br> <http://hewlett.org/grants-tool/index>
 
 EaselFL is distributed under the terms of the MIT license.
 
@@ -68,24 +68,15 @@ in EaselJS.
 if the origins of the circular guides are different (x0!==x1 || y0!==y1) 
 and both have radiuses greater than 0 (r0>0 && r1>0).
 * beginBitmapFill implements repeat, no-repeat, but not repeat-x, or repeat-y
-* setLineStyle does not implement caps, joints, or miterLimits; caps and joints 
-do not yet match EaselJS defaults
 * there is 1/2 pixel difference in the placement of some lines compared
 to EaselJS
 * drawAsPath is not implemented (the primary use, masking, is implemented)
 
 **Memory Management**
 
-* Garbage collection will not remove EaselFl objects either from
-Flash or JS due to stage level index of items. This could be
-remedied by storing all commands passed to Flash for a specific
-object, removing it from Flash and from the index whenever it is
-removed from the display list. A new instance would then be created
-again in Flash when added to the display list. Alternatively,
-objects could be explicitly destroyed and removed from display lists
-and indexes in both JS and Flash. -- In current implementation,
-if large numbers of objects will be created, object reuse (pooling)
-is suggested.
+* Garbage Collection is implemented via a reference count solution. Frequency 
+of the JS side sweep can be adjusted using createjs.CanvasFl.FL_GC_INTERVAL 
+(in number of frames from sweep to sweep).
 
 **Miscellaneous**
 

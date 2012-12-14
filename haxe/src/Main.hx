@@ -1,8 +1,6 @@
 /**
  * TODO : 
- * - hitTestPoint : problematic if drawing commands haven't been flushed to Flash
- * - mouseenabled won't work on bitmap or shape ? wrap when necessary?
- * 
+ * - hitTestPoint : problematic if drawing commands haven't been flushed to Flash 
  */
 
 package ;
@@ -13,7 +11,6 @@ import flash.display.Stage;
 import Control;
 import flash.external.ExternalInterface;
 import flash.events.Event;
-
 
 class Main {
 	
@@ -67,11 +64,17 @@ class Main {
 		
 		//-- Add JS  method
 		ExternalInterface.addCallback('sendCreate', Control.createItems);
+		ExternalInterface.addCallback('sendDestroy', Control.destroyItems);
 		ExternalInterface.addCallback('sendChange', Control.changeItems);
 		ExternalInterface.addCallback('sendInvoke', Control.invoke);	
 		//-- Notify JS the module is ready
 		callbackMethod = 'createjs.CanvasFl._flHooks.'+id;
 		ExternalInterface.call(callbackMethod);		
+		
+
+		#if debug
+			debug.SWFProfiler.init(this);
+		#end
 	}
 }
 

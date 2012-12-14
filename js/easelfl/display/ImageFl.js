@@ -46,18 +46,20 @@
      * @param HTMLImageElement
      **/
     var ImageFl = function(img){
-        this.id = ns.UID.get();
+        this._flId = ns.UID.get();
         this._img = img;
     }
     
     var p = ImageFl.prototype;
+
+    p._flType = 'img';
     
     /**
 	 * @internal
 	 * @property id
 	 * @type Number
 	 **/
-    p.id = null;
+    p._flId = null;
     
     /**
 	 * @private
@@ -90,18 +92,35 @@
      * @method sync
      * @param ContextFl
      */
-    p.sync = function( ctx ){
-        if(!this._flCtx){
-            this._flCtx = ctx;
-            ctx._flCreate.push(['img', this]);
-        }
-        
+    p.sync = function(){
         if(this._flSrc!==this._img.src){
             this._flSrc = this._img.src;
-            ctx._flChange.push([this.id, 'src', this._flSrc]);
-        }
+            this._flCtx._flChange.push([this._flId, 'src', this._flSrc]);
+        } 
+        return this;
     }
-    
+
+    p._flRefs = 0;
+
+    p.retain = function(ctx) {
+        this._flRefs++;
+        
+        if(!this._flCtx){
+            this._flCtx = ctx;
+            ctx._flCreate.push([this._flType, this]);
+        }
+
+        return this;
+    }
+
+     p.deretain = function() {
+        this._flRefs--;
+    }
+
+    p._flResetProps = function() {
+        this._flCtx = this._flSrc = null;
+    }
+
     /**
      * Create an ImageFl for this HTML image if one does not already exist.
      * @static

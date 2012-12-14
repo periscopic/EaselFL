@@ -125,24 +125,31 @@
    p._flCanvas = null;
 
 
+   // Flushes since stage init
+   p._flFlushCount = 0;
+
+
    /**
    * Send all queued commands to Flash
    * @internal
    **/
    p._flFlush = function() {		
       if(this.flReady){
-         var inst = this._flInstance;
-       
+
+        var inst = this._flInstance,
+        index = this._flItemIndex, 
+        item;
+
          //-- Create Flash counterparts of EaselJS and asset classes
          if(this._flCreate.length){
             
             //step through items, replacing actual items with id, and recording in index
-            var creates = this._flCreate, item, index = this._flItemIndex;
+            var creates = this._flCreate;
 
             for(var i=0, l=creates.length; i<l; ++i) {    
-               item = creates[i][1];        
-               creates[i][1] = item.id;
-               index[item.id] = item;	
+               item = creates[i][1];         
+               creates[i][1] = item._flId;
+               index[item._flId] = item;	
             }
             
             //-- notify flash to create these
@@ -157,7 +164,36 @@
            inst.sendChange(this._flChange);
            this._flChange = [];
          }
-      }
+
+         this._flFlushCount ++;
+
+         //check if it's time to check reference counts and clear
+         //unreferenced elements from flash
+         if(this._flFlushCount%CanvasFl.FL_GC_INTERVAL===0) {
+          this._flCollectGarbage();
+         }
+      } 
+   }
+
+   p._flCollectGarbage = function() {
+
+        var destroys, prop, index, inst, item;
+        destroys = [];
+
+        index = this._flItemIndex;
+        
+        for(prop in index) {
+          if(index[prop]._flRefs<1) {
+            item = index[prop];
+            destroys.push([item._flType, item._flId]);
+            delete index[prop];
+            item._flResetProps();
+          }
+        }
+
+        if(destroys.length) {
+          this._flInstance.sendDestroy(destroys);
+        }
    }
    
    /**
@@ -389,6 +425,7 @@
    CanvasFl.FL_URL = 'EaselFl.swf';
    CanvasFl.FL_WIDTH = '400';
    CanvasFl.FL_HEIGHT= '400';
+   CanvasFl.FL_GC_INTERVAL = 360; // every 15 secs at 24 fps
 
    //-- Object on which 'ready' callback is exposed to Flash Movie
    CanvasFl._flHooks = {};

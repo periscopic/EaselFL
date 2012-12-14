@@ -167,14 +167,13 @@ var p = DOMElement.prototype = new ns.DisplayObject();
 		this.htmlElement = htmlElement;
 		this._flLastMtx = {a:null, b:null, c:null, d:null, tx:null, ty:null};
 
-        //start invisible
-        htmlElement.style.visibility = 'hidden';
-        this._flVisible = false;
-
-
 		if (htmlElement) {
-			var style = this._style = htmlElement.style;
-			style.position = "absolute";
+            var style = this._style = htmlElement.style;
+            style.position = "absolute";
+
+            //start invisible   
+            htmlElement.style.visibility = 'hidden';
+            this._flVisible = false;
 
 			//not in EaselJS version, but for this to work both in 
 			//<= IE8, since matrixes aren't usable for translation
@@ -361,6 +360,7 @@ var p = DOMElement.prototype = new ns.DisplayObject();
     p._flMsCum = ' ';
     p._flParentNode = null;
     p._flCtx = null;
+    p._flType = 'dom';
 
 	p._flSyncVisibility = function(){
         
@@ -491,18 +491,6 @@ var p = DOMElement.prototype = new ns.DisplayObject();
             }           
         }
     }
-
-	p._flRunCreate = function(ctx){    
-	    if(this._flCtx !== ctx && ctx){
-	      //currently create a dummy shape in Flash to allow for adding removing
-	      //without conflict
-	      this._flCtx=ctx;
-	      
-	      ctx._flCreate.push(['shp', this]);
-	      //ctx._flCreate.push(['shp', this]);
-	    }
-	  }
-
 
 	/**
      * Must be called when updating anything that will change dimensions

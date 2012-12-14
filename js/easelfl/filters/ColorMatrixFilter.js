@@ -64,7 +64,7 @@ var p = ColorMatrixFilter.prototype = new ns.Filter();
 	p.initialize = function(matrix) {
 		this.matrix = matrix;		
 		this._flMatrix = [];
-		this.id = ns.UID.get();
+		this._flId = ns.UID.get();
 	}
 	
 // public methods:
@@ -143,14 +143,11 @@ var p = ColorMatrixFilter.prototype = new ns.Filter();
 	
 	/***** EaselFL specific code *****/
 	
+	p._flType = 'cmtxfl';
+	p._flMatrix = null;
+
 	//-- FL synchronize properties
 	p._flSyncProps = function(ctx) {
-		
-		if(!this._flCtx) {
-				this._flCtx = ctx;
-				ctx._flCreate.push(['cmtxfl', this]);
-		}
-		
 		var mtx = this.matrix;
 		var flmtx = this._flMatrix;
 		
@@ -177,13 +174,14 @@ var p = ColorMatrixFilter.prototype = new ns.Filter();
 			 mtx[19] !== flmtx[19] )
 			{
 				var copy = this._flMatrix = mtx.toArray();
-				this._flCtx._flChange.push([this.id, 'flt', copy]);
+				this._flCtx._flChange.push([this._flId, 'flt', copy]);
 		}
 	}
-	
-	p._flCtx = null;
-	p._flMatrix = null;
-	p.id = null;
+
+	p._flResetProps = function() {
+		this._flCtx = null;
+		this._flMtx = [];
+	}
 
 	/**** end EaselFL specific code ******/	
 	

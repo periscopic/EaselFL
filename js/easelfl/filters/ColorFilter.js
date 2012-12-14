@@ -139,7 +139,7 @@ var p = ColorFilter.prototype = new ns.Filter();
 		this.alphaOffset = alphaOffset || 0;
 		
 		//-- EaselFl Specific code
-		this.id = ns.UID.get();
+		this._flId = ns.UID.get();
 		this._flProps = [1, 1, 1, 1, 0, 0, 0, 0];
 	}
 
@@ -207,15 +207,11 @@ var p = ColorFilter.prototype = new ns.Filter();
 	
 	/***** EaselFL specific code *****/
 	
-	//-- FL synchronize properties
-	p._flSyncProps = function(ctx) {
+	p._flType = 'clrfl';
+	p._flProps = null;
 
-		if(!this._flCtx) {
-				this._flCtx = ctx;
-				ctx._flCreate.push(['clrfl', this]);
-		}
-		
-		var mtx = this.matrix;
+	//-- FL synchronize properties
+	p._flSyncProps = function(ctx) {		
 		var props = this._flProps;
 		
 		if(
@@ -239,13 +235,14 @@ var p = ColorFilter.prototype = new ns.Filter();
 				props[6] = this.blueOffset;
 				props[7] = this.alphaOffset;
 				
-				this._flCtx._flChange.push([this.id, 'flt', props]);
+				this._flCtx._flChange.push([this._flId, 'flt', props]);
 		}
 	}
-	
-	p._flCtx = null;
-	p._flProps = null;
-	p.id = null;
+
+	p._flResetProps = function() {
+		this._flCtx = null;
+		this._flProps = [1, 1, 1, 1, 0, 0, 0, 0];
+	}
 
 	/**** end EaselFL specific code ******/
 

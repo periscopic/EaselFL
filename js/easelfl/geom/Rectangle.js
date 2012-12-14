@@ -87,6 +87,8 @@ var p = Rectangle.prototype;
 		this.y = (y == null ? 0 : y);
 		this.width = (width == null ? 0 : width);
 		this.height = (height == null ? 0 : height);
+
+		this._flId = ns.UID.get();
 	}
 	
 // public methods:
@@ -109,33 +111,53 @@ var p = Rectangle.prototype;
 	}
 	
 	/**** Begin EaselFL specific code ****/
-		
+	
+	p._flType = 'rct';	
 	p._flX = 0;
 	p._flY = 0;
 	p._flWidth = 0;
 	p._flHeight = 0;
 	p._flCtx = null;
-	p.id = null;
+	p._flId = null;
+	p._flRefs = 0;
 	
 	//-- sync rectangle to flash context 
-	p._flSync = function(ctx){
-		//-- create flash counterpart
-		if(!this._flCtx){
-				this.id = ns.UID.get();
-				this._flCtx = ctx;
-				ctx._flCreate.push(['rct', this]);
-		}
+	p._flSync = function(){
 		
 		//-- sync properties
-		if(this._flX!==this.x || this._flY!==this.y || this._flWidth!==this.width || this._flHeight!==this.height){
+		if(this._flCtx  && (this._flX!==this.x || this._flY!==this.y || this._flWidth!==this.width || this._flHeight!==this.height)){
 				this._flX = this.x;
 				this._flY = this.y;
 				this._flWidth = this.width;
 				this._flHeight = this.height;
-				this._flCtx._flChange.push([this.id, 'dim', [this.x, this.y, this.width, this.height]]);
+				this._flCtx._flChange.push([this._flId, 'dim', [this.x, this.y, this.width, this.height]]);
 		}
 	}
+
+	p._flResetProps = function() {
+		this._flX = 
+		this._flY = 
+		this._flWidth = 
+		this._flHeight = 0;
+
+
+		this._flSourceRect =
+		this._flCtx = null;
+	}
 	
+	p._flRetain = function(ctx) {
+		this._flRefs++;
+
+		//-- create flash counterpart
+		if(!this._flCtx){
+			this._flCtx = ctx;
+			ctx._flCreate.push([this._flType, this]);
+		}
+	}
+
+	p._flDeretain = function() {
+		this._flRefs--;
+	}
 	/**** End EaselFL specific code ****/
 
 ns.Rectangle = Rectangle;

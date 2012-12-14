@@ -37,8 +37,9 @@ class Control {
 	static public var shadows:IntHash<ShadowFl>;
 	static public var filters:IntHash<IBitmapFilter>;
 	static public var makers:Hash<Int->Void>;
-	static public var stageFl:StageFl;
+	static public var unmakers:Hash<Int->Void>;
 	
+	static public var stageFl:StageFl;
 	
 	static public function init(){
 		items = new IntHash<IExec>();
@@ -53,22 +54,38 @@ class Control {
 		shadows = new IntHash<ShadowFl>();
 		filters = new IntHash<IBitmapFilter>();
 		makers = new Hash<Int->Void>();
+		unmakers = new Hash<Int->Void>();
 		
+		makers.set('stg', stage);
 		makers.set('img', image);
 		makers.set('bmp', bitmap);
 		makers.set('ban', bitmapAnimation);
+		makers.set('dom', shape); //DOMElement currently uses an empty shape to simplify display list issues
 		makers.set('shp', shape);
 		makers.set('gfx', graphics);
 		makers.set('cnt', container);
-		makers.set('stg', stage);
 		makers.set('rct', rectangle);
 		makers.set('frm', frame);
-		makers.set('shd', shadow);
 		makers.set('shd', shadow);
 		makers.set('cmtxfl', colorMatrixFilter);
 		makers.set('clrfl', colorFilter);
 		makers.set('bxblr', boxBlurFilter);
 		makers.set('txt', text);
+		
+		unmakers.set('img', unimage);
+		unmakers.set('bmp', unbitmap);
+		unmakers.set('ban', unbitmapAnimation);
+		unmakers.set('dom', unshape);
+		unmakers.set('shp', unshape);
+		unmakers.set('gfx', ungraphics);
+		unmakers.set('cnt', uncontainer);
+		unmakers.set('rct', unrectangle);
+		unmakers.set('frm', unframe);
+		unmakers.set('shd', unshadow);
+		unmakers.set('cmtxfl', unFilter);
+		unmakers.set('clrfl', unFilter);
+		unmakers.set('bxblr', unFilter);
+		unmakers.set('txt', untext);
 		
 		ImageFl.init();
 		BitmapFl.init();
@@ -98,6 +115,26 @@ class Control {
 	}
 	
 	/*
+	 * Takes a list of destruction commands [ ['type','id'], ...] 
+	 */
+	inline static public function destroyItems(a:Array<Array<Dynamic>>):Void{
+		for(crone in a){
+			if(crone.length==2){
+				unmakers.get(crone[0])(crone[1]);
+			}			
+		}
+		
+		#if debug 
+			//force garbage collection for testing
+			//see http://gskinner.com/blog/archives/2006/08/as3_resource_ma_2.html
+			try {
+				new flash.net.LocalConnection().connect('foo');
+				new flash.net.LocalConnection().connect('foo');
+			} catch (e:Dynamic) {}
+		#end
+	}
+	
+	/*
 	 * Takes a list of change commands [['002','f',['#FF0000', 0.5]], ...] 
 	 */
 	inline static public function changeItems(a:Array<Array<Dynamic>>):Void{
@@ -115,10 +152,20 @@ class Control {
 		return items.get(cmd[0]).exec(cmd[1], cmd[2]);
 	}
 	
+	inline static private function unimage(id:Int):Void{
+		items.remove(id);
+		bitmapDatas.remove(id);
+	}
+	
 	inline static private function image(id:Int):Void{
 		var img:ImageFl = new ImageFl(id);
 		items.set(id, img);
 		bitmapDatas.set(id, img);
+	}
+	
+	inline static private function unbitmap(id:Int):Void{
+		items.remove(id);
+		displays.remove(id);
 	}
 	
 	inline static private function bitmap(id:Int):Void{
@@ -134,16 +181,35 @@ class Control {
 		bmpAnimations.set(id, bmpAnim);
 	}
 	
+	inline static private function unbitmapAnimation(id:Int):Void {
+		//TODO: verify, destroy call may not actually be necessary
+		bmpAnimations.get(id).destroy();
+		items.remove(id);
+		displays.remove(id);
+		bmpAnimations.remove(id);
+	}
+	
 	inline static private function shape(id:Int):Void{
 		var shp:ShapeFl = new ShapeFl(id);
 		items.set(id, shp);
 		displays.set(id, shp);
 	}
 	
+	inline static private function unshape(id:Int):Void{
+		displays.get(id).destroy();
+		items.remove(id);
+		displays.remove(id);
+	}
+	
 	inline static private function graphics(id:Int):Void{
 		var gfx:GraphicsFl = new GraphicsFl();
 		items.set(id, gfx);
 		graphicsList.set(id, gfx);
+	}
+	
+	inline static private function ungraphics(id:Int):Void{
+		items.remove(id);
+		graphicsList.remove(id);
 	}
 	
 	inline static private function container(id:Int):Void{
@@ -153,10 +219,22 @@ class Control {
 		items.set(id, cnt);
 	}
 	
+	inline static private function uncontainer(id:Int):Void{
+		containers.get(id).destroy();
+		containers.remove(id);
+		displays.remove(id);
+		items.remove(id);
+	}
+	
 	inline static private function rectangle(id:Int):Void{
 		var rct:RectangleFl = new RectangleFl(id);
 		rectangles.set(id, rct);
 		items.set(id, rct);
+	}
+	
+	inline static private function unrectangle(id:Int):Void{
+		rectangles.remove(id);
+		items.remove(id);
 	}	
 	
 	inline static private function frame(id:Int):Void{
@@ -165,6 +243,13 @@ class Control {
 		items.set(id, frm);
 	}
 	
+	inline static private function unframe(id:Int):Void{
+		//TODO: verify, destroy call may not actually be necessary
+		frames.get(id).destroy();
+		frames.remove(id);
+		items.remove(id);
+	}	
+	
 	inline static private function text(id:Int):Void{
 		var txt:TextFl = new TextFl(id);
 		displays.set(id, txt);
@@ -172,10 +257,22 @@ class Control {
 		items.set(id, txt);
 	}
 	
+	inline static private function untext(id:Int):Void {
+		texts.get(id).destroy();
+		displays.remove(id);
+		texts.remove(id);
+		items.remove(id);
+	}
+	
 	inline static private function shadow(id:Int):Void{
 		var sh:ShadowFl = new ShadowFl(id);
 		shadows.set(id, sh);
 		items.set(id, sh);
+	}
+	
+	inline static private function unshadow(id:Int):Void{
+		shadows.remove(id);
+		items.remove(id);
 	}
 	
 	inline static private function colorMatrixFilter(id:Int):Void{
@@ -196,9 +293,13 @@ class Control {
 		items.set(id, flt);
 	}
 	
+	inline static private function unFilter(id:Int):Void{
+		filters.remove(id);
+		items.remove(id);
+	}
+	
 	inline static private function stage(id:Int):Void{
 		//-- Alias another container as Stage
-		//-- by assigning to an already created ContainerFl
 		//-- The EaselFl 'stage' is a child of the Flash stage
 		//-- (Flash stage itself doesn't not have all the interactive object
 		//-- characteristics necessary for Easel stage)
@@ -211,5 +312,4 @@ class Control {
 		Lib.current.stage.addChild(stg.display);
 		stageFl = stg;
 	}	
-	
 }

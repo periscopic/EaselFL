@@ -213,10 +213,7 @@ package utils;
         		str = 'transparent';
         	}
         	
-        	
 			str = (~/\s*$/).replace((~/^\s*/).replace(str.toLowerCase(),''), '');
-			
-
 			
 				
             // #F00

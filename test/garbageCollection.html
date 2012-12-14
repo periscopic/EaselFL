@@ -1,0 +1,464 @@
+<!-- Tests for garbage collection -->
+
+<html>
+<head>
+
+<script type="text/javascript" src="js/TestUtils.js"></script>
+
+<link rel='stylesheet' type='text/css' href='css/test.css' />
+
+<script type="text/javascript">
+
+window.onload = function(){
+	if(TestUtils.useCanvas){
+		TestUtils.loadWithEaselJS(init);
+	}else{
+		TestUtils.loadWithEaselFL(init);
+	}
+}
+
+//-- Start it up!
+
+function init(){
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('width', 600);
+	canvas.setAttribute('height', 400);
+	canvas.setAttribute('fl_swf_url', '../haxe/bin/EaselFl.swf');
+	canvas.setAttribute('id', 'testContainer');
+	document.getElementById('testContainer').appendChild(canvas);
+	
+	var myStage = new createjs.Stage(canvas);
+	createjs.Ticker.addListener(myStage);
+	
+	//-- specific test code
+	
+	/**
+	 * Note: building the EaselFl SWF with the -D debug
+	 * compile flag uncommented in project.hxml file will
+	 * include SWFProfiler. This can be accessed by right 
+	 * clicking on the SWF and choosing profiler from the
+	 * context menu. When the debug flag is enabled, each
+	 * batch destroy call to the SWF triggers a system GC
+	 * call
+	 */
+
+	//should garbage collection be tested by removing the objects themselves 
+	//or the parent container of the objects?
+	var testParentRemoval = true;
+
+	if(createjs.Stage.isEaselFl) {
+		//for testing, bump js side cleanups from once every ~15 seconds to once every ~1 second.
+		createjs.CanvasFl.FL_GC_INTERVAL = 24; 
+	}
+
+	function getTestContainer() {
+		var container;
+
+		if(testParentRemoval) {
+			container = new createjs.Container();
+			myStage.addChild(container);
+		} else {
+			container = myStage;
+		}
+
+		return container;
+	}
+
+	function destroyAll(container, children) {
+		if(testParentRemoval) {
+			myStage.removeChild(container);
+		} else {
+			for (var i = 0, l = children.length; i<l; ++i) {
+			    container.removeChild(children[i]);
+			}
+		}
+	}
+
+//--- the tests ----//
+
+	// Uncomment a specific test below
+
+
+	// bmp animation
+	var animImg = new Image();
+	animImg.src = "img/testSeq.png";
+	animImg.onload = handleAnimImageLoad;
+	
+	function handleAnimImageLoad(event) {
+		var spritesheet, animKeys;
+		// create spritesheet and assign the associated data.
+		spriteSheet  = new createjs.SpriteSheet({
+			images: [animImg],
+			frames: {width:64, height:68, regX:32, regY:34},
+			animations: {
+				walkUpRt:[0,19,"walkRt"],
+				walkDnRt:[20,39,"walkUpRt"],
+				walkRt:[41,59,"walkDnRt"]
+			}
+		});
+
+		createjs.SpriteSheetUtils.addFlippedFrames(spriteSheet, true, false, false);
+		animKeys = ['walkRt', 'walkRt_h', 'walkRt_v', 'walkRt_hv'];
+
+		function bmpAnimTest() {
+			var cnts = [], bmpAnim, container;
+
+			function build() {
+				console.log('build');
+				container = getTestContainer();
+
+				for(var i=0; i<1000; ++i) {
+					bmpAnim= new createjs.BitmapAnimation(spriteSheet);
+					cnts.push(bmpAnim);
+				
+					// start playing the first sequence:
+					bmpAnim.gotoAndPlay(animKeys[i%4]);		//animate
+					
+					bmpAnim.x = ((i%12) + 1) * 45;
+					bmpAnim.y = (Math.floor(i/12) + 1) * 45;
+					container.addChild(bmpAnim);	
+				}
+
+				setTimeout(destroy, 7500);
+			}
+
+			function destroy() {
+				console.log('destroy');
+				destroyAll(container, cnts);
+				cnts = [];
+
+				setTimeout(build, 7500);
+			}
+
+			build();
+	 	 
+		}
+
+		//bmpAnimTest();
+	}
+
+
+	function containerTest() {
+		var cnts = [], cnt, container;
+
+		function build() {
+			console.log('build');
+			container = getTestContainer();
+
+			for(var i=0; i<2000; ++i) {
+				cnt = new createjs.Container();
+				cnts.push(cnt);
+				container.addChild(cnt);	
+			}
+
+			setTimeout(destroy, 7500);
+		}
+
+		function destroy() {
+			console.log('destroy');
+			destroyAll(container, cnts);
+			cnts = [];
+
+			setTimeout(build, 7500);
+		}
+		
+		build();
+	}
+
+	//containerTest();
+
+
+	function bmpImageTest() {
+		var cnts = [], bmp, img, container;
+
+		img = new Image();
+		img.src = 'img/testImage.png';
+
+		function build() {
+			console.log('build');
+			container = getTestContainer();
+			
+			for(var i=0; i<2000; ++i) {
+
+				bmp = new createjs.Bitmap(img);
+				cnts.push(bmp);
+				container.addChild(bmp);	
+			}
+
+			setTimeout(destroy, 7500);
+		}
+
+		function destroy() {
+			console.log('destroy');
+			destroyAll(container, cnts);
+			cnts = [];
+
+			setTimeout(build, 7500);
+		}
+
+		build();
+	}
+
+	//bmpImageTest();
+
+
+	var shpImg = new Image();
+	shpImg.src = 'img/testImage.png';
+
+	shpImg.onload = function() {
+		function shapeTest() {
+			var cnts = [], shp, container, g;
+
+			function build() {
+				console.log('build');
+				container = getTestContainer();
+
+				for(var i=0; i<2000; ++i) {
+					shp = new createjs.Shape();
+					g = shp.graphics;
+					g.beginBitmapFill(shpImg);
+					g.drawRect(10, 10, 50, 50);
+					g.endFill();
+
+					cnts.push(shp);
+					container.addChild(shp);	
+				}
+
+				setTimeout(destroy, 7500);
+			}
+
+			function destroy() {
+				console.log('destroy');
+				destroyAll(container, cnts);
+				cnts = [];
+
+				setTimeout(build, 7500);
+			}
+			
+			build();
+		}
+
+		//shapeTest();
+	}
+
+	shpImg.onload = function() {
+		function shapeTest() {
+			var cnts = [], shp, container, g;
+
+			function build() {
+				console.log('build');
+				container = getTestContainer();
+
+				for(var i=0; i<2000; ++i) {
+					shp = new createjs.Shape();
+					g = shp.graphics;
+					g.beginBitmapFill(shpImg);
+					g.drawRect(10, 10, 50, 50);
+					g.endFill();
+
+					cnts.push(shp);
+					container.addChild(shp);	
+				}
+
+				setTimeout(destroy, 7500);
+			}
+
+			function destroy() {
+				console.log('destroy');
+				destroyAll(container, cnts);
+				cnts = [];
+
+				setTimeout(build, 7500);
+			}
+			
+			build();
+		}
+
+		//shapeTest();
+	}
+	
+
+	function maskTest() {
+		var cnts = [], bmp, msk, g, img, container;
+
+		img = new Image();
+		img.src = 'img/testImage.png';
+
+		function build() {
+			console.log('build');
+			container = getTestContainer();
+			
+			for(var i=0; i<500; ++i) {
+
+				bmp = new createjs.Bitmap(img);
+				msk = new createjs.Shape();
+				g = msk.graphics;
+				g.beginFill('#000');
+				g.drawPolyStar(39, 39, 30, 5, 0.5, 0);
+				g.endFill();
+				bmp.mask = msk;
+				cnts.push(bmp);
+				container.addChild(bmp);	
+			}
+
+			setTimeout(destroy, 7500);
+		}
+
+		function destroy() {
+			console.log('destroy');
+			destroyAll(container, cnts);
+			cnts = [];
+
+			setTimeout(build, 7500);
+		}
+
+		build();
+	}
+
+	//maskTest();
+
+
+	function textTest() {
+		var cnts = [], txt, container;
+
+		function build() {
+			console.log('build');
+			container = getTestContainer();
+			
+			for(var i=0; i<2000; ++i) {
+				txt = new createjs.Text('EASEL', 'bold 112px "Trebuchet MS"', '#3399E9');
+				txt.y = i;
+				cnts.push(txt);
+				container.addChild(txt);	
+			}
+
+			setTimeout(destroy, 7500);
+		}
+
+		function destroy() {
+			console.log('destroy');
+			destroyAll(container, cnts);
+			cnts = [];
+
+			setTimeout(build, 7500);
+		}
+
+		build();
+	}
+	
+	//textTest();
+
+
+	function shadowTest() {
+		var cnts = [], txt, container;
+
+		function build() {
+			console.log('build');
+			container = getTestContainer();
+			
+			for(var i=0; i<2000; ++i) {
+				txt = new createjs.Text('EASEL', 'bold 112px "Trebuchet MS"', '#3399E9');
+				txt.y = i;
+				cnts.push(txt);
+				container.addChild(txt);	
+			}
+
+			setTimeout(destroy, 7500);
+		}
+
+		function destroy() {
+			console.log('destroy');
+			destroyAll(container, cnts);
+			cnts = [];
+
+			setTimeout(build, 7500);
+		}
+
+		build();
+	}
+
+	function shadowTest() {
+		var cnts = [], shp, container, g;
+
+		function build() {
+			console.log('build');
+			container = getTestContainer();
+
+			for(var i=0; i<2000; ++i) {
+				shp = new createjs.Shape();
+				g = shp.graphics;
+				g.beginFill('#FFF');
+				g.drawRect(10, 10, 50, 50);
+				g.endFill();
+				shp.shadow = new createjs.Shadow('#2895AE', 0, 0, 8);
+
+				cnts.push(shp);
+				container.addChild(shp);	
+			}
+
+			setTimeout(destroy, 7500);
+		}
+
+		function destroy() {
+			console.log('destroy');
+			destroyAll(container, cnts);
+			cnts = [];
+
+			setTimeout(build, 7500);
+		}
+		
+		build();
+	}
+
+	//shadowTest();
+
+	function filterTest() {
+		var cnts = [], shp, container, g;
+
+		function build() {
+			console.log('build');
+			container = getTestContainer();
+
+			for(var i=0; i<1000; ++i) {
+				shp = new createjs.Shape();
+				shp.y = i*2;
+				g = shp.graphics;
+				g.beginFill('#3F3');
+				g.drawRect(10, 0, 50, 1);
+				g.endFill();
+				
+				shp.filters = [
+					new createjs.ColorMatrixFilter(new createjs.ColorMatrix(0, 5, 5, 200)),
+					new createjs.BoxBlurFilter(12, 0, 1),
+					new createjs.ColorFilter(0, 1, 4, 1, 0, 0.5, 0.5, 0)
+				];
+
+				shp.cache(0, 0, 70, 1);
+
+				cnts.push(shp);
+				container.addChild(shp);	
+			}
+
+			setTimeout(destroy, 7500);
+		}
+
+		function destroy() {
+			console.log('destroy');
+			destroyAll(container, cnts);
+			cnts = [];
+
+			setTimeout(build, 7500);
+		}
+		
+		build();
+	}
+
+	//filterTest();
+
+}
+
+</script>
+</head>
+<body>
+</body>
+</html>

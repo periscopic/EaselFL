@@ -23,7 +23,6 @@ class FrameFl implements IExec, implements IWatchable {
 		execs = new Hash();
 		execs.set('init', sInit);
 		execs.set('flp', sFlip);
-		
 	}
 
 	/**
@@ -60,6 +59,8 @@ class FrameFl implements IExec, implements IWatchable {
 	private var _sourceFlipVt:Bool;
 	
 	public var isFlip(default,null):Bool;
+	
+	
 	
 	public function new(id:Int) {
 		_eventID = FRAME_CHANGE + id;
@@ -168,6 +169,20 @@ class FrameFl implements IExec, implements IWatchable {
 		flipBmpd.draw(_sourceFrame.bitmapData, tmpMtx);
 		bitmapData = flipBmpd;
 		dispatcher.dispatchEvent(new Event(_eventID));
+	}
+	
+	public function destroy() {
+		if(_sourceFrame!=null) {
+			_sourceFrame.unwatch(updateFromSourceFrame);
+			_sourceFrame = null;
+		}
+		
+		if(_img!=null) {
+			_img.unwatch(updateBitmap);
+			_img = null;
+		}
+		
+		bitmapData = null;
 	}
 	
 	/**

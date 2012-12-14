@@ -416,7 +416,7 @@ var p = DisplayObject.prototype;
 	}
 	*/
 	p.initialize = function() {
-		this.id = ns.UID.get();
+		this.id = this._flId = ns.UID.get();
 		this._matrix = new ns.Matrix2D();
 		this._flChange = [];
 	}
@@ -563,9 +563,9 @@ var p = DisplayObject.prototype;
 	}
 	*/
 	p.updateCache = function(compositeOperation) {
-	  //-- In EaselFl cache currently only prevents redraw and updates filters
-	  this._flCache = true;
-	  this._flCached = false;
+		//-- In EaselFl cache currently only prevents redraw and updates filters
+		this._flCache = true;
+		this._flCached = false;
 		this._flFiltersDirty = true;
 	}
 
@@ -911,6 +911,29 @@ var p = DisplayObject.prototype;
 
 	
 	/**** Begin EaselFL specific code ****/
+
+	/**
+	 * Identical to id, but
+	 * private, as .id tends
+	 * to be overwritten and 
+	 * is crucial.
+	 * @type {Number}
+	 */
+	p._flId = -1;
+
+	/**
+	 * The number of references to
+	 * this object which require that
+	 * it is retained within the flash
+	 * rendering context.
+	 */
+	p._flRefs = 0;
+
+	 /**
+	 * The ContextFl of the display list to which this is attached
+	 * @private
+	 **/
+	p._flCtx = null;
 	
 	/**
 	 * The synced X value
@@ -1103,6 +1126,55 @@ var p = DisplayObject.prototype;
 	 **/
 	p._flFiltersDirty = false;
 
+
+	/**
+	 * Filters that have been synced.
+	 * @private
+	 * @property {_flFilters}
+	 * @type {Array}
+	 */
+	p._flFilters = null;
+
+	/**
+	 * Resets comparison props to default values and removes this 
+	 * object from the Flash rendering context. Called when
+	 * an object is removed from Flash rendering context for memory
+	 * managment purposes.
+	 * @return {Void}
+	 */
+	p._flResetProps = function() {
+		this._flVisible = true;
+
+		this._flX = 
+		this._flY = 
+		this._flRotation =
+		this._flRegX =
+		this._flRegY = 
+		this._flSkewX =
+		this._flSkeyY = 0;
+		
+		this._flAlpha =
+		this._flScaleX = 
+		this._flScaleY = 1;
+
+		this._flChange = [];
+
+		this._flCtx = 
+		this._flShadow = 
+		this._flClick =
+		this._flPress = 
+		this._flMask = 
+		this._flMouseOver =
+		this._flMouseOut =
+		this._flMouseEnabled = null;
+
+		this._flCache = 
+		this._flCached = 
+		this._flFiltersDirty = //?
+		this._flUseHandCursor =
+		this._flButtonMode = false;
+	}
+
 	/**
 	 * @method _flSyncProps
 	 * @protected
@@ -1113,7 +1185,7 @@ var p = DisplayObject.prototype;
 		//-- Synchronize Visibility		
 		if( this.visible !== this._flVisible) {			
 			this._flVisible = this.visible;
-			this._flChange.push([this.id, 'vs', this.visible]);
+			this._flChange.push([this._flId, 'vs', this.visible]);
 		}
 		
 		//don't sync anything else if not visible
@@ -1124,45 +1196,44 @@ var p = DisplayObject.prototype;
 		//synchronize mouse enabled
 		if(this.mouseEnabled!==this._flMouseEnabled){
 		  this._flMouseEnabled = this.mouseEnabled;
-		  this._flChange.push([this.id, 'smen', this.mouseEnabled]);
+		  this._flChange.push([this._flId, 'smen', this.mouseEnabled]);
 		}
 		
 		if(this.mouseEnabled) {
 		  //synchronize mouse events
 		  if(this.onMouseOver!==this._flMouseOver) {
 				if(this.onMouseOver  && !this._flMouseOver) {
-					this._flChange.push([this.id, 'amov']);
+					this._flChange.push([this._flId, 'amov']);
 				}else if(!this.onMouseOver && this._flMouseOver) {
-					this._flChange.push([this.id, 'rmov']);
+					this._flChange.push([this._flId, 'rmov']);
 				}				
 				this._flMouseOver = this.onMouseOver;
 		  }
 			
 		  if(this.onMouseOut!==this._flMouseOut) {
 				if(this.onMouseOut  && !this._flMouseOut) {
-					this._flChange.push([this.id, 'amot']);
+					this._flChange.push([this._flId, 'amot']);
 				}else if(!this.onMouseOut && this._flMouseOut) {
-					this._flChange.push([this.id, 'rmot']);
+					this._flChange.push([this._flId, 'rmot']);
 				}
 			  this._flMouseOut = this.onMouseOut;
 		  }
 			
 		  if(this.onClick!==this._flClick) {
 				if(this.onClick  && !this._flClick) {
-					this._flChange.push([this.id, 'amck']);
+					this._flChange.push([this._flId, 'amck']);
 				}else if(!this.onClick && this._flClick) {
-					this._flChange.push([this.id, 'rmck']);
+					this._flChange.push([this._flId, 'rmck']);
 				}
 			  this._flClick = this.onClick;
 		  }
 			
 			
 			if(this.onPress!==this._flOnPress) {
-				
 				if(this.onPress  && !this._flOnPress) {
-					this._flChange.push([this.id, 'aprs']);
+					this._flChange.push([this._flId, 'aprs']);
 				}else if(!this.onPress && this._flOnPress) {
-					this._flChange.push([this.id, 'rprs']);
+					this._flChange.push([this._flId, 'rprs']);
 				}
 			  this._flOnPress = this.onPress;
 		  }
@@ -1171,56 +1242,88 @@ var p = DisplayObject.prototype;
 		//-- Synchronize Alpha
 		if( this.alpha !== this._flAlpha) {
 			this._flAlpha = this.alpha;
-			this._flChange.push([this.id, 'op', this.alpha]);
+			this._flChange.push([this._flId, 'op', this.alpha]);
 		}
 		
 		//-- Synchronize Shadow
-		if(this.shadow) {
-			this.shadow._flSyncProps(ctx);
-		}
 		if( this.shadow !== this._flShadow) {
+			if(this._flShadow) {
+				this._flShadow._flDeretain();
+			}
+
 			this._flShadow = this.shadow;
-			this._flChange.push([this.id, 'shd', this.shadow.id]);
+
+			if(this._flShadow) {
+				this._flShadow._flRetain(ctx);
+			} 
+			
+			this._flChange.push([this._flId, 'shd', this._flShadow ?  this._flShadow._flId : null]);	
 		}
 		
+		//-- Synchronize Shadow properties
+		if(this.shadow) {
+			this.shadow._flSyncProps();
+		}
+
 		//-- Synchronize Filters
 		if(this._flFiltersDirty) {
+			var filterIDs, i, l;
+
 			this._flFiltersDirty=false;
+
+			if(this._flFilters) {
+				for (i = 0, l = this._flFilters.length; i<l; ++i) {
+					this._flFilters[i]._flDeretain();
+				}
+				this._flFilters = null;
+			}
 			
 			if(this.filters && this.filters.length>0) {	
-				var filterIDs = [];
+
+				filterIDs = [];
 	
-				for (var i=0, l=this.filters.length; i<l; i++) {
+				for (i=0, l=this.filters.length; i<l; i++) {
 					var flt = this.filters[i];
+					flt._flRetain(ctx);
 					flt._flSyncProps(ctx);
-					filterIDs[i] = flt.id;
+					filterIDs[i] = flt._flId;
 				}
 
-				this._flChange.push([this.id, 'flts', filterIDs]);
+				this._flFilters = this.filters.slice(0); //clone
+				this._flChange.push([this._flId, 'flts', filterIDs]);
 			}
 		}
-		
+
 		//-- Synchronize Mask
-		if(this.mask) {
-			this.mask._flRunCreate(ctx);
-			this.mask.draw(ctx);
+		if(this.mask !== this._flMask) {
+			if(this._flMask) {
+				this._flMask._flDeretain();
+			}
+
+			this._flMask = this.mask;
+
+			if(this._flMask) {
+				this._flMask._flRetain(ctx);
+			}
+			
+			this._flChange.push([this._flId, 'msk', this.mask ? this.mask._flId : null]);
 		}
 
-		if(this.mask !== this._flMask) {
-			this._flMask = this.mask;
-			this._flChange.push([this.id, 'msk', this.mask ? this.mask.id : null]);
+		//-- Synchronize Mask properties
+		if(this._flMask) {
+			this._flMask.draw(ctx);
 		}
 
 		//-- Synchronize tranform
 		if(	this.x !== this._flX ||
-				this.y !== this._flY ||
-				this.scaleX !== this._flScaleX ||
-				this.scaleY !== this._flScaleY ||
-				this.rotation !== this._flRotation ||
-				this.skewX !== this._flSkewX ||
-				this.skewY !== this._flSkewY ||
-				this.regX !== this._flRegX ||
-				this.regY !== this._flRegY ) {
+			this.y !== this._flY ||
+			this.scaleX !== this._flScaleX ||
+			this.scaleY !== this._flScaleY ||
+			this.rotation !== this._flRotation ||
+			this.skewX !== this._flSkewX ||
+			this.skewY !== this._flSkewY ||
+			this.regX !== this._flRegX ||
+			this.regY !== this._flRegY ) {
 			
 			this._flX = this.x;
 			this._flY = this.y;
@@ -1236,28 +1339,83 @@ var p = DisplayObject.prototype;
 			mtx.identity(); //reset
 			mtx.prependTransform( this.x, this.y, this.scaleX, this.scaleY, this.rotation, this.skewX, this.skewY, this.regX, this.regY);
 			
-			this._flChange.push([this.id, 'mtx', [mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty]]);
+			this._flChange.push([this._flId, 'mtx', [mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty]]);
 		}
 	}
 	
+
+	/**
+	 * Increment the number of references 
+	 * on this and dependent objects.
+	 */
+	p._flRetain = function(ctx) {
+		this._flRefs += 1;
+		
+		if(!this._flCtx) {
+			this._flRunCreate(ctx);
+		}
+
+		if(this._flMask) {
+			this._flMask._flRetain();
+		}
+
+		if(this._flShadow) {
+			this._flShadow._flRetain();
+		}
+
+		if(this._flFilters) {
+			for (var i = 0, l = this._flFilters.length; i<l; ++i) {
+			    this._flFilters[i]._flRetain();
+			}
+		}
+	}
+
+	/**
+	 * Decrement the number of references 
+	 * on this and dependent objects.
+	 */
+	p._flDeretain = function() {
+		this._flRefs -= 1;
+
+		if(this._flMask) {
+			this._flMask._flDeretain();
+		}
+
+		if(this._flShadow) {
+			this._flShadow._flDeretain();
+		}
+
+		if(this._flFilters) {
+			for (var i = 0, l = this._flFilters.length; i<l; ++i) {
+			    this._flFilters[i]._flDeretain();
+			}
+		}
+
+		// can display objects ever have more than 1 ref?
+		//if(this._flRefs===0) {
+		//	this._flCtx = null;
+		//}
+	}
+
 	
 	/**
 	 * Add the creation command for this object and its children to the CanvasFl context, to be created in Flash
 	 **/
 	p._flRunCreate = function(ctx){
-	  throw 'prototype._flRunCreate must be overriden for all DisplayObject subclasses';
+		this._flCtx = ctx;
+		ctx._flCreate.push([this._flType, this]);
 	}
 	
 	//-- Set usage of hand cursor
 	//-- Not part of the original EaselJS api
 	p.flSetCursorMode = function(useHandCursor, buttonMode) {
 		if(useHandCursor !== this._flUseHandCursor) {
-		  this._flChange.push([this.id, 'scrs', useHandCursor]);
+		  this._flChange.push([this._flId, 'scrs', useHandCursor]);
 		  this._flUseHandCursor = useHandCursor;
 		}
 		
 		if(buttonMode !== this._flButtonMode) {
-		  this._flChange.push([this.id, 'sbtn', buttonMode]);
+		  this._flChange.push([this._flId, 'sbtn', buttonMode]);
 		  this._flButtonMode = buttonMode;
 		}
 	}

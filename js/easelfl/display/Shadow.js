@@ -111,7 +111,7 @@ var p = Shadow.prototype;
 		this.offsetY = offsetY;
 		this.blur = blur;
 		
-		this.id = ns.UID.get();
+		this._flId = ns.UID.get();
 	}
 	
 // public methods:
@@ -135,8 +135,9 @@ var p = Shadow.prototype;
 	}
 	
 	/***** EaselFL specific code *****/
-	p.id = null;
-	p._flChange = null;
+	p._flType = 'shd';
+	p._flRefs = 0;
+	p._flId = null;
 	p._flCtx = null;
 	p._flColor = null;
 	p._flOffsetX = 0;
@@ -144,18 +145,13 @@ var p = Shadow.prototype;
 	p._flBlur = 0;
 	
 		//-- synchronize properties
-	p._flSyncProps = function(ctx) {
-		if(!this._flCtx) {
-				this._flCtx = ctx;
-				ctx._flCreate.push(['shd', this]);
-		}
-		
+	p._flSyncProps = function() {
 		if(this.color !== this._flColor ||
 			this.offsetX!==this._flOffsetX ||
 			this.offsetY!==this._flOffsetY ||
 			this.blur!==this._flBlur) {
 			
-			this._flCtx._flChange.push([this.id, 'shd', [this.color, this.offsetX, this.offsetY, this.blur]]);
+			this._flCtx._flChange.push([this._flId, 'shd', [this.color, this.offsetX, this.offsetY, this.blur]]);
 			
 			this._flColor = this.color;
 			this._flOffsetX = this.offsetX;
@@ -163,6 +159,33 @@ var p = Shadow.prototype;
 			this._flBlur = this.blur;
 		}
 	}
+
+	// increment references binding to context
+	p._flRetain = function(ctx) {
+		//create in flash context
+		if(!this._flCtx) {
+			this._flCtx = ctx;
+			ctx._flCreate.push([this._flType, this]);
+		}
+		
+		this._flRefs++;
+	}
+
+	// decrement references binding to context
+	p._flDeretain = function() {
+		this._flRefs--;
+	}
+
+	p._flResetProps = function() {
+		this._flCtx = 
+		this._flColor = null;
+
+		this._flOffsetX = 
+		this._flOffsetY =
+		this._flBlur = 0;
+
+	}
+
 	
 	/****** End EaselFL specific code *****/
 

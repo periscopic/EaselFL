@@ -296,9 +296,11 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.initialize = function() {
-		this.id = ns.UID.get();
+		this._flId = this.id = ns.UID.get();
 		this._flChange = [];
-		this._flChildImages = [];
+		this._flState = [];
+		this._flImageRequests = [];
+		this._flImageLinks = [];
 	}
 	
 	/**
@@ -320,8 +322,8 @@ var p = Graphics.prototype;
 	*/
 	p.draw = function(ctx) {
 		//--make sure images drawn (e.g. using bitmapBitmapStroke) are added to Flash 
-		while(this._flChildImages.length){
-			this._flChildImages.pop().sync(ctx);
+		while(this._flImageRequests.length){
+			this._flImageLinks.push( this._flImageRequests.pop().retain(ctx).sync() );
 		}
 	
 		//-- these are order dependent, so use FIFO
@@ -368,7 +370,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.moveTo = function(x, y) {
-		this._flChange.push([this.id, 'mt', [x, y]]);
+		this._flRecord([this._flId, 'mt', [x, y]]);
 		return this;
 	}
 	
@@ -391,7 +393,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.lineTo = function(x, y) {
-		this._flChange.push([this.id, 'lt', [x, y]]);
+		this._flRecord([this._flId, 'lt', [x, y]]);
 		return this;
 	}
 	
@@ -416,7 +418,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.arcTo = function(x1, y1, x2, y2, radius) {
-		this._flChange.push([this.id, 'at', [x1, y1, x2, y2, radius]]); //-- need implementation Flash side		
+		this._flRecord([this._flId, 'at', [x1, y1, x2, y2, radius]]); //-- need implementation Flash side		
 		return this;
 	}
 	
@@ -445,7 +447,7 @@ var p = Graphics.prototype;
 	*/
 	p.arc = function(x, y, radius, startAngle, endAngle, anticlockwise) {
 		if (anticlockwise == null) { anticlockwise = false; }
-		this._flChange.push([this.id, 'a', [x, y, radius, startAngle, endAngle, anticlockwise]]);
+		this._flRecord([this._flId, 'a', [x, y, radius, startAngle, endAngle, anticlockwise]]);
 		return this;
 	}
 	
@@ -469,7 +471,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.quadraticCurveTo = function(cpx, cpy, x, y) {
-		this._flChange.push([this.id, 'qt', [cpx, cpy, x, y]]);
+		this._flRecord([this._flId, 'qt', [cpx, cpy, x, y]]);
 		return this;
 	}
 	
@@ -496,7 +498,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.bezierCurveTo = function(cp1x, cp1y, cp2x, cp2y, x, y) {
-		this._flChange.push([this.id, 'bt', [cp1x, cp1y, cp2x, cp2y, x, y]]);
+		this._flRecord([this._flId, 'bt', [cp1x, cp1y, cp2x, cp2y, x, y]]);
 		return this;
 	}
 	
@@ -521,7 +523,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.rect = function(x, y, w, h) {
-		this._flChange.push([this.id, 'dr', [x, y, w, h]]);
+		this._flRecord([this._flId, 'dr', [x, y, w, h]]);
 		return this;
 	}
 	
@@ -542,7 +544,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.closePath = function() {
-			this._flChange.push([this.id, 'cp']);
+			this._flRecord([this._flId, 'cp']);
 			return this;
 	}
 	
@@ -565,7 +567,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.clear = function() {
-		this._flChange.push([this.id, 'c']);
+		this._flRecord([this._flId, 'c']);
 		return this;
 	}
 	
@@ -585,7 +587,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.beginFill = function(color) {
-		this._flChange.push([this.id, 'f', [color]]);
+		this._flRecord([this._flId, 'f', [color]]);
 		return this;
 	}
 	
@@ -617,7 +619,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.beginLinearGradientFill = function(colors, ratios, x0, y0, x1, y1) {
-		this._flChange.push([this.id, 'lf', [colors, ratios, x0, y0, x1, y1]]);
+		this._flRecord([this._flId, 'lf', [colors, ratios, x0, y0, x1, y1]]);
 		return this;
 	}
 	
@@ -651,7 +653,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.beginRadialGradientFill = function(colors, ratios, x0, y0, r0, x1, y1, r1) {
-		this._flChange.push([this.id, 'rf', [colors, ratios, x0, y0, r0, x1, y1, r1]]);
+		this._flRecord([this._flId, 'rf', [colors, ratios, x0, y0, r0, x1, y1, r1]]);
 		return this;
 	}
 	
@@ -677,8 +679,8 @@ var p = Graphics.prototype;
 		if(ns.Stage.FL_LOG_PART_IMPLEMENTED && (repetition && repetition==='repeat-x' || repetition==='repeat-y')) console.log('EaselFl:Graphics.beginBitmapFill currently does not implement repeat-x or repeat-y');
 
 		ns.ImageFl.watch(image);
-		this._flChildImages.push(image.__fl);
-		this._flChange.push([this.id, 'bf', [image.__fl.id, repetition]])
+		this._flImageRequests.push(image.__fl);
+		this._flRecord([this._flId, 'bf', [image.__fl._flId, repetition]])
 		return this;
 	}
 	
@@ -693,7 +695,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.endFill = function() {
-		this._flChange.push([this.id, 'ef']);
+		this._flRecord([this._flId, 'ef']);
 		return this;
 	}
 	
@@ -721,9 +723,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.setStrokeStyle = function(thickness, caps, joints, miterLimit) {
-		//TODO : implement caps, joints, miterLimit in Flash
-		if(ns.Stage.FL_LOG_PART_IMPLEMENTED && (caps || joints || miterLimit)) console.log('EaselFl:Graphics.setStrokeStyle currently does not implement caps, joints, or miterLimit');
-		this._flChange.push([this.id, 'ss',[thickness, caps, joints, miterLimit]]);
+		this._flRecord([this._flId, 'ss',[thickness, caps, joints, miterLimit]]);
 		return this;
 	}
 	
@@ -742,7 +742,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.beginStroke = function(color) {
-		this._flChange.push([this.id, 's', color]);
+		this._flRecord([this._flId, 's', color]);
 		return this;
 	}
 	
@@ -771,8 +771,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.beginLinearGradientStroke = function(colors, ratios, x0, y0, x1, y1) {
-		this._flChange.push([this.id, 'ls', [colors, ratios, x0, y0, x1, y1]]);
-		//if(ns.Stage.FL_THROW_UNIMPLEMENTED)  throw 'EaselFl:Graphics.beginLinearGradientStroke currently not implemented';
+		this._flRecord([this._flId, 'ls', [colors, ratios, x0, y0, x1, y1]]);
 		return this;
 	}
 	
@@ -804,8 +803,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.beginRadialGradientStroke = function(colors, ratios, x0, y0, r0, x1, y1, r1) {
-		this._flChange.push([this.id, 'rs', [colors, ratios, x0, y0, r0, x1, y1, r1]]);
-		//if(ns.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.beginRadialGradientStroke currently not implemented';
+		this._flRecord([this._flId, 'rs', [colors, ratios, x0, y0, r0, x1, y1, r1]]);
 		return this;
 	}
 	
@@ -829,8 +827,8 @@ var p = Graphics.prototype;
 	p.beginBitmapStroke = function(image, repetition) {
 		//-- make sure image has been loaded into flash
 		ns.ImageFl.watch(image);
-		this._flChildImages.push(image.__fl);
-		this._flChange.push([this.id, 'bs', [image.__fl.id, repetition]]);
+		this._flImageRequests.push(image.__fl);
+		this._flRecord([this._flId, 'bs', [image.__fl._flId, repetition]]);
 		return this;
 	}
 	
@@ -848,7 +846,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.endStroke = function() {
-		this._flChange.push([this.id, 'es']);
+		this._flRecord([this._flId, 'es']);
 		return this;
 	}
 	
@@ -884,7 +882,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.drawRoundRect = function(x, y, w, h, radius) {
-		this._flChange.push([this.id, 'rr', [x, y, w, h, radius]]);
+		this._flRecord([this._flId, 'rr', [x, y, w, h, radius]]);
 		return this;
 	}
 	
@@ -930,7 +928,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.drawRoundRectComplex = function(x, y, w, h, radiusTL, radiusTR, radiusBR, radiusBL) {
-		this._flChange.push([this.id, 'rc', [x, y, w, h, radiusTL, radiusTR, radiusBR, radiusBL]]);
+		this._flRecord([this._flId, 'rc', [x, y, w, h, radiusTL, radiusTR, radiusBR, radiusBL]]);
 		return this;
 	} 
 	
@@ -963,7 +961,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.drawCircle = function(x, y, radius) {
-		this._flChange.push([this.id, 'dc', [x, y, radius]]);
+		this._flRecord([this._flId, 'dc', [x, y, radius]]);
 		return this;
 	}
 	
@@ -999,7 +997,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.drawEllipse = function(x, y, w, h) {
-		this._flChange.push([this.id, 'de',[x, y, w, h]]);
+		this._flRecord([this._flId, 'de',[x, y, w, h]]);
 		return this;
 	}
 	
@@ -1041,7 +1039,7 @@ var p = Graphics.prototype;
 	}
 	*/
 	p.drawPolyStar = function(x, y, radius, sides, pointSize, angle) {
-		this._flChange.push([this.id, 'dp',[x, y, radius, sides, pointSize, angle]]);
+		this._flRecord([this._flId, 'dp',[x, y, radius, sides, pointSize, angle]]);
 		return this;
 	}
 	
@@ -1395,14 +1393,49 @@ var p = Graphics.prototype;
 	
 	p._flChange = null;
 	p._flChildImages = null;
-	
+	p._flId = -1;
+	p._flState = null;
+	p._flImageRequests = null;
+	p._flImageLinks = null;
+	p._flRefs = 0;
+	p._flCtx = null;
+	p._flType = 'gfx';
+
+
 	/**
-	 * @property id
-	 * @protected
-	 * @type Number
-	 * @default -1
-	 **/
-	p.id = -1;
+	 * Increment the number of references 
+	 * on this and dependent objects.
+	 */
+	p._flRetain = function(ctx) {
+		this._flRefs += 1;
+		
+		if(!this._flCtx) {
+			this._flCtx = ctx;
+			ctx._flCreate.push(['gfx', this]); //-- create the graphics		
+		}
+	}
+
+	/**
+	 * Decrement the number of references 
+	 * on this and dependent objects.
+	 */
+	p._flDeretain = function() {
+		this._flRefs -= 1;
+	}
+
+	p._flResetProps = function() {
+		this._flChange = this._flState.slice(0);
+		this._flCtx = null;
+		
+		while(this._flImageLinks.length) {
+			this._flImageLinks.pop().deretain();
+		}
+	}
+
+	p._flRecord = function(command) {
+		this._flChange.push(command);
+		this._flState.push(command);
+	}
 	
 /***** end EaselFL sepcific code *****/
 	

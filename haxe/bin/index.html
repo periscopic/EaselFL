@@ -1,0 +1,102 @@
+<html>
+<head>
+<script type="text/javascript">
+
+function Stage(){
+	//-- TODO : figure out how to handle initial sizing of stage, stage transparency,
+	//-- and resizing of stage
+	
+	var myID = 'EaselFl_'+Stage.__count++;
+	
+	var shake = Stage.stages[myID] = {};
+
+	//-- called when Flash responds with handshake
+	shake.ready = function(){
+		Stage.stages[myID] = Stage.__getInstance( myID );
+		
+		var instance = Stage.stages[myID];
+		
+		instance.create(
+			[
+				//-- create a shape
+				['shp', '001'],
+				['gfx', '002'],
+				
+				//-- create an image
+				['bmp','003'],
+				['img','004'],
+
+				//-- create a container
+				['cnt', '005']
+			]
+		);
+		
+		instance.change(
+			[
+				//-- draw something in the shape
+				['001', 'gfx', '002'],
+				['002', 'f', 'rgba(200, 100, 0, 0.7)'],
+				['002', 'dr', [0, 0, 50, 50]],
+				
+				//-- set source of bitmap
+				['004', 'src', 'testImage.png'],
+		    	['003', 'img', '004'],
+		    	
+		    	//-- add shape and bitmap to container
+				['005', 'ac', '001'],
+				['005', 'ac', '003'],	
+				['005', 'rt', 0],
+				
+				//-- add container to stage
+				['stage', 'ac', '005']
+				
+			]
+		);		
+
+		//-- hit test point on container
+		var val = instance.invokeOn( ['005', 'htp', [-10, 1]]);
+		console.log(val);
+	}
+	
+	//-- Create flash movie
+	Stage.__loadInstance(myID, 400, 400);
+}
+
+
+//-- Static fields and methods
+Stage.stages = {};
+Stage.__count = 0;
+Stage.SWF_URL = 'EaselFl.swf'; 
+
+//-- TODO : write this into a specified dom context
+//-- TODO : verify cross-browser compatability, specifically regarding 'user focus' issue.
+Stage.__loadInstance = function(id, width, height){
+	document.write("<object id='"+id+" codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0' width='"+width+"' height='"+height+"'>");
+    document.write("<param name='flashvars' value='id="+id+"'/>");
+    document.write("<param name='src' value='"+Stage.SWF_URL+"'/>");
+  
+    document.write("<embed name='"+id+"' pluginspage='http://www.macromedia.com/go/getflashplayer' src='"+Stage.SWF_URL+"' width='"+width+"' height='"+height+"' flashvars='id="+id+"'/>");
+    document.write("</object>");            
+}
+
+Stage.__getInstance = function(id){
+	if (/Explorer/.test(navigator.appName)) {
+    	return window[id];
+    } else {
+    	return document[id];
+	}
+}
+
+
+
+//-- Start it up!
+window.onload = function(){
+	new Stage();
+}
+
+
+</script>
+</head>
+<body>
+</body>
+</html>

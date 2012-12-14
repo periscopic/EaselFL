@@ -1,9 +1,11 @@
-package display;
+/* TEST */package display;
 
 import flash.display.Graphics;
 import flash.display.DisplayObject;
 import flash.display.BitmapData;
 import flash.display.LineScaleMode;
+import flash.display.CapsStyle;
+import flash.display.JointStyle;
 import flash.display.GradientType;
 import flash.display.SpreadMethod;
 import flash.display.InterpolationMethod;
@@ -59,10 +61,6 @@ class GraphicsFl implements IExec{
 		execs.set('es', endStroke);
 		execs.set('cp', closePath);
 	}
-
-	//TODO : beginLinearGradientFill, radialGradientFill
-	//TODO : beginLinearGradientStroke, beginRadialGradientStroke
-
 
 	static private function beginFill(target:GraphicsFl, color:String):Void{
 		CSSColor.parse(color);
@@ -203,34 +201,58 @@ class GraphicsFl implements IExec{
 	
 	inline static private function setStrokeStyle(target:GraphicsFl, args:Array<Dynamic>):Void{
 		//TODO map : caps, joints, miterLimit
+		var caps:Dynamic = args[1];
+		var joints:Dynamic = args[2];
+		
 		target.activePath = false;
 		target.strokeThickness = args[0];
+		target.miterLimit = Math.isNaN(args[3]) ? 10 : args[3];
+		
+		switch(caps) {
+			case 'round', 1:
+				target.capsStyle = CapsStyle.ROUND;
+			case 'square', 2:
+				target.capsStyle = CapsStyle.SQUARE;
+			default:	//'butt', 0
+				target.capsStyle = CapsStyle.NONE;
+		}
+		
+		switch(joints) {
+			case 'round', 1:
+				target.jointsStyle = JointStyle.ROUND;
+			case 'bevel', 2:
+				target.jointsStyle = JointStyle.BEVEL;
+			default:	//'butt', 0
+				target.jointsStyle = JointStyle.MITER;
+		}
+		
+		
 	}
 	
 	inline static private function beginStroke(target:GraphicsFl, color:String):Void{
 		target.activePath = false;
 		CSSColor.parse(color);
-		target.graphics.lineStyle(target.strokeThickness, CSSColor.color, CSSColor.alpha, false, LineScaleMode.NONE);//, pixelHinting, scaleMode, caps, joints, miterLimit)
+		target.graphics.lineStyle(target.strokeThickness, CSSColor.color, CSSColor.alpha, false, LineScaleMode.NONE, target.capsStyle, target.jointsStyle, target.miterLimit);
 	}
 	
 	inline static private function beginBitmapStroke(target:GraphicsFl, args:Array<Dynamic>):Void{
 		//TODO : handle repeat-x, repeat-y
 		target.activePath = false;
 		var img = Control.bitmapDatas.get(args[0]);	
-		target.graphics.lineStyle(target.strokeThickness);	
+		target.graphics.lineStyle(target.strokeThickness, 0, 1, false, LineScaleMode.NONE, target.capsStyle, target.jointsStyle, target.miterLimit);	
 		target.graphics.lineBitmapStyle(img.bitmapData, null, args[1]!='no-repeat', false);
 		watchBitmapData(target, img);
 	}
 	
 	static private function beginRadialGradientStroke(target:GraphicsFl, args:Array<Dynamic>):Void{
 		target.activePath = false;
-		target.graphics.lineStyle(target.strokeThickness);
+		target.graphics.lineStyle(target.strokeThickness, 0, 1, false, LineScaleMode.NONE, target.capsStyle, target.jointsStyle, target.miterLimit);	
 		applyRadialGradientFillOrStroke(target.graphics.lineGradientStyle, args);
 	}
 	
 	static private function beginLinearGradientStroke(target:GraphicsFl, args:Array<Dynamic>):Void{
 		target.activePath = false;
-		target.graphics.lineStyle(target.strokeThickness);
+		target.graphics.lineStyle(target.strokeThickness, 0, 1, false, LineScaleMode.NONE, target.capsStyle, target.jointsStyle, target.miterLimit);	
 		applyLinearGradientFillOrStroke(target.graphics.lineGradientStyle, args);
 	}
 	
@@ -355,15 +377,10 @@ class GraphicsFl implements IExec{
 	}
 	
 	inline static private function clear(target:GraphicsFl, ?nada:Dynamic):Void{
-		target.startX = target.startY = target.curX = target.curY = 0;
-		target.activePath = false;
-		target.activeFill = false;
-		target.fillMethod = target.fillArgs = null;
-		
 		target.graphics.clear();
+		target.setDefaults();
 		
 		//-- Clear redraw serialization
-		
 		//-- Empty commands
 		target.commands = [];
 		//-- Stop listening for redraws
@@ -603,6 +620,9 @@ class GraphicsFl implements IExec{
 	
 	private var graphics:Graphics;
 	private var strokeThickness:Float;
+	private var capsStyle:Dynamic;
+	private var jointsStyle:Dynamic;
+	private var miterLimit:Float;
 	
 	private var fillMethod:Dynamic;
 	private var fillArgs:Dynamic;
@@ -622,11 +642,21 @@ class GraphicsFl implements IExec{
 	private var bitmapDatas:Array<IBitmapData>;
 
 	public function new(){
-		startX = startY = curX = curY = 0;	
+		
 		commands = [];
-		strokeThickness = 1;
-		activePath = activeFill = false;
+		setDefaults();
 	}
+	
+	inline private function setDefaults() {
+		startX = startY = curX = curY = 0;	
+		strokeThickness = 1;
+		capsStyle = CapsStyle.NONE;
+		jointsStyle = JointStyle.MITER;
+		miterLimit = 10;
+		activePath = activeFill = false;
+		fillMethod = fillArgs = null;
+	}
+	
 	
 	/**
 	 * Map this object to a graphics object from a DisplayObject
@@ -642,6 +672,8 @@ class GraphicsFl implements IExec{
 	 */
 	private function handleRedraw(e:Dynamic):Void {
 		this.graphics.clear();
+		this.setDefaults();
+		
 		for(cmd in commands) {
 			execs.get(cmd.method)(this, cmd.arguments);
 		}

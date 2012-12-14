@@ -69,7 +69,7 @@ var p = BoxBlurFilter.prototype = new ns.Filter();
 		this.quality = quality | 0;
 		
 		// EaselFL specific
-		this.id = ns.UID.get();
+		this._flId = ns.UID.get();
 	}
 
 // public properties:
@@ -277,20 +277,13 @@ var p = BoxBlurFilter.prototype = new ns.Filter();
 	
 	/***** EaselFL specific code *****/
 	
+	p._flType = 'bxblr';
 	p._flBlurX = p.blurX;
 	p._flBlurY = p.blurY;
 	p._flQuality = p.quality;
-	p._flCtx = null;
-	p.id = null;
 	
 	//-- FL synchronize properties
 	p._flSyncProps = function(ctx) {
-		
-		if(!this._flCtx) {
-				this._flCtx = ctx;
-				ctx._flCreate.push(['bxblr', this]);
-		}
-		
 		if(
 			this.blurX !== this._flBlurX ||
 			this.blurY !== this._flBlurY ||
@@ -301,15 +294,20 @@ var p = BoxBlurFilter.prototype = new ns.Filter();
 				this._flBlurY = this.blurY;
 				this._flQuality = this.quality;
 				
-				this._flCtx._flChange.push([this.id, 'flt', [this.blurX, this.blurY, this.quality * 2.5]]);
+				this._flCtx._flChange.push([this._flId, 'flt', [this.blurX, this.blurY, this.quality * 2.5]]);
 		}
 	}
-	
+
+	p._flResetProps = function() {
+		this._flCtx = null;
+		this._flBlurX =
+		this._flBlurY = 0;
+		this._flQuality = 1;
+	}
+
 	/**** end EaselFL specific code ******/	
 
 // private methods:
-
-
 
 ns.BoxBlurFilter = BoxBlurFilter;
 }(createjs||(createjs={})));

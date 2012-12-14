@@ -207,10 +207,17 @@ var p = BitmapAnimation.prototype = new ns.DisplayObject();
 		if (o == null) { return false; }
 		
 		if(o!==this._flFrame) {
-			ns.FrameFl.watch(o);
-			o.__fl.sync(ctx);
+			if(this._flFrame) {
+				this._flFrame.__fl.deretain();
+			}
+
+			if(o) {
+				ns.FrameFl.watch(o);
+				o.__fl.retain(ctx);
+			}
+
 			this._flFrame = o;
-			ctx._flChange.push([this.id, 'frm', o.__fl.id]);
+			ctx._flChange.push([this._flId, 'frm', o? o.__fl._flId : null]);
 		}
 		
 		return true;
@@ -394,6 +401,7 @@ var p = BitmapAnimation.prototype = new ns.DisplayObject();
 	
 	/**** Begin EaselFL specific code ****/
 
+	p._flType = 'ban';
 	p._flFrame = null;
 	p._flSmoothing = false;
 	p.flSmoothing = false;
@@ -401,7 +409,7 @@ var p = BitmapAnimation.prototype = new ns.DisplayObject();
 	p.flSetSmoothing = function(smooth) {
 		if(this._flCtx && smooth!==this._flSmoothing){
 			this.flSmoothing = this._flSmoothing = smooth;
-			this._flCtx._flChange.push([this.id, 'smth', smooth]);	
+			this._flCtx._flChange.push([this._flId, 'smth', smooth]);	
 		}else{
 			this.flSmoothing = smooth;
 		}
@@ -413,11 +421,39 @@ var p = BitmapAnimation.prototype = new ns.DisplayObject();
 	p._flRunCreate = function(ctx){
 	  if(this._flCtx!==ctx){
 			this._flCtx = ctx;
-			ctx._flCreate.push(['ban', this]);	
+			ctx._flCreate.push([this._flType, this]);	
 
 		//we have a context, so we can update smoothing
 		this.flSetSmoothing(this.flSmoothing);		
 	  }
+	}
+
+	p._flDisplayObjectRetain = p._flRetain;
+
+	p._flRetain = function(ctx) {
+		this._flDisplayObjectRetain(ctx);
+
+		if(this._flFrame) {
+			this._flFrame.__fl.retain(ctx);
+		}
+	}
+
+	p._flDisplayObjectDeretain = p._flDeretain;
+
+	p._flDeretain = function() {
+		this._flDisplayObjectDeretain();
+
+		if(this._flFrame) {
+			this._flFrame.__fl.deretain();
+			this._flFrame = null;
+		}
+	}
+
+	p._flDisplayObjectResetProps = p._flResetProps;
+
+	p._flResetProps = function() {
+		this._flDisplayObjectResetProps();
+		this._flFrame = null;
 	}
 
 	/**** End EaselFL specific code ****/
