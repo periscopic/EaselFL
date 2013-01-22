@@ -31,6 +31,7 @@ var SOURCE_FILES = [
 	"../js/easelfl/filters/Filter.js",
 	"../js/easelfl/filters/BoxBlurFilter.js",
 	"../js/easelfl/filters/ColorFilter.js",
+	"../js/easelfl/filters/ColorMatrix.js",
 	"../js/easelfl/filters/ColorMatrixFilter.js"//,
 	//"../js/easelfl/ui/Touch.js"
 ];
