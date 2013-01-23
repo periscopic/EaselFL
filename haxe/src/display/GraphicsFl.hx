@@ -315,7 +315,13 @@ class GraphicsFl implements IExec{
 	 */
 	inline static private function moveTo(target:GraphicsFl, xy:Array<Dynamic>):Void{
 		
-		target.graphics.moveTo(xy[0], xy[1]);
+		if(target.activeStroke && target.activePath) {
+			target.graphics.lineStyle();
+			target.graphics.moveTo(xy[0], xy[1]);
+			updateStroke(target);
+		} else {
+			target.graphics.moveTo(xy[0], xy[1]);
+		}		
 		
 		//-- store current drawing point
 		target.curX = xy[0];
