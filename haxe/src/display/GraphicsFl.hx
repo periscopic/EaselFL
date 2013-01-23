@@ -226,40 +226,71 @@ class GraphicsFl implements IExec{
 				target.jointsStyle = JointStyle.MITER;
 		}
 		
-		
+		if(target.activeStroke) {
+			updateStroke(target);
+		}
+				
+	}
+	
+	inline static private function updateStroke(target:GraphicsFl) {
+		//normal
+		if(target.strokeMethod==null) {
+			target.graphics.lineStyle(target.strokeThickness, target.strokeColor, target.strokeAlpha, false, LineScaleMode.NONE, target.capsStyle, target.jointsStyle, target.miterLimit);
+		} else {
+			target.graphics.lineStyle(target.strokeThickness, 0, 1, false, LineScaleMode.NONE, target.capsStyle, target.jointsStyle, target.miterLimit);	
+			Reflect.callMethod(null, target.strokeMethod, target.strokeArgs);
+		}
 	}
 	
 	inline static private function beginStroke(target:GraphicsFl, color:String):Void{
 		target.activePath = false;
+		target.activeStroke = true;
 		CSSColor.parse(color);
-		target.graphics.lineStyle(target.strokeThickness, CSSColor.color, CSSColor.alpha, false, LineScaleMode.NONE, target.capsStyle, target.jointsStyle, target.miterLimit);
+		target.strokeColor = CSSColor.color;
+		target.strokeAlpha = CSSColor.alpha;
+		updateStroke(target);
 	}
 	
 	inline static private function beginBitmapStroke(target:GraphicsFl, args:Array<Dynamic>):Void{
 		//TODO : handle repeat-x, repeat-y
 		target.activePath = false;
+		target.activeStroke = true;	
+		
 		var img = Control.bitmapDatas.get(args[0]);	
-		target.graphics.lineStyle(target.strokeThickness, 0, 1, false, LineScaleMode.NONE, target.capsStyle, target.jointsStyle, target.miterLimit);	
-		target.graphics.lineBitmapStyle(img.bitmapData, null, args[1]!='no-repeat', false);
+		target.strokeMethod = target.graphics.lineBitmapStyle;
+		target.strokeArgs = [img.bitmapData, null, args[1]!='no-repeat', false];
+		updateStroke(target);
+		
 		watchBitmapData(target, img);
 	}
 	
 	static private function beginRadialGradientStroke(target:GraphicsFl, args:Array<Dynamic>):Void{
 		target.activePath = false;
-		target.graphics.lineStyle(target.strokeThickness, 0, 1, false, LineScaleMode.NONE, target.capsStyle, target.jointsStyle, target.miterLimit);	
-		applyRadialGradientFillOrStroke(target.graphics.lineGradientStyle, args);
+		target.activeStroke = true;	
+			
+		//target.graphics.lineStyle(target.strokeThickness, 0, 1, false, LineScaleMode.NONE, target.capsStyle, target.jointsStyle, target.miterLimit);	
+		//applyRadialGradientFillOrStroke(target.graphics.lineGradientStyle, args);	
+		target.strokeMethod = applyRadialGradientFillOrStroke;
+		target.strokeArgs = [target.graphics.lineGradientStyle, args];
+		updateStroke(target);
 	}
 	
 	static private function beginLinearGradientStroke(target:GraphicsFl, args:Array<Dynamic>):Void{
 		target.activePath = false;
-		target.graphics.lineStyle(target.strokeThickness, 0, 1, false, LineScaleMode.NONE, target.capsStyle, target.jointsStyle, target.miterLimit);	
-		applyLinearGradientFillOrStroke(target.graphics.lineGradientStyle, args);
+		target.activeStroke = true;
+		//target.graphics.lineStyle(target.strokeThickness, 0, 1, false, LineScaleMode.NONE, target.capsStyle, target.jointsStyle, target.miterLimit);	
+		//applyLinearGradientFillOrStroke(target.graphics.lineGradientStyle, args);
+		target.strokeMethod = applyLinearGradientFillOrStroke;
+		target.strokeArgs = [target.graphics.lineGradientStyle, args];
+		updateStroke(target);
 	}
 	
 	inline static private function endStroke(target:GraphicsFl, ?nada:Dynamic):Void{
 		target.activePath = false;
+		target.activeStroke = false;
 		target.graphics.lineStyle();
 	}
+		
 	
 	inline static private function endFill(target:GraphicsFl, ?nada:Dynamic):Void{
 		target.activePath = false;
@@ -271,8 +302,10 @@ class GraphicsFl implements IExec{
 	
 	inline static private function closePath(target:GraphicsFl, ?nada:Dynamic):Void{
 		if(target.activePath == true) {
+			
 			target.graphics.lineTo(target.startX, target.startY);
 			target.activePath = false;
+			
 		}
 	}
 	
@@ -281,23 +314,28 @@ class GraphicsFl implements IExec{
 	 * 
 	 */
 	inline static private function moveTo(target:GraphicsFl, xy:Array<Dynamic>):Void{
+		
 		target.graphics.moveTo(xy[0], xy[1]);
 		
 		//-- store current drawing point
 		target.curX = xy[0];
 		target.curY = xy[1];
+		
 	}
 	
 	inline static private function lineTo(target:GraphicsFl, xy:Array<Dynamic>):Void{
+		
 		target.checkFreshPath();
 		target.graphics.lineTo(xy[0], xy[1]);
 		
 		//-- store current drawing point
 		target.curX = xy[0];
 		target.curY = xy[1];
+		
 	}
 	
 	inline static private function cubicCurveTo(target:GraphicsFl, pts:Array<Dynamic>):Void{
+		
 		target.checkFreshPath();
 		
 		//-- Flash11 version
@@ -321,6 +359,7 @@ class GraphicsFl implements IExec{
 		//-- store current drawing point
       	target.curX = pts[4];
       	target.curY = pts[5];
+      	
 	}
 		
 	/** 
@@ -362,18 +401,21 @@ class GraphicsFl implements IExec{
 
 	
 	inline static private function quadraticCurveTo(target:GraphicsFl, pts:Array<Dynamic>):Void{
+		
 		target.checkFreshPath();
 		target.graphics.curveTo(pts[0], pts[1], pts[2], pts[3]);
 		
 		//-- store current drawing point
 		target.curX = pts[2];
 		target.curY = pts[3];
+		
 	}
 	
 	inline static private function drawRect(target:GraphicsFl, rct:Array<Dynamic>):Void{
-		//-- TODO : check if this should change current XY position
+		
 		target.checkFreshFill();
 		target.graphics.drawRect(rct[0], rct[1], rct[2], rct[3]);
+		
 	}
 	
 	inline static private function clear(target:GraphicsFl, ?nada:Dynamic):Void{
@@ -469,7 +511,6 @@ class GraphicsFl implements IExec{
 	 * @param Array The arguments for the corresponding EaselJS method
 	 */
 	 inline static function drawArcTo(target:GraphicsFl, args:Array<Dynamic>):Void{
-		
 		//-- control point
 		var x1:Float = args[0];
 		var y1:Float = args[1];
@@ -517,7 +558,7 @@ class GraphicsFl implements IExec{
 	 * @param Array The arguments for the corresponding EaselJS method
 	 */
 	inline static function drawArc(target:GraphicsFl, args:Array<Dynamic>):Void{
- 
+ 		
        	//-- center of arc
        	var ax:Float = args[0]; 
         var ay:Float = args[1];
@@ -601,7 +642,7 @@ class GraphicsFl implements IExec{
     
     	//-- store current drawing point
     	target.curX = bx;
-		target.curY = by;
+		target.curY = by;		
     }
 	
 	/**
@@ -623,10 +664,15 @@ class GraphicsFl implements IExec{
 	private var capsStyle:Dynamic;
 	private var jointsStyle:Dynamic;
 	private var miterLimit:Float;
+	private var strokeColor:Int;
+	private var strokeAlpha:Float;
+	private var strokeMethod:Dynamic;
+	private var strokeArgs:Dynamic;
 	
 	private var fillMethod:Dynamic;
 	private var fillArgs:Dynamic;
 	private var activeFill:Bool;
+	
 	
 	//-- The current position of the drawing head
 	private var curX:Float;
@@ -636,10 +682,14 @@ class GraphicsFl implements IExec{
 	private var startX:Float;
 	private var startY:Float;
 	private var activePath:Bool;
+	private var activeStroke:Bool;
 	
 	//-- serialized commands
 	private var commands:Array<Dynamic>;
 	private var bitmapDatas:Array<IBitmapData>;
+	
+	//-- currently in process of receiving commands
+	private var changing:Bool;
 
 	public function new(){
 		
@@ -653,8 +703,8 @@ class GraphicsFl implements IExec{
 		capsStyle = CapsStyle.NONE;
 		jointsStyle = JointStyle.MITER;
 		miterLimit = 10;
-		activePath = activeFill = false;
-		fillMethod = fillArgs = null;
+		activePath = activeFill = activeStroke = changing = false;
+		fillMethod = fillArgs = strokeMethod = strokeArgs = null;
 	}
 	
 	
@@ -670,7 +720,14 @@ class GraphicsFl implements IExec{
 	 * Redraw when an IBitmapData on which this dependant
 	 * has changed.
 	 */
-	private function handleRedraw(e:Dynamic):Void {
+	private function handleRedraw(?e:Dynamic):Void {
+		redraw();
+		if(activeStroke){
+			this.graphics.lineStyle();
+		}
+	}
+	
+	inline private function redraw() {
 		this.graphics.clear();
 		this.setDefaults();
 		
@@ -707,6 +764,15 @@ class GraphicsFl implements IExec{
 		activeFill = true;
 	}
 	
+	private function onChangesComplete(e:Dynamic) {
+		if(this.activeStroke) {
+			this.graphics.lineStyle();
+		}
+		
+		Control.dispatcher.removeEventListener('CHANGES_COMPLETE', onChangesComplete);
+		changing = false;
+	}
+	
 	/**
 	 * Execute a method on this GraphicsFl object
 	 * @param String key corresponding to the method
@@ -716,6 +782,15 @@ class GraphicsFl implements IExec{
 		#if debug
 			if(execs.exists(method)){
 		#end
+		
+		if(!changing) {
+			changing = true;
+			Control.dispatcher.addEventListener('CHANGES_COMPLETE', onChangesComplete);
+			
+			if(commands.length>0) {
+				redraw();
+			}
+		}
 		
 		commands.push({method:method, arguments:arguments});
 		return execs.get(method)( this, arguments);

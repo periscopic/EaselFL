@@ -19,7 +19,8 @@ import filters.ColorMatrixFilterFl;
 import filters.ColorFilterFl;
 import filters.BoxBlurFilterFl;
 import geom.RectangleFl;
-
+import flash.events.EventDispatcher;
+import flash.events.Event;
 import utils.CSSFont;
 
 
@@ -38,10 +39,13 @@ class Control {
 	static public var filters:IntHash<IBitmapFilter>;
 	static public var makers:Hash<Int->Void>;
 	static public var unmakers:Hash<Int->Void>;
+	static public var dispatcher:EventDispatcher;
 	
 	static public var stageFl:StageFl;
 	
 	static public function init(){
+		dispatcher = new EventDispatcher();
+		
 		items = new IntHash<IExec>();
 		containers = new IntHash<ContainerFl>();
 		displays = new IntHash<IDisplayable>();
@@ -142,6 +146,7 @@ class Control {
 			//-- Get item by id and delegate execution to it
 			items.get(cmd[0]).exec(cmd[1], cmd[2]);			
 		}
+		dispatcher.dispatchEvent(new Event('CHANGES_COMPLETE'));
 	}
 	
 	/*

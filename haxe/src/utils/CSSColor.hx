@@ -212,7 +212,7 @@ package utils;
         	if(str==null) {
         		str = 'transparent';
         	}
-        	
+        	       	
 			str = (~/\s*$/).replace((~/^\s*/).replace(str.toLowerCase(),''), '');
 			
 				
@@ -288,7 +288,7 @@ package utils;
             {
             	color = 0x000000;
             	alpha = 0.0;
-                throw 'Invalid CSS color argument: '+str;
+                //throw 'Invalid CSS color argument: '+str;
             }
         }
 

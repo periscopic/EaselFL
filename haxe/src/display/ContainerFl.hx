@@ -29,13 +29,13 @@ class ContainerFl extends DisplayObjectFl, implements IExec {
 		var ci:Int = 0;
 		var i:Int = 0;
 		var container:Sprite = target.container;
-		
+
 		//iterate while there are still some of both
 		while(ci<childIDs.length && i<ids.length) {
 			if(childIDs[ci]!=ids[i]) {
 				//remove from existing if not equal
 				container.removeChildAt(ci);
-				childIDs.slice(ci, 1);
+				childIDs.splice(ci, 1);
 			} else {
 				//skip any that are equal
 				ci+=1;
