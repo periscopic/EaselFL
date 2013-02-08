@@ -6,9 +6,9 @@
 
 <!--
 When exported by the createjs toolkit, the libs are all loaded immediately and sequentially
-using script tags. When using EaselJS + EaselFL we need to know which to load - and that
-loading must occur before the exported JS file is run, since it utilizes the Easel classes
-for prototypes immediately.
+using script tags. When using EaselJS + EaselFL we need to know which to load. That
+loading must occur before that of the createjs.MovieClip or the toolkit exported JS file
+since they both utilize the Easel classes for prototypes immediately.
 -->
 
 <!-- added -->
@@ -46,17 +46,9 @@ function init() {
 		checkReady();
 	}
 	
-	function onEaselComplete() {
+	function onEaselSuccess() {
 		easel = true;
 		checkReady();
-	}
-
-	function onEaselSuccess() {
-		if(requireMovieClip) {
-			createjs.FLSetup.loadScripts('http://code.createjs.com/movieclip-0.5.0.min.js', onEaselComplete);
-		} else {
-			onEaselComplete();
-		}
 	}
 
 	function onEaselFailure() {
@@ -90,7 +82,11 @@ function init() {
 		preferFlash: true, //normally - false - in production
 		EaselJS_url: 'http://code.createjs.com/easeljs-0.5.0.min.js',
 		EaselFL_url: '../../build/output/easelfl-cur.min.js',
-		SWFObject_url: '../../js/swfobject.js'
+		SWFObject_url: '../../js/swfobject.js',
+		//include only if movieclip is necessary for your application.
+		//MC will load after core EaselJS or EaselFL
+		//but before the success callback is executed
+		MovieClip_url: 'http://code.createjs.com/movieclip-0.5.0.min.js' 
 	};
 
 	createjs.FLSetup.run( onEaselSuccess, onEaselFailure, options);

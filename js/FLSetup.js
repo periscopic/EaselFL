@@ -164,7 +164,7 @@
 
 	/**
 	 * Tests for browser/plugin support of EaselJS / EaselFL 
- 	 * and loads those scripts and dependencies.
+	 * and loads those scripts and dependencies.
 	 * @param  {Function} onSuccess Easel loaded callback
 	 * @param  {Function} onFailure Easel not supported callback
 	 * @param  {Object} options
@@ -176,6 +176,14 @@
 		function onLoaded() {
 			if(onSuccess) {
 				onSuccess(isFL);
+			}
+		}
+
+		function onEaselLoaded() {
+			if(options.MovieClip_url) {
+				loadScript(options.MovieClip_url, onLoaded);
+			} else {
+				onLoaded();
 			}
 		}
 
@@ -205,7 +213,7 @@
 				}
 			}
 
-			loadScripts(loads, onLoaded);
+			loadScripts(loads, onEaselLoaded);
 		} else if(onFailure){
 			// unsupported callback
 			onFailure();

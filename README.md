@@ -17,9 +17,7 @@ EaselFL is distributed under the terms of the MIT license.
 
 ##Getting Started
 
-The <a href="https://github.com/periscopic/EaselFL/blob/master/examples/setup.html">example setup</a> uses the FLSetup util to get up and 
-running quickly. There are also a series of <a href="https://github.com/periscopic/EaselFL/tree/master/test">tests</a> that demonstrate
-various features and their consistency with EaselJS.
+The <a href="https://github.com/periscopic/EaselFL/blob/master/examples/setup.html">example setup</a> uses the FLSetup util to get up and running quickly. If you are interested in using EaselFL with the createjs toolkit, start with <a href ="https://github.com/periscopic/EaselFL/blob/master/examples/toolkit/toolkit_easelFL.html">this example</a>. There are also a series of <a href="https://github.com/periscopic/EaselFL/tree/master/test">tests</a> that demonstrate various features and their consistency with EaselJS.
 
 ##Key shortcomings, inconsistencies, and notes:
 **Dependencies**
