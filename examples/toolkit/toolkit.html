@@ -5,6 +5,8 @@
 <title>CreateJS export from toolkit</title>
 
 <script src="http://code.createjs.com/easeljs-0.5.0.min.js"></script>
+<script src="http://code.createjs.com/tweenjs-0.3.0.min.js"></script>
+<script src="http://code.createjs.com/movieclip-0.5.0.min.js"></script>
 <script src="http://code.createjs.com/preloadjs-0.2.0.min.js"></script>
 <script src="toolkit.js"></script>
 
@@ -36,8 +38,8 @@ function handleComplete() {
 	stage.addChild(exportRoot);
 	stage.update();
 
-	createjs.Ticker.setFPS(24);
-	//createjs.Ticker.addListener(stage);
+	createjs.Ticker.setFPS(30);
+	createjs.Ticker.addListener(stage);
 }
 </script>
 </head>

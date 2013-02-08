@@ -15,11 +15,10 @@ for prototypes immediately.
 <script src="../../js/FLSetup.js"></script>
 
 <!--<script src="http://code.createjs.com/easeljs-0.5.0.min.js"></script>-->
+<script src="http://code.createjs.com/tweenjs-0.3.0.min.js"></script>
+<!--<script src="http://code.createjs.com/movieclip-0.5.0.min.js"></script>-->
 <script src="http://code.createjs.com/preloadjs-0.2.0.min.js"></script>
 <!--<script src="toolkit.js"></script>-->
-
-
-
 
 <script>
 var myCanvas, stage, exportRoot;
@@ -32,7 +31,8 @@ function init() {
 	
 	//flags
 	var preloads = false, 
-	easel = false;
+	easel = false,
+	requireMovieClip = true;
 
 	//handlers
 	function checkReady() {
@@ -46,12 +46,20 @@ function init() {
 		checkReady();
 	}
 	
-	function onSetupSuccess() {
+	function onEaselComplete() {
 		easel = true;
 		checkReady();
 	}
 
-	function onSetupFailure() {
+	function onEaselSuccess() {
+		if(requireMovieClip) {
+			createjs.FLSetup.loadScripts('http://code.createjs.com/movieclip-0.5.0.min.js', onEaselComplete);
+		} else {
+			onEaselComplete();
+		}
+	}
+
+	function onEaselFailure() {
 		//handle lack of support for Easel
 	}
 
@@ -82,10 +90,10 @@ function init() {
 		preferFlash: true, //normally - false - in production
 		EaselJS_url: 'http://code.createjs.com/easeljs-0.5.0.min.js',
 		EaselFL_url: '../../build/output/easelfl-cur.min.js',
-		SWFObject_url: '../../js/swfobject.js',
+		SWFObject_url: '../../js/swfobject.js'
 	};
 
-	createjs.FLSetup.run( onSetupSuccess, onSetupFailure, options);
+	createjs.FLSetup.run( onEaselSuccess, onEaselFailure, options);
 }
 
 
