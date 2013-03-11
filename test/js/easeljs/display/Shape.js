@@ -26,20 +26,37 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(ns) {
+// namespace:
+this.createjs = this.createjs||{};
+
+(function() {
 
 /**
-* A Shape allows you to display vector art in the display list. It composites a Graphics instance which exposes all of the vector
-* drawing methods. The Graphics instance can be shared between multiple Shape instances to display the same vector graphics with different
-* positions or transforms. If the vector art will not change between draws, you may want to use the cache() method to reduce the rendering cost.
-* @class Shape
-* @extends DisplayObject
-* @param {Graphics} graphics Optional. The graphics instance to display. If null, a new Graphics instance will be created.
-**/
+ * A Shape allows you to display vector art in the display list. It composites a {{#crossLink "Graphics"}}{{/crossLink}}
+ * instance which exposes all of the vector drawing methods. The Graphics instance can be shared between multiple Shape
+ * instances to display the same vector graphics with different positions or transforms.
+ *
+ * If the vector art will not
+ * change between draws, you may want to use the {{#crossLink "DisplayObject/cache"}}{{/crossLink}} method to reduce the
+ * rendering cost.
+ *
+ * <h4>Example</h4>
+ *      var graphics = new createjs.Graphics().beginFill("#ff0000").drawRect(0, 0, 100, 100);
+ *      var shape = new createjs.Shape(graphics);
+ *      
+ *      //Alternatively use can also use the graphics property of the Shape class to renderer the same as above.
+ *      var shape = new createjs.Shape();
+ *      shape.graphics.beginFill("#ff0000").drawRect(0, 0, 100, 100);
+ *
+ * @class Shape
+ * @extends DisplayObject
+ * @constructor
+ * @param {Graphics} graphics Optional. The graphics instance to display. If null, a new Graphics instance will be created.
+ **/
 var Shape = function(graphics) {
   this.initialize(graphics);
 }
-var p = Shape.prototype = new ns.DisplayObject();
+var p = Shape.prototype = new createjs.DisplayObject();
 
 // public properties:
 	/**
@@ -60,12 +77,12 @@ var p = Shape.prototype = new ns.DisplayObject();
 	/** 
 	 * Initialization method.
 	 * @method initialize
-	 * param {Graphics} graphics
+	 * @param {Graphics} graphics
 	 * @protected
 	 **/
 	p.initialize = function(graphics) {
 		this.DisplayObject_initialize();
-		this.graphics = graphics ? graphics : new ns.Graphics();
+		this.graphics = graphics ? graphics : new createjs.Graphics();
 	}
 
 	/**
@@ -76,8 +93,9 @@ var p = Shape.prototype = new ns.DisplayObject();
 	 * @return {Boolean} Boolean indicating whether the Shape would be visible if drawn to a canvas
 	 **/
 	p.isVisible = function() {
-		return this.visible && this.alpha > 0 && this.scaleX != 0 && this.scaleY != 0 && this.graphics;
-	}
+		var hasContent = this.cacheCanvas || (this.graphics && !this.graphics.isEmpty());
+		return !!(this.visible && this.alpha > 0 && this.scaleX != 0 && this.scaleY != 0 && hasContent);
+	};
 
 	/**
 	 * @property DisplayObject_draw
@@ -87,14 +105,14 @@ var p = Shape.prototype = new ns.DisplayObject();
 	p.DisplayObject_draw = p.draw;
 	
 	/**
-	 * Draws the Shape into the specified context ignoring it's visible, alpha, shadow, and transform.
-	 * Returns true if the draw was handled (useful for overriding functionality).
-	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
+	 * Draws the Shape into the specified context ignoring it's visible, alpha, shadow, and transform. Returns true if
+	 * the draw was handled (useful for overriding functionality).
+	 *
+	 * <i>NOTE: This method is mainly for internal use, though it may be useful for advanced uses.</i>
 	 * @method draw
 	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
-	 * @param {Boolean} ignoreCache Indicates whether the draw operation should ignore any current cache. 
-	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
-	 * into itself).
+	 * @param {Boolean} ignoreCache Indicates whether the draw operation should ignore any current cache. For example,
+	 * used for drawing the cache (to prevent it from simply drawing an existing cache back into itself).
 	 **/
 	p.draw = function(ctx, ignoreCache) {
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
@@ -106,8 +124,8 @@ var p = Shape.prototype = new ns.DisplayObject();
 	 * Returns a clone of this Shape. Some properties that are specific to this instance's current context are reverted to 
 	 * their defaults (for example .parent).
 	 * @method clone
-	 * @param {Boolean} recursive If true, this Shape's Graphics instance will also be cloned. If false, the Graphics instance 
-	 * will be shared with the new Shape.
+	 * @param {Boolean} recursive If true, this Shape's {{#crossLink "Graphics"}}{{/crossLink}} instance will also be
+	 * cloned. If false, the Graphics instance will be shared with the new Shape.
 	 **/
 	p.clone = function(recursive) {
 		var o = new Shape((recursive && this.graphics) ? this.graphics.clone() : this.graphics);
@@ -124,6 +142,5 @@ var p = Shape.prototype = new ns.DisplayObject();
 		return "[Shape (name="+  this.name +")]";
 	}
 
-ns.Shape = Shape;
-}(createjs||(createjs={})));
-var createjs;
+createjs.Shape = Shape;
+}());

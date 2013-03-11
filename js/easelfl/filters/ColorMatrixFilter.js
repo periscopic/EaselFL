@@ -31,19 +31,25 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(ns) {
+// namespace:
+this.createjs = this.createjs||{};
+
+(function() {
 
 /**
-* Allows you to carry out complex color operations such as modifying saturation, brightness, or inverting.
-* @class ColorMatrixFilter
-* @constructor
-* @augments Filter
-* @param matrix A 4x5 matrix describing the color operation to perform. See also the ColorMatrix class.
-**/
+ * Allows you to carry out complex color operations such as modifying saturation, brightness, or inverting. See the
+ * {{#crossLink "ColorMatrix"}}{{/crossLink}} for more information on changing colors.
+ *
+ * See {{#crossLink "Filter"}}{{/crossLink}} for an example of how to apply filters.
+ * @class ColorMatrixFilter
+ * @constructor
+ * @extends Filter
+ * @param {Array} matrix A 4x5 matrix describing the color operation to perform. See also the ColorMatrix class.
+ **/
 var ColorMatrixFilter = function(matrix) {
   this.initialize(matrix);
 }
-var p = ColorMatrixFilter.prototype = new ns.Filter();
+var p = ColorMatrixFilter.prototype = new createjs.Filter();
 
 // public properties:
 	p.matrix = null;
@@ -53,7 +59,7 @@ var p = ColorMatrixFilter.prototype = new ns.Filter();
 	/** 
 	 * @method initialize
 	 * @protected
-	 * @param matrix A 4x5 matrix describing the color operation to perform.
+	 * @param {Array} matrix A 4x5 matrix describing the color operation to perform.
 	 **/
 	/*
 	 //-- EaselJS
@@ -64,21 +70,22 @@ var p = ColorMatrixFilter.prototype = new ns.Filter();
 	p.initialize = function(matrix) {
 		this.matrix = matrix;		
 		this._flMatrix = [];
-		this._flId = ns.UID.get();
+		this._flId = createjs.UID.get();
 	}
 	
 // public methods:
 	/**
 	 * Applies the filter to the specified context.
 	 * @method applyFilter
-	 * @param ctx The 2D context to use as the source.
-	 * @param x The x position to use for the source rect.
-	 * @param y The y position to use for the source rect.
-	 * @param width The width to use for the source rect.
-	 * @param height The height to use for the source rect.
-	 * @param targetCtx Optional. The 2D context to draw the result to. Defaults to the context passed to ctx.
-	 * @param targetX Optional. The x position to draw the result to. Defaults to the value passed to x.
-	 * @param targetY Optional. The y position to draw the result to. Defaults to the value passed to y.
+	 * @param {CanvasRenderingContext2D} ctx The 2D context to use as the source.
+	 * @param {Number} x The x position to use for the source rect.
+	 * @param {Number} y The y position to use for the source rect.
+	 * @param {Number} width The width to use for the source rect.
+	 * @param {Number} height The height to use for the source rect.
+	 * @param {CanvasRenderingContext2D} targetCtx Optional. The 2D context to draw the result to. Defaults to the context passed to ctx.
+	 * @param {Number} targetX Optional. The x position to draw the result to. Defaults to the value passed to x.
+	 * @param {Number} targetY Optional. The y position to draw the result to. Defaults to the value passed to y.
+	 * @return {Boolean}
 	 **/
 	/*
 	 //-- EaselJS
@@ -117,7 +124,7 @@ var p = ColorMatrixFilter.prototype = new ns.Filter();
 	}
 	*/
 	p.applyFilter = function(ctx, x, y, width, height, targetCtx, targetX, targetY) {
-		if(ns.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:ColorMatrixFilter.applyFilter currently not implemented';
+		if(createjs.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:ColorMatrixFilter.applyFilter currently not implemented';
 		return true;
 	}
 
@@ -134,7 +141,7 @@ var p = ColorMatrixFilter.prototype = new ns.Filter();
 	/**
 	 * Returns a clone of this ColorMatrixFilter instance.
 	 * @method clone
-	 @return {ColorMatrixFilter} A clone of the current ColorMatrixFilter instance.
+	 * @return {ColorMatrixFilter} A clone of the current ColorMatrixFilter instance.
 	 **/
 	p.clone = function() {
 		return new ColorMatrixFilter(this.matrix);
@@ -185,6 +192,5 @@ var p = ColorMatrixFilter.prototype = new ns.Filter();
 
 	/**** end EaselFL specific code ******/	
 	
-ns.ColorMatrixFilter = ColorMatrixFilter;
-}(createjs||(createjs={})));
-var createjs;
+createjs.ColorMatrixFilter = ColorMatrixFilter;
+}());

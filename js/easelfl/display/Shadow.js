@@ -31,17 +31,25 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(ns) {
+// namespace:
+this.createjs = this.createjs||{};
+
+(function() {
 
 /**
-* Encapsulates the properties required to define a shadow to apply to a DisplayObject via it's .shadow property.
-* @class Shadow
-* @constructor
-* @param {String} color The color of the shadow.
-* @param {Number} offsetX The x offset of the shadow.
-* @param {Number} offsetY The y offset of the shadow.
-* @param {Number} blur The size of the blurring effect.
-**/
+ * This class encapsulates the properties required to define a shadow to apply to a {{#crossLink "DisplayObject"}}{{/crossLink}}
+ * via it's <code>shadow</code> property.
+ *
+ * <h4>Example</h4>
+ *      myImage.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+ *
+ * @class Shadow
+ * @constructor
+ * @param {String} color The color of the shadow.
+ * @param {Number} offsetX The x offset of the shadow in pixels.
+ * @param {Number} offsetY The y offset of the shadow in pixels.
+ * @param {Number} blur The size of the blurring effect.
+ **/
 var Shadow = function(color, offsetX, offsetY, blur) {
   this.initialize(color, offsetX, offsetY, blur);
 }
@@ -51,7 +59,7 @@ var p = Shadow.prototype;
 	/**
 	 * An identity shadow object (all properties are set to 0). Read-only.
 	 * @property identity
-	 * @type Shadow
+	 * @type {Shadow}
 	 * @static
 	 * @final
 	 **/
@@ -60,30 +68,30 @@ var p = Shadow.prototype;
 // public properties:
 	/** The color of the shadow.
 	 * property color
-	 * @type String
+	 * @type {String}
 	 * @default null
-	*/
+	 */
 	p.color = null;
 	
 	/** The x offset of the shadow.
 	 * property offsetX
-	 * @type Number
+	 * @type {Number}
 	 * @default 0
-	*/
+	 */
 	p.offsetX = 0;
 	
 	/** The y offset of the shadow.
 	 * property offsetY
-	 * @type Number
+	 * @type {Number}
 	 * @default 0
-	*/
+	 */
 	p.offsetY = 0;
 	
 	/** The blur of the shadow.
 	 * property blur
-	 * @type Number
+	 * @type {Number}
 	 * @default 0
-	*/
+	 */
 	p.blur = 0;
 	
 // constructor:
@@ -111,7 +119,7 @@ var p = Shadow.prototype;
 		this.offsetY = offsetY;
 		this.blur = blur;
 		
-		this._flId = ns.UID.get();
+		this._flId = createjs.UID.get();
 	}
 	
 // public methods:
@@ -128,7 +136,7 @@ var p = Shadow.prototype;
 	/**
 	 * Returns a clone of this Shadow instance.
 	 * @method clone
-	 @return {Shadow} A clone of the current Shadow instance.
+	 * @return {Shadow} A clone of the current Shadow instance.
 	 **/
 	p.clone = function() {
 		return new Shadow(this.color, this.offsetX, this.offsetY, this.blur);
@@ -194,6 +202,6 @@ var p = Shadow.prototype;
 	// @TODO decide if this is needed in flash version
 	Shadow.identity = new Shadow("transparent", 0, 0, 0);
 	
-ns.Shadow = Shadow;
-}(createjs||(createjs={})));
-var createjs;
+createjs.Shadow = Shadow;
+
+}());

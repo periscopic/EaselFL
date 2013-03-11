@@ -31,82 +31,97 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(ns) {
+// namespace:
+this.createjs = this.createjs||{};
+
+(function() {
 	
 /**
-* Allows you to display one or more lines of dynamic text (not user editable) in the display list.
-* Line wrapping support (using the lineWidth is very basic, wrapping on spaces and tabs only. Note
-* that as an alternative to Text, you can position HTML text above or below the canvas relative to 
-* items in the display list using the localToGlobal() method.
-* @class Text
-* @extends DisplayObject
-* @constructor
-* @param {String} text Optional. The text to display.
-* @param {String} font Optional. The font style to use. Any valid value for the CSS font attribute is 
-* acceptable (ex. "36px bold Arial").
-* @param {String} color Optional. The color to draw the text in. Any valid value for the CSS color attribute
-* is acceptable (ex. "#F00").
-**/
+ * Display one or more lines of dynamic text (not user editable) in the display list. Line wrapping support (using the
+ * lineWidth) is very basic, wrapping on spaces and tabs only. Note that as an alternative to Text, you can position HTML
+ * text above or below the canvas relative to items in the display list using the {{#crossLink "DisplayObject/localToGlobal"}}{{/crossLink}}
+ * method, or using {{#crossLink "DOMElement"}}{{/crossLink}}.
+ *
+ * <b>Please note that Text does not support HTML text, and can only display one font style at a time.</b> To use
+ * multiple font styles, you will need to create multiple text instances, and position them manually.
+ *
+ * <h4>Example</h4>
+ *      var text = new createjs.Text("Hello World", "20px Arial", #ff7700");
+ *      text.x = 100;
+ *      text.textBaseline = "alphabetic";
+ *
+ * CreateJS Text supports web fonts (the same rules as Canvas). The font must be loaded and supported by the browser
+ * before it can be displayed.
+ *
+ * @class Text
+ * @extends DisplayObject
+ * @constructor
+ * @param {String} [text] The text to display.
+ * @param {String} [font] The font style to use. Any valid value for the CSS font attribute is acceptable (ex. "bold
+ * 36px Arial").
+ * @param {String} [color] The color to draw the text in. Any valid value for the CSS color attribute is acceptable (ex.
+ * "#F00", "red", or "#FF0000").
+ **/
 var Text = function(text, font, color) {
   this.initialize(text, font, color);
 }
-var p = Text.prototype = new ns.DisplayObject();
+var p = Text.prototype = new createjs.DisplayObject();
 
 
 	/**
 	 * @property _workingContext
-	 * @type CanvasRenderingContext2D
+	 * @type {CanvasRenderingContext2D}
 	 * @private
 	 **/
 	/*
 	 //-- EaselJS
-	Text._workingContext = document.createElement("canvas").getContext("2d");
+	Text._workingContext = (createjs.createCanvas?createjs.createCanvas():document.createElement("canvas")).getContext("2d");
 	*/
 
 // public properties:
 	/**
 	 * The text to display.
 	 * @property text
-	 * @type String
+	 * @type {String}
 	 **/
 	p.text = "";
 	
 	/**
 	 * The font style to use. Any valid value for the CSS font attribute is acceptable (ex. "bold 36px Arial"). 
 	 * @property font
-	 * @type String
+	 * @type {String}
 	 **/
 	p.font = null;
 	
 	/**
-	 * The color to draw the text in. Any valid value for the CSS color attribute is acceptable (ex. "#F00").
+	 * The color to draw the text in. Any valid value for the CSS color attribute is acceptable (ex. "#F00"). Default is "#000".
 	 * @property color
 	 * @type String
 	 **/
-	p.color = null;
+	p.color = "#000";
 	
 	/**
 	 * The horizontal text alignment. Any of "start", "end", "left", "right", and "center". For detailed 
 	 * information view the 
-	 * <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#text-0">
-	 * whatwg spec</a>.
+	 * <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#text-styles">
+	 * whatwg spec</a>. Default is "left".
 	 * @property textAlign
 	 * @type String
 	 **/
-	p.textAlign = null;
+	p.textAlign = "left";
 	
 	/** The vertical alignment point on the font. Any of "top", "hanging", "middle", "alphabetic", 
 	 * "ideographic", or "bottom". For detailed information view the 
-	 * <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#text-0">
-	 * whatwg spec</a>.
+	 * <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#text-styles">
+	 * whatwg spec</a>. Default is "top".
 	 * @property textBaseline
 	 * @type String
 	*/
-	p.textBaseline = null;
+	p.textBaseline = "top";
 	
 	/** The maximum width to draw the text. If maxWidth is specified (not null), the text will be condensed or 
 	 * shrunk to make it fit in this width. For detailed information view the 
-	 * <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#text-0">
+	 * <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#text-styles">
 	 * whatwg spec</a>.
 	 * @property maxWidth
 	 * @type Number
@@ -115,14 +130,14 @@ var p = Text.prototype = new ns.DisplayObject();
 	
 	/** If true, the text will be drawn as a stroke (outline). If false, the text will be drawn as a fill.
 	 * @property outline
-	 * @type Boolean
+	 * @type {Boolean}
 	 **/
 	p.outline = false;
 	
 	/** Indicates the line height (vertical distance between baselines) for multi-line text. If null or 0, 
 	 * the value of getMeasuredLineHeight is used.
 	 * @property lineHeight
-	 * @type Number
+	 * @type {Number}
 	 **/
 	p.lineHeight = 0;
 	
@@ -130,7 +145,7 @@ var p = Text.prototype = new ns.DisplayObject();
 	 * Indicates the maximum width for a line of text before it is wrapped to multiple lines. If null, 
 	 * the text will not be wrapped.
 	 * @property lineWidth
-	 * @type Number
+	 * @type {Number}
 	 **/
 	p.lineWidth = null;
 	
@@ -138,7 +153,7 @@ var p = Text.prototype = new ns.DisplayObject();
 	/**
 	 * @property DisplayObject_initialize
 	 * @private
-	 * @type Function
+	 * @type {Function}
 	 **/
 	p.DisplayObject_initialize = p.initialize;
 	
@@ -159,17 +174,24 @@ var p = Text.prototype = new ns.DisplayObject();
 	 * This does not account for whether it would be visible within the boundaries of the stage.
 	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
 	 * @method isVisible
-	 * @return {Boolean} Boolean indicating whether the display object would be visible if drawn to a canvas
+	 * @return {Boolean} Whether the display object would be visible if drawn to a canvas
 	 **/
+	/*
+	//-- EaselJS	
 	p.isVisible = function() {
-		// Note: this.text = "0" will evaluate to false in JS.
-		return Boolean(this.visible && this.alpha > 0 && this.scaleX != 0 && this.scaleY != 0 && this.text != null && this.text !== "");
+		var hasContent = this.cacheCanvas || (this.text != null && this.text !== "");
+		return !!(this.visible && this.alpha > 0 && this.scaleX != 0 && this.scaleY != 0 && hasContent);
+	}
+	*/
+	p.isVisible = function() {
+		var hasContent = (this.text != null && this.text !== "");
+		return Boolean(this.visible && this.alpha > 0 && this.scaleX != 0 && this.scaleY != 0 && hasContent);
 	}
 
 	/**
 	 * @property DisplayObject_draw
 	 * @private
-	 * @type Function
+	 * @type {Function}
 	 **/
 	p.DisplayObject_draw = p.draw;
 	
@@ -257,7 +279,7 @@ var p = Text.prototype = new ns.DisplayObject();
 	}
 	*/
 	p.getMeasuredWidth = function() {
-		if(ns.Stage.FL_THROW_UNIMPLEMENTED) {
+		if(createjs.Stage.FL_THROW_UNIMPLEMENTED) {
 			throw 'EaseFl:Text.getMeasuredWidth not yet implemented';
 		}
 		return null;
@@ -279,7 +301,7 @@ var p = Text.prototype = new ns.DisplayObject();
 	}
 	*/
 	p.getMeasuredLineHeight = function() {
-		if(ns.Stage.FL_THROW_UNIMPLEMENTED) {
+		if(createjs.Stage.FL_THROW_UNIMPLEMENTED) {
 			throw 'EaseFl:Text.getMeasuredLineHeight not yet implemented';
 		}
 		return null;
@@ -299,16 +321,16 @@ var p = Text.prototype = new ns.DisplayObject();
 	}
 	*/
 	p.getMeasuredHeight = function() {
-		if(ns.Stage.FL_THROW_UNIMPLEMENTED) {
+		if(createjs.Stage.FL_THROW_UNIMPLEMENTED) {
 			throw 'EaseFl:Text.getMeasuredHeight not yet implemented';
 		}
 		return null;
 	}
 	
 	/**
-	 * Returns a clone of the Point instance.
+	 * Returns a clone of the Text instance.
 	 * @method clone
-	 * @return {Point} a clone of the Point instance.
+	 * @return {Text} a clone of the Text instance.
 	 **/
 	p.clone = function() {
 		var o = new Text(this.text, this.font, this.color);
@@ -330,7 +352,7 @@ var p = Text.prototype = new ns.DisplayObject();
 	/**
 	 * @property DisplayObject_cloneProps
 	 * @private
-	 * @type Function
+	 * @type {Function}
 	 **/
 	p.DisplayObject_cloneProps = p.cloneProps;
 
@@ -385,9 +407,9 @@ var p = Text.prototype = new ns.DisplayObject();
 	
 	p._flFont = null;
 	p._flText = "";
-	p._flColor = null;
-	p._flTextAlign = null;
-	p._flTextBaseline = null;
+	p._flColor = "#000";
+	p._flTextAlign = "left";
+	p._flTextBaseline = "top";
 	p._flOutline = false;
 	p._flLineHeight = 0;
 	p._flLineWidth = null;
@@ -413,7 +435,6 @@ var p = Text.prototype = new ns.DisplayObject();
 	/**** End EaselFL specific code ****/
 	
 
-ns.Text = Text;
+createjs.Text = Text;
 
-}(createjs||(createjs={})));
-var createjs;
+}());

@@ -38,10 +38,13 @@
  * and allows efficient reuse of the bitmaps inside Flash.
  */
 
-(function(ns) {
+// namespace:
+this.createjs = this.createjs||{};
+
+(function() {
 
     var FrameFl = function(frame){
-        this._flId = ns.UID.get();
+        this._flId = createjs.UID.get();
         this._frame = frame;
     }
     
@@ -73,7 +76,7 @@
                 ctx._flChange.push([this._flId, 'flp', [this._flDep._flId, f.h, f.v]]);
             } else {
                 //-- verify image is pushed to flash
-                ns.ImageFl.watch(f.image);
+                createjs.ImageFl.watch(f.image);
                 this._flDep = f.image.__fl;
                 this._flDep.retain(ctx).sync();
                 
@@ -114,7 +117,6 @@
         return false;
     }
 
-ns.FrameFl = FrameFl;
+createjs.FrameFl = FrameFl;
 
-}(createjs||(createjs={})));
-var createjs;
+}());

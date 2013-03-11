@@ -31,19 +31,22 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(ns) {
+// namespace:
+this.createjs = this.createjs||{};
+
+(function() {
 
 /**
-* Represents an affine transformation matrix, and provides tools for constructing and concatenating matrixes.
-* @class Matrix2D
-* @constructor
-* @param {Number} a Specifies the a property for the new matrix.
-* @param {Number} b Specifies the b property for the new matrix.
-* @param {Number} c Specifies the c property for the new matrix.
-* @param {Number} d Specifies the d property for the new matrix.
-* @param {Number} tx Specifies the tx property for the new matrix.
-* @param {Number} ty Specifies the ty property for the new matrix.
-**/
+ * Represents an affine transformation matrix, and provides tools for constructing and concatenating matrixes.
+ * @class Matrix2D
+ * @constructor
+ * @param {Number} a Specifies the a property for the new matrix.
+ * @param {Number} b Specifies the b property for the new matrix.
+ * @param {Number} c Specifies the c property for the new matrix.
+ * @param {Number} d Specifies the d property for the new matrix.
+ * @param {Number} tx Specifies the tx property for the new matrix.
+ * @param {Number} ty Specifies the ty property for the new matrix.
+ **/
 var Matrix2D = function(a, b, c, d, tx, ty) {
   this.initialize(a, b, c, d, tx, ty);
 }
@@ -55,7 +58,7 @@ var p = Matrix2D.prototype;
 	 * An identity matrix, representing a null transformation. Read-only.
 	 * @property identity
 	 * @static
-	 * @type Matrix2D
+	 * @type {Matrix2D}
 	 **/
 	Matrix2D.identity = null; // set at bottom of class definition.
 
@@ -64,7 +67,7 @@ var p = Matrix2D.prototype;
 	 * @property DEG_TO_RAD
 	 * @static
 	 * @final
-	 * @type Number
+	 * @type {Number}
 	 **/
 	Matrix2D.DEG_TO_RAD = Math.PI/180;
 
@@ -73,42 +76,42 @@ var p = Matrix2D.prototype;
 	/**
 	 * Position (0, 0) in a 3x3 affine transformation matrix.
 	 * @property a
-	 * @type Number
+	 * @type {Number}
 	 **/
 	p.a = 1;
 
 	/**
 	 * Position (0, 1) in a 3x3 affine transformation matrix.
 	 * @property b
-	 * @type Number
+	 * @type {Number}
 	 **/
 	p.b = 0;
 
 	/**
 	 * Position (1, 0) in a 3x3 affine transformation matrix.
 	 * @property c
-	 * @type Number
+	 * @type {Number}
 	 **/
 	p.c = 0;
 
 	/**
 	 * Position (1, 1) in a 3x3 affine transformation matrix.
 	 * @property d
-	 * @type Number
+	 * @type {Number}
 	 **/
 	p.d = 1;
 
 	/**
 	 * Position (2, 0) in a 3x3 affine transformation matrix.
 	 * @property atx
-	 * @type Number
+	 * @type {Number}
 	 **/
 	p.tx = 0;
 
 	/**
 	 * Position (2, 1) in a 3x3 affine transformation matrix.
 	 * @property ty
-	 * @type Number
+	 * @type {Number}
 	 **/
 	p.ty = 0;
 
@@ -116,7 +119,7 @@ var p = Matrix2D.prototype;
 	 * Property representing the alpha that will be applied to a display object. This is not part of matrix
 	 * operations, but is used for operations like getConcatenatedMatrix to provide concatenated alpha values.
 	 * @property alpha
-	 * @type Number
+	 * @type {Number}
 	 **/
 	p.alpha = 1;
 
@@ -124,7 +127,7 @@ var p = Matrix2D.prototype;
 	 * Property representing the shadow that will be applied to a display object. This is not part of matrix
 	 * operations, but is used for operations like getConcatenatedMatrix to provide concatenated shadow values.
 	 * @property shadow
-	 * @type Shadow
+	 * @type {Shadow}
 	 **/
 	p.shadow  = null;
 
@@ -134,7 +137,7 @@ var p = Matrix2D.prototype;
 	 * compositeOperation values. You can find a list of valid composite operations at:
 	 * <a href="https://developer.mozilla.org/en/Canvas_tutorial/Compositing">https://developer.mozilla.org/en/Canvas_tutorial/Compositing</a>
 	 * @property compositeOperation
-	 * @type String
+	 * @type {String}
 	 **/
 	p.compositeOperation = null;
 
@@ -419,7 +422,7 @@ var p = Matrix2D.prototype;
 	/**
 	 * Returns true if the matrix is an identity matrix.
 	 * @method isIdentity
-	 * @returns Boolean
+	 * @return {Boolean}
 	 **/
 	p.isIdentity = function() {
 		return this.tx == 0 && this.ty == 0 && this.a == 1 && this.b == 0 && this.c == 0 && this.d == 1;
@@ -535,6 +538,6 @@ var p = Matrix2D.prototype;
 	// this has to be populated after the class is defined:
 	Matrix2D.identity = new Matrix2D(1, 0, 0, 1, 0, 0);
 
-ns.Matrix2D = Matrix2D;
-}(createjs||(createjs={})));
-var createjs;
+	createjs.Matrix2D = Matrix2D;
+
+}());

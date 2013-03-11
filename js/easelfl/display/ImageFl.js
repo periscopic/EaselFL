@@ -37,8 +37,10 @@
  * It facilitates loading and syncing of image files into Flash.
  */
 
+// namespace:
+this.createjs = this.createjs||{};
 
-(function(ns) {
+(function() {
 
     /**
      * @constructor
@@ -46,7 +48,7 @@
      * @param HTMLImageElement
      **/
     var ImageFl = function(img){
-        this._flId = ns.UID.get();
+        this._flId = createjs.UID.get();
         this._img = img;
     }
     
@@ -57,14 +59,14 @@
     /**
 	 * @internal
 	 * @property id
-	 * @type Number
+	 * @type {Number}
 	 **/
     p._flId = null;
     
     /**
 	 * @private
 	 * @property _img
-	 * @type HTMLImageElement
+	 * @type {HTMLImageElement}
 	 **/
     p._img = null;
     
@@ -72,7 +74,7 @@
 	 * The synced ContextFl
 	 * @private
 	 * @property _flCtx
-	 * @type ContextFl
+	 * @type {ContextFl}
 	 **/
     p._flCtx = null;
     
@@ -80,7 +82,7 @@
 	 * The image source URL
 	 * @private
 	 * @property _flSrc
-	 * @type String
+	 * @type {String}
 	 **/
     p._flSrc = null;
     
@@ -137,7 +139,6 @@
         return false;
     }
 
-ns.ImageFl = ImageFl;
+createjs.ImageFl = ImageFl;
 
-}(createjs||(createjs={})));
-var createjs;
+}());

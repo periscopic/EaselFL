@@ -31,37 +31,81 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(ns) {
+// namespace:
+this.createjs = this.createjs||{};
+
+(function() {
 
 /**
-* A stage is the root level Container for a display list. Each time its tick method is called, it will render its display
-* list to its target canvas.
-* @class Stage
-* @extends Container
-* @constructor
-* @param {HTMLCanvasElement} canvas The canvas the stage will render to.
-**/
+ * A stage is the root level {{#crossLink "Container"}}{{/crossLink}} for a display list. Each time its {{#crossLink "Stage/tick"}}{{/crossLink}}
+ * method is called, it will render its display list to its target canvas.
+ *
+ * <h4>Example</h4>
+ * This example creates a stage, adds a child to it, then uses {{#crossLink "Ticker"}}{{/crossLink}} to update the child
+ * and redraw the stage using {{#crossLink "Stage/update"}}{{/crossLink}}.
+ *
+ *      var stage = new createjs.Stage("canvasElementId");
+ *      var image = new createjs.Bitmap("imagePath.png");
+ *      createjs.Ticker.addEventListener("tick", handleTick);
+ *      function handleTick(event) {
+ *          bitmap.x += 10;
+ *          stage.update();
+ *      }
+ *
+ * @class Stage
+ * @extends Container
+ * @constructor
+ * @param {HTMLCanvasElement | String | Object} canvas A canvas object that the Stage will render to, or the string id
+ * of a canvas object in the current document.
+ **/
 var Stage = function(canvas) {
   this.initialize(canvas);
 }
-var p = Stage.prototype = new ns.Container();
+var p = Stage.prototype = new createjs.Container();
 
 // static properties:
 	/**
 	 * @property _snapToPixelEnabled
 	 * @protected
 	 * @static
-	 * @type Boolean
+	 * @type {Boolean}
 	 * @default false
+	 * @deprecated Hardware acceleration in modern browsers makes this unnecessary.
 	 **/
+	/*
+	//-- EaselJS
 	Stage._snapToPixelEnabled = false; // snapToPixelEnabled is temporarily copied here during a draw to provide global access.
+	*/
+
+// events:
+
+	/**
+	 * Dispatched when the user moves the mouse over the canvas.
+	 * See the {{#crossLink "MouseEvent"}}{{/crossLink}} class for a listing of event properties.
+	 * @event stagemousemove
+	 * @since 0.6.0
+	 */
+
+	/**
+	 * Dispatched when the user releases the mouse button anywhere that the page can detect it (this varies slightly between browsers).
+	 * See the {{#crossLink "MouseEvent"}}{{/crossLink}} class for a listing of event properties.
+	 * @event stagemouseup
+	 * @since 0.6.0
+	 */
+
+	/**
+	 * Dispatched when the user the user releases the mouse button anywhere that the page can detect it (this varies slightly between browsers).
+	 * See the {{#crossLink "MouseEvent"}}{{/crossLink}} class for a listing of event properties.
+	 * @event stagemouseup
+	 * @since 0.6.0
+	 */
 
 // public properties:
 	/**
 	 * Indicates whether the stage should automatically clear the canvas before each render. You can set this to false to manually
 	 * control clearing (for generative art, or when pointing multiple stages at the same canvas for example).
 	 * @property autoClear
-	 * @type Boolean
+	 * @type {Boolean}
 	 * @default true
 	 **/
 	p.autoClear = true;
@@ -70,7 +114,7 @@ var p = Stage.prototype = new ns.Container();
 	 * The canvas the stage will render to. Multiple stages can share a single canvas, but you must disable autoClear for all but the
 	 * first stage that will be ticked (or they will clear each other's render).
 	 * @property canvas
-	 * @type HTMLCanvasElement
+	 * @type {HTMLCanvasElement | Object}
 	 **/
 	p.canvas = null;
 
@@ -78,40 +122,43 @@ var p = Stage.prototype = new ns.Container();
 	 * READ-ONLY. The current mouse X position on the canvas. If the mouse leaves the canvas, this will indicate the most recent
 	 * position over the canvas, and mouseInBounds will be set to false.
 	 * @property mouseX
-	 * @type Number
+	 * @type {Number}
 	 **/
-	p.mouseX = null;
+	p.mouseX = 0;
 
 	/**
 	 * READ-ONLY. The current mouse Y position on the canvas. If the mouse leaves the canvas, this will indicate the most recent
 	 * position over the canvas, and mouseInBounds will be set to false.
 	 * @property mouseY
-	 * @type Number
+	 * @type {Number}
 	 **/
-	p.mouseY = null;
+	p.mouseY = 0;
 
 	/**
 	 * The onMouseMove callback is called when the user moves the mouse over the canvas.  The handler is passed a single param
 	 * containing the corresponding MouseEvent instance.
-	 * @event onMouseMove
-	 * @param {MouseEvent} event A MouseEvent instance with information about the current mouse event.
-	 **/
+	 * @property onMouseMove
+	 * @type Function
+	 * @deprecated In favour of the "stagemousemove" event. Will be removed in a future version.
+	 */
 	p.onMouseMove = null;
 
 	/**
 	 * The onMouseUp callback is called when the user releases the mouse button anywhere that the page can detect it.  The handler
 	 * is passed a single param containing the corresponding MouseEvent instance.
-	 * @event onMouseUp
-	 * @param {MouseEvent} event A MouseEvent instance with information about the current mouse event.
-	 **/
+	 * @property onMouseUp
+	 * @type Function
+	 * @deprecated In favour of the "stagemouseup" event. Will be removed in a future version.
+	 */
 	p.onMouseUp = null;
 
 	/**
 	 * The onMouseDown callback is called when the user presses the mouse button over the canvas.  The handler is passed a single
 	 * param containing the corresponding MouseEvent instance.
-	 * @event onMouseDown
-	 * @param {MouseEvent} event A MouseEvent instance with information about the current mouse event.
-	 **/
+	 * @property onMouseDown
+	 * @type Function
+	 * @deprecated In favour of the "stagemousedown" event. Will be removed in a future version.
+	 */
 	p.onMouseDown = null;
 
 	/**
@@ -120,25 +167,44 @@ var p = Stage.prototype = new ns.Container();
 	 * @property snapToPixelEnabled
 	 * @type Boolean
 	 * @default false
+	 * @deprecated Hardware acceleration makes this not beneficial
 	 **/
 	p.snapToPixelEnabled = false;
 
 	/**
 	 * Indicates whether the mouse is currently within the bounds of the canvas.
 	 * @property mouseInBounds
-	 * @type Boolean
+	 * @type {Boolean}
 	 * @default false
 	 **/
 	p.mouseInBounds = false;
 
 	/**
-	 * If false, tick callbacks will be called on all display objects on the stage prior to rendering to the canvas.
+	 * If true, tick callbacks will be called on all display objects on the stage prior to rendering to the canvas.
+	 * You can call 
 	 * @property tickOnUpdate
 	 * @type Boolean
-	 * @default false
+	 * @default true
 	 **/
 	p.tickOnUpdate = true;
 
+	/**
+	 * If true, mouse move events will continue to be called when the mouse leaves the target canvas. See
+	 * mouseInBounds, and MouseEvent.x/y/rawX/rawY.
+	 * @property mouseMoveOutside
+	 * @type Boolean
+	 * @default false
+	 **/
+	console.log("TODO: verify Stage.mouseMoveOutside works")
+	p.mouseMoveOutside = false;
+
+	/**
+	 * The hitArea property is not supported for Stage.
+	 * @property hitArea
+	 * @type {DisplayObject}
+	 * @default null
+	 */
+	
 // private properties:
 
 	/**
@@ -169,14 +235,14 @@ var p = Stage.prototype = new ns.Container();
 	/**
 	 * @property _mouseOverIntervalID
 	 * @protected
-	 * @type Number
+	 * @type {Number}
 	 **/
 	p._mouseOverIntervalID = null;
 
 // constructor:
 	/**
 	 * @property DisplayObject_initialize
-	 * @type Function
+	 * @type {Function}
 	 * @private
 	 **/
 	p.Container_initialize = p.initialize;
@@ -184,26 +250,27 @@ var p = Stage.prototype = new ns.Container();
 	/**
 	 * Initialization method.
 	 * @method initialize
-	 * param {HTMLCanvasElement} canvas A canvas object, or the string id of a canvas object in the current document.
+	 * @param {HTMLCanvasElement | String | Object} canvas A canvas object, or the string id of a canvas object in the current document.
 	 * @protected
 	 **/
 	/*
-	 //-- EaselJS
-	 p.initialize = function(canvas) {
+	//-- EaselJS
+	p.initialize = function(canvas) {
 		this.Container_initialize();
-		this.canvas = (canvas instanceof HTMLCanvasElement) ? canvas : document.getElementById(canvas);
+		this.canvas = (typeof canvas == "string") ? document.getElementById(canvas) : canvas;
 		this._pointerData = {};
-		this._enableMouseEvents(true);
+		this.enableDOMEvents(true);
 	}
 	*/
 	p.initialize = function(canvas) {
-		if(canvas.isFl == true) {
+		if(canvas.isFl === true) {
 		  //-- Already a CanvasFl
 		  this.canvas = canvas;
 		}
 		else {
 		  //-- Not a CanvasFl
-		  this.canvas = new ns.CanvasFl(canvas);
+		  canvas = (typeof canvas == "string") ? document.getElementById(canvas) : canvas;
+		  this.canvas = new createjs.CanvasFl(canvas);
 		}
 		
 		this.canvas._stage = this;
@@ -211,7 +278,8 @@ var p = Stage.prototype = new ns.Container();
 		//-- Begin EaselFl specific setup		
 		this.Container_initialize();
 		
-		this._enableMouseEvents(true);
+		this._pointerData = {};
+		this.enableDOMEvents(true);
 		
 		//-- Set this container as Stage in flash
 		var ctx = this.canvas.getContext('2d');			
@@ -229,23 +297,27 @@ var p = Stage.prototype = new ns.Container();
 	 **/
 
 	/**
-	 * Each time the update method is called, the stage will tick any descendants exposing a tick method (ex. BitmapAnimation)
-	 * and render its entire display list to the canvas.
+	 * Each time the update method is called, the stage will tick any descendants exposing a tick method (ex. {{#crossLink "BitmapAnimation"}}{{/crossLink}})
+	 * and render its entire display list to the canvas. Any parameters passed to update will be passed on to any
+	 * onTick handlers.
 	 * @method update
 	 **/
 	/*
 	 //-- EaselJS
-	p.update = function(data) {
+	p.update = function() {
 		if (!this.canvas) { return; }
 		if (this.autoClear) { this.clear(); }
 		Stage._snapToPixelEnabled = this.snapToPixelEnabled;
-		if (this.tickOnUpdate) {
-			this._tick(data);
-		}
-		this.draw(this.canvas.getContext("2d"), false, this.getConcatenatedMatrix(this._matrix));
+		if (this.tickOnUpdate) { this._tick((arguments.length ? arguments : null)); }
+		var ctx = this.canvas.getContext("2d");
+		ctx.save();
+		this.updateContext(ctx);
+		this.draw(ctx, false);
+		ctx.restore();
 	}
 	*/
-	p.update = function(data) {
+	console.log('TODO: verify draw method fired via Stage.update still has correct params');
+	p.update = function() {
 		if(!(this.canvas && this.canvas._ctx && this.canvas._ctx.flReady)) { return; }
 		
 		if(this.autoClear === false) {
@@ -257,29 +329,41 @@ var p = Stage.prototype = new ns.Container();
 		}
 		
 		Stage._snapToPixelEnabled = this.snapToPixelEnabled;
-		
-		if(this.tickOnUpdate) {
-			this._tick(data);
-		}
+
+		if (this.tickOnUpdate) { this._tick((arguments.length ? arguments : null)); }
 		
 		//-- Should anything be passed in place of the canvas, the first parameter?
 		this.draw( this.canvas._ctx, false, this.getConcatenatedMatrix(this._matrix));
 		
 		//-- send commands to Flash movie
 		this.canvas._ctx._flFlush();
-
-	}
+	};
 
 	/**
-	 * Calls the update method. Useful for adding stage as a listener to Ticker directly.
+	 * Calls the update method. Useful for adding stage as a listener to {{#crossLink "Ticker"}}{{/crossLink}} directly.
 	 * @property tick
-	 * @private
+	 * @deprecated In favour of using Ticker.addEventListener in conjunction with handleEvent.
 	 * @type Function
 	 **/
 	p.tick = p.update;
 
 	/**
-	 * Clears the target canvas. Useful if autoClear is set to false.
+	 * Default event handler that calls Stage.update() when a "tick" event is received. This allows you to register a
+	 * Stage instance as a event listener on {{#crossLink "Ticker"}}{{/crossLink}} directly, using:
+	 * 
+	 *      Ticker.addEventListener("tick", myStage");
+	 * 
+	 * Note that if you subscribe to ticks using this pattern then the tick event object will be passed through to display
+	 * object tick handlers, instead of delta and paused parameters.
+	 * @property handleEvent
+	 * @type Function
+	 **/
+	p.handleEvent = function(evt) {
+		if (evt.type == "tick") { this.update(evt); }
+	}
+
+	/**
+	 * Clears the target canvas. Useful if <code>autoClear</code> is set to false.
 	 * @method clear
 	 **/
 	/*
@@ -292,11 +376,13 @@ var p = Stage.prototype = new ns.Container();
 	}
 	*/
 	p.clear = function() {
+		//this only has usage where autoclear is false or ticker is not auto updating
+		//could potentially clear blit bmp and hide internal stage in flash until next draw...
 		if(Stage.FL_THROW_UNIMPLEMENTED) throw 'EaseFl:Stage.clear not yet implemented';
 	}
 
 	/**
-	 * Returns a data url that contains a Base64 encoded image of the contents of the stage. The returned data url can be
+	 * Returns a data url that contains a Base64-encoded image of the contents of the stage. The returned data url can be
 	 * specified as the src value of an image element.
 	 * @method toDataURL
 	 * @param {String} backgroundColor The background color to be used for the generated image. The value can be any value HTML color
@@ -359,12 +445,13 @@ var p = Stage.prototype = new ns.Container();
 	}
 
 	/**
-	 * Enables or disables (by passing a frequency of 0) mouse over handlers (onMouseOver and onMouseOut) for this stage's display
+	 * Enables or disables (by passing a frequency of 0) mouse over events (mouseover and mouseout) for this stage's display
 	 * list. These events can be expensive to generate, so they are disabled by default, and the frequency of the events
-	 * can be controlled independently of mouse move events via the optional frequency parameter.
+	 * can be controlled independently of mouse move events via the optional <code>frequency</code> parameter.
 	 * @method enableMouseOver
-	 * @param {Number} frequency Optional param specifying the maximum number of times per second to broadcast mouse over/out events. Set to 0 to disable mouse
-	 * over events completely. Maximum is 50. A lower frequency is less responsive, but uses less CPU. Default is 20.
+	 * @param {Number} [frequency=20] Optional param specifying the maximum number of times per second to broadcast
+	 * mouse over/out events. Set to 0 to disable mouse over events completely. Maximum is 50. A lower frequency is less
+	 * responsive, but uses less CPU.
 	 **/
 	/*
 	 //-- EaselJS
@@ -380,8 +467,79 @@ var p = Stage.prototype = new ns.Container();
 	}
 	*/
 	p.enableMouseOver = function(frequency) {
-		/* MouseEvents are currently always enabled in EaselJS; they can be disabled on each DisplayObject */
+		/* MouseEvents are currently always enabled in EaselFL; they can be disabled on each DisplayObject */
 	}
+
+	/**
+	 * Enables or disables the  event listeners that stage adds to DOM elements (window, document and canvas).
+	 * It is good practice to disable events when disposing of a Stage instance, otherwise the stage will
+	 * continue to receive events from the page.
+	 * @method enableDOMEvents
+	 * @param {Boolean} [enable=true] Indicates whether to enable or disable the events. Default is true.
+	 **/
+	/*
+	//-- EaselJS
+	p.enableDOMEvents = function(enable) {
+		if (enable == null) { enable = true; }
+		var n, o, ls = this._eventListeners;
+		if (!enable && ls) {
+			for (n in ls) {
+				o = ls[n];
+				o.t.removeEventListener(n, o.f);
+			}
+			this._eventListeners = null;
+		} else if (enable && !ls) {
+			var t = window.addEventListener ? window : document;
+			var _this = this;
+			ls = this._eventListeners = {};
+			ls["mouseup"] = {t:t, f:function(e) { _this._handleMouseUp(e)} };
+			ls["mousemove"] = {t:t, f:function(e) { _this._handleMouseMove(e)} };
+			ls["dblclick"] = {t:t, f:function(e) { _this._handleDoubleClick(e)} };
+			t = this.canvas;
+			if (t) { ls["mousedown"] = {t:t, f:function(e) { _this._handleMouseDown(e)} }; }
+			
+			for (n in ls) {
+				o = ls[n];
+				o.t.addEventListener(n, o.f);
+			}
+		}
+	}
+	*/
+
+console.log("TODO: verify IE uses removeEvent as counterpart of attachEvent");
+console.log("TODO: verify IE event names");
+console.log("TODO: verify mousedown behavior in Stage");
+
+	p.enableDOMEvents = function(enable) {
+		var n, o, ls, t, bind, unbind, ms, _this;
+
+		if (enable == null) { enable = true; }
+
+		ms = Stage.__MS_BINDING;
+
+		if(!enable && ls) {
+			unbind = ms ? 'detachEvent' : 'removeEventListener';
+
+			for (n in ls) {
+				o = ls[n];
+				o.t[unbind](o.native, o.f);
+			}
+		} else if (enable && !ls) {
+			_this = this;
+			bind = ms ? 'attachEvent' : 'addEventListener';
+			t = document[bind] ? document : window; //prefer document since IE8 window has 'attachEvent' but fails to call after binding
+			ls = this._eventListeners = {};
+			ls["mouseup"] = {t:t, native: ms?'onmouseup':'mouseup', f:function(e) { _this._handleMouseUp(e);} };
+			ls["mousemove"] = {t:t, native: ms?'onmousemove':'mousemove', f:function(e) { _this._handleMouseMove(e);} };
+			ls["dblclick"] = {t:t, native: ms?'ondblclick':'dblclick', f:function(e) { _this._handleDoubleClick(e);} };
+
+			for (n in ls) {
+				o = ls[n];
+				o.t[bind](o.native, o.f);
+			}
+		}
+	};
+
 
 	/**
 	 * Returns a clone of this Stage.
@@ -403,47 +561,21 @@ var p = Stage.prototype = new ns.Container();
 	}
 
 	// private methods:
-
-	/**
-	 * @method _enableMouseEvents
-	 * @protected
-	 **/
-	/*
-	 //-- EaselJS
-	p._enableMouseEvents = function() {
-		var o = this;
-		var evtTarget = window.addEventListener ? window : document;
-		evtTarget.addEventListener("mouseup", function(e) { o._handleMouseUp(e); }, false);
-		evtTarget.addEventListener("mousemove", function(e) { o._handleMouseMove(e); }, false);
-		evtTarget.addEventListener("dblclick", function(e) { o._handleDoubleClick(e); }, false);
-		// this is to facilitate extending Stage:
-		if (this.canvas) { this.canvas.addEventListener("mousedown", function(e) { o._handleMouseDown(e); }, false); }
-	}
-	*/
-	p._enableMouseEvents = function() {
-	  var o = this;
-	  var evtBindMethod = Stage.__MS_BINDING? 'attachEvent' : 'addEventListener';
-	  var evtTarget = document[evtBindMethod] ? document : window; //prefer document since IE8 window has 'attachEvent' but fails to call after binding
-	  evtTarget[evtBindMethod]( (Stage.__MS_BINDING ? "onmousemove" : "mousemove"), function(e) { o._handleMouseMove(e); }, false);
-	}
 	
 	/**
 	 * @method _getPointerData
 	 * @protected
 	 * @param {Number} id
 	 **/
-	/*
-	 //-- EaselJS
 	p._getPointerData = function(id) {
 		var data = this._pointerData[id];
 		if (!data) {
-			data = this._pointerData[id] = {};
+			data = this._pointerData[id] = {x:0,y:0};
 			// if it's the mouse (id == NaN) or the first new touch, then make it the primary pointer id:
 			if (this._primaryPointerID == null) { this._primaryPointerID = id; }
 		}
 		return data;
 	}
-	*/
 	
 	/**
 	 * @method _handleMouseMove
@@ -481,7 +613,7 @@ var p = Stage.prototype = new ns.Container();
 		
 		if (!inBounds && !this.mouseInBounds) { return; }
 		
-		var evt = new ns.MouseEvent("onMouseMove", this.mouseX, this.mouseY, this, e);
+		var evt = new createjs.MouseEvent("onMouseMove", this.mouseX, this.mouseY, this, e);
 
 		if (this.onMouseMove) { this.onMouseMove(evt); }
 		if (this._activeMouseEvent && this._activeMouseEvent.onMouseMove) { this._activeMouseEvent.onMouseMove(evt); }
@@ -499,15 +631,25 @@ var p = Stage.prototype = new ns.Container();
 	 //-- EaselJS
 	p._handlePointerMove = function(id, e, pageX, pageY) {
 		if (!this.canvas) { return; } // this.mouseX = this.mouseY = null;
+		var evt;
 		var o = this._getPointerData(id);
 
 		var inBounds = o.inBounds;
 		this._updatePointerPosition(id, pageX, pageY);
-		if (!inBounds && !o.inBounds) { return; }
-		var evt = new ns.MouseEvent("onMouseMove", o.x, o.y, this, e, id, id == this._primaryPointerID);
-
-		if (this.onMouseMove) { this.onMouseMove(evt); }
-		if (o.event && o.event.onMouseMove) { o.event.onMouseMove(evt); }
+		if (!inBounds && !o.inBounds && !this.mouseMoveOutside) { return; }
+		
+		if (this.onMouseMove || this.hasEventListener("stagemousemove"))  {
+			evt = new createjs.MouseEvent("stagemousemove", o.x, o.y, this, e, id, id == this._primaryPointerID, o.rawX, o.rawY);
+			this.onMouseMove&&this.onMouseMove(evt);
+			this.dispatchEvent(evt);
+		}
+		
+		var oEvt = o.event;
+		if (oEvt && (oEvt.onMouseMove || oEvt.hasEventListener("mousemove"))) {
+			evt = new createjs.MouseEvent("mousemove", o.x, o.y, oEvt.target, e, id, id == this._primaryPointerID, o.rawX, o.rawY);
+			oEvt.onMouseMove&&oEvt.onMouseMove(evt);
+			oEvt.dispatchEvent(evt, oEvt.target);
+		}
 	}
 	*/
 
@@ -521,17 +663,25 @@ var p = Stage.prototype = new ns.Container();
 	/*
 	 //-- EaselJS
 	p._updatePointerPosition = function(id, pageX, pageY) {
-		var element = this.canvas;
-		do {
-			pageX -= element.offsetLeft;
-			pageY -= element.offsetTop;
-		} while (element = element.offsetParent);
+		var rect = this._getElementRect(this.canvas);
+		pageX -= rect.left;
+		pageY -= rect.top;
 		
+		var w = this.canvas.width;
+		var h = this.canvas.height;
+		pageX /= (rect.right-rect.left)/w;
+		pageY /= (rect.bottom-rect.top)/h;
 		var o = this._getPointerData(id);
-		if (o.inBounds = (pageX >= 0 && pageY >= 0 && pageX < this.canvas.width && pageY < this.canvas.height)) {
+		if (o.inBounds = (pageX >= 0 && pageY >= 0 && pageX <= w-1 && pageY <= h-1)) {
 			o.x = pageX;
 			o.y = pageY;
+		} else if (this.mouseMoveOutside) {
+			o.x = pageX < 0 ? 0 : (pageX > w-1 ? w-1 : pageX);
+			o.y = pageY < 0 ? 0 : (pageY > h-1 ? h-1 : pageY);
 		}
+		
+		o.rawX = pageX;
+		o.rawY = pageY;
 		
 		if (id == this._primaryPointerID) {
 			this.mouseX = o.x;
@@ -559,6 +709,35 @@ var p = Stage.prototype = new ns.Container();
 	}
 	
 
+	console.log("TODO: implement IE8 Stage._getElementRect");
+
+	/**
+	 * @method _getElementRect
+	 * @protected
+	 * @param {HTMLElement} e
+	 **/
+	p._getElementRect = function(e) {
+		var bounds;
+		try { bounds = e.getBoundingClientRect(); } // this can fail on disconnected DOM elements in IE9
+		catch (err) { bounds = {top: e.offsetTop, left: e.offsetLeft, width:e.offsetWidth, height:e.offsetHeight}; }
+		
+		var offX = (window.pageXOffset || document.scrollLeft || 0) - (document.clientLeft || document.body.clientLeft || 0);
+		var offY = (window.pageYOffset || document.scrollTop || 0) - (document.clientTop  || document.body.clientTop  || 0);
+		
+		var styles = window.getComputedStyle ? getComputedStyle(e) : e.currentStyle; // IE <9 compatibility.
+		var padL = parseInt(styles.paddingLeft)+parseInt(styles.borderLeftWidth);
+		var padT = parseInt(styles.paddingTop)+parseInt(styles.borderTopWidth);
+		var padR = parseInt(styles.paddingRight)+parseInt(styles.borderRightWidth);
+		var padB = parseInt(styles.paddingBottom)+parseInt(styles.borderBottomWidth);
+		
+		// note: in some browsers bounds properties are read only.
+		return {
+			left: bounds.left+offX+padL,
+			right: bounds.right+offX-padR,
+			top: bounds.top+offY+padT,
+			bottom: bounds.bottom+offY-padB
+		}
+	};
 
 
 /**
@@ -566,12 +745,9 @@ var p = Stage.prototype = new ns.Container();
 	 * @protected
 	 * @param {MouseEvent} e
 	 **/
-	/*
-	 //-- EaselJS
 	p._handleMouseUp = function(e) {
 		this._handlePointerUp(-1, e, false);
 	}
-	*/
 
 	/**
 	 * @method _handlePointerUp
@@ -580,44 +756,53 @@ var p = Stage.prototype = new ns.Container();
 	 * @param {Event} e
 	 * @param {Boolean} clear
 	 **/
-	/*
-	 //-- EaselJS
 	p._handlePointerUp = function(id, e, clear) {
 		var o = this._getPointerData(id);
+		var evt;
 		
-		var evt = new ns.MouseEvent("onMouseUp", o.x, o.y, this, e, id, id==this._primaryPointerID);
-		if (this.onMouseUp) { this.onMouseUp(evt); }
-		// TODO: should this event have the target set to the original target? Ditto for mousemove.
-		if (o.event && o.event.onMouseUp) { o.event.onMouseUp(evt); }
-		if (o.target && o.target.onClick && this._getObjectsUnderPoint(o.x, o.y, null, true, (this._mouseOverIntervalID ? 3 : 1)) == o.target) {
-			o.target.onClick(new ns.MouseEvent("onClick", o.x, o.y, o.target, e, id, id==this._primaryPointerID));
+		if (this.onMouseMove || this.hasEventListener("stagemouseup")) {
+			evt = new createjs.MouseEvent("stagemouseup", o.x, o.y, this, e, id, id==this._primaryPointerID, o.rawX, o.rawY);
+			this.onMouseUp&&this.onMouseUp(evt);
+			this.dispatchEvent(evt);
 		}
+		
+		var oEvt = o.event;
+		if (oEvt && (oEvt.onMouseUp || oEvt.hasEventListener("mouseup"))) {
+			evt = new createjs.MouseEvent("mouseup", o.x, o.y, oEvt.target, e, id, id==this._primaryPointerID, o.rawX, o.rawY);
+			oEvt.onMouseUp&&oEvt.onMouseUp(evt);
+			oEvt.dispatchEvent(evt, oEvt.target);
+		}
+		
+		var oTarget = o.target;
+		if (oTarget && (oTarget.onClick  || oTarget.hasEventListener("click")) && this._getObjectsUnderPoint(o.x, o.y, null, true, (this._mouseOverIntervalID ? 3 : 1)) == oTarget) {
+			evt = new createjs.MouseEvent("click", o.x, o.y, oTarget, e, id, id==this._primaryPointerID, o.rawX, o.rawY);
+			oTarget.onClick&&oTarget.onClick(evt);
+			oTarget.dispatchEvent(evt);
+		}
+		
 		if (clear) {
 			if (id == this._primaryPointerID) { this._primaryPointerID = null; }
 			delete(this._pointerData[id]);
 		} else { o.event = o.target = null; }
 	}
-	*/
 
 	/**
 	 * @method _handleMouseDown
 	 * @protected
 	 * @param {MouseEvent} e
 	 **/
-	/*
-	 //-- EaselJS
 	p._handleMouseDown = function(e) {
 		this._handlePointerDown(-1, e, false);
 	}
-	*/
+	
 	
 	/**
 	 * @method _handlePointerDown
 	 * @protected
 	 * @param {Number} id
 	 * @param {Event} e
-	 * @param {Number} pageX
-	 * @param {Number} pageY
+	 * @param {Number} x
+	 * @param {Number} y
 	 **/
 	/*
 	 //-- EaselJS
@@ -625,20 +810,35 @@ var p = Stage.prototype = new ns.Container();
 		var o = this._getPointerData(id);
 		if (y != null) { this._updatePointerPosition(id, x, y); }
 		
-		if (this.onMouseDown) {
-			this.onMouseDown(new ns.MouseEvent("onMouseDown", o.x, o.y, this, e, id, id==this._primaryPointerID));
+		if (this.onMouseDown || this.hasEventListener("stagemousedown")) {
+			var evt = new createjs.MouseEvent("stagemousedown", o.x, o.y, this, e, id, id==this._primaryPointerID, o.rawX, o.rawY);
+			this.onMouseDown&&this.onMouseDown(evt);
+			this.dispatchEvent(evt);
 		}
+		
 		var target = this._getObjectsUnderPoint(o.x, o.y, null, (this._mouseOverIntervalID ? 3 : 1));
 		if (target) {
-			if (target.onPress) {
-				var evt = new ns.MouseEvent("onPress", o.x, o.y, target, e, id, id==this._primaryPointerID);
-				target.onPress(evt);
-				if (evt.onMouseMove || evt.onMouseUp) { o.event = evt; }
-			}
 			o.target = target;
+			if (target.onPress || target.hasEventListener("mousedown")) {
+				evt = new createjs.MouseEvent("mousedown", o.x, o.y, target, e, id, id==this._primaryPointerID, o.rawX, o.rawY);
+				target.onPress&&target.onPress(evt);
+				target.dispatchEvent(evt);
+				
+				if (evt.onMouseMove || evt.onMouseUp || evt.hasEventListener("mousemove") || evt.hasEventListener("mouseup")) { o.event = evt; }
+			}
 		}
 	}
 	*/
+	p._handlePointerDown = function(id, e, x, y) {
+		var o = this._getPointerData(id);
+		if (y != null) { this._updatePointerPosition(id, x, y); }
+		
+		if (this.onMouseDown || this.hasEventListener("stagemousedown")) {
+			var evt = new createjs.MouseEvent("stagemousedown", o.x, o.y, this, e, id, id==this._primaryPointerID, o.rawX, o.rawY);
+			this.onMouseDown&&this.onMouseDown(evt);
+			this.dispatchEvent(evt);
+		}
+	}
 
 	/**
 	 * @method _testMouseOver
@@ -650,6 +850,7 @@ var p = Stage.prototype = new ns.Container();
 		// for now, this only tests the mouse.
 		if (this._primaryPointerID != -1) { return; }
 		
+		// only update if the mouse position has changed. This provides a lot of optimization, but has some trade-offs.
 		if (this.mouseX == this._mouseOverX && this.mouseY == this._mouseOverY && this.mouseInBounds) { return; }
 		var target = null;
 		if (this.mouseInBounds) {
@@ -657,14 +858,24 @@ var p = Stage.prototype = new ns.Container();
 			this._mouseOverX = this.mouseX;
 			this._mouseOverY = this.mouseY;
 		}
-
-		if (this._mouseOverTarget != target) {
-			if (this._mouseOverTarget && this._mouseOverTarget.onMouseOut) {
-				this._mouseOverTarget.onMouseOut(new ns.MouseEvent("onMouseOut", this.mouseX, this.mouseY, this._mouseOverTarget));
+		
+		var mouseOverTarget = this._mouseOverTarget;
+		if (mouseOverTarget != target) {
+			var o = this._getPointerData(-1);
+			if (mouseOverTarget && (mouseOverTarget.onMouseOut ||  mouseOverTarget.hasEventListener("mouseout"))) {
+				var evt = new createjs.MouseEvent("mouseout", o.x, o.y, mouseOverTarget, null, -1, o.rawX, o.rawY);
+				mouseOverTarget.onMouseOut&&mouseOverTarget.onMouseOut(evt);
+				mouseOverTarget.dispatchEvent(evt);
 			}
-			if (target && target.onMouseOver) {
-				target.onMouseOver(new ns.MouseEvent("onMouseOver", this.mouseX, this.mouseY, target));
+			if (mouseOverTarget) { this.canvas.style.cursor = ""; }
+			
+			if (target && (target.onMouseOver || target.hasEventListener("mouseover"))) {
+				evt = new createjs.MouseEvent("mouseover", o.x, o.y, target, null, -1, o.rawX, o.rawY);
+				target.onMouseOver&&target.onMouseOver(evt);
+				target.dispatchEvent(evt);
 			}
+			if (target) { this.canvas.style.cursor = target.cursor||""; }
+			
 			this._mouseOverTarget = target;
 		}
 	}
@@ -678,13 +889,12 @@ var p = Stage.prototype = new ns.Container();
 	/*
 	 //-- EaselJS
 	p._handleDoubleClick = function(e) {
-		// TODO: add Touch support for double tap.
-		if (this.onDoubleClick) {
-			this.onDoubleClick(new ns.MouseEvent("onDoubleClick", this.mouseX, this.mouseY, this, e, NaN, true));
-		}
-		var target = this._getObjectsUnderPoint(this.mouseX, this.mouseY, null, (this._mouseOverIntervalID ? 3 : 1));
-		if (target && target.onDoubleClick) {
-			target.onDoubleClick(new ns.MouseEvent("onDoubleClick", this.mouseX, this.mouseY, target, e));
+		var o = this._getPointerData(-1);
+		var target = this._getObjectsUnderPoint(o.x, o.y, null, (this._mouseOverIntervalID ? 3 : 1));
+		if (target && (target.onDoubleClick || target.hasEventListener("dblclick"))) {
+			evt = new createjs.MouseEvent("dblclick", o.x, o.y, target, e, -1, true, o.rawX, o.rawY);
+			target.onDoubleClick&&target.onDoubleClick(evt);
+			target.dispatchEvent(evt);
 		}
 	}
 	*/
@@ -720,7 +930,7 @@ var p = Stage.prototype = new ns.Container();
 	 /**
 		* READ-ONLY Indicates whether the Flash Movie is ready.
 		* @property
-		* @type Boolean
+		* @type {Boolean}
 		**/
 	 p.flReady = false;
 
@@ -732,6 +942,6 @@ var p = Stage.prototype = new ns.Container();
 	
 	/**** End EaselFL specific code ****/
 
-ns.Stage = Stage;
+createjs.Stage = Stage;
 
-}(createjs||(createjs={})));
+}());

@@ -26,21 +26,26 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(ns) {
+// namespace:
+this.createjs = this.createjs||{};
+
+(function() {
 
 /**
-* BoxBlurFilter applies a box blur to DisplayObjects
-* @class BoxBlurFilter
-* @augments Filter
-* @constructor
-* @param {Number} blurX
-* @param {Number} blurY
-* @param {Number} quality
-**/
+ * BoxBlurFilter applies a box blur to DisplayObjects
+ *
+ * See {{#crossLink "Filter"}}{{/crossLink}} for an example of how to apply filters.
+ * @class BoxBlurFilter
+ * @extends Filter
+ * @constructor
+ * @param {Number} blurX
+ * @param {Number} blurY
+ * @param {Number} quality
+ **/
 var BoxBlurFilter = function( blurX, blurY, quality ) {
   this.initialize( blurX, blurY, quality );
 }
-var p = BoxBlurFilter.prototype = new ns.Filter();
+var p = BoxBlurFilter.prototype = new createjs.Filter();
 
 // constructor:
 	/** @ignore */
@@ -87,20 +92,21 @@ var p = BoxBlurFilter.prototype = new ns.Filter();
 	 **/
 	p.getBounds = function() {
 		// TODO: this doesn't properly account for blur quality.
-		return new ns.Rectangle(-this.blurX,-this.blurY,2*this.blurX,2*this.blurY);
+		return new createjs.Rectangle(-this.blurX,-this.blurY,2*this.blurX,2*this.blurY);
 	}
 
 	/**
 	 * Applies the filter to the specified context.
 	 * @method applyFilter
-	 * @param ctx The 2D context to use as the source.
-	 * @param x The x position to use for the source rect.
-	 * @param y The y position to use for the source rect.
-	 * @param width The width to use for the source rect.
-	 * @param height The height to use for the source rect.
-	 * @param targetCtx Optional. The 2D context to draw the result to. Defaults to the context passed to ctx.
-	 * @param targetX Optional. The x position to draw the result to. Defaults to the value passed to x.
-	 * @param targetY Optional. The y position to draw the result to. Defaults to the value passed to y.
+	 * @param {CanvasRenderingContext2D} ctx The 2D context to use as the source.
+	 * @param {Number} x The x position to use for the source rect.
+	 * @param {Number} y The y position to use for the source rect.
+	 * @param {Number} width The width to use for the source rect.
+	 * @param {Number} height The height to use for the source rect.
+	 * @param {CanvasRenderingContext2D} targetCtx Optional. The 2D context to draw the result to. Defaults to the context passed to ctx.
+	 * @param {Number} targetX Optional. The x position to draw the result to. Defaults to the value passed to x.
+	 * @param {Number} targetY Optional. The y position to draw the result to. Defaults to the value passed to y.
+	 * @return {Boolean} 
 	 **/
 	p.applyFilter = function(ctx, x, y, width, height, targetCtx, targetX, targetY) {
 		targetCtx = targetCtx || ctx;
@@ -236,6 +242,7 @@ var p = BoxBlurFilter.prototype = new ns.Filter();
 
 	/**
 	 * Returns a clone of this object.
+	 * @return {BoxBlurFilter}
 	 **/
 	p.clone = function() {
 		return new BoxBlurFilter(this.blurX, this.blurY, this.quality);
@@ -243,6 +250,7 @@ var p = BoxBlurFilter.prototype = new ns.Filter();
 
 	/**
 	 * Returns a string representation of this object.
+	 * @return {String}
 	 **/
 	p.toString = function() {
 		return "[BoxBlurFilter]";
@@ -252,6 +260,5 @@ var p = BoxBlurFilter.prototype = new ns.Filter();
 
 
 
-ns.BoxBlurFilter = BoxBlurFilter;
-}(createjs||(createjs={})));
-var createjs;
+createjs.BoxBlurFilter = BoxBlurFilter;
+}());

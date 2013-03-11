@@ -1,4 +1,4 @@
-package display;
+/* TEST */package display;
 
 import flash.display.Sprite;
 import flash.display.DisplayObjectContainer;
@@ -21,13 +21,15 @@ class DisplayObjectFl implements IDisplayable {
 		execs.set('flts', setFilters);
 		execs.set('mtx', setMatrix);		
 		execs.set('amck', addClickHandler);
+		execs.set('adck', addDoubleClickHandler);
 		execs.set('amot', addOutHandler);
 		execs.set('amov', addOverHandler);
-		execs.set('aprs', addPressHandler);
+		execs.set('amod', addDownHandler);
 		execs.set('rmck', removeClickHandler);
+		execs.set('rdck', removeDoubleClickHandler);
 		execs.set('rmot', removeOutHandler);
 		execs.set('rmov', removeOverHandler);
-		execs.set('rprs', removePressHandler);
+		execs.set('rmod', removeDownHandler);
 		execs.set('smen', setMouseEnabled);
 		execs.set('scrs', setHandCursor);
 		execs.set('sbtn', setButtonMode);
@@ -66,7 +68,18 @@ class DisplayObjectFl implements IDisplayable {
 	}
 	
 	inline static private function addClickHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{
-		target.display.addEventListener(MouseEvent.CLICK, target.handleClick, false, 0, true);
+		target.clickActive = true;
+
+		if(!target.dblClickActive) {
+			target.display.addEventListener(MouseEvent.CLICK, target.handleClick, false, 0, true);
+		}	}
+	
+	inline static private function addDoubleClickHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{
+		target.dblClickActive = true;
+
+		if(!target.clickActive) {
+			target.display.addEventListener(MouseEvent.CLICK, target.handleClick, false, 0, true);
+		}
 	}
 	
 	inline static private function addOverHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{
@@ -77,12 +90,24 @@ class DisplayObjectFl implements IDisplayable {
 		target.display.addEventListener(MouseEvent.MOUSE_OUT, target.handleOut, false, 0, true);
 	}
 	
-	inline static private function addPressHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{
-		target.display.addEventListener(MouseEvent.MOUSE_DOWN, target.handlePress, false, 0, true);
+	inline static private function addDownHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{
+		target.display.addEventListener(MouseEvent.MOUSE_DOWN, target.handleDown, false, 0, true);
 	}
 	
 	inline static private function removeClickHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{
-		target.display.removeEventListener(MouseEvent.CLICK, target.handleClick, false);
+		target.clickActive = false;
+
+		if(!target.dblClickActive) {
+			target.display.removeEventListener(MouseEvent.CLICK, target.handleClick, false);
+		}
+	}	
+	
+	inline static private function removeDoubleClickHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{
+		target.dblClickActive = false;
+
+		if(!target.clickActive) {
+			target.display.removeEventListener(MouseEvent.CLICK, target.handleClick, false);
+		}
 	}
 	
 	inline static private function removeOverHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{
@@ -93,8 +118,8 @@ class DisplayObjectFl implements IDisplayable {
 		target.display.removeEventListener(MouseEvent.MOUSE_OUT, target.handleOut, false);
 	}
 	
-	inline static private function removePressHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{
-		target.display.removeEventListener(MouseEvent.MOUSE_DOWN, target.handlePress, false);
+	inline static private function removeDownHandler(target:DisplayObjectFl, ?nada:Dynamic):Void{
+		target.display.removeEventListener(MouseEvent.MOUSE_DOWN, target.handleDown, false);
 	}
 	
 	inline static private function setMouseEnabled(target:DisplayObjectFl,isOn:Bool):Void{
@@ -166,7 +191,7 @@ class DisplayObjectFl implements IDisplayable {
 		var time:Float = Date.now().getTime();
 		if(time-lastMoveEvtTime>=33) {
 			lastMoveEvtTime = time;
-			var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'onMouseMove'};
+			var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'mousemove'};
 			Main.dispatch(evt);
 		}
 	}
@@ -177,7 +202,7 @@ class DisplayObjectFl implements IDisplayable {
 		e.target.removeEventListener(MouseEvent.MOUSE_UP, handleStageUp, false);
 		
 		//-- dispatch event to js
-		var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'onMouseUp'};
+		var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'mouseup'};
 		Main.dispatch(evt);
 	}
 
@@ -187,32 +212,55 @@ class DisplayObjectFl implements IDisplayable {
 	// stores the shadow props
 	private var _shadow:ShadowFl;
 	private var _filterFls:Array<IBitmapFilter>;
+	private var lastSingleClickTime:Float;
+	private var clickActive:Bool;
+	private var dblClickActive:Bool;
 	
-	public function new( id:Int ){ this.id = id;}
+	public function new( id:Int ){ 
+		this.id = id;
+		clickActive = dblClickActive = false;
+		lastSingleClickTime = 0.0;
+	}
 	
 	public function handleClick(e:MouseEvent):Void{
-		var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'onClick', id:this.id};
-		Main.dispatch(evt);
+		var evt:Dynamic;
+		var now:Float;
+		
+		if(clickActive) {
+			evt = {stageX:e.stageX, stageY:e.stageY, type:'click', id:this.id};
+			Main.dispatch(evt);
+		}
+		
+		if(dblClickActive) {
+			now = Date.now().getTime();
+			if(now-lastSingleClickTime<500) {	
+				lastSingleClickTime = 0.0;
+				evt = {stageX:e.stageX, stageY:e.stageY, type:'dblclick', id:this.id};
+				Main.dispatch(evt);
+			} else {
+				lastSingleClickTime = now;
+			}
+		}
 	}
 	
 	public function handleOver(e:MouseEvent):Void{
-		var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'onMouseOver', id:this.id};
+		var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'mouseover', id:this.id};
 		Main.dispatch(evt);	
 	}
 	
 	public function handleOut(e:MouseEvent):Void{
-		var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'onMouseOut', id:this.id};
+		var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'mouseout', id:this.id};
 		Main.dispatch(evt);	
 	}
 	
-	public function handlePress(e:MouseEvent):Void{
+	public function handleDown(e:MouseEvent):Void{
 		//-- subscribe stage to receive mousemove, up events
 		var stg = Control.stageFl;
 		stg.display.addEventListener(MouseEvent.MOUSE_MOVE, handleStageMove, false, 0, true);
 		stg.display.addEventListener(MouseEvent.MOUSE_UP, handleStageUp, false, 0, true);
 		
 		//-- dispatch event
-		var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'onPress', id:this.id};
+		var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'mousedown', id:this.id};
 		Main.dispatch(evt);	
 	}
 	

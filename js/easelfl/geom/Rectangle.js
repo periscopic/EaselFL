@@ -31,17 +31,24 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(ns) {
+// namespace:
+this.createjs = this.createjs||{};
+
+(function() {
 
 /**
-* Represents a rectangle as defined by the points (x, y) and (x+width, y+height).
-* @class Rectangle
-* @constructor
-* @param {Number} x X position. Default is 0.
-* @param {Number} y Y position. Default is 0.
-* @param {Number} width Width. Default is 0.
-* @param {Number} height Height. Default is 0.
-**/
+ * Represents a rectangle as defined by the points (x, y) and (x+width, y+height).
+ *
+ * @example
+ *      var rect = new createjs.Rectangle(0, 0, 100, 100);
+ *
+ * @class Rectangle
+ * @constructor
+ * @param {Number} [x=0] X position.
+ * @param {Number} [y=0] Y position.
+ * @param {Number} [width=0] The width of the Rectangle.
+ * @param {Number} [height=0] The height of the Rectangle.
+ **/
 var Rectangle = function(x, y, width, height) {
   this.initialize(x, y, width, height);
 }
@@ -51,28 +58,28 @@ var p = Rectangle.prototype;
 	/** 
 	 * X position. 
 	 * @property x
-	 * @type Number
+	 * @type {Number}
 	 **/
 	p.x = 0;
 	
 	/** 
 	 * Y position. 
 	 * @property y
-	 * @type Number
+	 * @type {Number}
 	 **/
 	p.y = 0;
 	
 	/** 
 	 * Width.
 	 * @property width
-	 * @type Number
+	 * @type {Number}
 	 **/
 	p.width = 0;
 	
 	/** 
 	 * Height.
 	 * @property height
-	 * @type Number
+	 * @type {Number}
 	 **/
 	p.height = 0;
 	
@@ -88,7 +95,7 @@ var p = Rectangle.prototype;
 		this.width = (width == null ? 0 : width);
 		this.height = (height == null ? 0 : height);
 
-		this._flId = ns.UID.get();
+		this._flId = createjs.UID.get();
 	}
 	
 // public methods:
@@ -160,6 +167,5 @@ var p = Rectangle.prototype;
 	}
 	/**** End EaselFL specific code ****/
 
-ns.Rectangle = Rectangle;
-}(createjs||(createjs={})));
-var createjs;
+createjs.Rectangle = Rectangle;
+}());

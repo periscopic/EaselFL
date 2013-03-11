@@ -26,26 +26,31 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(ns) {
+// namespace:
+this.createjs = this.createjs||{};
+
+(function() {
 
 /**
-* Applies color transforms.
-* @class ColorFilter
-* @constructor
-* @augments Filter
-* @param {Number} redMultiplier
-* @param {Number} greenMultiplier
-* @param {Number} blueMultiplier
-* @param {Number} alphaMultiplier
-* @param {Number} redOffset
-* @param {Number} greenOffset
-* @param {Number} blueOffset
-* @param {Number} alphaOffset
-**/
+ * Applies color transforms.
+ *
+ * See {{#crossLink "Filter"}}{{/crossLink}} for an example of how to apply filters.
+ * @class ColorFilter
+ * @constructor
+ * @extends Filter
+ * @param {Number} redMultiplier
+ * @param {Number} greenMultiplier
+ * @param {Number} blueMultiplier
+ * @param {Number} alphaMultiplier
+ * @param {Number} redOffset
+ * @param {Number} greenOffset
+ * @param {Number} blueOffset
+ * @param {Number} alphaOffset
+ **/
 var ColorFilter = function(redMultiplier, greenMultiplier, blueMultiplier, alphaMultiplier, redOffset, greenOffset, blueOffset, alphaOffset) {
   this.initialize(redMultiplier, greenMultiplier, blueMultiplier, alphaMultiplier, redOffset, greenOffset, blueOffset, alphaOffset);
 }
-var p = ColorFilter.prototype = new ns.Filter();
+var p = ColorFilter.prototype = new createjs.Filter();
 
 // public properties:
 	/**
@@ -125,14 +130,15 @@ var p = ColorFilter.prototype = new ns.Filter();
 	/**
 	 * Applies the filter to the specified context.
 	 * @method applyFilter
-	 * @param ctx The 2D context to use as the source.
-	 * @param x The x position to use for the source rect.
-	 * @param y The y position to use for the source rect.
-	 * @param width The width to use for the source rect.
-	 * @param height The height to use for the source rect.
-	 * @param targetCtx Optional. The 2D context to draw the result to. Defaults to the context passed to ctx.
-	 * @param targetX Optional. The x position to draw the result to. Defaults to the value passed to x.
-	 * @param targetY Optional. The y position to draw the result to. Defaults to the value passed to y.
+	 * @param {CanvasRenderingContext2D} ctx The 2D context to use as the source.
+	 * @param {Number} x The x position to use for the source rect.
+	 * @param {Number} y The y position to use for the source rect.
+	 * @param {Number} width The width to use for the source rect.
+	 * @param {Number} height The height to use for the source rect.
+	 * @param {CanvasRenderingContext2D} targetCtx Optional. The 2D context to draw the result to. Defaults to the context passed to ctx.
+	 * @param {Number} targetX Optional. The x position to draw the result to. Defaults to the value passed to x.
+	 * @param {Number} targetY Optional. The y position to draw the result to. Defaults to the value passed to y.
+	 * @return {Boolean}
 	 **/
 	p.applyFilter = function(ctx, x, y, width, height, targetCtx, targetX, targetY) {
 		targetCtx = targetCtx || ctx;
@@ -170,12 +176,11 @@ var p = ColorFilter.prototype = new ns.Filter();
 	/**
 	 * Returns a clone of this ColorFilter instance.
 	 * @method clone
-	 @return {ColorFilter} A clone of the current ColorFilter instance.
+	 * @return {ColorFilter} A clone of the current ColorFilter instance.
 	 **/
 	p.clone = function() {
 		return new ColorFilter(this.redMultiplier, this.greenMultiplier, this.blueMultiplier, this.alphaMultiplier, this.redOffset, this.greenOffset, this.blueOffset, this.alphaOffset);
 	}
 
-ns.ColorFilter = ColorFilter;
-}(createjs||(createjs={})));
-var createjs;
+createjs.ColorFilter = ColorFilter;
+}());

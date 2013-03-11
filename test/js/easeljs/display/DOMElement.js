@@ -26,55 +26,71 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(ns) {
+// namespace:
+this.createjs = this.createjs||{};
+
+(function() {
 // TODO: fix problems with rotation.
 // TODO: exclude from getObjectsUnderPoint
 
 /**
- * <b>This class is still experimental, and more advanced use is likely to be buggy. Please report bugs.</b><br/><br/>
-* A DOMElement allows you to associate a HTMLElement with the display list. It will be transformed
-* within the DOM as though it is child of the Container it is added to. However, it is not rendered
-* to canvas, and as such will retain whatever z-index it has relative to the canvas (ie. it will be
-* drawn in front of or behind the canvas).<br/><br/>
-* The position of a DOMElement is relative to their parent node in the DOM. It is recommended that
-* the DOM Object be added to a div that also contains the canvas so that they share the same position
-* on the page.<br/><br/>
-* DOMElement is useful for positioning HTML elements over top of canvas content, and for elements
-* that you want to display outside the bounds of the canvas. For example, a tooltip with rich HTML
-* content.<br/><br/>
-* DOMElement instances are not full EaselJS display objects, and do not participate in EaselJS mouse
-* events or support methods like hitTest.
-* @class DOMElement
-* @extends DisplayObject
-* @constructor
-* @param {HTMLElement} htmlElement A reference or id for the DOM element to manage.
-**/
+ * <b>This class is still experimental, and more advanced use is likely to be buggy. Please report bugs.</b>
+ *
+ * A DOMElement allows you to associate a HTMLElement with the display list. It will be transformed
+ * within the DOM as though it is child of the {{#crossLink "Container"}}{{/crossLink}} it is added to. However, it is
+ * not rendered to canvas, and as such will retain whatever z-index it has relative to the canvas (ie. it will be
+ * drawn in front of or behind the canvas).
+ *
+ * The position of a DOMElement is relative to their parent node in the DOM. It is recommended that
+ * the DOM Object be added to a div that also contains the canvas so that they share the same position
+ * on the page.
+ *
+ * DOMElement is useful for positioning HTML elements over top of canvas content, and for elements
+ * that you want to display outside the bounds of the canvas. For example, a tooltip with rich HTML
+ * content.
+ *
+ * <h4>Mouse Interaction</h4>
+ *
+ * DOMElement instances are not full EaselJS display objects, and do not participate in EaselJS mouse
+ * events or support methods like hitTest. To get mouse events from a DOMElement, you must instead add handlers to
+ * the htmlElement (note, this does not support EventDispatcher)
+ *
+ *      var domElement = new createjs.DOMElement(htmlElement);
+ *      domElement.htmlElement.onclick = function() {
+ *          console.log("clicked");
+ *      }
+ *
+ * @class DOMElement
+ * @extends DisplayObject
+ * @constructor
+ * @param {HTMLElement} htmlElement A reference or id for the DOM element to manage.
+ */
 var DOMElement = function(htmlElement) {
   this.initialize(htmlElement);
-}
-var p = DOMElement.prototype = new ns.DisplayObject();
+};
+var p = DOMElement.prototype = new createjs.DisplayObject();
 
 // public properties:
 	/**
 	 * The DOM object to manage.
 	 * @property htmlElement
 	 * @type HTMLElement
-	 **/
+	 */
 	p.htmlElement = null;
 
 // private properties:
 	/**
-	 * @property _style
+	 * @property _oldMtx
 	 * @protected
-	 **/
-	p._style = null;
+	 */
+	p._oldMtx = null;
 
 // constructor:
 	/**
 	 * @property DisplayObject_initialize
 	 * @type Function
    * @private
-	 **/
+	 */
 	p.DisplayObject_initialize = p.initialize;
 
 	/**
@@ -87,22 +103,20 @@ var p = DOMElement.prototype = new ns.DisplayObject();
 		this.DisplayObject_initialize();
 		this.mouseEnabled = false;
 		this.htmlElement = htmlElement;
-		if (htmlElement) {
-			this._style = htmlElement.style;
-			this._style.position = "absolute";
-			this._style.transformOrigin = this._style.webkitTransformOrigin = this._style.msTransformOrigin = this._style.MozTransformOrigin = "0% 0%";
-		}
+		var style = htmlElement.style;
+		// this relies on the _tick method because draw isn't called if a parent is not visible.
+		style.position = "absolute";
+		style.transformOrigin = style.WebkitTransformOrigin = style.msTransformOrigin = style.MozTransformOrigin = style.OTransformOrigin = "0% 0%";
 	}
 
 // public methods:
-	// TODO: fix this. Right now it's used internally to determine if it should be drawn, but DOMElement always needs to be drawn.
 	/**
 	 * Returns true or false indicating whether the display object would be visible if drawn to a canvas.
 	 * This does not account for whether it would be visible within the boundaries of the stage.
 	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
 	 * @method isVisible
 	 * @return {Boolean} Boolean indicating whether the display object would be visible if drawn to a canvas
-	 **/
+	 */
 	p.isVisible = function() {
 		return this.htmlElement != null;
 	}
@@ -116,100 +130,135 @@ var p = DOMElement.prototype = new ns.DisplayObject();
 	 * @param {Boolean} ignoreCache Indicates whether the draw operation should ignore any current cache.
 	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
 	 * into itself).
-	 **/
+	 */
 	p.draw = function(ctx, ignoreCache) {
-		// TODO: possibly save out previous matrix values, to compare against new ones (so layout doesn't need to fire if there is no change)
 		if (this.htmlElement == null) { return; }
 		var mtx = this.getConcatenatedMatrix(this._matrix);
 		
 		var o = this.htmlElement;
-		o.style.opacity = ""+mtx.alpha;
+		var style = o.style;
+		
 		// this relies on the _tick method because draw isn't called if a parent is not visible.
-		o.style.visibility = this.visible ? "visible" : "hidden";
-		o.style.transform = o.style.webkitTransform = o.style.oTransform =  o.style.msTransform = ["matrix("+mtx.a,mtx.b,mtx.c,mtx.d,(mtx.tx+0.5|0),(mtx.ty+0.5|0)+")"].join(",");
-		o.style.MozTransform = ["matrix("+mtx.a,mtx.b,mtx.c,mtx.d,(mtx.tx+0.5|0)+"px",(mtx.ty+0.5|0)+"px)"].join(",");
+		if (this.visible) { style.visibility = "visible"; }
+		else { return true; }
+		
+		var oMtx = this._oldMtx||{};
+		if (oMtx.alpha != mtx.alpha) { style.opacity = ""+mtx.alpha; oMtx.alpha = mtx.alpha; }
+		if (oMtx.tx != mtx.tx || oMtx.ty != mtx.ty || oMtx.a != mtx.a || oMtx.b != mtx.b || oMtx.c != mtx.c || oMtx.d != mtx.d) {
+			style.transform = style.WebkitTransform = style.OTransform =  style.msTransform = ["matrix("+mtx.a,mtx.b,mtx.c,mtx.d,(mtx.tx+0.5|0),(mtx.ty+0.5|0)+")"].join(",");
+			style.MozTransform = ["matrix("+mtx.a,mtx.b,mtx.c,mtx.d,(mtx.tx+0.5|0)+"px",(mtx.ty+0.5|0)+"px)"].join(",");
+			this._oldMtx = mtx.clone();
+		}
+		
 		return true;
-	}
+	};
 
 	/**
 	 * Not applicable to DOMElement.
 	 * @method cache
 	 */
-	p.cache = function() {}
+	p.cache = function() {};
 
 	/**
 	 * Not applicable to DOMElement.
 	 * @method uncache
 	 */
-	p.uncache = function() {}
+	p.uncache = function() {};
 
 	/**
 	 * Not applicable to DOMElement.
 	 * @method updateCache
 	 */
-	p.updateCache = function() {}
+	p.updateCache = function() {};
 
 	/**
 	 * Not applicable to DOMElement.
-	 * @method updateCache
+	 * @method hitArea
 	 */
-	p.hitTest = function() {}
+	p.hitTest = function() {};
 
 	/**
 	 * Not applicable to DOMElement.
 	 * @method localToGlobal
 	 */
-	p.localToGlobal = function() {}
+	p.localToGlobal = function() {};
 
 	/**
 	 * Not applicable to DOMElement.
 	 * @method globalToLocal
 	 */
-	p.globalToLocal = function() {}
+	p.globalToLocal = function() {};
 
 	/**
 	 * Not applicable to DOMElement.
 	 * @method localToLocal
 	 */
-	p.localToLocal = function() {}
+	p.localToLocal = function() {};
 
 	/**
-	 * This presently clones the DOMElement instance, but not the associated HTMLElement.
+	 * DOMElement cannot be cloned. Throws an error.
 	 * @method clone
-	 * @return {DOMElement} a clone of the DOMElement instance.
-	 **/
+	 */
 	p.clone = function() {
-		var o = new DOMElement();
-		this.cloneProps(o);
-		return o;
-	}
+		throw("DOMElement cannot be cloned.")
+	};
 
 	/**
 	 * Returns a string representation of this object.
 	 * @method toString
 	 * @return {String} a string representation of the instance.
-	 **/
+	 */
 	p.toString = function() {
 		return "[DOMElement (name="+  this.name +")]";
-	}
+	};
+    
+	/**
+     * Interaction events should be added to `htmlElement`, and not the DOMElement instance, since DOMElement instances
+	 * are not full EaselJS display objects and do not participate in EaselJS mouse events.
+	 * @event click
+	 */
+          
+     /**
+     * Interaction events should be added to `htmlElement`, and not the DOMElement instance, since DOMElement instances
+ 	 * are not full EaselJS display objects and do not participate in EaselJS mouse events.
+	 * @event dblClick
+	 */
+     
+     /**
+      * Interaction events should be added to `htmlElement`, and not the DOMElement instance, since DOMElement instances
+ 	  * are not full EaselJS display objects and do not participate in EaselJS mouse events.
+	  * @event mousedown
+	  */
+     
+     /**
+      * The HTMLElement can listen for the mouseover event, not the DOMElement instance.
+      * Since DOMElement instances are not full EaselJS display objects and do not participate in EaselJS mouse events.
+      * @event mouseover
+	  */ 
+     
+     /**
+      * Not applicable to DOMElement.
+	  * @event tick
+	  */
+     
 
 // private methods:
-	p._tick = function(data) {
-		if (this.htmlElement == null) { return; }
+	/**
+	 * @property DisplayObject__tick
+	 * @type Function
+	 * @protected
+	 */
+	p.DisplayObject__tick = p._tick;
+	
+	/**
+	 * @method _tick
+	 * @protected
+	 */
+	p._tick = function(params) {
+		// TODO: figure out how to get around this.
 		this.htmlElement.style.visibility = "hidden";
-		if (this.onTick) { this.onTick(data); }
-	}
+		this.DisplayObject__tick(params);
+	};
 
-	/* Not needed with current setup:
-	p._calculateVisible = function() {
-		var p = this;
-		while (p) {
-			if (!p.visible) { return false; }
-			p = p.parent;
-		}
-		return true;
-	}
-	*/
-ns.DOMElement = DOMElement;
-}(createjs||(createjs={})));
-var createjs;
+createjs.DOMElement = DOMElement;
+}());

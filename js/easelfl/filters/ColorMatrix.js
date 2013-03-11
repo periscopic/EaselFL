@@ -31,15 +31,23 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(ns) {
+// namespace:
+this.createjs = this.createjs||{};
+
+(function() {
 	
 	/**
-	 * Provides helper functions for assembling a matrix for use with the ColorMatrixFilter.
-	 * Can be used directly as the matrix for a ColorMatrixFilter. Most methods return the instance
-	 * to facilitate chained calls. Ex. myColorMatrix.adjustHue(20).adjustBrightness(50);
+	 * Provides helper functions for assembling a matrix for use with the {{#crossLink "ColorMatrixFilter"}}{{/crossLink}},
+	 * or can be used directly as the matrix for a ColorMatrixFilter. Most methods return the instance to facilitate
+	 * chained calls.
+	 *
+	 * <h4>Example</h4>
+	 *      myColorMatrix.adjustHue(20).adjustBrightness(50);
+	 *
+	 * See {{#crossLink "Filter"}}{{/crossLink}} for an example of how to apply filters.
 	 * @class ColorMatrix
 	 * @constructor
-	 * @augments Array
+	 * @extends Array
 	 * @param {Number} brightness
 	 * @param {Number} contrast
 	 * @param {Number} saturation
@@ -53,7 +61,7 @@
 	/**
 	 * Array of delta values for contrast calculations.
 	 * @property DELTA_INDEX
-	 * @type Array
+	 * @type {Array}
 	 * @static
 	 **/
 	ColorMatrix.DELTA_INDEX = [
@@ -73,7 +81,7 @@
 	/**
 	 * Identity matrix values.
 	 * @property IDENTITY_MATRIX
-	 * @type Array
+	 * @type {Array}
 	 * @static
 	 **/
 	ColorMatrix.IDENTITY_MATRIX = [
@@ -87,7 +95,7 @@
 	/**
 	 * The constant length of a color matrix.
 	 * @property LENGTH
-	 * @type Number
+	 * @type {Number}
 	 * @static
 	 **/
 	ColorMatrix.LENGTH = ColorMatrix.IDENTITY_MATRIX.length;
@@ -327,7 +335,6 @@
 		return matrix;
 	};
 	
-	ns.ColorMatrix = ColorMatrix;
+	createjs.ColorMatrix = ColorMatrix;
 
-}(createjs||(createjs={})));
-var createjs;
+}());

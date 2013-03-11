@@ -26,21 +26,47 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(ns) {
+// namespace:
+this.createjs = this.createjs||{};
+
+(function() {
 
 // constructor:
 /**
-* The Ticker class uses a static interface (ex. Ticker.getPaused()) and should not be instantiated.
-* Provides a centralized tick or heartbeat broadcast at a set interval. Listeners can subscribe
-* to the tick event to be notified when a set time interval has elapsed.
-* Note that the interval that the tick event is called is a target interval, and may be broadcast
-* at a slower interval during times of high CPU load.
-* @class Ticker
-* @static
-**/
+ * The Ticker provides  a centralized tick or heartbeat broadcast at a set interval. Listeners can subscribe to the tick
+ * event to be notified when a set time interval has elapsed.
+ *
+ * Note that the interval that the tick event is called is a target interval, and may be broadcast at a slower interval
+ * during times of high CPU load. The Ticker class uses a static interface (ex. <code>Ticker.getPaused()</code>) and should not be
+ * instantiated.
+ *
+ * <h4>Example</h4>
+ *      createjs.Ticker.addEventListener("tick", handleTick);
+ *      function handleTick(event) {
+ *          // Actions carried out each frame
+ *      }
+ * @class Ticker
+ * @uses EventDispatcher
+ * @static
+ **/
 var Ticker = function() {
 	throw "Ticker cannot be instantiated.";
 }
+
+// events:
+
+	/**
+	 * Dispatched each tick.
+	 * @event tick
+	 * @param {Object} target The object that dispatched the event.
+	 * @param {String} type The event type.
+	 * @param {Boolean} paused Indicates whether the ticker is currently paused.
+	 * @param {Number} delta The time elapsed in ms since the last tick.
+	 * @param {Number} time The total time in ms since Ticker was initialized.
+	 * @param {Number} runTime The total time in ms that Ticker was not paused since it was initialized. For example,
+	 * 	you could determine the amount of time that the Ticker has been paused since initialization with time-runTime.
+	 * @since 0.6.0
+	 */
 
 // public static properties:
 	/**
@@ -49,9 +75,20 @@ var Ticker = function() {
 	 * 20, 30, 60).
 	 * @property useRAF
 	 * @static
-	 * @type Boolean
+	 * @type {Boolean}
+	 * @default false
 	 **/
-	Ticker.useRAF = null;
+	Ticker.useRAF = false;
+	
+// mix-ins:
+	// EventDispatcher methods:
+	Ticker.addEventListener = null;
+	Ticker.removeEventListener = null;
+	Ticker.removeAllEventListeners = null;
+	Ticker.dispatchEvent = null;
+	Ticker.hasEventListener = null;
+	Ticker._listeners = null;
+	createjs.EventDispatcher.initialize(Ticker); // inject EventDispatcher methods.
 	
 	/**
 	 * Event broadcast  once each tick / interval. The interval is specified via the 
@@ -65,42 +102,42 @@ var Ticker = function() {
 	
 	/** 
 	 * @property _listeners
-	 * @type Array[Object]
+	 * @type {Array}
 	 * @protected 
 	 **/
 	Ticker._listeners = null;
 	
 	/** 
 	 * @property _pauseable
-	 * @type Array[Boolean]
+	 * @type {Array}
 	 * @protected 
 	 **/
 	Ticker._pauseable = null;
 	
 	/** 
 	 * @property _paused
-	 * @type Boolean
+	 * @type {Boolean}
 	 * @protected 
 	 **/
 	Ticker._paused = false;
 	
 	/** 
 	 * @property _inited
-	 * @type Boolean
+	 * @type {Boolean}
 	 * @protected 
 	 **/
 	Ticker._inited = false;
 	
 	/** 
 	 * @property _startTime
-	 * @type Number
+	 * @type {Number}
 	 * @protected 
 	 **/
 	Ticker._startTime = 0;
 	
 	/** 
 	 * @property _pausedTime
-	 * @type Number
+	 * @type {Number}
 	 * @protected 
 	 **/
 	Ticker._pausedTime=0;
@@ -108,7 +145,7 @@ var Ticker = function() {
 	/** 
 	 * Number of ticks that have passed
 	 * @property _ticks
-	 * @type Number
+	 * @type {Number}
 	 * @protected 
 	 **/
 	Ticker._ticks = 0;
@@ -116,49 +153,49 @@ var Ticker = function() {
 	/**
 	 * Number of ticks that have passed while Ticker has been paused
 	 * @property _pausedTicks
-	 * @type Number
+	 * @type {Number}
 	 * @protected 
 	 **/
 	Ticker._pausedTicks = 0;
 	
 	/** 
 	 * @property _interval
-	 * @type Number
+	 * @type {Number}
 	 * @protected 
 	 **/
 	Ticker._interval = 50; // READ-ONLY
 	
 	/** 
 	 * @property _lastTime
-	 * @type Number
+	 * @type {Number}
 	 * @protected 
 	 **/
 	Ticker._lastTime = 0;
 	
 	/** 
 	 * @property _times
-	 * @type Array[Number]
+	 * @type {Array}
 	 * @protected 
 	 **/
 	Ticker._times = null;
 	
 	/** 
 	 * @property _tickTimes
-	 * @type Array[Number]
+	 * @type {Array}
 	 * @protected 
 	 **/
 	Ticker._tickTimes = null;
 	
 	/** 
 	 * @property _rafActive
-	 * @type Boolean
+	 * @type {Boolean}
 	 * @protected 
 	 **/
 	Ticker._rafActive = false;
 	
 	/** 
 	 * @property _timeoutID
-	 * @type Number
+	 * @type {Number}
 	 * @protected 
 	 **/
 	Ticker._timeoutID = null;
@@ -166,7 +203,7 @@ var Ticker = function() {
 	
 // public static methods:
 	/**
-	 * Adds a listener for the tick event. The listener must be either an object exposing a .tick() method,
+	 * Adds a listener for the tick event. The listener must be either an object exposing a <code>tick</code> method,
 	 * or a function. The listener will be called once each tick / interval. The interval is specified via the 
 	 * .setInterval(ms) method.
 	 * The tick method or function is passed two parameters: the elapsed time between the 
@@ -176,10 +213,10 @@ var Ticker = function() {
 	 * @param {Object} o The object or function to add as a listener.
 	 * @param {Boolean} pauseable If false, the listener will continue to have tick called 
 	 * even when Ticker is paused via Ticker.pause(). Default is true.
+	 * @deprecated In favour of the "tick" event. Will be removed in a future version.
 	 **/
 	Ticker.addListener = function(o, pauseable) {
 		if (o == null) { return; }
-		if (!Ticker._inited) { Ticker.init(); }
 		Ticker.removeListener(o);
 		Ticker._pauseable[Ticker._listeners.length] = (pauseable == null) ? true : pauseable;
 		Ticker._listeners.push(o);
@@ -206,12 +243,14 @@ var Ticker = function() {
 	 * @method removeListener
 	 * @static
 	 * @param {Object} o The object or function to remove from listening from the tick event.
+	 * @deprecated In favour of the "tick" event. Will be removed in a future version.
 	 **/
 	Ticker.removeListener = function(o) {
-		if (Ticker._listeners == null) { return; }
-		var index = Ticker._listeners.indexOf(o);
+		var listeners = Ticker._listeners;
+		if (!listeners) { return; }
+		var index = listeners.indexOf(o);
 		if (index != -1) {
-			Ticker._listeners.splice(index, 1);
+			listeners.splice(index, 1);
 			Ticker._pauseable.splice(index, 1);
 		}
 	}
@@ -220,6 +259,7 @@ var Ticker = function() {
 	 * Removes all listeners.
 	 * @method removeAllListeners
 	 * @static
+	 * @deprecated In favour of the "tick" event. Will be removed in a future version.
 	 **/
 	Ticker.removeAllListeners = function() {
 		Ticker._listeners = [];
@@ -310,18 +350,18 @@ var Ticker = function() {
 	}
 	
 	/**
-	 * Returns the number of milliseconds that have elapsed since the first tick event listener was added to
-	 * Ticker. For example, you could use this in a time synchronized animation to determine the exact amount of 
+	 * Returns the number of milliseconds that have elapsed since Ticker was initialized.
+	 * For example, you could use this in a time synchronized animation to determine the exact amount of 
 	 * time that has elapsed.
 	 * @method getTime
 	 * @static
-	 * @param {Boolean} pauseable Indicates whether to include time elapsed
-	 * while Ticker was paused. If false only time elapsed while Ticker is not paused will be returned.
-	 * If true, the value returned will be total time elapsed since the first tick event listener was added.
-	 * @return {Number} Number of milliseconds that have elapsed since Ticker was begun.
+	 * @param {Boolean} runTime If true only time elapsed while Ticker was not paused will be returned.
+	 * If false, the value returned will be total time elapsed since the first tick event listener was added.
+	 * The default value is false.
+	 * @return {Number} Number of milliseconds that have elapsed since Ticker was initialized.
 	 **/
-	Ticker.getTime = function(pauseable) {
-		return Ticker._getTime() - Ticker._startTime - (pauseable ? Ticker._pausedTime : 0);
+	Ticker.getTime = function(runTime) {
+		return Ticker._getTime() - Ticker._startTime - (runTime ? Ticker._pausedTime : 0);
 	}
 	
 	/**
@@ -329,8 +369,8 @@ var Ticker = function() {
 	 * @method getTicks
 	 * @static
 	 * @param {Boolean} pauseable Indicates whether to include ticks that would have been broadcast
-	 * while Ticker was paused. If false only tick events broadcast while Ticker is not paused will be returned.
-	 * If true, tick events that would have been broadcast while Ticker was paused will be included in the return
+	 * while Ticker was paused. If true only tick events broadcast while Ticker is not paused will be returned.
+	 * If false, tick events that would have been broadcast while Ticker was paused will be included in the return
 	 * value. The default value is false.
 	 * @return {Number} of ticks that have been broadcast.
 	 **/
@@ -407,6 +447,8 @@ var Ticker = function() {
 			else if (listener instanceof Function) { listener(elapsedTime, paused); }
 		}
 		
+		Ticker.dispatchEvent({type:"tick", paused:paused, delta:elapsedTime, time:time, runTime:time-Ticker._pausedTime})
+
 		Ticker._tickTimes.unshift(Ticker._getTime()-time);
 		while (Ticker._tickTimes.length > 100) { Ticker._tickTimes.pop(); }
 		
@@ -422,7 +464,8 @@ var Ticker = function() {
 	Ticker._getTime = function() {
 		return (now&&now.call(performance))||(new Date().getTime());
 	}
+	
+	Ticker.init();
 
-ns.Ticker = Ticker;
-}(createjs||(createjs={})));
-var createjs;
+createjs.Ticker = Ticker;
+}());

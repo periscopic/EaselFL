@@ -26,19 +26,22 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(ns) {
+// namespace:
+this.createjs = this.createjs||{};
+
+(function() {
 
 /**
-* Represents an affine transformation matrix, and provides tools for constructing and concatenating matrixes.
-* @class Matrix2D
-* @constructor
-* @param {Number} a Specifies the a property for the new matrix.
-* @param {Number} b Specifies the b property for the new matrix.
-* @param {Number} c Specifies the c property for the new matrix.
-* @param {Number} d Specifies the d property for the new matrix.
-* @param {Number} tx Specifies the tx property for the new matrix.
-* @param {Number} ty Specifies the ty property for the new matrix.
-**/
+ * Represents an affine transformation matrix, and provides tools for constructing and concatenating matrixes.
+ * @class Matrix2D
+ * @constructor
+ * @param {Number} a Specifies the a property for the new matrix.
+ * @param {Number} b Specifies the b property for the new matrix.
+ * @param {Number} c Specifies the c property for the new matrix.
+ * @param {Number} d Specifies the d property for the new matrix.
+ * @param {Number} tx Specifies the tx property for the new matrix.
+ * @param {Number} ty Specifies the ty property for the new matrix.
+ **/
 var Matrix2D = function(a, b, c, d, tx, ty) {
   this.initialize(a, b, c, d, tx, ty);
 }
@@ -414,7 +417,7 @@ var p = Matrix2D.prototype;
 	/**
 	 * Returns true if the matrix is an identity matrix.
 	 * @method isIdentity
-	 * @returns Boolean
+	 * @return {Boolean}
 	 **/
 	p.isIdentity = function() {
 		return this.tx == 0 && this.ty == 0 && this.a == 1 && this.b == 0 && this.c == 0 && this.d == 1;
@@ -530,6 +533,5 @@ var p = Matrix2D.prototype;
 	// this has to be populated after the class is defined:
 	Matrix2D.identity = new Matrix2D(1, 0, 0, 1, 0, 0);
 
-ns.Matrix2D = Matrix2D;
-}(createjs||(createjs={})));
-var createjs;
+createjs.Matrix2D = Matrix2D;
+}());

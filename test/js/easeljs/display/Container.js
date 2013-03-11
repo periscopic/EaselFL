@@ -26,31 +26,43 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(ns) {
+// namespace:
+this.createjs = this.createjs||{};
+
+(function() {
 
 /**
-* A Container is a nestable display lists that allows you to work with compound display elements. For
-* example you could group arm, leg, torso and head Bitmaps together into a Person Container, and
-* transform them as a group, while still being able to move the individual parts relative to each
-* other. Children of containers have their transform and alpha properties concatenated with their
-* parent Container. For example, a Shape with x=100 and alpha=0.5, placed in a Container with
-* x=50 and alpha=0.7 will be rendered to the canvas at x=150 and alpha=0.35. Containers have some
-* overhead, so you generally shouldn't create a Container to hold a single child.
-* @class Container
-* @extends DisplayObject
-* @constructor
-**/
+ * A Container is a nestable display list that allows you to work with compound display elements. For  example you could
+ * group arm, leg, torso and head {{#crossLink "Bitmap"}}{{/crossLink}} instances together into a Person Container, and
+ * transform them as a group, while still being able to move the individual parts relative to each other. Children of
+ * containers have their <code>transform</code> and <code>alpha</code> properties concatenated with their parent
+ * Container.
+ *
+ * For example, a {{#crossLink "Shape"}}{{/crossLink}} with x=100 and alpha=0.5, placed in a Container with <code>x=50</code>
+ * and <code>alpha=0.7</code> will be rendered to the canvas at <code>x=150</code> and <code>alpha=0.35</code>.
+ * Containers have some overhead, so you generally shouldn't create a Container to hold a single child.
+ *
+ * <h4>Example</h4>
+ *      var container = new createjs.Container();
+ *      container.addChild(bitmapInstance, shapeInstance);
+ *      container.x = 100;
+ *
+ * @class Container
+ * @extends DisplayObject
+ * @constructor
+ **/
 var Container = function() {
   this.initialize();
 }
-var p = Container.prototype = new ns.DisplayObject();
+var p = Container.prototype = new createjs.DisplayObject();
 
 // public properties:
 	/**
-	 * The array of children in the display list. You should usually use the child management methods,
+	 * The array of children in the display list. You should usually use the child management methods such as {{#crossLink "Container/addChild"}}{{/crossLink}},
+	 * {{#crossLink "Container/removeChild"}}{{/crossLink}}, {{#crossLink "Container/swapChildren"}}{{/crossLink}}, etc,
 	 * rather than accessing this directly, but it is included for advanced users.
 	 * @property children
-	 * @type Array[DisplayObject]
+	 * @type Array
 	 * @default null
 	 **/
 	p.children = null;
@@ -84,7 +96,8 @@ var p = Container.prototype = new ns.DisplayObject();
 	 * @return {Boolean} Boolean indicating whether the display object would be visible if drawn to a canvas
 	 **/
 	p.isVisible = function() {
-		return this.visible && this.alpha > 0 && this.children.length && this.scaleX != 0 && this.scaleY != 0;
+		var hasContent = this.cacheCanvas || this.children.length;
+		return !!(this.visible && this.alpha > 0 && this.scaleX != 0 && this.scaleY != 0 && hasContent);
 	}
 
 	/**
@@ -104,7 +117,7 @@ var p = Container.prototype = new ns.DisplayObject();
 	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
 	 * into itself).
 	 **/
-	p.draw = function(ctx, ignoreCache, matrix) {
+	p.draw = function(ctx, ignoreCache) {
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
 		
 		// this ensures we don't have issues with display list changes that occur during a draw:
@@ -125,6 +138,10 @@ var p = Container.prototype = new ns.DisplayObject();
 	/**
 	 * Adds a child to the top of the display list. You can also add multiple children, such as "addChild(child1, child2, ...);".
 	 * Returns the child that was added, or the last child if multiple children were added.
+	 *
+	 * <h4>Example</h4>
+	 *      container.addChild(bitmapInstance, shapeInstance);
+	 *
 	 * @method addChild
 	 * @param {DisplayObject} child The display object to add.
 	 * @return {DisplayObject} The child that was added, or the last child if multiple children were added.
@@ -191,7 +208,7 @@ var p = Container.prototype = new ns.DisplayObject();
 	 * children, such as "removeChildAt(2, 7, ...);". Returns true if the child (or children) was removed, or false if any index
 	 * was out of range.
 	 * @param {Number} index The index of the child to remove.
-	 * @return true if the child (or children) was removed, or false if any index was out of range.
+	 * @return {Boolean} true if the child (or children) was removed, or false if any index was out of range.
 	 **/
 	p.removeChildAt = function(index) {
 		var l = arguments.length;
@@ -200,7 +217,7 @@ var p = Container.prototype = new ns.DisplayObject();
 			for (var i=0; i<l; i++) { a[i] = arguments[i]; }
 			a.sort(function(a, b) { return b-a; });
 			var good = true;
-			for (i=0; i<l; i++) { good = good && this.removeChildAt(a[i]); }
+			for (var i=0; i<l; i++) { good = good && this.removeChildAt(a[i]); }
 			return good;
 		}
 		if (index < 0 || index > this.children.length-1) { return false; }
@@ -227,6 +244,20 @@ var p = Container.prototype = new ns.DisplayObject();
 	 **/
 	p.getChildAt = function(index) {
 		return this.children[index];
+	}
+	
+	/**
+	 * Returns the child with the specified name.
+	 * @method getChildByName
+	 * @param {String} name The name of the child to return.
+	 * @return {DisplayObject} The child with the specified name.
+	 **/
+	p.getChildByName = function(name) {
+		var kids = this.children;
+		for (var i=0,l=kids.length;i<l;i++) {
+			if(kids[i].name == name) { return kids[i]; }
+		}
+		return null;
 	}
 
 	/**
@@ -260,8 +291,8 @@ var p = Container.prototype = new ns.DisplayObject();
 	
 	/**
 	 * Swaps the children at the specified indexes. Fails silently if either index is out of range.
-	 * @param index1
-	 * @param index2
+	 * @param {Number} index1
+	 * @param {Number} index2
 	 * @method swapChildrenAt
 	 **/
 	p.swapChildrenAt = function(index1, index2) {
@@ -275,8 +306,8 @@ var p = Container.prototype = new ns.DisplayObject();
 	
 	/**
 	 * Swaps the specified children's depth in the display list. Fails silently if either child is not a child of this Container.
-	 * @param child1
-	 * @param child2
+	 * @param {DisplayObject} child1
+	 * @param {DisplayObject} child2
 	 * @method swapChildren
 	 **/
 	p.swapChildren = function(child1, child2) {
@@ -294,8 +325,8 @@ var p = Container.prototype = new ns.DisplayObject();
 	
 	/**
 	 * Changes the depth of the specified child. Fails silently if the child is not a child of this container, or the index is out of range.
-	 * @param child
-	 * @param index
+	 * @param {DisplayObject} child
+	 * @param {Number} index  
 	 * @method setChildIndex
 	 **/
 	p.setChildIndex = function(child, index) {
@@ -330,8 +361,8 @@ var p = Container.prototype = new ns.DisplayObject();
 	 * position). This ignores the alpha, shadow and compositeOperation of the display object, and all transform properties
 	 * including regX/Y.
 	 * @method hitTest
-	 * @param x The x position to check in the display object's local coordinates.
-	 * @param y The y position to check in the display object's local coordinates.
+	 * @param {Number} x The x position to check in the display object's local coordinates.
+	 * @param {Number} y The y position to check in the display object's local coordinates.
 	 * @return {Boolean} A Boolean indicating whether there is a visible section of a DisplayObject that overlaps the specified
 	 * coordinates.
 	 **/
@@ -349,7 +380,7 @@ var p = Container.prototype = new ns.DisplayObject();
 	 * @method getObjectsUnderPoint
 	 * @param {Number} x The x position in the container to test.
 	 * @param {Number} y The y position in the container to test.
-	 * @return {Array[DisplayObject]} An Array of DisplayObjects under the specified coordinates.
+	 * @return {Array} An Array of DisplayObjects under the specified coordinates.
 	 **/
 	p.getObjectsUnderPoint = function(x, y) {
 		var arr = [];
@@ -403,15 +434,22 @@ var p = Container.prototype = new ns.DisplayObject();
 
 // private properties:
 	/**
+	 * @property DisplayObject__tick
+	 * @type Function
+	 * @private
+	 **/
+	p.DisplayObject__tick = p._tick;
+	
+	/**
 	 * @method _tick
 	 * @protected
 	 **/
-	p._tick = function(data) {
+	p._tick = function(params) {
 		for (var i=this.children.length-1; i>=0; i--) {
 			var child = this.children[i];
-			if (child._tick) { child._tick(data); }
+			if (child._tick) { child._tick(params); }
 		}
-		if (this.onTick) { this.onTick(data); }
+		this.DisplayObject__tick(params);
 	}
 
 	/**
@@ -419,21 +457,20 @@ var p = Container.prototype = new ns.DisplayObject();
 	 * @param {Number} x
 	 * @param {Number} y
 	 * @param {Array} arr
-	 * @param {Number} mouseEvents A bitmask indicating which mouseEvent types to look for. Bit 1 specifies onPress &
-	 * onClick & onDoubleClick, bit 2 specifies it should look for onMouseOver and onMouseOut. This implementation may change.
-	 * @return {Array[DisplayObject]}
+	 * @param {Number} mouseEvents A bitmask indicating which event types to look for. Bit 1 specifies press &
+	 * click & double click, bit 2 specifies it should look for mouse over and mouse out. This implementation may change.
+	 * @return {Array}
 	 * @protected
 	 **/
 	p._getObjectsUnderPoint = function(x, y, arr, mouseEvents) {
 		var ctx = createjs.DisplayObject._hitTestContext;
 		var canvas = createjs.DisplayObject._hitTestCanvas;
 		var mtx = this._matrix;
-		var hasHandler = (mouseEvents&1 && (this.onPress || this.onClick || this.onDoubleClick)) || (mouseEvents&2 &&
-																(this.onMouseOver || this.onMouseOut));
+		var hasHandler = this._hasMouseHandler(mouseEvents);
 
 		// if we have a cache handy & this has a handler, we can use it to do a quick check.
 		// we can't use the cache for screening children, because they might have hitArea set.
-		if (this.cacheCanvas && hasHandler) {
+		if (!this.hitArea && this.cacheCanvas && hasHandler) {
 			this.getConcatenatedMatrix(mtx);
 			ctx.setTransform(mtx.a,  mtx.b, mtx.c, mtx.d, mtx.tx-x, mtx.ty-y);
 			ctx.globalAlpha = mtx.alpha;
@@ -449,9 +486,12 @@ var p = Container.prototype = new ns.DisplayObject();
 		var l = this.children.length;
 		for (var i=l-1; i>=0; i--) {
 			var child = this.children[i];
-			if (!child.isVisible() || !child.mouseEnabled) { continue; }
-
-			if (child instanceof Container) {
+			var hitArea = child.hitArea;
+			if (!child.visible || (!hitArea && !child.isVisible()) || (mouseEvents && !child.mouseEnabled)) { continue; }
+			var childHasHandler = mouseEvents && child._hasMouseHandler(mouseEvents);
+			
+			// if a child container has a handler and a hitArea then we only need to check its hitArea, so we can treat it as a normal DO:
+			if (child instanceof Container && !(hitArea && childHasHandler)) {
 				var result;
 				if (hasHandler) {
 					// only concerned about the first hit, because this container is going to claim it anyway:
@@ -461,13 +501,12 @@ var p = Container.prototype = new ns.DisplayObject();
 					result = child._getObjectsUnderPoint(x, y, arr, mouseEvents);
 					if (!arr && result) { return result; }
 				}
-			} else if (!mouseEvents || hasHandler || (mouseEvents&1 && (child.onPress || child.onClick || child.onDoubleClick)) || (mouseEvents&2 && (child.onMouseOver || child.onMouseOut))) {
-				var hitArea = child.hitArea;
+			} else if (!mouseEvents || hasHandler || childHasHandler) {
 				child.getConcatenatedMatrix(mtx);
 				
 				if (hitArea) {
-					mtx.appendTransform(hitArea.x+child.regX, hitArea.y+child.regY, hitArea.scaleX, hitArea.scaleY, hitArea.rotation, hitArea.skewX, hitArea.skewY, hitArea.regX, hitArea.regY);
-					mtx.alpha *= hitArea.alpha/child.alpha;
+					mtx.appendTransform(hitArea.x, hitArea.y, hitArea.scaleX, hitArea.scaleY, hitArea.rotation, hitArea.skewX, hitArea.skewY, hitArea.regX, hitArea.regY);
+					mtx.alpha = hitArea.alpha;
 				}
 				
 				ctx.globalAlpha = mtx.alpha;
@@ -482,8 +521,7 @@ var p = Container.prototype = new ns.DisplayObject();
 			}
 		}
 		return null;
-	}
+	};
 
-ns.Container = Container;
-}(createjs||(createjs={})));
-var createjs;
+createjs.Container = Container;
+}());

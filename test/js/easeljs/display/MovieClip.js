@@ -26,16 +26,21 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(ns) {
+// namespace:
+this.createjs = this.createjs||{};
+
+(function() {
 
 /**
- * The MovieClip class associates a TweenJS Timeline with an EaselJS Container. It allows you to create objects which
- * encapsulate timeline animations, state changes, and synched actions. Due to the complexities inherent in correctly
- * setting up a MovieClip, it is largely intended for tool output and is not included in the main EaselJS library.
- * <br/><br/>
+ * The MovieClip class associates a TweenJS Timeline with an EaselJS {{#crossLink "Container"}}{{/crossLink}}. It allows
+ * you to create objects which encapsulate timeline animations, state changes, and synched actions. Due to the
+ * complexities inherent in correctly setting up a MovieClip, it is largely intended for tool output and is not included
+ * in the main EaselJS library.
+ *
  * Currently MovieClip only works properly if it is tick based (as opposed to time based) though some concessions have
- * been made to support time based timelines in the future.
+ * been made to support time-based timelines in the future.
  * @class MovieClip
+ * @main MovieClip
  * @extends Container
  * @constructor
  * @param {String} mode Initial value for the mode property. One of MovieClip.INDEPENDENT, MovieClip.SINGLE_FRAME, or MovieClip.SYNCHED.
@@ -46,7 +51,7 @@
 var MovieClip = function(mode, startPosition, loop, labels) {
   this.initialize(mode, startPosition, loop, labels);
 }
-var p = MovieClip.prototype = new ns.Container();
+var p = MovieClip.prototype = new createjs.Container();
 
 	/**
 	 * Read-only. The MovieClip will advance independently of its parent, even if its parent is paused.
@@ -103,12 +108,20 @@ var p = MovieClip.prototype = new ns.Container();
 	 * @default true
 	 */
 	p.loop = true;
+	
+	/**
+	 * Read-Only. The current frame of the movieclip.
+	 * @property currentFrame
+	 * @type Number
+	 */
+	p.currentFrame = 0;
 
 	/**
 	 * The TweenJS Timeline that is associated with this MovieClip. This is created automatically when the MovieClip
 	 * instance is initialized.
 	 * @property timeline
 	 * @type Timeline
+	 * @default null
 	 */
 	p.timeline = null;
 
@@ -116,6 +129,7 @@ var p = MovieClip.prototype = new ns.Container();
 	 * If true, the MovieClip's position will not advance when ticked.
 	 * @property paused
 	 * @type Boolean
+	 * @default false
 	 */
 	p.paused = false;
 	
@@ -123,8 +137,25 @@ var p = MovieClip.prototype = new ns.Container();
 	 * If true, actions in this MovieClip's tweens will be run when the playhead advances.
 	 * @property actionsEnabled
 	 * @type Boolean
+	 * @default true
 	 */
 	p.actionsEnabled = true;
+	
+	/**
+	 * If true, the MovieClip will automatically be reset to its first frame whenever the timeline adds
+	 * it back onto the display list. This only applies to MovieClip instances with mode=INDEPENDENT.
+	 * <br><br>
+	 * For example, if you had a character animation with a "body" child MovieClip instance
+	 * with different costumes on each frame, you could set body.autoReset = false, so that
+	 * you can manually change the frame it is on, without worrying that it will be reset
+	 * automatically.
+	 * @property autoReset
+	 * @type Boolean
+	 * @default true
+	 */
+	p.autoReset = true;
+	
+	
 	
 // private properties:
 
@@ -142,7 +173,7 @@ var p = MovieClip.prototype = new ns.Container();
 	 * @default -1
 	 * @private
 	 */
-	p._prevPos = -1;
+	p._prevPos = -1; // TODO: evaluate using a ._reset Boolean prop instead of -1.
 	
 	/**
 	 * @property _prevPosition
@@ -180,7 +211,7 @@ var p = MovieClip.prototype = new ns.Container();
 		this.loop = loop;
 		props = {paused:true, position:startPosition, useTicks:true};
 		this.Container_initialize();
-		this.timeline = new ns.Timeline(null, labels, props);
+		this.timeline = new createjs.Timeline(null, labels, props);
 		this._managed = {};
 	}
 	
@@ -193,8 +224,9 @@ var p = MovieClip.prototype = new ns.Container();
 	 * @return {Boolean} Boolean indicating whether the display object would be visible if drawn to a canvas
 	 **/
 	p.isVisible = function() {
-		return this.visible && this.alpha > 0 && this.scaleX != 0 && this.scaleY != 0;
-	}
+		// children are placed in draw, so we can't determine if we have content.
+		return !!(this.visible && this.alpha > 0 && this.scaleX != 0 && this.scaleY != 0);
+	};
 	
 	/**
 	 * @property Container_draw
@@ -240,7 +272,7 @@ var p = MovieClip.prototype = new ns.Container();
 	/**
 	 * Advances this movie clip to the specified position or label and sets paused to false.
 	 * @method gotoAndPlay
-	 * @param positionOrLabel
+	 * @param {String|Number} positionOrLabel
 	 **/
 	p.gotoAndPlay = function(positionOrLabel) {
 		this.paused = false;
@@ -250,7 +282,7 @@ var p = MovieClip.prototype = new ns.Container();
 	/**
 	 * Advances this movie clip to the specified position or label and sets paused to true.
 	 * @method gotoAndStop
-	 * @param positionOrLabel
+	 * @param {String|Number} positionOrLabel
 	 **/
 	p.gotoAndStop = function(positionOrLabel) {
 		this.paused = true;
@@ -262,7 +294,7 @@ var p = MovieClip.prototype = new ns.Container();
 	 * @method clone
 	 **/
 	p.clone = function() {
-		// TODO: add support for this?? Need to clone the Timeline & retarget tweens - pretty complex.
+		// TODO: add support for this? Need to clone the Timeline & retarget tweens - pretty complex.
 		throw("MovieClip cannot be cloned.")
 	}
 	
@@ -288,11 +320,11 @@ var p = MovieClip.prototype = new ns.Container();
 	 * @method _tick
 	 * @private
 	 **/
-	p._tick = function() {
+	p._tick = function(params) {
 		if (!this.paused && this.mode == MovieClip.INDEPENDENT) {
-			this._prevPosition = (this._prevPos<0) ? 0 : this._prevPosition+1;
+			this._prevPosition = (this._prevPos < 0) ? 0 : this._prevPosition+1;
 		}
-		this.Container__tick();
+		this.Container__tick(params);
 	}
 	
 	/**
@@ -302,6 +334,8 @@ var p = MovieClip.prototype = new ns.Container();
 	p._goto = function(positionOrLabel) {
 		var pos = this.timeline.resolve(positionOrLabel);
 		if (pos == null) { return; }
+		// prevent _updateTimeline from overwriting the new position because of a reset:
+		if (this._prevPos == -1) { this._prevPos = NaN; }
 		this._prevPosition = pos;
 		this._updateTimeline();
 	}
@@ -312,6 +346,7 @@ var p = MovieClip.prototype = new ns.Container();
 	 **/
 	p._reset = function() {
 		this._prevPos = -1;
+		this.currentFrame = 0;
 	}
 	
 	/**
@@ -329,14 +364,14 @@ var p = MovieClip.prototype = new ns.Container();
 		// update timeline position, ignoring actions if this is a graphic.
 		if (synched) {
 			// TODO: this would be far more ideal if the _synchOffset was somehow provided by the parent, so that reparenting wouldn't cause problems and we can direct draw. Ditto for _off (though less important).
-			tl.setPosition(this.startPosition + (this.mode==MovieClip.SINGLE_FRAME?0:this._synchOffset), ns.Tween.NONE);
+			tl.setPosition(this.startPosition + (this.mode==MovieClip.SINGLE_FRAME?0:this._synchOffset), createjs.Tween.NONE);
 		} else {
-			tl.setPosition(this._prevPosition, this.actionsEnabled ? null : ns.Tween.NONE);
+			tl.setPosition(this._prevPos < 0 ? 0 : this._prevPosition, this.actionsEnabled ? null : createjs.Tween.NONE);
 		}
 		
 		this._prevPosition = tl._prevPosition;
 		if (this._prevPos == tl._prevPos) { return; }
-		this._prevPos = tl._prevPos;
+		this.currentFrame = this._prevPos = tl._prevPos;
 		
 		for (var n in this._managed) { this._managed[n] = 1; }
 		
@@ -346,7 +381,7 @@ var p = MovieClip.prototype = new ns.Container();
 			if (target == this) { continue; } // TODO: this assumes this is the actions tween. Valid?
 			var offset = tween._stepPosition;
 			
-			if (target instanceof ns.DisplayObject) {
+			if (target instanceof createjs.DisplayObject) {
 				// motion tween.
 				this._addManagedChild(target, offset);
 			} else {
@@ -390,18 +425,20 @@ var p = MovieClip.prototype = new ns.Container();
 		
 		if (child instanceof MovieClip) {
 			child._synchOffset = offset;
-			if (child.mode == MovieClip.INDEPENDENT && (!this._managed[child.id] || this._prevPos == 0)) { child._reset(); }
+			// TODO: this does not precisely match Flash. Flash loses track of the clip if it is renamed or removed from the timeline, which causes it to reset.
+			if (child.mode == MovieClip.INDEPENDENT && child.autoReset && !this._managed[child.id]) { child._reset(); }
 		}
 		this._managed[child.id] = 2;
 	}
 	
 
-ns.MovieClip = MovieClip;
+createjs.MovieClip = MovieClip;
 
 
 
 	/**
-	 * This plugin works with TweenJS to prevent the startPosition property from tweening.
+	 * This plugin works with <a href="http://tweenjs.com" target="_blank">TweenJS</a> to prevent the startPosition
+	 * property from tweening.
 	 * @private
 	 * @class MovieClipPlugin
 	 * @constructor
@@ -421,7 +458,7 @@ ns.MovieClip = MovieClip;
 	 * @private
 	 **/
 	MovieClipPlugin.install = function() {
-		ns.Tween.installPlugin(MovieClipPlugin, ["startPosition"]);
+		createjs.Tween.installPlugin(MovieClipPlugin, ["startPosition"]);
 	}
 	
 	/**
@@ -429,19 +466,26 @@ ns.MovieClip = MovieClip;
 	 * @private
 	 **/
 	MovieClipPlugin.init = function(tween, prop, value) {
-		if (prop == "startPosition" || !(tween._target instanceof ns.MovieClip)) { return value; }
+		return value;
+	}
+	
+	/**
+	 * @method step
+	 * @private
+	 **/
+	MovieClipPlugin.step = function() {
+		// unused.
 	}
 	
 	/** 
 	 * @method tween
 	 * @private
 	 **/
-	MovieClipPlugin.tween = function(tween, prop, value, startValues, endValues, ratio, position, end) {
-		if (!(tween._target instanceof nsMovieClip)) { return value; }
+	MovieClipPlugin.tween = function(tween, prop, value, startValues, endValues, ratio, wait, end) {
+		if (!(tween.target instanceof MovieClip)) { return value; }
 		return (ratio == 1 ? endValues[prop] : startValues[prop]);
 	}
 
 	MovieClipPlugin.install();
 
-}(createjs||(createjs={})));
-var createjs;
+}());

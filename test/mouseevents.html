@@ -1,0 +1,96 @@
+<!-- Draw a variety of shapes -->
+
+<html>
+<head>
+
+<script type="text/javascript" src="js/TestUtils.js"></script>
+
+<link rel='stylesheet' type='text/css' href='css/test.css' />
+
+<script type="text/javascript">
+
+window.onload = function(){
+	if(TestUtils.useCanvas){
+		TestUtils.loadWithEaselJS(init);
+	}else{
+		TestUtils.loadWithEaselFL(init);
+	}
+}
+
+//-- Start it up!
+
+function init(){
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('width', 600);
+	canvas.setAttribute('height', 400);
+	canvas.setAttribute('fl_swf_url', '../haxe/bin/easelfl-cur.swf');
+	document.getElementById('testContainer').appendChild(canvas);
+	
+	var myStage = new createjs.Stage(canvas);
+	createjs.Ticker.addListener(myStage);
+	
+	//-- specific test code
+	myStage.enableMouseOver();
+	var trace = document.getElementById('trace');
+
+	function onMouse(e) {
+		if(e.type==='mousedown') {
+			e.addEventListener('mousemove', onMouse);
+			e.addEventListener('mouseup', onMouse);
+		}
+
+		trace.innerHTML = e.type+': '+e.stageX+', '+e.stageY;
+		console.log(e);
+	}
+
+	
+
+	var g, shp;
+	
+	shp = new createjs.Shape();
+	g = shp.graphics;
+	g.beginFill('#888');
+	g.drawRect(0, 0, 100, 100);
+	g.endFill();
+
+	shp.addEventListener('dblclick', onMouse);
+	shp.addEventListener('click', onMouse);
+	shp.addEventListener('mouseover', onMouse);
+	shp.addEventListener('mouseout', onMouse);
+	shp.addEventListener('mousedown', onMouse);
+	shp.x = shp.y = 100;
+
+	myStage.addChild(shp);
+}
+
+</script>
+
+
+<style type="text/css"> 
+ #trace {
+	position: absolute;
+	top: 195px;
+	left: 630px;
+	font-size: 12px;
+	font-family: Verdana, sans-serif;
+	color: #333;
+ }
+</style>
+
+
+<style type="text/css"> 
+ #trace {
+	position: absolute;
+	top: 195px;
+	left: 630px;
+	font-size: 12px;
+	font-family: Verdana, sans-serif;
+	color: #333;
+ }
+</style>
+
+</head>
+<body>
+<div id="trace">Click around</div>
+</body>
+</html>

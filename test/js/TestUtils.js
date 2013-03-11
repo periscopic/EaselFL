@@ -98,34 +98,41 @@ var ScriptLoader = {
             buildHTML('Canvas + EaselJS', 'view in Flash with EaselFL');
             
              ScriptLoader.loadInOrder([
+                'js/easeljs/utils/UID.js',
+                'js/easeljs/events/EventDispatcher.js',
+                'js/easeljs/utils/Ticker.js',
+                'js/easeljs/events/MouseEvent.js',
                 'js/easeljs/geom/Matrix2D.js',
                 'js/easeljs/geom/Point.js',
                 'js/easeljs/geom/Rectangle.js',
-                'js/easeljs/utils/UID.js',
+                'js/easeljs/ui/ButtonHelper.js',
+                'js/easeljs/display/Shadow.js',
+                'js/easeljs/display/SpriteSheet.js',
+                'js/easeljs/display/Graphics.js',
                 'js/easeljs/display/DisplayObject.js',
-                'js/easeljs/display/DOMElement.js',
                 'js/easeljs/display/Container.js',
                 'js/easeljs/display/Stage.js',
-                'js/easeljs/display/Graphics.js',
-                'js/easeljs/display/Shape.js',
                 'js/easeljs/display/Bitmap.js',
-                'js/easeljs/display/SpriteSheet.js',
                 'js/easeljs/display/BitmapAnimation.js',
+                'js/easeljs/display/Shape.js',
                 'js/easeljs/display/Text.js',
-                'js/easeljs/display/Shadow.js',
+                'js/easeljs/utils/SpriteSheetUtils.js',
+                'js/easeljs/utils/SpriteSheetBuilder.js',
+                'js/easeljs/display/DOMElement.js',
                 'js/easeljs/filters/Filter.js',
+                'js/easeljs/ui/Touch.js',
+                'js/easeljs/version.js',
+
                 'js/easeljs/filters/ColorFilter.js',
                 'js/easeljs/filters/ColorMatrix.js',
                 'js/easeljs/filters/ColorMatrixFilter.js',
-                'js/easeljs/filters/BoxBlurFilter.js',
-                'js/easeljs/events/MouseEvent.js',
-                'js/easeljs/utils/Ticker.js',
-                'js/easeljs/utils/SpriteSheetUtils.js'
+                'js/easeljs/filters/BoxBlurFilter.js'
                 ], init);
              
             //window.createjs = window;
             //ScriptLoader.load('js/easeljs-0.4.2.min.js', init);
             //ScriptLoader.load('js/easeljs-0.5.0.min.js', init);
+            //ScriptLoader.load('js/easeljs-0.6.0.min.js', init);
         },
       
         loadWithEaselFL : function(init) {
@@ -135,32 +142,38 @@ var ScriptLoader = {
             ScriptLoader.loadInOrder([
                 '../js/swfobject.js',
                 '../js/easelfl/utils/ContextConfig.js',
+                '../js/easelfl/utils/UID.js',
+                '../js/easelfl/events/EventDispatcher.js',
+                '../js/easelfl/utils/Ticker.js',
+                '../js/easelfl/events/MouseEvent.js',
                 '../js/easelfl/geom/Matrix2D.js',
                 '../js/easelfl/geom/Point.js',
                 '../js/easelfl/geom/Rectangle.js',
-                '../js/easelfl/utils/UID.js',
+                '../js/easelfl/ui/ButtonHelper.js',
                 '../js/easelfl/display/CanvasFl.js',
-                '../js/easelfl/display/DisplayObject.js',
-                '../js/easelfl/display/DOMElement.js',
-                '../js/easelfl/display/Container.js',
-                '../js/easelfl/display/Stage.js',
-                '../js/easelfl/display/Graphics.js',
-                '../js/easelfl/display/Shape.js',
                 '../js/easelfl/display/ImageFl.js',
-                '../js/easelfl/display/Bitmap.js',
+                '../js/easelfl/display/Shadow.js',
                 '../js/easelfl/display/FrameFl.js',
                 '../js/easelfl/display/SpriteSheet.js',
+                '../js/easelfl/display/Graphics.js',
+                '../js/easelfl/display/DisplayObject.js',
+                '../js/easelfl/display/Container.js',
+                '../js/easelfl/display/Stage.js',
+                '../js/easelfl/display/Bitmap.js',
                 '../js/easelfl/display/BitmapAnimation.js',
+                '../js/easelfl/display/Shape.js',
                 '../js/easelfl/display/Text.js',
-                '../js/easelfl/display/Shadow.js',
+                '../js/easelfl/utils/SpriteSheetUtils.js',
+                //'../js/easelfl/utils/SpriteSheetBuilder.js',
+                '../js/easelfl/display/DOMElement.js',
                 '../js/easelfl/filters/Filter.js',
+                //'../js/easelfl/ui/Touch.js',
+                '../js/easelfl/version.js',
+
                 '../js/easelfl/filters/ColorFilter.js',
                 '../js/easelfl/filters/ColorMatrix.js',
                 '../js/easelfl/filters/ColorMatrixFilter.js',
                 '../js/easelfl/filters/BoxBlurFilter.js',
-                '../js/easelfl/events/MouseEvent.js',
-                '../js/easelfl/utils/Ticker.js',
-                '../js/easelfl/utils/SpriteSheetUtils.js'
             ], init);
              
             
