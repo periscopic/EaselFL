@@ -32,17 +32,11 @@ function init(){
 	//-- specific test code
 	var trace = document.getElementById('trace');
 	
-	var container = new createjs.Container();
-	myStage.addChild(container);
+	function onMouseDown(evt) {
+		var val = targ.hitTest(evt.stageX, evt.stageY);
+		trace.innerHTML = '('+evt.stageX+', '+evt.stageY+') is '+(val?'inside':'outside')+' the red area';
+	}
 
-	//Flash doesn't receive mouseevents on 100% transparent
-	var bg = new createjs.Shape();
-	bg.alpha = 0.3;
-	bg.graphics.beginFill('#FFF');
-	bg.graphics.drawRect(0, 0, 600, 400);
-	bg.graphics.endFill();
-	container.addChild(bg);
-	
 	var targ = new createjs.Shape();
 
 	targ.graphics.beginFill('#F00');
@@ -54,12 +48,11 @@ function init(){
 	
 	targ.graphics.endFill();
 	
-	container.addChild(targ);
+	myStage.addChild(targ);
 	
-	container.onClick = function(evt) {
-		var val = targ.hitTest(evt.stageX, evt.stageY);
-		trace.innerHTML = '('+evt.stageX+', '+evt.stageY+') is '+(val?'inside':'outside')+' the red area';
-	}
+	//note that stage doesn't receive regular mousedown events where
+	//transparent, but does receive stagemousedown events
+	myStage.addEventListener('stagemousedown', onMouseDown);
 }
 
 </script>
@@ -72,6 +65,11 @@ function init(){
 	font-size: 12px;
 	font-family: Verdana, sans-serif;
 	color: #333;
+ }
+
+ #testContainer {
+ 	border-right: 1px solid #CCC;
+ 	border-bottom: 1px solid #CCC;
  }
 </style>
 

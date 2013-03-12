@@ -506,12 +506,8 @@ var p = Stage.prototype = new createjs.Container();
 	}
 	*/
 
-console.log("TODO: verify IE uses removeEvent as counterpart of attachEvent");
-console.log("TODO: verify IE event names");
-console.log("TODO: verify mousedown behavior in Stage");
-
 	p.enableDOMEvents = function(enable) {
-		var n, o, ls, t, bind, unbind, ms, _this;
+		/*var n, o, ls, t, bind, unbind, ms, _this;
 
 		if (enable == null) { enable = true; }
 
@@ -537,7 +533,7 @@ console.log("TODO: verify mousedown behavior in Stage");
 				o = ls[n];
 				o.t[bind](o.native, o.f);
 			}
-		}
+		}*/
 	};
 
 
@@ -567,6 +563,7 @@ console.log("TODO: verify mousedown behavior in Stage");
 	 * @protected
 	 * @param {Number} id
 	 **/
+	/*
 	p._getPointerData = function(id) {
 		var data = this._pointerData[id];
 		if (!data) {
@@ -576,6 +573,7 @@ console.log("TODO: verify mousedown behavior in Stage");
 		}
 		return data;
 	}
+	*/
 	
 	/**
 	 * @method _handleMouseMove
@@ -588,37 +586,8 @@ console.log("TODO: verify mousedown behavior in Stage");
 		if(!e){ e = window.event; }
 		this._handlePointerMove(-1, e, e.pageX, e.pageY);
 	}
-	*/
-	p._handleMouseMove = function(e) {
-	  
-		if (!this.canvas) {
-			this.mouseX = this.mouseY = null;
-			return;
-		}
-		
-		if(!e){ e = window.event; }
-		
-		var inBounds = this.mouseInBounds;		
-		
-		if(Stage.__MS_BINDING) {
-		  this._updatePointerPosition(
-		  	-1,
-			e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft,
-			e.clientY + document.body.scrollTop + document.documentElement.scrollTop
-		  );
-									
-		} else {
-		  this._updatePointerPosition(-1, e.pageX, e.pageY);
-		}		
-		
-		if (!inBounds && !this.mouseInBounds) { return; }
-		
-		var evt = new createjs.MouseEvent("onMouseMove", this.mouseX, this.mouseY, this, e);
+	*/	
 
-		if (this.onMouseMove) { this.onMouseMove(evt); }
-		if (this._activeMouseEvent && this._activeMouseEvent.onMouseMove) { this._activeMouseEvent.onMouseMove(evt); }
-	}
-	
 	/**
 	 * @method _handlePointerMove
 	 * @protected
@@ -745,9 +714,9 @@ console.log("TODO: verify mousedown behavior in Stage");
 	 * @protected
 	 * @param {MouseEvent} e
 	 **/
-	p._handleMouseUp = function(e) {
+	/*p._handleMouseUp = function(e) {
 		this._handlePointerUp(-1, e, false);
-	}
+	}*/
 
 	/**
 	 * @method _handlePointerUp
@@ -756,7 +725,7 @@ console.log("TODO: verify mousedown behavior in Stage");
 	 * @param {Event} e
 	 * @param {Boolean} clear
 	 **/
-	p._handlePointerUp = function(id, e, clear) {
+	/*p._handlePointerUp = function(id, e, clear) {
 		var o = this._getPointerData(id);
 		var evt;
 		
@@ -784,16 +753,18 @@ console.log("TODO: verify mousedown behavior in Stage");
 			if (id == this._primaryPointerID) { this._primaryPointerID = null; }
 			delete(this._pointerData[id]);
 		} else { o.event = o.target = null; }
-	}
+	}*/
 
 	/**
 	 * @method _handleMouseDown
 	 * @protected
 	 * @param {MouseEvent} e
 	 **/
+	/*
+	//-- EaselJS
 	p._handleMouseDown = function(e) {
 		this._handlePointerDown(-1, e, false);
-	}
+	}*/
 	
 	
 	/**
@@ -829,7 +800,7 @@ console.log("TODO: verify mousedown behavior in Stage");
 		}
 	}
 	*/
-	p._handlePointerDown = function(id, e, x, y) {
+	/*p._handlePointerDown = function(id, e, x, y) {
 		var o = this._getPointerData(id);
 		if (y != null) { this._updatePointerPosition(id, x, y); }
 		
@@ -838,7 +809,7 @@ console.log("TODO: verify mousedown behavior in Stage");
 			this.onMouseDown&&this.onMouseDown(evt);
 			this.dispatchEvent(evt);
 		}
-	}
+	}*/
 
 	/**
 	 * @method _testMouseOver
@@ -898,7 +869,11 @@ console.log("TODO: verify mousedown behavior in Stage");
 		}
 	}
 	*/
-	
+
+	p._handleDoubleClick = function(e) {
+		//all double clicks trigger from within Flash
+	}
+
 	/**** Begin EaselFL specific code ****/
 	
 	/**

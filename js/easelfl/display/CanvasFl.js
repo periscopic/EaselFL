@@ -219,6 +219,7 @@ this.createjs = this.createjs||{};
 	**/
 	p._flOnReady = function() {
 		this._flInstance = ContextFl._flGetInstance( this._flInstanceID );
+		this._flInstance.addEventListener('click', function(){'stage click';});
 		this.flReady = true;
 		this._flFlush();
 
@@ -247,15 +248,19 @@ this.createjs = this.createjs||{};
 
 			if(evtKeyVal){
 				
-				//-- Continuation/Completion of mousedown session event
 				if(obj.type==='mousemove' || obj.type==='mouseup'){
+					//-- Continuation/Completion of mousedown session event
 					item = self._flCurPressEvent;
 					target = item.target;
 
 					if(obj.type==='mouseup') {
 						self._flCurPressEvent = null;
 					}
+				} else if(obj.type === 'stagemousedown' || obj.type === 'stagemouseup') {
+					//-- Stage level mouse events
+					item = target = self._flCanvas._stage;
 				} else {
+					//-- other mouse events
 					item = target = self._flItemIndex[obj.id];
 				}
 
@@ -274,7 +279,7 @@ this.createjs = this.createjs||{};
 						self._flCurPressEvent = evt;
 					}
 				}
-			}
+			} 
 		}         
 		
 			
@@ -298,7 +303,7 @@ this.createjs = this.createjs||{};
 			//reassign hook to receive calls from Flash
 			CanvasFl._flHooks[myID] = handleEvents;
 			self._flOnReady();
-		}
+		};
 	 
 		//-- Embed and initial loading of Flash Movie
 		ContextFl._flLoadInstance(myID, thecanvas.width, thecanvas.height, thecanvas.transparent, this._flInstanceID, fl_swf_url);
@@ -318,8 +323,11 @@ this.createjs = this.createjs||{};
 		mouseout: 'onMouseOut',
 		mouseover: 'onMouseOver',
 		mousedown: 'onPress',
-		mouseup: 'onMouseUp'
+		mouseup: 'onMouseUp',
+		stagemousedown: 'onMouseDown',
+		stagemouseup: 'onMouseUp'
 	};
+
 
 	/**
 	* Increment of number of contexts created.

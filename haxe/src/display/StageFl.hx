@@ -1,4 +1,4 @@
-/* TEST */package display;
+package display;
 
 import interfaces.IExec;
 import interfaces.IDisplayable;
@@ -7,6 +7,7 @@ import flash.display.BitmapData;
 import flash.Lib;
 import flash.display.Stage;
 import flash.events.Event;
+import flash.events.MouseEvent;
 
 class StageFl extends ContainerFl {
 
@@ -44,7 +45,19 @@ class StageFl extends ContainerFl {
 		blitBitmap.visible = false;
 		this.stage = stage;
 		stage.addEventListener(Event.RESIZE, handleResize, false, 0, true);
+		stage.addEventListener(flash.events.MouseEvent.MOUSE_UP, handleStageUp, false, 0, true);
+		stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, handleStageDown, false, 0, true);
 		handleResize(null);
+	}
+	
+	private function handleStageUp(e:MouseEvent):Void {
+		var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'stagemouseup'};
+		Main.dispatch(evt);
+	}
+	
+	private function handleStageDown(e:MouseEvent):Void {
+		var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'stagemousedown'};
+		Main.dispatch(evt);
 	}
 	
 	/**

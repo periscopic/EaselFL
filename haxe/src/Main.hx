@@ -74,7 +74,7 @@ class Main {
 
 		#if debug
 			debug.SWFProfiler.init(this);
-		#end
+		#end		
 	}
 }
 

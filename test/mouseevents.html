@@ -32,6 +32,14 @@ function init(){
 	//-- specific test code
 	myStage.enableMouseOver();
 	var trace = document.getElementById('trace');
+	var evts = [];
+
+	function traceEvent(e) {
+		var s, out;
+		s = evts.length+'  '+e.toString();
+		evts.push(s);
+		trace.innerHTML = evts.slice(Math.max(0, evts.length-8)).join('<br>');
+	}
 
 	function onMouse(e) {
 		if(e.type==='mousedown') {
@@ -39,11 +47,8 @@ function init(){
 			e.addEventListener('mouseup', onMouse);
 		}
 
-		trace.innerHTML = e.type+': '+e.stageX+', '+e.stageY;
-		console.log(e);
+		traceEvent(e);
 	}
-
-	
 
 	var g, shp;
 	
@@ -61,6 +66,9 @@ function init(){
 	shp.x = shp.y = 100;
 
 	myStage.addChild(shp);
+
+	myStage.addEventListener('stagemousedown', onMouse);
+	myStage.addEventListener('stagemouseup', onMouse);
 }
 
 </script>
