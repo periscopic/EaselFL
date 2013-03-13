@@ -143,6 +143,11 @@ this.createjs = this.createjs||{};
 			index = this._flItemIndex, 
 			item;
 
+			if(this._flCommands.length) {
+				inst.sendCommands(this._flCommands);
+				this._flCommands = [];
+			}
+
 			//-- Create Flash counterparts of EaselJS and asset classes
 			if(this._flCreate.length){
 				
@@ -286,6 +291,7 @@ this.createjs = this.createjs||{};
 		//-- Setup flush data staging queues
 		this._flCreate = [];
 		this._flChange = [];
+		this._flCommands = [];
 		 
 		//-- Index of created items for distributing events dispatched in Flash
 		this._flItemIndex = {};

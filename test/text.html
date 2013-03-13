@@ -6,6 +6,8 @@
 <script type="text/javascript" src="js/TestUtils.js"></script>
 
 <link rel='stylesheet' type='text/css' href='css/test.css' />
+<link rel='stylesheet' type='text/css' href='css/fonts/fonts.css' />
+
 
 <script type="text/javascript">
 
@@ -30,9 +32,15 @@ function init(){
 	createjs.Ticker.addListener(myStage);
 	
 	//-- specific test code
-	var head = new createjs.Text('EASEL', 'bold 112px "Trebuchet MS"', '#3399E9');
-	head.y = 341;
-	head.x = 260;
+	if(createjs.Stage.isEaselFL) {
+		myStage.flEmbedFonts(['RobotoThinItalic'], 'css/fonts/Roboto.swf');
+	}
+
+	//var head = new createjs.Text('EASEL', 'bold 112px "Trebuchet MS"', '#3399E9');
+	var head = new createjs.Text('EASEL', '112px "Roboto Thin Italic"', '#3399E9');
+	//head.y = 341;
+	head.y = 300;
+	head.x = 275;
 	myStage.addChild(head);
 	
 	var copy = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.';

@@ -8,6 +8,7 @@ import flash.text.TextFormatAlign;
 import flash.display.Sprite;
 import utils.CSSFont;
 import utils.CSSColor;
+import utils.FontLib;
 import interfaces.IExec;
 import flash.filters.GlowFilter;
 
@@ -40,13 +41,33 @@ class TextFl extends DisplayObjectFl, implements IExec {
 		return new GlowFilter(color, 1, 1.1, 1.1, 16, 2, true, true);
 	}
 
-	inline static private function setFont(target:TextFl, cssFontString:String) {
+	static private function setFont(target:TextFl, cssFontString:String) {
 		var fmt = target.fmt;
+		target.cssFontString = cssFontString;
+		
 		CSSFont.parse(cssFontString);
 		fmt.bold = CSSFont.bold;
 		fmt.italic = CSSFont.italic;
 		fmt.size = CSSFont.size;
 		fmt.font = CSSFont.font;
+
+		//update embedding and watch for font embedding
+		if(target.font!=null) {
+			//stop listening for old font to be embedded
+			FontLib.dispatcher.removeEventListener(target.font, target.updateEmbedding, false);
+		}
+			
+		target.font = CSSFont.font;
+			
+		if(CSSFont.font!=null) {
+			target.tf.embedFonts = FontLib.isEmbedded(CSSFont.font);
+			
+			if(!target.tf.embedFonts) {
+				FontLib.dispatcher.addEventListener(target.font, target.updateEmbedding, false, 0, true);
+			}
+		}
+		
+		// apply formatting
 		target.tf.setTextFormat(target.fmt);
 		target.tf.defaultTextFormat = target.fmt;
 		target.updateBaseline();		
@@ -112,6 +133,8 @@ class TextFl extends DisplayObjectFl, implements IExec {
 	private var lineWidth:Float;
 	private var lineHeight:Float;
 	private var outline:Bool;
+	private var cssFontString:String;
+	private var font:String;
 	
 	public function new(id:Int) {
 		super(id);
@@ -244,6 +267,10 @@ class TextFl extends DisplayObjectFl, implements IExec {
 				tf.text = finalLines.join('\n');
 			}
 		}
+	}
+	
+	public function updateEmbedding(e:Dynamic=null):Void {
+		setFont(this, cssFontString);
 	}
 	
 	/**

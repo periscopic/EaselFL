@@ -22,6 +22,7 @@ import geom.RectangleFl;
 import flash.events.EventDispatcher;
 import flash.events.Event;
 import utils.CSSFont;
+import utils.FontLib;
 
 
 class Control {
@@ -37,6 +38,7 @@ class Control {
 	static public var texts:IntHash<TextFl>;
 	static public var shadows:IntHash<ShadowFl>;
 	static public var filters:IntHash<IBitmapFilter>;
+	static public var commands:Hash<Dynamic->Void>;
 	static public var makers:Hash<Int->Void>;
 	static public var unmakers:Hash<Int->Void>;
 	static public var dispatcher:EventDispatcher;
@@ -57,6 +59,7 @@ class Control {
 		texts = new IntHash<TextFl>();
 		shadows = new IntHash<ShadowFl>();
 		filters = new IntHash<IBitmapFilter>();
+		commands = new Hash<Dynamic->Void>();
 		makers = new Hash<Int->Void>();
 		unmakers = new Hash<Int->Void>();
 		
@@ -91,6 +94,8 @@ class Control {
 		unmakers.set('bxblr', unFilter);
 		unmakers.set('txt', untext);
 		
+		commands.set('fnts', FontLib.embedFonts);
+		
 		ImageFl.init();
 		BitmapFl.init();
 		ShapeFl.init();
@@ -106,6 +111,13 @@ class Control {
 		BoxBlurFilterFl.init();
 		StageFl.init();
 	}
+	
+	inline static public function runCommands(a:Array<Array<Dynamic>>):Void {
+		for(cmd in a) {
+			commands.get(cmd[0])(cmd[1]);
+		}
+	}
+	
 	
 	/*
 	 * Takes a list of creation commands [ ['type','id'], ...] 
@@ -302,6 +314,7 @@ class Control {
 		filters.remove(id);
 		items.remove(id);
 	}
+	
 	
 	inline static private function stage(id:Int):Void{
 		//-- Alias another container as Stage

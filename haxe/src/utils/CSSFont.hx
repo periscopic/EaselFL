@@ -7,8 +7,8 @@ import flash.text.TextFormat;
 
 class CSSFont {
 
-	inline static var boldRgx:EReg = ~/bold|regular/i;
-	inline static var italicRgx:EReg = ~/italic|oblique|normal/i;
+	inline static var boldRgx:EReg = ~/^(?:bold|regular)/i;
+	inline static var italicRgx:EReg = ~/^(?:italic|oblique|normal)$/i;
 
 	inline static var DEFAULT_FONT:String = 'Arial';
 	inline static var DEFAULT_SIZE:Float = 13;
@@ -45,11 +45,11 @@ class CSSFont {
 				}catch(e:Dynamic) {}
 				
 			//-- font weight
-			}else if(boldRgx.match(part)) {
+			}else if(boldRgx.match(part)) {// && boldRgx.matchedPos().pos==0) {
 				bold = (part.toUpperCase()!='REGULAR');
 				
 			//-- font style (posture)
-			}else if(italicRgx.match(part)) {
+			}else if(italicRgx.match(part)) {// && italicRgx.matchedLeft().length==0) {
 				italic = (part.toUpperCase()!='NORMAL');
 				
 			//-- font name

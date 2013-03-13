@@ -11,6 +11,7 @@ import flash.display.Stage;
 import Control;
 import flash.external.ExternalInterface;
 import flash.events.Event;
+import utils.FontLib;
 
 class Main {
 	
@@ -63,6 +64,7 @@ class Main {
 		Control.init();
 		
 		//-- Add JS  method
+		ExternalInterface.addCallback('sendCommands', Control.runCommands);
 		ExternalInterface.addCallback('sendCreate', Control.createItems);
 		ExternalInterface.addCallback('sendDestroy', Control.destroyItems);
 		ExternalInterface.addCallback('sendChange', Control.changeItems);
@@ -75,6 +77,12 @@ class Main {
 		#if debug
 			debug.SWFProfiler.init(this);
 		#end		
+		
+				//public static const FONT_NAME:String = "Brush Script Std";
+		//public static const FONT_EXPORT_NAME:String = "FontBrushScript";
+		//public static const FONT_FILE_NAME:String = "font/BrushScript.swf";
+		//var fontList:Array<String> = ['RobotoThinItalic'];
+		//FontLib.embedFonts(fontList, 'css/fonts/Roboto.swf');
 	}
 }
 

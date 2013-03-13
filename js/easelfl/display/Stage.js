@@ -909,6 +909,10 @@ var p = Stage.prototype = new createjs.Container();
 		**/
 	 p.flReady = false;
 
+	p.flEmbedFonts = function(fontList, fontFileURL) {
+		this.canvas._ctx._flCommands.push(['fnts', [fontList, fontFileURL]]);
+	};
+
 	Stage.isEaselFl = Stage.isEaselFL = true;
 	
 	Stage.__MS_BINDING = window.addEventListener || document.addEventListener ? false : true;

@@ -1820,6 +1820,96 @@
 		<display public="1"><c path="flash.display.Sprite"/></display>
 		<destroy public="1" set="method"><f a=""><e path="Void"/></f></destroy>
 	</class>
+	<class path="flash.events.Event" params="" file="/usr/lib/haxe/std/flash9/events/Event.hx" extern="1">
+		<ACTIVATE public="1" static="1"><c path="String"/></ACTIVATE>
+		<ADDED public="1" static="1"><c path="String"/></ADDED>
+		<ADDED_TO_STAGE public="1" static="1"><c path="String"/></ADDED_TO_STAGE>
+		<CANCEL public="1" static="1"><c path="String"/></CANCEL>
+		<CHANGE public="1" static="1"><c path="String"/></CHANGE>
+		<CLEAR public="1" static="1"><c path="String"/></CLEAR>
+		<CLOSE public="1" static="1"><c path="String"/></CLOSE>
+		<COMPLETE public="1" static="1"><c path="String"/></COMPLETE>
+		<CONNECT public="1" static="1"><c path="String"/></CONNECT>
+		<CONTEXT3D_CREATE public="1" static="1"><c path="String"/></CONTEXT3D_CREATE>
+		<COPY public="1" static="1"><c path="String"/></COPY>
+		<CUT public="1" static="1"><c path="String"/></CUT>
+		<DEACTIVATE public="1" static="1"><c path="String"/></DEACTIVATE>
+		<ENTER_FRAME public="1" static="1"><c path="String"/></ENTER_FRAME>
+		<EXIT_FRAME public="1" static="1"><c path="String"/></EXIT_FRAME>
+		<FRAME_CONSTRUCTED public="1" static="1"><c path="String"/></FRAME_CONSTRUCTED>
+		<FULLSCREEN public="1" static="1"><c path="String"/></FULLSCREEN>
+		<ID3 public="1" static="1"><c path="String"/></ID3>
+		<INIT public="1" static="1"><c path="String"/></INIT>
+		<MOUSE_LEAVE public="1" static="1"><c path="String"/></MOUSE_LEAVE>
+		<OPEN public="1" static="1"><c path="String"/></OPEN>
+		<PASTE public="1" static="1"><c path="String"/></PASTE>
+		<REMOVED public="1" static="1"><c path="String"/></REMOVED>
+		<REMOVED_FROM_STAGE public="1" static="1"><c path="String"/></REMOVED_FROM_STAGE>
+		<RENDER public="1" static="1"><c path="String"/></RENDER>
+		<RESIZE public="1" static="1"><c path="String"/></RESIZE>
+		<SCROLL public="1" static="1"><c path="String"/></SCROLL>
+		<SELECT public="1" static="1"><c path="String"/></SELECT>
+		<SELECT_ALL public="1" static="1"><c path="String"/></SELECT_ALL>
+		<SOUND_COMPLETE public="1" static="1"><c path="String"/></SOUND_COMPLETE>
+		<TAB_CHILDREN_CHANGE public="1" static="1"><c path="String"/></TAB_CHILDREN_CHANGE>
+		<TAB_ENABLED_CHANGE public="1" static="1"><c path="String"/></TAB_ENABLED_CHANGE>
+		<TAB_INDEX_CHANGE public="1" static="1"><c path="String"/></TAB_INDEX_CHANGE>
+		<TEXT_INTERACTION_MODE_CHANGE public="1" static="1"><c path="String"/></TEXT_INTERACTION_MODE_CHANGE>
+		<UNLOAD public="1" static="1"><c path="String"/></UNLOAD>
+		<bubbles public="1" set="null"><e path="Bool"/></bubbles>
+		<cancelable public="1" set="null"><e path="Bool"/></cancelable>
+		<currentTarget public="1" set="null"><d/></currentTarget>
+		<eventPhase public="1" set="null"><e path="flash.events.EventPhase"/></eventPhase>
+		<target public="1" set="null"><d/></target>
+		<type public="1" set="null"><c path="String"/></type>
+		<clone public="1" set="method"><f a=""><c path="flash.events.Event"/></f></clone>
+		<formatToString public="1" set="method"><f a="className:?p1:?p2:?p3:?p4:?p5">
+	<c path="String"/>
+	<d/>
+	<d/>
+	<d/>
+	<d/>
+	<d/>
+	<c path="String"/>
+</f></formatToString>
+		<isDefaultPrevented public="1" set="method"><f a=""><e path="Bool"/></f></isDefaultPrevented>
+		<preventDefault public="1" set="method"><f a=""><e path="Void"/></f></preventDefault>
+		<stopImmediatePropagation public="1" set="method"><f a=""><e path="Void"/></f></stopImmediatePropagation>
+		<stopPropagation public="1" set="method"><f a=""><e path="Void"/></f></stopPropagation>
+		<toString public="1" set="method"><f a=""><c path="String"/></f></toString>
+		<new public="1" set="method"><f a="type:?bubbles:?cancelable">
+	<c path="String"/>
+	<e path="Bool"/>
+	<e path="Bool"/>
+	<e path="Void"/>
+</f></new>
+	</class>
+	<class path="flash.events.TextEvent" params="" file="/usr/lib/haxe/std/flash9/events/TextEvent.hx" extern="1">
+		<extends path="flash.events.Event"/>
+		<LINK public="1" static="1"><c path="String"/></LINK>
+		<TEXT_INPUT public="1" static="1"><c path="String"/></TEXT_INPUT>
+		<text public="1"><c path="String"/></text>
+		<new public="1" set="method"><f a="type:?bubbles:?cancelable:?text">
+	<c path="String"/>
+	<e path="Bool"/>
+	<e path="Bool"/>
+	<c path="String"/>
+	<e path="Void"/>
+</f></new>
+	</class>
+	<class path="flash.events.ErrorEvent" params="" file="/usr/lib/haxe/std/flash9/events/ErrorEvent.hx" extern="1">
+		<extends path="flash.events.TextEvent"/>
+		<ERROR public="1" static="1"><c path="String"/></ERROR>
+		<errorID public="1"><c path="Int"/></errorID>
+		<new public="1" set="method"><f a="type:?bubbles:?cancelable:?text:?id">
+	<c path="String"/>
+	<e path="Bool"/>
+	<e path="Bool"/>
+	<c path="String"/>
+	<c path="Int"/>
+	<e path="Void"/>
+</f></new>
+	</class>
 	<class path="flash.accessibility.AccessibilityImplementation" params="" file="/usr/lib/haxe/std/flash9/accessibility/AccessibilityImplementation.hx" extern="1">
 		<errno public="1"><t path="UInt"/></errno>
 		<stub public="1"><e path="Bool"/></stub>
@@ -2677,6 +2767,21 @@
 		<new public="1" set="method"><f a=""><e path="Void"/></f></new>
 		<haxe_dynamic><d/></haxe_dynamic>
 	</class>
+	<class path="flash.events.IOErrorEvent" params="" file="/usr/lib/haxe/std/flash9/events/IOErrorEvent.hx" extern="1">
+		<extends path="flash.events.ErrorEvent"/>
+		<DISK_ERROR public="1" static="1"><c path="String"/></DISK_ERROR>
+		<IO_ERROR public="1" static="1"><c path="String"/></IO_ERROR>
+		<NETWORK_ERROR public="1" static="1"><c path="String"/></NETWORK_ERROR>
+		<VERIFY_ERROR public="1" static="1"><c path="String"/></VERIFY_ERROR>
+		<new public="1" set="method"><f a="type:?bubbles:?cancelable:?text:?id">
+	<c path="String"/>
+	<e path="Bool"/>
+	<e path="Bool"/>
+	<c path="String"/>
+	<c path="Int"/>
+	<e path="Void"/>
+</f></new>
+	</class>
 	<enum path="flash.display.ShaderPrecision" params="" file="/usr/lib/haxe/std/flash9/display/ShaderPrecision.hx">
 		<FULL/>
 		<FAST/>
@@ -2777,6 +2882,24 @@
 		<wmodeGPU public="1"><e path="Bool"/></wmodeGPU>
 		<invalidate public="1" set="method"><f a=""><e path="Void"/></f></invalidate>
 		<isFocusInaccessible public="1" set="method"><f a=""><e path="Bool"/></f></isFocusInaccessible>
+	</class>
+	<class path="flash.text.Font" params="" file="/usr/lib/haxe/std/flash9/text/Font.hx" extern="1">
+		<enumerateFonts public="1" set="method" static="1"><f a="?enumerateDeviceFonts">
+	<e path="Bool"/>
+	<c path="Array"><c path="flash.text.Font"/></c>
+</f></enumerateFonts>
+		<registerFont public="1" set="method" static="1"><f a="font">
+	<c path="Class"><d/></c>
+	<e path="Void"/>
+</f></registerFont>
+		<fontName public="1" set="null"><c path="String"/></fontName>
+		<fontStyle public="1" set="null"><e path="flash.text.FontStyle"/></fontStyle>
+		<fontType public="1" set="null"><e path="flash.text.FontType"/></fontType>
+		<hasGlyphs public="1" set="method"><f a="str">
+	<c path="String"/>
+	<e path="Bool"/>
+</f></hasGlyphs>
+		<new public="1" set="method"><f a=""><e path="Void"/></f></new>
 	</class>
 	<class path="Reflect" params="" file="/usr/lib/haxe/std/flash9/_std/Reflect.hx">
 		<hasField public="1" set="method" line="28" static="1">
@@ -2926,58 +3049,63 @@
 	<e path="Void"/>
 </f></new>
 	</class>
+	<enum path="flash.text.FontType" params="" file="/usr/lib/haxe/std/flash9/text/FontType.hx">
+		<EMBEDDED_CFF/>
+		<EMBEDDED/>
+		<DEVICE/>
+	</enum>
 	<class path="display.TextFl" params="" file="src/display/TextFl.hx">
 		<extends path="display.DisplayObjectFl"/>
 		<implements path="interfaces.IExec"/>
 		<execs static="1"><c path="Hash"><d/></c></execs>
-		<LINE_DELIMITER get="inline" set="null" line="18" static="1"><c path="EReg"/></LINE_DELIMITER>
-		<WORD_DELIMITER get="inline" set="null" line="19" static="1"><c path="EReg"/></WORD_DELIMITER>
-		<OUTLINE get="inline" set="null" line="20" static="1"><c path="flash.filters.GlowFilter"/></OUTLINE>
-		<init public="1" set="method" line="22" static="1"><f a=""><e path="Void"/></f></init>
-		<mapMethods public="1" set="method" line="27" static="1"><f a="execs">
+		<LINE_DELIMITER get="inline" set="null" line="19" static="1"><c path="EReg"/></LINE_DELIMITER>
+		<WORD_DELIMITER get="inline" set="null" line="20" static="1"><c path="EReg"/></WORD_DELIMITER>
+		<OUTLINE get="inline" set="null" line="21" static="1"><c path="flash.filters.GlowFilter"/></OUTLINE>
+		<init public="1" set="method" line="23" static="1"><f a=""><e path="Void"/></f></init>
+		<mapMethods public="1" set="method" line="28" static="1"><f a="execs">
 	<c path="Hash"><d/></c>
 	<e path="Void"/>
 </f></mapMethods>
-		<getOutlineFilter get="inline" set="null" line="39" static="1"><f a="color">
+		<getOutlineFilter get="inline" set="null" line="40" static="1"><f a="color">
 	<c path="Int"/>
 	<c path="flash.filters.GlowFilter"/>
 </f></getOutlineFilter>
-		<setFont get="inline" set="null" line="43" static="1"><f a="target:cssFontString">
+		<setFont set="method" line="44" static="1"><f a="target:cssFontString">
 	<c path="display.TextFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></setFont>
-		<setColor get="inline" set="null" line="55" static="1"><f a="target:cssColorString">
+		<setColor get="inline" set="null" line="76" static="1"><f a="target:cssColorString">
 	<c path="display.TextFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></setColor>
-		<setOutline get="inline" set="null" line="67" static="1"><f a="target:outline">
+		<setOutline get="inline" set="null" line="88" static="1"><f a="target:outline">
 	<c path="display.TextFl"/>
 	<e path="Bool"/>
 	<e path="Void"/>
 </f></setOutline>
-		<setLineWidth get="inline" set="null" line="76" static="1"><f a="target:wd">
+		<setLineWidth get="inline" set="null" line="97" static="1"><f a="target:wd">
 	<c path="display.TextFl"/>
 	<d/>
 	<e path="Void"/>
 </f></setLineWidth>
-		<setLineHeight get="inline" set="null" line="82" static="1"><f a="target:ht">
+		<setLineHeight get="inline" set="null" line="103" static="1"><f a="target:ht">
 	<c path="display.TextFl"/>
 	<d/>
 	<e path="Void"/>
 </f></setLineHeight>
-		<setTextAlign get="inline" set="null" line="87" static="1"><f a="target:align">
+		<setTextAlign get="inline" set="null" line="108" static="1"><f a="target:align">
 	<c path="display.TextFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></setTextAlign>
-		<setTextBaseline get="inline" set="null" line="92" static="1"><f a="target:baseline">
+		<setTextBaseline get="inline" set="null" line="113" static="1"><f a="target:baseline">
 	<c path="display.TextFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></setTextBaseline>
-		<setText public="1" get="inline" set="null" line="101" static="1"><f a="target:text">
+		<setText public="1" get="inline" set="null" line="122" static="1"><f a="target:text">
 	<c path="display.TextFl"/>
 	<c path="String"/>
 	<e path="Void"/>
@@ -2990,17 +3118,23 @@
 		<lineWidth><c path="Float"/></lineWidth>
 		<lineHeight><c path="Float"/></lineHeight>
 		<outline><e path="Bool"/></outline>
-		<updateBaseline set="method" line="132"><f a=""><e path="Void"/></f></updateBaseline>
-		<updateLineHeight set="method" line="152"><f a=""><e path="Void"/></f></updateLineHeight>
-		<updateAlign set="method" line="165"><f a=""><e path="Void"/></f></updateAlign>
-		<updateText set="method" line="194">
+		<cssFontString><c path="String"/></cssFontString>
+		<font><c path="String"/></font>
+		<updateBaseline set="method" line="155"><f a=""><e path="Void"/></f></updateBaseline>
+		<updateLineHeight set="method" line="175"><f a=""><e path="Void"/></f></updateLineHeight>
+		<updateAlign set="method" line="188"><f a=""><e path="Void"/></f></updateAlign>
+		<updateText set="method" line="217">
 			<f a=""><e path="Void"/></f>
 			<haxe_doc>
 	 * Mimic the text application in EaselJS since we want as close as possible
 	 * a match to that output.
 	 </haxe_doc>
 		</updateText>
-		<exec public="1" get="inline" set="null" line="254">
+		<updateEmbedding public="1" set="method" line="272"><f a="?e">
+	<d/>
+	<e path="Void"/>
+</f></updateEmbedding>
+		<exec public="1" get="inline" set="null" line="281">
 			<f a="method:?arguments">
 				<c path="String"/>
 				<d/>
@@ -3012,7 +3146,7 @@
 	 * @param Array arguments for the method
 	 </haxe_doc>
 		</exec>
-		<new public="1" set="method" line="116"><f a="id">
+		<new public="1" set="method" line="139"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></new>
@@ -3029,6 +3163,10 @@
 		<texts public="1" static="1"><c path="IntHash"><c path="display.TextFl"/></c></texts>
 		<shadows public="1" static="1"><c path="IntHash"><c path="display.ShadowFl"/></c></shadows>
 		<filters public="1" static="1"><c path="IntHash"><c path="interfaces.IBitmapFilter"/></c></filters>
+		<commands public="1" static="1"><c path="Hash"><f a="">
+	<d/>
+	<e path="Void"/>
+</f></c></commands>
 		<makers public="1" static="1"><c path="Hash"><f a="">
 	<c path="Int"/>
 	<e path="Void"/>
@@ -3039,120 +3177,124 @@
 </f></c></unmakers>
 		<dispatcher public="1" static="1"><c path="flash.events.EventDispatcher"/></dispatcher>
 		<stageFl public="1" static="1"><c path="display.StageFl"/></stageFl>
-		<init public="1" set="method" line="46" static="1"><f a=""><e path="Void"/></f></init>
-		<createItems public="1" get="inline" set="null" line="113" static="1"><f a="a">
+		<init public="1" set="method" line="48" static="1"><f a=""><e path="Void"/></f></init>
+		<runCommands public="1" get="inline" set="null" line="115" static="1"><f a="a">
+	<c path="Array"><c path="Array"><d/></c></c>
+	<e path="Void"/>
+</f></runCommands>
+		<createItems public="1" get="inline" set="null" line="125" static="1"><f a="a">
 	<c path="Array"><c path="Array"><d/></c></c>
 	<e path="Void"/>
 </f></createItems>
-		<destroyItems public="1" get="inline" set="null" line="124" static="1"><f a="a">
+		<destroyItems public="1" get="inline" set="null" line="136" static="1"><f a="a">
 	<c path="Array"><c path="Array"><d/></c></c>
 	<e path="Void"/>
 </f></destroyItems>
-		<changeItems public="1" get="inline" set="null" line="144" static="1"><f a="a">
+		<changeItems public="1" get="inline" set="null" line="156" static="1"><f a="a">
 	<c path="Array"><c path="Array"><d/></c></c>
 	<e path="Void"/>
 </f></changeItems>
-		<invoke public="1" get="inline" set="null" line="156" static="1"><f a="cmd">
+		<invoke public="1" get="inline" set="null" line="168" static="1"><f a="cmd">
 	<d/>
 	<d/>
 </f></invoke>
-		<unimage get="inline" set="null" line="160" static="1"><f a="id">
+		<unimage get="inline" set="null" line="172" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></unimage>
-		<image get="inline" set="null" line="165" static="1"><f a="id">
+		<image get="inline" set="null" line="177" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></image>
-		<unbitmap get="inline" set="null" line="171" static="1"><f a="id">
+		<unbitmap get="inline" set="null" line="183" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></unbitmap>
-		<bitmap get="inline" set="null" line="176" static="1"><f a="id">
+		<bitmap get="inline" set="null" line="188" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></bitmap>
-		<bitmapAnimation get="inline" set="null" line="182" static="1"><f a="id">
+		<bitmapAnimation get="inline" set="null" line="194" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></bitmapAnimation>
-		<unbitmapAnimation get="inline" set="null" line="189" static="1"><f a="id">
+		<unbitmapAnimation get="inline" set="null" line="201" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></unbitmapAnimation>
-		<shape get="inline" set="null" line="197" static="1"><f a="id">
+		<shape get="inline" set="null" line="209" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></shape>
-		<unshape get="inline" set="null" line="203" static="1"><f a="id">
+		<unshape get="inline" set="null" line="215" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></unshape>
-		<graphics get="inline" set="null" line="209" static="1"><f a="id">
+		<graphics get="inline" set="null" line="221" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></graphics>
-		<ungraphics get="inline" set="null" line="215" static="1"><f a="id">
+		<ungraphics get="inline" set="null" line="227" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></ungraphics>
-		<container get="inline" set="null" line="220" static="1"><f a="id">
+		<container get="inline" set="null" line="232" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></container>
-		<uncontainer get="inline" set="null" line="227" static="1"><f a="id">
+		<uncontainer get="inline" set="null" line="239" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></uncontainer>
-		<rectangle get="inline" set="null" line="234" static="1"><f a="id">
+		<rectangle get="inline" set="null" line="246" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></rectangle>
-		<unrectangle get="inline" set="null" line="240" static="1"><f a="id">
+		<unrectangle get="inline" set="null" line="252" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></unrectangle>
-		<frame get="inline" set="null" line="245" static="1"><f a="id">
+		<frame get="inline" set="null" line="257" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></frame>
-		<unframe get="inline" set="null" line="251" static="1"><f a="id">
+		<unframe get="inline" set="null" line="263" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></unframe>
-		<text get="inline" set="null" line="258" static="1"><f a="id">
+		<text get="inline" set="null" line="270" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></text>
-		<untext get="inline" set="null" line="265" static="1"><f a="id">
+		<untext get="inline" set="null" line="277" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></untext>
-		<shadow get="inline" set="null" line="272" static="1"><f a="id">
+		<shadow get="inline" set="null" line="284" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></shadow>
-		<unshadow get="inline" set="null" line="278" static="1"><f a="id">
+		<unshadow get="inline" set="null" line="290" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></unshadow>
-		<colorMatrixFilter get="inline" set="null" line="283" static="1"><f a="id">
+		<colorMatrixFilter get="inline" set="null" line="295" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></colorMatrixFilter>
-		<colorFilter get="inline" set="null" line="289" static="1"><f a="id">
+		<colorFilter get="inline" set="null" line="301" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></colorFilter>
-		<boxBlurFilter get="inline" set="null" line="295" static="1"><f a="id">
+		<boxBlurFilter get="inline" set="null" line="307" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></boxBlurFilter>
-		<unFilter get="inline" set="null" line="301" static="1"><f a="id">
+		<unFilter get="inline" set="null" line="313" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></unFilter>
-		<stage get="inline" set="null" line="306" static="1"><f a="id">
+		<stage get="inline" set="null" line="319" static="1"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></stage>
@@ -4506,22 +4648,22 @@
 	<e path="Void"/>
 </f></new></class>
 	<class path="Main" params="" file="src/Main.hx">
-		<DEFAULT_ID get="inline" set="null" line="17" static="1"><c path="String"/></DEFAULT_ID>
+		<DEFAULT_ID get="inline" set="null" line="18" static="1"><c path="String"/></DEFAULT_ID>
 		<callbackMethod static="1"><c path="String"/></callbackMethod>
-		<main public="1" set="method" line="21" static="1"><f a=""><e path="Void"/></f></main>
-		<dispatch public="1" set="method" line="44" static="1"><f a="evt">
+		<main public="1" set="method" line="22" static="1"><f a=""><e path="Void"/></f></main>
+		<dispatch public="1" set="method" line="45" static="1"><f a="evt">
 	<d/>
 	<e path="Void"/>
 </f></dispatch>
-		<addedToStage set="method" line="34"><f a="?evt">
+		<addedToStage set="method" line="35"><f a="?evt">
 	<c path="flash.events.Event"/>
 	<e path="Void"/>
 </f></addedToStage>
-		<init set="method" line="48"><f a="?evt">
+		<init set="method" line="49"><f a="?evt">
 	<c path="flash.events.Event"/>
 	<e path="Void"/>
 </f></init>
-		<new public="1" set="method" line="25"><f a=""><e path="Void"/></f></new>
+		<new public="1" set="method" line="26"><f a=""><e path="Void"/></f></new>
 		<haxe_doc>
  * TODO : 
  * - hitTestPoint : problematic if drawing commands haven't been flushed to Flash 
@@ -4713,6 +4855,35 @@
 	<e path="Void"/>
 </f></new>
 	</class>
+	<class path="utils.FontLib" params="" file="src/utils/FontLib.hx">
+		<_embedded line="25" static="1"><c path="Hash"><e path="Bool"/></c></_embedded>
+		<dispatcher public="1" set="null" static="1"><c path="flash.events.EventDispatcher"/></dispatcher>
+		<isEmbedded public="1" set="method" line="29" static="1"><f a="font">
+	<c path="String"/>
+	<t path="Null"><e path="Bool"/></t>
+</f></isEmbedded>
+		<embedFonts public="1" get="inline" set="null" line="33" static="1"><f a="a">
+	<c path="Array"><d/></c>
+	<e path="Void"/>
+</f></embedFonts>
+		<_fontList><c path="Array"><c path="String"/></c></_fontList>
+		<onFontLoaded set="method" line="50"><f a="e">
+	<c path="flash.events.Event"/>
+	<e path="Void"/>
+</f></onFontLoaded>
+		<onFontLoadingFailed set="method" line="67"><f a="e">
+	<c path="flash.events.IOErrorEvent"/>
+	<e path="Void"/>
+</f></onFontLoadingFailed>
+		<new set="method" line="39"><f a="fontList:filePath">
+	<c path="Array"><c path="String"/></c>
+	<c path="String"/>
+	<e path="Void"/>
+</f></new>
+		<haxe_doc>
+ * NOTE: this is util is incomplete.
+ </haxe_doc>
+	</class>
 	<class path="Std" params="" file="/usr/lib/haxe/std/flash9/_std/Std.hx">
 		<is public="1" set="method" line="28" static="1">
 			<f a="v:t">
@@ -4787,70 +4958,6 @@
 		<DECREMENT_WRAP/>
 		<DECREMENT_SATURATE/>
 	</enum>
-	<class path="flash.events.Event" params="" file="/usr/lib/haxe/std/flash9/events/Event.hx" extern="1">
-		<ACTIVATE public="1" static="1"><c path="String"/></ACTIVATE>
-		<ADDED public="1" static="1"><c path="String"/></ADDED>
-		<ADDED_TO_STAGE public="1" static="1"><c path="String"/></ADDED_TO_STAGE>
-		<CANCEL public="1" static="1"><c path="String"/></CANCEL>
-		<CHANGE public="1" static="1"><c path="String"/></CHANGE>
-		<CLEAR public="1" static="1"><c path="String"/></CLEAR>
-		<CLOSE public="1" static="1"><c path="String"/></CLOSE>
-		<COMPLETE public="1" static="1"><c path="String"/></COMPLETE>
-		<CONNECT public="1" static="1"><c path="String"/></CONNECT>
-		<CONTEXT3D_CREATE public="1" static="1"><c path="String"/></CONTEXT3D_CREATE>
-		<COPY public="1" static="1"><c path="String"/></COPY>
-		<CUT public="1" static="1"><c path="String"/></CUT>
-		<DEACTIVATE public="1" static="1"><c path="String"/></DEACTIVATE>
-		<ENTER_FRAME public="1" static="1"><c path="String"/></ENTER_FRAME>
-		<EXIT_FRAME public="1" static="1"><c path="String"/></EXIT_FRAME>
-		<FRAME_CONSTRUCTED public="1" static="1"><c path="String"/></FRAME_CONSTRUCTED>
-		<FULLSCREEN public="1" static="1"><c path="String"/></FULLSCREEN>
-		<ID3 public="1" static="1"><c path="String"/></ID3>
-		<INIT public="1" static="1"><c path="String"/></INIT>
-		<MOUSE_LEAVE public="1" static="1"><c path="String"/></MOUSE_LEAVE>
-		<OPEN public="1" static="1"><c path="String"/></OPEN>
-		<PASTE public="1" static="1"><c path="String"/></PASTE>
-		<REMOVED public="1" static="1"><c path="String"/></REMOVED>
-		<REMOVED_FROM_STAGE public="1" static="1"><c path="String"/></REMOVED_FROM_STAGE>
-		<RENDER public="1" static="1"><c path="String"/></RENDER>
-		<RESIZE public="1" static="1"><c path="String"/></RESIZE>
-		<SCROLL public="1" static="1"><c path="String"/></SCROLL>
-		<SELECT public="1" static="1"><c path="String"/></SELECT>
-		<SELECT_ALL public="1" static="1"><c path="String"/></SELECT_ALL>
-		<SOUND_COMPLETE public="1" static="1"><c path="String"/></SOUND_COMPLETE>
-		<TAB_CHILDREN_CHANGE public="1" static="1"><c path="String"/></TAB_CHILDREN_CHANGE>
-		<TAB_ENABLED_CHANGE public="1" static="1"><c path="String"/></TAB_ENABLED_CHANGE>
-		<TAB_INDEX_CHANGE public="1" static="1"><c path="String"/></TAB_INDEX_CHANGE>
-		<TEXT_INTERACTION_MODE_CHANGE public="1" static="1"><c path="String"/></TEXT_INTERACTION_MODE_CHANGE>
-		<UNLOAD public="1" static="1"><c path="String"/></UNLOAD>
-		<bubbles public="1" set="null"><e path="Bool"/></bubbles>
-		<cancelable public="1" set="null"><e path="Bool"/></cancelable>
-		<currentTarget public="1" set="null"><d/></currentTarget>
-		<eventPhase public="1" set="null"><e path="flash.events.EventPhase"/></eventPhase>
-		<target public="1" set="null"><d/></target>
-		<type public="1" set="null"><c path="String"/></type>
-		<clone public="1" set="method"><f a=""><c path="flash.events.Event"/></f></clone>
-		<formatToString public="1" set="method"><f a="className:?p1:?p2:?p3:?p4:?p5">
-	<c path="String"/>
-	<d/>
-	<d/>
-	<d/>
-	<d/>
-	<d/>
-	<c path="String"/>
-</f></formatToString>
-		<isDefaultPrevented public="1" set="method"><f a=""><e path="Bool"/></f></isDefaultPrevented>
-		<preventDefault public="1" set="method"><f a=""><e path="Void"/></f></preventDefault>
-		<stopImmediatePropagation public="1" set="method"><f a=""><e path="Void"/></f></stopImmediatePropagation>
-		<stopPropagation public="1" set="method"><f a=""><e path="Void"/></f></stopPropagation>
-		<toString public="1" set="method"><f a=""><c path="String"/></f></toString>
-		<new public="1" set="method"><f a="type:?bubbles:?cancelable">
-	<c path="String"/>
-	<e path="Bool"/>
-	<e path="Bool"/>
-	<e path="Void"/>
-</f></new>
-	</class>
 	<class path="flash.events.MouseEvent" params="" file="/usr/lib/haxe/std/flash9/events/MouseEvent.hx" extern="1">
 		<extends path="flash.events.Event"/>
 		<CLICK public="1" static="1"><c path="String"/></CLICK>
@@ -5674,6 +5781,12 @@
 		<ROUND/>
 		<MITER/>
 		<BEVEL/>
+	</enum>
+	<enum path="flash.text.FontStyle" params="" file="/usr/lib/haxe/std/flash9/text/FontStyle.hx">
+		<REGULAR/>
+		<ITALIC/>
+		<BOLD_ITALIC/>
+		<BOLD/>
 	</enum>
 	<class path="flash.display3D.Context3D" params="" file="/usr/lib/haxe/std/flash9/display3D/Context3D.hx" extern="1">
 		<extends path="flash.events.EventDispatcher"/>
