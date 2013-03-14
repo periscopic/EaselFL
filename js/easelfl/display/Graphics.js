@@ -1274,7 +1274,27 @@ var p = Graphics.prototype;
 	};
 	*/
 	p.clone = function() {
-		if(createjs.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.clone currently not implemented';
+		//if(createjs.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.clone currently not implemented';
+		//return o;
+		
+		//TODO: moving ID out of specific graphics command
+		//and wrapping commands as using shape id would
+		//facilitate shared graphics
+		//
+		var o = new Graphics();
+		var state = o._flState = new Array(this._flState.length);
+		
+		//replace ids in state
+		for(var i=0, l=state.length; i<l; ++i) {
+			state[i] = this._flState[i].slice();
+			state[i][0] = o._flId;
+		}
+
+		 o._flChange = state.slice();
+		 console.log(this._flImageRequests);
+		 console.log(this._flImageLinks);
+		 o._flImageRequests = this._flImageLinks.slice().concat(this._flImageRequests);
+		console.log(o._flImageRequests);
 		return o;
 	};
 		

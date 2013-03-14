@@ -154,8 +154,12 @@ var p = Shape.prototype = new createjs.DisplayObject();
 	}
 	*/	
 	p.clone = function(recursive) {
-		if(CanvasFl.THROW_UNIMPLEMENTED) throw 'EaselFl:Shape.clone currently not implemented';
-		return null;
+		if(createjs.Stage.FL_LOG_PART_IMPLEMENTED) {
+			console.log('EaselFL:Shape.clone is currently always recursive');
+		}
+		var o = new Shape(this.graphics?this.graphics.clone():null);
+		this.cloneProps(o);
+		return o;
 	}
 		
 	/**
