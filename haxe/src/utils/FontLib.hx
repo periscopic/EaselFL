@@ -11,9 +11,10 @@ package utils;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
+	import flash.text.TextLineMetrics;
 	import flash.events.EventDispatcher;
 	import flash.Lib;
-	import interfaces.IExec;
+	import haxe.Timer;
 	
 
     class FontLib {
@@ -24,6 +25,9 @@ package utils;
 
 		static private var _embedded:Hash<Bool> = new Hash<Bool>();
 		static public var dispatcher(default, null):EventDispatcher;
+		static private var tf:TextField;
+		static private var fmt:TextFormat;
+		static private var tmr:Timer;
 		
 		
 		static public function isEmbedded(font:String) {
@@ -47,7 +51,7 @@ package utils;
 			loader.load(new URLRequest(filePath));
 		}	
 
-		private function onFontLoaded(e:Event):Void {
+		function onFontLoaded(e:Event):Void {
 			for(className in _fontList) {
 				if(e.target.applicationDomain.hasDefinition(className)) {
 					var FontClass:Dynamic = e.target.applicationDomain.getDefinition(className);					
@@ -55,14 +59,19 @@ package utils;
 				}
 			}
 			
+			noteFonts();
+		}
+		
+		function noteFonts():Void {
 			for(font in Font.enumerateFonts()) {
 				if(!_embedded.exists(font.fontName)) {
+
 					_embedded.set(font.fontName, true);
 					dispatcher.dispatchEvent(new Event(font.fontName));
 				}	
 			}
-			
 		}
+		
 		
 		function onFontLoadingFailed(e:IOErrorEvent):Void {			
 			//trace("failed:");

@@ -142,6 +142,7 @@ var ScriptLoader = {
             ScriptLoader.loadInOrder([
                 '../js/swfobject.js',
                 '../js/easelfl/utils/ContextConfig.js',
+                '../js/easelfl/utils/Log.js',
                 '../js/easelfl/utils/UID.js',
                 '../js/easelfl/events/EventDispatcher.js',
                 '../js/easelfl/utils/Ticker.js',

@@ -3061,51 +3061,57 @@
 		<LINE_DELIMITER get="inline" set="null" line="19" static="1"><c path="EReg"/></LINE_DELIMITER>
 		<WORD_DELIMITER get="inline" set="null" line="20" static="1"><c path="EReg"/></WORD_DELIMITER>
 		<OUTLINE get="inline" set="null" line="21" static="1"><c path="flash.filters.GlowFilter"/></OUTLINE>
-		<init public="1" set="method" line="23" static="1"><f a=""><e path="Void"/></f></init>
-		<mapMethods public="1" set="method" line="28" static="1"><f a="execs">
+		<_mTf static="1"><c path="flash.text.TextField"/></_mTf>
+		<init public="1" set="method" line="26" static="1"><f a=""><e path="Void"/></f></init>
+		<getMetrics set="method" line="33" static="1"><f a="fmt:embed">
+	<c path="flash.text.TextFormat"/>
+	<e path="Bool"/>
+	<c path="flash.text.TextLineMetrics"/>
+</f></getMetrics>
+		<mapMethods public="1" set="method" line="42" static="1"><f a="execs">
 	<c path="Hash"><d/></c>
 	<e path="Void"/>
 </f></mapMethods>
-		<getOutlineFilter get="inline" set="null" line="40" static="1"><f a="color">
+		<getOutlineFilter get="inline" set="null" line="54" static="1"><f a="color">
 	<c path="Int"/>
 	<c path="flash.filters.GlowFilter"/>
 </f></getOutlineFilter>
-		<setFont set="method" line="44" static="1"><f a="target:cssFontString">
+		<setFont set="method" line="58" static="1"><f a="target:cssFontString">
 	<c path="display.TextFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></setFont>
-		<setColor get="inline" set="null" line="76" static="1"><f a="target:cssColorString">
+		<setColor get="inline" set="null" line="92" static="1"><f a="target:cssColorString">
 	<c path="display.TextFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></setColor>
-		<setOutline get="inline" set="null" line="88" static="1"><f a="target:outline">
+		<setOutline get="inline" set="null" line="104" static="1"><f a="target:outline">
 	<c path="display.TextFl"/>
 	<e path="Bool"/>
 	<e path="Void"/>
 </f></setOutline>
-		<setLineWidth get="inline" set="null" line="97" static="1"><f a="target:wd">
+		<setLineWidth get="inline" set="null" line="113" static="1"><f a="target:wd">
 	<c path="display.TextFl"/>
 	<d/>
 	<e path="Void"/>
 </f></setLineWidth>
-		<setLineHeight get="inline" set="null" line="103" static="1"><f a="target:ht">
+		<setLineHeight get="inline" set="null" line="119" static="1"><f a="target:ht">
 	<c path="display.TextFl"/>
 	<d/>
 	<e path="Void"/>
 </f></setLineHeight>
-		<setTextAlign get="inline" set="null" line="108" static="1"><f a="target:align">
+		<setTextAlign get="inline" set="null" line="124" static="1"><f a="target:align">
 	<c path="display.TextFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></setTextAlign>
-		<setTextBaseline get="inline" set="null" line="113" static="1"><f a="target:baseline">
+		<setTextBaseline get="inline" set="null" line="129" static="1"><f a="target:baseline">
 	<c path="display.TextFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></setTextBaseline>
-		<setText public="1" get="inline" set="null" line="122" static="1"><f a="target:text">
+		<setText public="1" get="inline" set="null" line="134" static="1"><f a="target:text">
 	<c path="display.TextFl"/>
 	<c path="String"/>
 	<e path="Void"/>
@@ -3120,21 +3126,22 @@
 		<outline><e path="Bool"/></outline>
 		<cssFontString><c path="String"/></cssFontString>
 		<font><c path="String"/></font>
-		<updateBaseline set="method" line="155"><f a=""><e path="Void"/></f></updateBaseline>
-		<updateLineHeight set="method" line="175"><f a=""><e path="Void"/></f></updateLineHeight>
-		<updateAlign set="method" line="188"><f a=""><e path="Void"/></f></updateAlign>
-		<updateText set="method" line="217">
+		<fmtMetrics><c path="flash.text.TextLineMetrics"/></fmtMetrics>
+		<updateBaseline set="method" line="167"><f a=""><e path="Void"/></f></updateBaseline>
+		<updateLineHeight set="method" line="193"><f a=""><e path="Void"/></f></updateLineHeight>
+		<updateAlign set="method" line="209"><f a=""><e path="Void"/></f></updateAlign>
+		<updateText set="method" line="238">
 			<f a=""><e path="Void"/></f>
 			<haxe_doc>
 	 * Mimic the text application in EaselJS since we want as close as possible
 	 * a match to that output.
 	 </haxe_doc>
 		</updateText>
-		<updateEmbedding public="1" set="method" line="272"><f a="?e">
+		<updateEmbedding public="1" set="method" line="293"><f a="?e">
 	<d/>
 	<e path="Void"/>
 </f></updateEmbedding>
-		<exec public="1" get="inline" set="null" line="281">
+		<exec public="1" get="inline" set="null" line="302">
 			<f a="method:?arguments">
 				<c path="String"/>
 				<d/>
@@ -3146,7 +3153,7 @@
 	 * @param Array arguments for the method
 	 </haxe_doc>
 		</exec>
-		<new public="1" set="method" line="139"><f a="id">
+		<new public="1" set="method" line="151"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></new>
@@ -4642,6 +4649,18 @@
 	<e path="Void"/>
 </f></new>
 	</class>
+	<class path="haxe.Log" params="" file="/usr/lib/haxe/std/haxe/Log.hx">
+		<trace public="1" set="dynamic" line="29" static="1"><f a="v:?infos">
+	<d/>
+	<t path="haxe.PosInfos"/>
+	<e path="Void"/>
+</f></trace>
+		<clear public="1" set="dynamic" line="43" static="1"><f a=""><e path="Void"/></f></clear>
+		<setColor public="1" set="dynamic" line="52" static="1"><f a="rgb">
+	<c path="Int"/>
+	<e path="Void"/>
+</f></setColor>
+	</class>
 	<class path="flash.net.Responder" params="" file="/usr/lib/haxe/std/flash9/net/Responder.hx" extern="1"><new public="1" set="method"><f a="result:?status">
 	<d/>
 	<d/>
@@ -4856,26 +4875,30 @@
 </f></new>
 	</class>
 	<class path="utils.FontLib" params="" file="src/utils/FontLib.hx">
-		<_embedded line="25" static="1"><c path="Hash"><e path="Bool"/></c></_embedded>
+		<_embedded line="26" static="1"><c path="Hash"><e path="Bool"/></c></_embedded>
 		<dispatcher public="1" set="null" static="1"><c path="flash.events.EventDispatcher"/></dispatcher>
-		<isEmbedded public="1" set="method" line="29" static="1"><f a="font">
+		<tf static="1"><c path="flash.text.TextField"/></tf>
+		<fmt static="1"><c path="flash.text.TextFormat"/></fmt>
+		<tmr static="1"><c path="haxe.Timer"/></tmr>
+		<isEmbedded public="1" set="method" line="33" static="1"><f a="font">
 	<c path="String"/>
 	<t path="Null"><e path="Bool"/></t>
 </f></isEmbedded>
-		<embedFonts public="1" get="inline" set="null" line="33" static="1"><f a="a">
+		<embedFonts public="1" get="inline" set="null" line="37" static="1"><f a="a">
 	<c path="Array"><d/></c>
 	<e path="Void"/>
 </f></embedFonts>
 		<_fontList><c path="Array"><c path="String"/></c></_fontList>
-		<onFontLoaded set="method" line="50"><f a="e">
+		<onFontLoaded set="method" line="54"><f a="e">
 	<c path="flash.events.Event"/>
 	<e path="Void"/>
 </f></onFontLoaded>
-		<onFontLoadingFailed set="method" line="67"><f a="e">
+		<noteFonts set="method" line="65"><f a=""><e path="Void"/></f></noteFonts>
+		<onFontLoadingFailed set="method" line="76"><f a="e">
 	<c path="flash.events.IOErrorEvent"/>
 	<e path="Void"/>
 </f></onFontLoadingFailed>
-		<new set="method" line="39"><f a="fontList:filePath">
+		<new set="method" line="43"><f a="fontList:filePath">
 	<c path="Array"><c path="String"/></c>
 	<c path="String"/>
 	<e path="Void"/>
@@ -4943,6 +4966,31 @@
 		<haxe_doc>
 	The Std class provides standard methods for manipulating basic types.
 </haxe_doc>
+	</class>
+	<class path="haxe.Timer" params="" file="/usr/lib/haxe/std/haxe/Timer.hx">
+		<delay public="1" set="method" line="77" static="1"><f a="f:time_ms">
+	<f a=""><e path="Void"/></f>
+	<c path="Int"/>
+	<c path="haxe.Timer"/>
+</f></delay>
+		<measure public="1" params="T" set="method" line="88" static="1"><f a="f:?pos">
+	<f a=""><c path="measure.T"/></f>
+	<t path="haxe.PosInfos"/>
+	<c path="measure.T"/>
+</f></measure>
+		<stamp public="1" set="method" line="98" static="1">
+			<f a=""><c path="Float"/></f>
+			<haxe_doc>
+		Returns a timestamp, in seconds
+	</haxe_doc>
+		</stamp>
+		<id><t path="Null"><c path="Int"/></t></id>
+		<stop public="1" set="method" line="52"><f a=""><e path="Void"/></f></stop>
+		<run public="1" set="dynamic" line="74"><f a=""><e path="Void"/></f></run>
+		<new public="1" set="method" line="37"><f a="time_ms">
+	<c path="Int"/>
+	<e path="Void"/>
+</f></new>
 	</class>
 	<enum path="flash.display.ActionScriptVersion" params="" file="/usr/lib/haxe/std/flash9/display/ActionScriptVersion.hx">
 		<ACTIONSCRIPT3/>

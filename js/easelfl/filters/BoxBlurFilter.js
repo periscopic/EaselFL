@@ -31,7 +31,10 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(ns) {
+// namespace:
+this.createjs = this.createjs||{};
+
+(function() {
 
 /**
  * BoxBlurFilter applies a box blur to DisplayObjects
@@ -47,7 +50,7 @@
 var BoxBlurFilter = function( blurX, blurY, quality ) {
   this.initialize( blurX, blurY, quality );
 }
-var p = BoxBlurFilter.prototype = new ns.Filter();
+var p = BoxBlurFilter.prototype = new createjs.Filter();
 
 // constructor:
 	/** @ignore */
@@ -71,7 +74,7 @@ var p = BoxBlurFilter.prototype = new ns.Filter();
 		this.quality = quality | 0;
 		
 		// EaselFL specific
-		this._flId = ns.UID.get();
+		this._flId = createjs.UID.get();
 	}
 
 // public properties:
@@ -108,7 +111,7 @@ var p = BoxBlurFilter.prototype = new ns.Filter();
 	 **/
 	p.getBounds = function() {
 		// TODO: this doesn't properly account for blur quality.
-		return new ns.Rectangle(-this.blurX,-this.blurY,2*this.blurX,2*this.blurY);
+		return new createjs.Rectangle(-this.blurX,-this.blurY,2*this.blurX,2*this.blurY);
 	}
 
 	/**
@@ -259,7 +262,9 @@ var p = BoxBlurFilter.prototype = new ns.Filter();
 	}
 	*/
 	p.applyFilter = function(ctx, x, y, width, height, targetCtx, targetX, targetY) {
-		if(ns.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:BoxBlurFilter.applyFilter currently not implemented';
+		if(createjs.Stage.FL_THROW_UNIMPLEMENTED) {
+			throw 'EaselFl:BoxBlurFilter.applyFilter currently not implemented';
+		}
 		return true;
 	}
 
@@ -314,6 +319,5 @@ var p = BoxBlurFilter.prototype = new ns.Filter();
 
 // private methods:
 
-ns.BoxBlurFilter = BoxBlurFilter;
-}(createjs||(createjs={})));
-var createjs;
+createjs.BoxBlurFilter = BoxBlurFilter;
+}());

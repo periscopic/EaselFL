@@ -782,9 +782,9 @@ var p = Graphics.prototype;
 		return this;
 	};
 	*/
-	console.log('TODO: handle Graphics.beginBitmapFill matrix');
+
 	p.beginBitmapFill = function(image, repetition, matrix) {
-		if(createjs.Stage.FL_LOG_PART_IMPLEMENTED && (repetition && repetition==='repeat-x' || repetition==='repeat-y')) console.log('EaselFl:Graphics.beginBitmapFill currently does not implement repeat-x or repeat-y');
+		if(createjs.Stage.FL_LOG_PART_IMPLEMENTED && ((repetition && repetition==='repeat-x' || repetition==='repeat-y')) || matrix ) createjs.Log.log('EaselFl:Graphics.beginBitmapFill currently does not implement repeat-x or repeat-y; nor does it implement a matrix transformation', null, createjs.Log.WARNING);
 
 		createjs.ImageFl.watch(image);
 		this._flImageRequests.push(image.__fl);
@@ -1273,10 +1273,7 @@ var p = Graphics.prototype;
 		return o;
 	};
 	*/
-	p.clone = function() {
-		//if(createjs.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Graphics.clone currently not implemented';
-		//return o;
-		
+	p.clone = function() {		
 		//TODO: moving ID out of specific graphics command
 		//and wrapping commands as using shape id would
 		//facilitate shared graphics
@@ -1290,11 +1287,8 @@ var p = Graphics.prototype;
 			state[i][0] = o._flId;
 		}
 
-		 o._flChange = state.slice();
-		 console.log(this._flImageRequests);
-		 console.log(this._flImageLinks);
-		 o._flImageRequests = this._flImageLinks.slice().concat(this._flImageRequests);
-		console.log(o._flImageRequests);
+		o._flChange = state.slice();
+		o._flImageRequests = this._flImageLinks.slice().concat(this._flImageRequests);
 		return o;
 	};
 		

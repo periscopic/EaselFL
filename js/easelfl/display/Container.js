@@ -407,7 +407,9 @@ console.log("TODO:: make sure Container.draw lack of matrix issue in 0.6 is addr
 	}
 	*/
 	p.sortChildren = function(sortFunction) {
-		if(createjs.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Container.sortChildren not yet implemented';
+		if(createjs.Stage.FL_THROW_UNIMPLEMENTED) {
+			throw 'EaselFl:Container.sortChildren not yet implemented';
+		}
 	}
 
 	/**
@@ -484,7 +486,9 @@ console.log("TODO:: make sure Container.draw lack of matrix issue in 0.6 is addr
 	}
 	*/
 	p.setChildIndex = function(child, index) {
-		if(createjs.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Container.setChildIndex not yet implemented';
+		if(createjs.Stage.FL_THROW_UNIMPLEMENTED) {
+			throw 'EaselFl:Container.setChildIndex not yet implemented';
+		}
 	}
 	
 	/**
@@ -676,7 +680,9 @@ console.log("TODO:: make sure Container.draw lack of matrix issue in 0.6 is addr
 	};
 	*/
 	p._getObjectsUnderPoint = function(x, y, arr, mouseEvents) {
-		if(createjs.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:Container._getObjectsUnderPoint not yet implemented';
+		if(createjs.Stage.FL_THROW_UNIMPLEMENTED) {
+			throw 'EaselFl:Container._getObjectsUnderPoint not yet implemented';
+		}
 	}
 	
 	/**** Begin EaselFL specific code ****/

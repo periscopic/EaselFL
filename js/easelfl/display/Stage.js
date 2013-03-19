@@ -378,7 +378,9 @@ var p = Stage.prototype = new createjs.Container();
 	p.clear = function() {
 		//this only has usage where autoclear is false or ticker is not auto updating
 		//could potentially clear blit bmp and hide internal stage in flash until next draw...
-		if(Stage.FL_THROW_UNIMPLEMENTED) throw 'EaseFl:Stage.clear not yet implemented';
+		if(Stage.FL_THROW_UNIMPLEMENTED) {
+			throw 'EaseFL:Stage.clear not yet implemented';
+		}
 	}
 
 	/**
@@ -440,7 +442,9 @@ var p = Stage.prototype = new createjs.Container();
 	}
 	*/
 	p.toDataURL = function(backgroundColor, mimeType) {
-		if(Stage.FL_THROW_UNIMPLEMENTED) throw "Stage.toDataURL not implemented in EaselFl";
+		if(Stage.FL_THROW_UNIMPLEMENTED) {
+			throw "Stage.toDataURL not implemented in EaselFl";
+		}
 		return null;
 	}
 

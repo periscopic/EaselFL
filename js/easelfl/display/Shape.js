@@ -154,8 +154,8 @@ var p = Shape.prototype = new createjs.DisplayObject();
 	}
 	*/	
 	p.clone = function(recursive) {
-		if(createjs.Stage.FL_LOG_PART_IMPLEMENTED) {
-			console.log('EaselFL:Shape.clone is currently always recursive');
+		if(createjs.Stage.FL_LOG_PART_IMPLEMENTED && !recursive) {
+			createjs.Log.log('EaselFL:Shape.clone is currently always recursive', null, createjs.Log.WARNING);
 		}
 		var o = new Shape(this.graphics?this.graphics.clone():null);
 		this.cloneProps(o);

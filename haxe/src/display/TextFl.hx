@@ -20,9 +20,23 @@ class TextFl extends DisplayObjectFl, implements IExec {
 	inline static var WORD_DELIMITER:EReg = ~/(\s)/g;
 	inline static var OUTLINE:GlowFilter = new GlowFilter(0, 1, 2, 2, 8, 1, false, true);
 	
+	static private var _mTf:TextField;
+	
+	
 	static public function init(){
 		execs = new Hash();
 		mapMethods(execs);
+		_mTf = new TextField();
+		_mTf.embedFonts = true;
+	}
+	
+	static private function getMetrics(fmt:TextFormat, embed:Bool) {
+		_mTf.embedFonts = embed;
+		_mTf.text = '';
+		_mTf.width = 1;
+		_mTf.text = 'X';
+		_mTf.setTextFormat(fmt, 0, 1);
+		return _mTf.getLineMetrics(0);
 	}
 	
 	static public function mapMethods(execs:Hash<Dynamic>) :Void{
@@ -68,9 +82,11 @@ class TextFl extends DisplayObjectFl, implements IExec {
 		}
 		
 		// apply formatting
-		target.tf.setTextFormat(target.fmt);
+		target.tf.setTextFormat(target.fmt, 0, target.tf.text.length);
 		target.tf.defaultTextFormat = target.fmt;
-		target.updateBaseline();		
+		target.fmtMetrics = getMetrics(target.fmt, target.tf.embedFonts);
+		target.updateLineHeight();
+		target.updateBaseline();	
 	}
 	
 	inline static private function setColor(target:TextFl, cssColorString:String) {
@@ -115,15 +131,10 @@ class TextFl extends DisplayObjectFl, implements IExec {
 		target.updateBaseline();
 	}
 	
-	
-	
-	
-	
 	inline static public function setText(target:TextFl, text:String) {
 		target.text = text;
 		target.updateText();
 	}
-	
 
 	private var tf:TextField;
 	private var fmt:TextFormat;
@@ -135,6 +146,7 @@ class TextFl extends DisplayObjectFl, implements IExec {
 	private var outline:Bool;
 	private var cssFontString:String;
 	private var font:String;
+	private var fmtMetrics:TextLineMetrics; //for ascent/descent/lineheight
 	
 	public function new(id:Int) {
 		super(id);
@@ -153,32 +165,41 @@ class TextFl extends DisplayObjectFl, implements IExec {
 	}
 	
 	function updateBaseline():Void {
-		var metrics:TextLineMetrics = tf.getLineMetrics(0);
+		var offset:Float;
 	
 		//TODO : 'hanging', 'ideographic' should be treated differently
-		switch(baseline) {
-			
+		
+		if(fmtMetrics == null) {
+			return;
+		}
+		
+		offset = tf.embedFonts ? -fmtMetrics.ascent * 0.136 : 0;
+		
+		switch(baseline) {	
 			case 'alphabetic', 'ideographic':				
-				tf.y = - (metrics.ascent + 2);
+				tf.y = - (fmtMetrics.ascent + 2) + offset;
 				
 			case 'bottom':
-				tf.y = - (metrics.ascent + metrics.descent + 2);
+				tf.y = - (fmtMetrics.ascent + fmtMetrics.descent + 2) + offset;
 				
 			case 'middle':
-				tf.y = - ((metrics.ascent + metrics.descent) * 0.5 +2);	
+				tf.y = - ((fmtMetrics.ascent + fmtMetrics.descent) * 0.5 +2) + offset;	
 			
 			default: //'top', 'hanging', null 
-				tf.y = -2;	
+				tf.y = -2 + offset;	
 		}	
 	}
 	
 	function updateLineHeight():Void{
+		if(fmtMetrics==null) {
+			return;
+		}
+		
 		if(Math.isNaN(lineHeight)){
-			fmt.leading = null;
-			
+			fmt.leading = null;	
+			//TODO: default leading is too much on embedded fonts		
 		}else{
-			var metrics:TextLineMetrics = tf.getLineMetrics(0);
-			fmt.leading = lineHeight - (metrics.ascent + metrics.descent);
+			fmt.leading = lineHeight - (fmtMetrics.ascent + fmtMetrics.descent);
 		}
 
 		tf.setTextFormat(fmt);

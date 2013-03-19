@@ -32,25 +32,66 @@ function init(){
 	createjs.Ticker.addListener(myStage);
 	
 	//-- specific test code
-	if(createjs.Stage.isEaselFL) {
-		myStage.flEmbedFonts(['RobotoThinItalic'], 'css/fonts/Roboto.swf');
+
+	
+
+
+
+	var line, g;
+	line = new createjs.Shape();
+	g = line.graphics;
+	g.beginFill('#F00');
+	g.drawRect(0, 0, 400, 1);
+	g.endFill();
+	line.y = 208;
+	line.x = 275;
+	myStage.addChild(line);
+
+	line = line.clone();
+	line.y = 280;
+	myStage.addChild(line);
+
+	line = line.clone();
+	line.y = 312;
+	myStage.addChild(line);
+
+	line = line.clone();
+	line.y = 384;
+	myStage.addChild(line);
+
+
+	function addText() {
+
+		var head = new createjs.Text('EASEL EASEL', '100px "Roboto Thin Italic"', '#3399E9');
+		//head.y = 341;
+		head.y = 200;
+		head.x = 275;
+		head.lineWidth = 320;
+		head.lineHeight = 104;
+		myStage.addChild(head);
+
+
+		var copy = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.';
+		
+		var txt = new createjs.Text(copy, '14px "Trebuchet MS"', '#000');
+		txt.y = 42;
+		txt.x = 260;
+		txt.lineWidth = 240;
+		txt.lineHeight = 25;
+		txt.textAlign = 'right';
+		myStage.addChild(txt);
 	}
 
-	//var head = new createjs.Text('EASEL', 'bold 112px "Trebuchet MS"', '#3399E9');
-	var head = new createjs.Text('EASEL', '112px "Roboto Thin Italic"', '#3399E9');
-	//head.y = 341;
-	head.y = 300;
-	head.x = 275;
-	myStage.addChild(head);
+	function embedFont() {
+		if(createjs.Stage.isEaselFL) {
+			myStage.flEmbedFonts(['RobotoThinItalic'], 'css/fonts/Roboto.swf');
+		}
+	}
+
+	embedFont();
+	addText();
 	
-	var copy = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.';
-	var txt = new createjs.Text(copy, '14px "Trebuchet MS"', '#000');
-	txt.y = 42;
-	txt.x = 260;
-	txt.lineWidth = 240;
-	txt.lineHeight = 25;
-	txt.textAlign = 'right';
-	myStage.addChild(txt);
+	
 	
 }
 

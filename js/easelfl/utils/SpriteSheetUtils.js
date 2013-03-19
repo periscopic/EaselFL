@@ -120,7 +120,9 @@ var SpriteSheetUtils = function() {
 	}
 	 */
 	SpriteSheetUtils.extractFrame = function(spriteSheet, frame) {
-		if(createjs.Stage.FL_THROW_UNIMPLEMENTED) throw "EaselFl::SpriteSheetUtils.extractFrame not yet implemented";
+		if(createjs.Stage.FL_THROW_UNIMPLEMENTED) {
+			throw "EaselFl::SpriteSheetUtils.extractFrame not yet implemented";
+		}
 	}
 
 	/**
@@ -151,7 +153,9 @@ var SpriteSheetUtils = function() {
 	}
 	*/
 	SpriteSheetUtils.mergeAlpha = function(rgbImage, alphaImage, canvas) {
-		if(createjs.Stage.FL_THROW_UNIMPLEMENTED) throw "EaselFl::SpriteSheetUtils.mergeAlpha not yet implemented";
+		if(createjs.Stage.FL_THROW_UNIMPLEMENTED) {
+			throw "EaselFl::SpriteSheetUtils.mergeAlpha not yet implemented";
+		}
 	}
 
 // private static methods:

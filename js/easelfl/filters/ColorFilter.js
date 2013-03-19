@@ -188,7 +188,9 @@ var p = ColorFilter.prototype = new createjs.Filter();
 	}
 	*/
 	p.applyFilter = function(ctx, x, y, width, height, targetCtx, targetX, targetY) {
-		if(createjs.Stage.FL_THROW_UNIMPLEMENTED) throw 'EaselFl:ColorFilter.applyFilter currently not implemented';
+		if(createjs.Stage.FL_THROW_UNIMPLEMENTED) {
+			throw 'EaselFl:ColorFilter.applyFilter currently not implemented';
+		}
 		return true;
 	}
 	
