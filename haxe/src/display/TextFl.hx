@@ -12,6 +12,12 @@ import utils.FontLib;
 import interfaces.IExec;
 import flash.filters.GlowFilter;
 
+import flash.text.engine.FontMetrics;
+import flash.text.engine.FontDescription;
+import flash.text.engine.ElementFormat;
+ 
+
+
 class TextFl extends DisplayObjectFl, implements IExec {
 
 	static private var execs:Hash<Dynamic>;
@@ -38,6 +44,17 @@ class TextFl extends DisplayObjectFl, implements IExec {
 		_mTf.setTextFormat(fmt, 0, 1);
 		return _mTf.getLineMetrics(0);
 	}
+	
+	/*static private function getFontMetrics(fmt:TextFormat, embed:Bool) {
+		var fd:FontDescription = new FontDescription();
+            fd.fontName = fmt.font;//"Garamond";
+            fd.fontWeight = flash.text.engine.FontWeight.BOLD;
+
+            var ef1:ElementFormat = new ElementFormat(fd);
+            ef1.fontSize = fmt.size;
+            
+            return ef1.getFontMetrics();
+	}*/
 	
 	static public function mapMethods(execs:Hash<Dynamic>) :Void{
 		DisplayObjectFl.mapMethods(execs);
@@ -85,6 +102,8 @@ class TextFl extends DisplayObjectFl, implements IExec {
 		target.tf.setTextFormat(target.fmt, 0, target.tf.text.length);
 		target.tf.defaultTextFormat = target.fmt;
 		target.fmtMetrics = getMetrics(target.fmt, target.tf.embedFonts);
+		//target.fontMetrics = getFontMetrics(target.fmt, target.tf.embedFonts);
+		//trace(target.fmt.font+','+target.fontMetrics.emBox+','+target.fmtMetrics.ascent+','+target.fmtMetrics.height);
 		target.updateLineHeight();
 		target.updateBaseline();	
 	}
@@ -147,6 +166,7 @@ class TextFl extends DisplayObjectFl, implements IExec {
 	private var cssFontString:String;
 	private var font:String;
 	private var fmtMetrics:TextLineMetrics; //for ascent/descent/lineheight
+	//private var fontMetrics:FontMetrics;
 	
 	public function new(id:Int) {
 		super(id);
@@ -173,7 +193,7 @@ class TextFl extends DisplayObjectFl, implements IExec {
 			return;
 		}
 		
-		offset = tf.embedFonts ? -fmtMetrics.ascent * 0.136 : 0;
+		offset = 0;
 		
 		switch(baseline) {	
 			case 'alphabetic', 'ideographic':				
@@ -186,7 +206,8 @@ class TextFl extends DisplayObjectFl, implements IExec {
 				tf.y = - ((fmtMetrics.ascent + fmtMetrics.descent) * 0.5 +2) + offset;	
 			
 			default: //'top', 'hanging', null 
-				tf.y = -2 + offset;	
+				tf.y = -2 + offset;
+				//tf.y = fontMetrics.emBox.y + fmtMetrics.ascent;
 		}	
 	}
 	

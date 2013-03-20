@@ -391,6 +391,37 @@
 </f></setQuality>
 		<new public="1" set="method"><f a=""><e path="Void"/></f></new>
 	</class>
+	<class path="flash.text.engine.FontDescription" params="" file="/usr/lib/haxe/std/flash9/text/engine/FontDescription.hx" extern="1">
+		<isDeviceFontCompatible public="1" static="1"><f a="fontName:fontWeight:fontPosture">
+	<c path="String"/>
+	<e path="flash.text.engine.FontWeight"/>
+	<e path="flash.text.engine.FontPosture"/>
+	<e path="Bool"/>
+</f></isDeviceFontCompatible>
+		<isFontCompatible public="1" set="method" static="1"><f a="fontName:fontWeight:fontPosture">
+	<c path="String"/>
+	<e path="flash.text.engine.FontWeight"/>
+	<e path="flash.text.engine.FontPosture"/>
+	<e path="Bool"/>
+</f></isFontCompatible>
+		<cffHinting public="1"><e path="flash.text.engine.CFFHinting"/></cffHinting>
+		<fontLookup public="1"><e path="flash.text.engine.FontLookup"/></fontLookup>
+		<fontName public="1"><c path="String"/></fontName>
+		<fontPosture public="1"><e path="flash.text.engine.FontPosture"/></fontPosture>
+		<fontWeight public="1"><e path="flash.text.engine.FontWeight"/></fontWeight>
+		<locked public="1"><e path="Bool"/></locked>
+		<renderingMode public="1"><e path="flash.text.engine.RenderingMode"/></renderingMode>
+		<clone public="1" set="method"><f a=""><c path="flash.text.engine.FontDescription"/></f></clone>
+		<new public="1" set="method"><f a="?fontName:?fontWeight:?fontPosture:?fontLookup:?renderingMode:?cffHinting">
+	<c path="String"/>
+	<e path="flash.text.engine.FontWeight"/>
+	<e path="flash.text.engine.FontPosture"/>
+	<e path="flash.text.engine.FontLookup"/>
+	<e path="flash.text.engine.RenderingMode"/>
+	<e path="flash.text.engine.CFFHinting"/>
+	<e path="Void"/>
+</f></new>
+	</class>
 	<class path="flash.text.TextFormat" params="" file="/usr/lib/haxe/std/flash9/text/TextFormat.hx" extern="1">
 		<align public="1"><e path="flash.text.TextFormatAlign"/></align>
 		<blockIndent public="1"><t path="Null"><c path="Float"/></t></blockIndent>
@@ -2630,6 +2661,11 @@
 	<e path="Void"/>
 </f></new>
 	</class>
+	<enum path="flash.text.engine.DigitWidth" params="" file="/usr/lib/haxe/std/flash9/text/engine/DigitWidth.hx">
+		<TABULAR/>
+		<PROPORTIONAL/>
+		<DEFAULT/>
+	</enum>
 	<class path="flash.external.ExternalInterface" params="" file="/usr/lib/haxe/std/flash9/external/ExternalInterface.hx" extern="1">
 		<available public="1" set="null" static="1"><e path="Bool"/></available>
 		<marshallExceptions public="1" static="1"><e path="Bool"/></marshallExceptions>
@@ -2883,6 +2919,10 @@
 		<invalidate public="1" set="method"><f a=""><e path="Void"/></f></invalidate>
 		<isFocusInaccessible public="1" set="method"><f a=""><e path="Bool"/></f></isFocusInaccessible>
 	</class>
+	<enum path="flash.text.engine.FontPosture" params="" file="/usr/lib/haxe/std/flash9/text/engine/FontPosture.hx">
+		<NORMAL/>
+		<ITALIC/>
+	</enum>
 	<class path="flash.text.Font" params="" file="/usr/lib/haxe/std/flash9/text/Font.hx" extern="1">
 		<enumerateFonts public="1" set="method" static="1"><f a="?enumerateDeviceFonts">
 	<e path="Bool"/>
@@ -3037,6 +3077,10 @@
 	<e path="Void"/>
 </f></new>
 	</class>
+	<enum path="flash.text.engine.FontLookup" params="" file="/usr/lib/haxe/std/flash9/text/engine/FontLookup.hx">
+		<EMBEDDED_CFF/>
+		<DEVICE/>
+	</enum>
 	<class path="flash.filters.BlurFilter" params="" file="/usr/lib/haxe/std/flash9/filters/BlurFilter.hx" extern="1">
 		<extends path="flash.filters.BitmapFilter"/>
 		<blurX public="1"><c path="Float"/></blurX>
@@ -3058,60 +3102,60 @@
 		<extends path="display.DisplayObjectFl"/>
 		<implements path="interfaces.IExec"/>
 		<execs static="1"><c path="Hash"><d/></c></execs>
-		<LINE_DELIMITER get="inline" set="null" line="19" static="1"><c path="EReg"/></LINE_DELIMITER>
-		<WORD_DELIMITER get="inline" set="null" line="20" static="1"><c path="EReg"/></WORD_DELIMITER>
-		<OUTLINE get="inline" set="null" line="21" static="1"><c path="flash.filters.GlowFilter"/></OUTLINE>
+		<LINE_DELIMITER get="inline" set="null" line="25" static="1"><c path="EReg"/></LINE_DELIMITER>
+		<WORD_DELIMITER get="inline" set="null" line="26" static="1"><c path="EReg"/></WORD_DELIMITER>
+		<OUTLINE get="inline" set="null" line="27" static="1"><c path="flash.filters.GlowFilter"/></OUTLINE>
 		<_mTf static="1"><c path="flash.text.TextField"/></_mTf>
-		<init public="1" set="method" line="26" static="1"><f a=""><e path="Void"/></f></init>
-		<getMetrics set="method" line="33" static="1"><f a="fmt:embed">
+		<init public="1" set="method" line="32" static="1"><f a=""><e path="Void"/></f></init>
+		<getMetrics set="method" line="39" static="1"><f a="fmt:embed">
 	<c path="flash.text.TextFormat"/>
 	<e path="Bool"/>
 	<c path="flash.text.TextLineMetrics"/>
 </f></getMetrics>
-		<mapMethods public="1" set="method" line="42" static="1"><f a="execs">
+		<mapMethods public="1" set="method" line="59" static="1"><f a="execs">
 	<c path="Hash"><d/></c>
 	<e path="Void"/>
 </f></mapMethods>
-		<getOutlineFilter get="inline" set="null" line="54" static="1"><f a="color">
+		<getOutlineFilter get="inline" set="null" line="71" static="1"><f a="color">
 	<c path="Int"/>
 	<c path="flash.filters.GlowFilter"/>
 </f></getOutlineFilter>
-		<setFont set="method" line="58" static="1"><f a="target:cssFontString">
+		<setFont set="method" line="75" static="1"><f a="target:cssFontString">
 	<c path="display.TextFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></setFont>
-		<setColor get="inline" set="null" line="92" static="1"><f a="target:cssColorString">
+		<setColor get="inline" set="null" line="111" static="1"><f a="target:cssColorString">
 	<c path="display.TextFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></setColor>
-		<setOutline get="inline" set="null" line="104" static="1"><f a="target:outline">
+		<setOutline get="inline" set="null" line="123" static="1"><f a="target:outline">
 	<c path="display.TextFl"/>
 	<e path="Bool"/>
 	<e path="Void"/>
 </f></setOutline>
-		<setLineWidth get="inline" set="null" line="113" static="1"><f a="target:wd">
+		<setLineWidth get="inline" set="null" line="132" static="1"><f a="target:wd">
 	<c path="display.TextFl"/>
 	<d/>
 	<e path="Void"/>
 </f></setLineWidth>
-		<setLineHeight get="inline" set="null" line="119" static="1"><f a="target:ht">
+		<setLineHeight get="inline" set="null" line="138" static="1"><f a="target:ht">
 	<c path="display.TextFl"/>
 	<d/>
 	<e path="Void"/>
 </f></setLineHeight>
-		<setTextAlign get="inline" set="null" line="124" static="1"><f a="target:align">
+		<setTextAlign get="inline" set="null" line="143" static="1"><f a="target:align">
 	<c path="display.TextFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></setTextAlign>
-		<setTextBaseline get="inline" set="null" line="129" static="1"><f a="target:baseline">
+		<setTextBaseline get="inline" set="null" line="148" static="1"><f a="target:baseline">
 	<c path="display.TextFl"/>
 	<c path="String"/>
 	<e path="Void"/>
 </f></setTextBaseline>
-		<setText public="1" get="inline" set="null" line="134" static="1"><f a="target:text">
+		<setText public="1" get="inline" set="null" line="153" static="1"><f a="target:text">
 	<c path="display.TextFl"/>
 	<c path="String"/>
 	<e path="Void"/>
@@ -3127,21 +3171,21 @@
 		<cssFontString><c path="String"/></cssFontString>
 		<font><c path="String"/></font>
 		<fmtMetrics><c path="flash.text.TextLineMetrics"/></fmtMetrics>
-		<updateBaseline set="method" line="167"><f a=""><e path="Void"/></f></updateBaseline>
-		<updateLineHeight set="method" line="193"><f a=""><e path="Void"/></f></updateLineHeight>
-		<updateAlign set="method" line="209"><f a=""><e path="Void"/></f></updateAlign>
-		<updateText set="method" line="238">
+		<updateBaseline set="method" line="187"><f a=""><e path="Void"/></f></updateBaseline>
+		<updateLineHeight set="method" line="214"><f a=""><e path="Void"/></f></updateLineHeight>
+		<updateAlign set="method" line="230"><f a=""><e path="Void"/></f></updateAlign>
+		<updateText set="method" line="259">
 			<f a=""><e path="Void"/></f>
 			<haxe_doc>
 	 * Mimic the text application in EaselJS since we want as close as possible
 	 * a match to that output.
 	 </haxe_doc>
 		</updateText>
-		<updateEmbedding public="1" set="method" line="293"><f a="?e">
+		<updateEmbedding public="1" set="method" line="314"><f a="?e">
 	<d/>
 	<e path="Void"/>
 </f></updateEmbedding>
-		<exec public="1" get="inline" set="null" line="302">
+		<exec public="1" get="inline" set="null" line="323">
 			<f a="method:?arguments">
 				<c path="String"/>
 				<d/>
@@ -3153,7 +3197,7 @@
 	 * @param Array arguments for the method
 	 </haxe_doc>
 		</exec>
-		<new public="1" set="method" line="151"><f a="id">
+		<new public="1" set="method" line="171"><f a="id">
 	<c path="Int"/>
 	<e path="Void"/>
 </f></new>
@@ -3474,6 +3518,10 @@
 	<e path="Void"/>
 </f></new>
 	</class>
+	<enum path="flash.text.engine.RenderingMode" params="" file="/usr/lib/haxe/std/flash9/text/engine/RenderingMode.hx">
+		<NORMAL/>
+		<CFF/>
+	</enum>
 	<class path="flash.events.UncaughtErrorEvents" params="" file="/usr/lib/haxe/std/flash9/events/UncaughtErrorEvents.hx" extern="1">
 		<extends path="flash.events.EventDispatcher"/>
 		<new public="1"><f a=""><e path="Void"/></f></new>
@@ -4038,6 +4086,10 @@
 	<e path="Void"/>
 </f></new>
 	</class>
+	<enum path="flash.text.engine.CFFHinting" params="" file="/usr/lib/haxe/std/flash9/text/engine/CFFHinting.hx">
+		<NONE/>
+		<HORIZONTAL_STEM/>
+	</enum>
 	<class path="flash.display3D.Program3D" params="" file="/usr/lib/haxe/std/flash9/display3D/Program3D.hx" extern="1">
 		<dispose public="1" set="method"><f a=""><e path="Void"/></f></dispose>
 		<upload public="1" set="method"><f a="vertexProgram:fragmentProgram">
@@ -4045,6 +4097,48 @@
 	<c path="flash.utils.ByteArray"/>
 	<e path="Void"/>
 </f></upload>
+	</class>
+	<class path="flash.text.engine.ElementFormat" params="" file="/usr/lib/haxe/std/flash9/text/engine/ElementFormat.hx" extern="1">
+		<alignmentBaseline public="1"><e path="flash.text.engine.TextBaseline"/></alignmentBaseline>
+		<alpha public="1"><c path="Float"/></alpha>
+		<baselineShift public="1"><c path="Float"/></baselineShift>
+		<breakOpportunity public="1"><e path="flash.text.engine.BreakOpportunity"/></breakOpportunity>
+		<color public="1"><t path="UInt"/></color>
+		<digitCase public="1"><e path="flash.text.engine.DigitCase"/></digitCase>
+		<digitWidth public="1"><e path="flash.text.engine.DigitWidth"/></digitWidth>
+		<dominantBaseline public="1"><e path="flash.text.engine.TextBaseline"/></dominantBaseline>
+		<fontDescription public="1"><c path="flash.text.engine.FontDescription"/></fontDescription>
+		<fontSize public="1"><c path="Float"/></fontSize>
+		<kerning public="1"><e path="flash.text.engine.Kerning"/></kerning>
+		<ligatureLevel public="1"><e path="flash.text.engine.LigatureLevel"/></ligatureLevel>
+		<locale public="1"><c path="String"/></locale>
+		<locked public="1"><e path="Bool"/></locked>
+		<textRotation public="1"><e path="flash.text.engine.TextRotation"/></textRotation>
+		<trackingLeft public="1"><c path="Float"/></trackingLeft>
+		<trackingRight public="1"><c path="Float"/></trackingRight>
+		<typographicCase public="1"><e path="flash.text.engine.TypographicCase"/></typographicCase>
+		<clone public="1" set="method"><f a=""><c path="flash.text.engine.ElementFormat"/></f></clone>
+		<getFontMetrics public="1" set="method"><f a=""><c path="flash.text.engine.FontMetrics"/></f></getFontMetrics>
+		<new public="1" set="method"><f a="?fontDescription:?fontSize:?color:?alpha:?textRotation:?dominantBaseline:?alignmentBaseline:?baselineShift:?kerning:?trackingRight:?trackingLeft:?locale:?breakOpportunity:?digitCase:?digitWidth:?ligatureLevel:?typographicCase">
+	<c path="flash.text.engine.FontDescription"/>
+	<c path="Float"/>
+	<t path="UInt"/>
+	<c path="Float"/>
+	<e path="flash.text.engine.TextRotation"/>
+	<e path="flash.text.engine.TextBaseline"/>
+	<e path="flash.text.engine.TextBaseline"/>
+	<c path="Float"/>
+	<e path="flash.text.engine.Kerning"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="String"/>
+	<e path="flash.text.engine.BreakOpportunity"/>
+	<e path="flash.text.engine.DigitCase"/>
+	<e path="flash.text.engine.DigitWidth"/>
+	<e path="flash.text.engine.LigatureLevel"/>
+	<e path="flash.text.engine.TypographicCase"/>
+	<e path="Void"/>
+</f></new>
 	</class>
 	<class path="display.ShadowFl" params="" file="src/display/ShadowFl.hx">
 		<implements path="interfaces.IWatchable"/>
@@ -4115,6 +4209,13 @@
 	<e path="Void"/>
 </f></new>
 	</class>
+	<enum path="flash.text.engine.TextRotation" params="" file="/usr/lib/haxe/std/flash9/text/engine/TextRotation.hx">
+		<ROTATE_90/>
+		<ROTATE_270/>
+		<ROTATE_180/>
+		<ROTATE_0/>
+		<AUTO/>
+	</enum>
 	<class path="flash.media.StageVideo" params="" file="/usr/lib/haxe/std/flash9/media/StageVideo.hx" extern="1">
 		<extends path="flash.events.EventDispatcher"/>
 		<colorSpaces public="1" set="null"><c path="flash.Vector"><c path="String"/></c></colorSpaces>
@@ -4661,6 +4762,13 @@
 	<e path="Void"/>
 </f></setColor>
 	</class>
+	<enum path="flash.text.engine.LigatureLevel" params="" file="/usr/lib/haxe/std/flash9/text/engine/LigatureLevel.hx">
+		<UNCOMMON/>
+		<NONE/>
+		<MINIMUM/>
+		<EXOTIC/>
+		<COMMON/>
+	</enum>
 	<class path="flash.net.Responder" params="" file="/usr/lib/haxe/std/flash9/net/Responder.hx" extern="1"><new public="1" set="method"><f a="result:?status">
 	<d/>
 	<d/>
@@ -4696,6 +4804,20 @@
 		<nonLinearProcessing public="1"><e path="Bool"/></nonLinearProcessing>
 		<new public="1"><f a=""><e path="Void"/></f></new>
 	</class>
+	<enum path="flash.text.engine.Kerning" params="" file="/usr/lib/haxe/std/flash9/text/engine/Kerning.hx">
+		<ON/>
+		<OFF/>
+		<AUTO/>
+	</enum>
+	<enum path="flash.text.engine.TextBaseline" params="" file="/usr/lib/haxe/std/flash9/text/engine/TextBaseline.hx">
+		<USE_DOMINANT_BASELINE/>
+		<ROMAN/>
+		<IDEOGRAPHIC_TOP/>
+		<IDEOGRAPHIC_CENTER/>
+		<IDEOGRAPHIC_BOTTOM/>
+		<DESCENT/>
+		<ASCENT/>
+	</enum>
 	<enum path="flash.geom.Orientation3D" params="" file="/usr/lib/haxe/std/flash9/geom/Orientation3D.hx">
 		<QUATERNION/>
 		<EULER_ANGLES/>
@@ -4894,7 +5016,7 @@
 	<e path="Void"/>
 </f></onFontLoaded>
 		<noteFonts set="method" line="65"><f a=""><e path="Void"/></f></noteFonts>
-		<onFontLoadingFailed set="method" line="76"><f a="e">
+		<onFontLoadingFailed set="method" line="75"><f a="e">
 	<c path="flash.events.IOErrorEvent"/>
 	<e path="Void"/>
 </f></onFontLoadingFailed>
@@ -5101,6 +5223,20 @@
 	<enum path="flash.utils.Endian" params="" file="/usr/lib/haxe/std/flash9/utils/Endian.hx">
 		<LITTLE_ENDIAN/>
 		<BIG_ENDIAN/>
+	</enum>
+	<enum path="flash.text.engine.TypographicCase" params="" file="/usr/lib/haxe/std/flash9/text/engine/TypographicCase.hx">
+		<UPPERCASE/>
+		<TITLE/>
+		<SMALL_CAPS/>
+		<LOWERCASE/>
+		<DEFAULT/>
+		<CAPS_AND_SMALL_CAPS/>
+		<CAPS/>
+	</enum>
+	<enum path="flash.text.engine.DigitCase" params="" file="/usr/lib/haxe/std/flash9/text/engine/DigitCase.hx">
+		<OLD_STYLE/>
+		<LINING/>
+		<DEFAULT/>
 	</enum>
 	<enum path="Void" params="" file="/usr/lib/haxe/std/StdTypes.hx" module="StdTypes"><haxe_doc>
 	The standard Void type. Only [null] values can be of the type [Void].
@@ -5365,6 +5501,31 @@
 		<FLOAT_1/>
 		<BYTES_4/>
 	</enum>
+	<class path="flash.text.engine.FontMetrics" params="" file="/usr/lib/haxe/std/flash9/text/engine/FontMetrics.hx" extern="1">
+		<emBox public="1"><c path="flash.geom.Rectangle"/></emBox>
+		<lineGap public="1"><c path="Float"/></lineGap>
+		<strikethroughOffset public="1"><c path="Float"/></strikethroughOffset>
+		<strikethroughThickness public="1"><c path="Float"/></strikethroughThickness>
+		<subscriptOffset public="1"><c path="Float"/></subscriptOffset>
+		<subscriptScale public="1"><c path="Float"/></subscriptScale>
+		<superscriptOffset public="1"><c path="Float"/></superscriptOffset>
+		<superscriptScale public="1"><c path="Float"/></superscriptScale>
+		<underlineOffset public="1"><c path="Float"/></underlineOffset>
+		<underlineThickness public="1"><c path="Float"/></underlineThickness>
+		<new public="1" set="method"><f a="emBox:strikethroughOffset:strikethroughThickness:underlineOffset:underlineThickness:subscriptOffset:subscriptScale:superscriptOffset:superscriptScale:?lineGap">
+	<c path="flash.geom.Rectangle"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<c path="Float"/>
+	<e path="Void"/>
+</f></new>
+	</class>
 	<class path="flash.text.TextField" params="" file="/usr/lib/haxe/std/flash9/text/TextField.hx" extern="1">
 		<extends path="flash.display.InteractiveObject"/>
 		<isFontCompatible public="1" set="method" static="1"><f a="fontName:fontStyle">
@@ -5645,6 +5806,10 @@
 		<ON_LOAD/>
 		<ON_DEMAND/>
 	</enum>
+	<enum path="flash.text.engine.FontWeight" params="" file="/usr/lib/haxe/std/flash9/text/engine/FontWeight.hx">
+		<NORMAL/>
+		<BOLD/>
+	</enum>
 	<enum path="flash.media.SoundCodec" params="" file="/usr/lib/haxe/std/flash9/media/SoundCodec.hx">
 		<SPEEX/>
 		<PCMU/>
@@ -5819,6 +5984,12 @@
 </f></unloadAndStop>
 		<new public="1" set="method"><f a=""><e path="Void"/></f></new>
 	</class>
+	<enum path="flash.text.engine.BreakOpportunity" params="" file="/usr/lib/haxe/std/flash9/text/engine/BreakOpportunity.hx">
+		<NONE/>
+		<AUTO/>
+		<ANY/>
+		<ALL/>
+	</enum>
 	<enum path="flash.display.StageQuality" params="" file="/usr/lib/haxe/std/flash9/display/StageQuality.hx">
 		<MEDIUM/>
 		<LOW/>

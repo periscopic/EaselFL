@@ -65,7 +65,6 @@ package utils;
 		function noteFonts():Void {
 			for(font in Font.enumerateFonts()) {
 				if(!_embedded.exists(font.fontName)) {
-
 					_embedded.set(font.fontName, true);
 					dispatcher.dispatchEvent(new Event(font.fontName));
 				}	
