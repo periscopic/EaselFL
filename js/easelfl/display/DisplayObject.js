@@ -496,7 +496,6 @@ var p = DisplayObject.prototype;
 	 */
 	p.hitArea = null;
 	
-	console.log("TODO: tie cursor to _flUseHandCursor");
 	/**
 	 * A CSS cursor (ex. "pointer", "help", "text", etc) that will be displayed when the user hovers over this display object. You must enable
 	 * mouseover events using the stage.enableMouseOver() method to use this property. If null it will use the default cursor.
@@ -1293,22 +1292,11 @@ var p = DisplayObject.prototype;
 	p._flShadow = null;
 	
 	/**
-	 * NOTE : not part of the original EaselJS api
-	 * The synced useHandCursor value
 	 * @private
-	 * @property _flUseHandCursor
-	 * @type {Boolean}
+	 * @property _flCursor
+	 * @type {String}
 	 **/
-	p._flUseHandCursor = false;
-	
-	/**
-	 * NOTE : not part of the original EaselJS api
-	 * The synced buttonMode value
-	 * @private
-	 * @property _flButtonMode
-	 * @type {Boolean}
-	 **/
-	p._flButtonMode = false;
+	p._flCursor = null;
 	
 	/**
 	 * Commands that will be pushed to Flash on each render cycle when this
@@ -1444,6 +1432,11 @@ var p = DisplayObject.prototype;
 				this._flDblClick = !this._flDblClick;
 				this._flChange.push([this._flId, this._flDblClick ? 'adck' : 'rdck' ]);
 			}			
+		}
+
+		if(this.cursor!==this._flCursor) {
+		  this._flChange.push([this._flId, 'scrs', this.cursor]);
+		  this._flCursor = this.cursor;
 		}
 		
 		//-- Synchronize Alpha
@@ -1616,15 +1609,7 @@ var p = DisplayObject.prototype;
 	//-- Set usage of hand cursor
 	//-- Not part of the original EaselJS api
 	p.flSetCursorMode = function(useHandCursor, buttonMode) {
-		if(useHandCursor !== this._flUseHandCursor) {
-		  this._flChange.push([this._flId, 'scrs', useHandCursor]);
-		  this._flUseHandCursor = useHandCursor;
-		}
-		
-		if(buttonMode !== this._flButtonMode) {
-		  this._flChange.push([this._flId, 'sbtn', buttonMode]);
-		  this._flButtonMode = buttonMode;
-		}
+		createjs.Log.log('flSetCursorMode has been deprecated and will be removed in a future version; use EaselJS \'cursor\' property instead', null, createjs.Log.WARNING);
 	}
 	
 	//-- Static

@@ -1,4 +1,4 @@
-/* TEST */package display;
+package display;
 
 import flash.display.Sprite;
 import flash.display.DisplayObjectContainer;
@@ -31,8 +31,7 @@ class DisplayObjectFl implements IDisplayable {
 		execs.set('rmov', removeOverHandler);
 		execs.set('rmod', removeDownHandler);
 		execs.set('smen', setMouseEnabled);
-		execs.set('scrs', setHandCursor);
-		execs.set('sbtn', setButtonMode);
+		execs.set('scrs', setCursor);
 		execs.set('msk', setMask);
 		
 		//-- has callback
@@ -126,12 +125,15 @@ class DisplayObjectFl implements IDisplayable {
 		target.display.mouseEnabled = isOn;
 	}
 	
-	inline static private function setHandCursor(target:DisplayObjectFl,isOn:Bool):Void{
-		target.display.useHandCursor = isOn;
-	}
-	
-	inline static private function setButtonMode(target:DisplayObjectFl,isOn:Bool):Void{
-		target.display.buttonMode = isOn;
+	inline static private function setCursor(target:DisplayObjectFl,cursor:String):Void{
+		//TODO: handle other css cursor types
+		if(cursor=='pointer') {
+			target.display.useHandCursor = 
+			target.display.buttonMode = true; 
+		} else {
+			target.display.useHandCursor = 
+			target.display.buttonMode = false;
+		}
 	}
 	
 	inline static private function setMask(target:DisplayObjectFl, maskID:Dynamic):Void{

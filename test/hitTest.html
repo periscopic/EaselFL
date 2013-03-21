@@ -30,6 +30,8 @@ function init(){
 	createjs.Ticker.addListener(myStage);
 	
 	//-- specific test code
+	myStage.enableMouseOver(); // required for hand cursor in EaselJS
+
 	var trace = document.getElementById('trace');
 	
 	function onMouseDown(evt) {
@@ -47,6 +49,7 @@ function init(){
 	}
 	
 	targ.graphics.endFill();
+	targ.cursor = 'pointer';
 	
 	myStage.addChild(targ);
 	

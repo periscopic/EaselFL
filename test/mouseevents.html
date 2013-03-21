@@ -31,6 +31,7 @@ function init(){
 	
 	//-- specific test code
 	myStage.enableMouseOver();
+
 	var trace = document.getElementById('trace');
 	var evts = [];
 
@@ -57,6 +58,8 @@ function init(){
 	g.beginFill('#888');
 	g.drawRect(0, 0, 100, 100);
 	g.endFill();
+
+	shp.cursor = 'pointer';
 
 	shp.addEventListener('dblclick', onMouse);
 	shp.addEventListener('click', onMouse);

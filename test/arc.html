@@ -30,6 +30,7 @@ function init(){
 	createjs.Ticker.addListener(myStage);
 	
 	//-- specific test code
+	myStage.enableMouseOver(); // required for hand cursor in EaselJS
 
 	var bg = new createjs.Shape();
 	//Flash doesn't recieve mousemove's on a perfectly transparent stage
@@ -111,6 +112,7 @@ function init(){
 		shp.regY = 4;
 		shp.x = x;
 		shp.y = y;
+		shp.cursor = 'pointer';
 		
 		container.addChild(shp);
 		
