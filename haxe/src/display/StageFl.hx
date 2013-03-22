@@ -22,17 +22,26 @@ class StageFl extends ContainerFl {
 	static private function mapMethods(excs:Hash<Dynamic>) :Void {
 		ContainerFl.mapMethods(excs);
 		execs.set('blt', blit );
+		execs.set('aclr', autoClear );
 		execs.set('clr', clear );
 	}
+	
 	
 	static private function blit(target, ?nada:Dynamic) :Void {
 		target.blitBitmapData.draw(target.display);
 		target.blitBitmap.visible = true;
 	}
 	
-	static private function clear(target, ?nada:Dynamic) :Void {
+	static private function autoClear(target, ?nada:Dynamic) :Void {
 		target.blitBitmapData.fillRect(target.blitBitmapData.rect, 0);
 		target.blitBitmap.visible = false;
+		target.display.visible = true;
+	}
+	
+	static private function clear(target, ?nada:Dynamic) :Void {
+		target.blitBitmapData.fillRect(target.blitBitmapData.rect, 0);
+		target.blitBitmap.visible = true;
+		target.display.visible = false;
 	}
 	
 	public var blitBitmap(default, null):Bitmap;

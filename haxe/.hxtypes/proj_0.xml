@@ -2591,7 +2591,7 @@
 	<c path="Hash"><d/></c>
 	<e path="Void"/>
 </f></mapMethods>
-		<blit set="method" line="28" static="1"><f a="target:?nada">
+		<blit set="method" line="30" static="1"><f a="target:?nada">
 	<a>
 		<display set="null"><unknown/></display>
 		<blitBitmapData set="null"><a><draw set="null"><f a="">
@@ -2603,8 +2603,25 @@
 	<d/>
 	<e path="Void"/>
 </f></blit>
-		<clear set="method" line="33" static="1"><f a="target:?nada">
+		<autoClear set="method" line="35" static="1"><f a="target:?nada">
 	<a>
+		<display set="null"><a><visible><e path="Bool"/></visible></a></display>
+		<blitBitmapData set="null"><a>
+	<rect set="null"><unknown/></rect>
+	<fillRect set="null"><f a=":">
+	<unknown/>
+	<c path="Int"/>
+	<unknown/>
+</f></fillRect>
+</a></blitBitmapData>
+		<blitBitmap set="null"><a><visible><e path="Bool"/></visible></a></blitBitmap>
+	</a>
+	<d/>
+	<e path="Void"/>
+</f></autoClear>
+		<clear set="method" line="41" static="1"><f a="target:?nada">
+	<a>
+		<display set="null"><a><visible><e path="Bool"/></visible></a></display>
 		<blitBitmapData set="null"><a>
 	<rect set="null"><unknown/></rect>
 	<fillRect set="null"><f a=":">
@@ -2621,15 +2638,15 @@
 		<blitBitmap public="1" set="null"><c path="flash.display.Bitmap"/></blitBitmap>
 		<blitBitmapData><c path="flash.display.BitmapData"/></blitBitmapData>
 		<stage><c path="flash.display.Stage"/></stage>
-		<handleStageUp set="method" line="53"><f a="e">
+		<handleStageUp set="method" line="62"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></handleStageUp>
-		<handleStageDown set="method" line="58"><f a="e">
+		<handleStageDown set="method" line="67"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></handleStageDown>
-		<handleResize set="method" line="66">
+		<handleResize set="method" line="75">
 			<f a="e">
 				<c path="flash.events.Event"/>
 				<e path="Void"/>
@@ -2638,7 +2655,7 @@
 	 * Create resized bitmap
 	 </haxe_doc>
 		</handleResize>
-		<exec public="1" set="method" line="76" override="1">
+		<exec public="1" set="method" line="85" override="1">
 			<f a="method:?arguments">
 				<c path="String"/>
 				<d/>
@@ -2650,7 +2667,7 @@
 	 * @param Array arguments for the method
 	 </haxe_doc>
 		</exec>
-		<new public="1" set="method" line="42"><f a="id:stage">
+		<new public="1" set="method" line="51"><f a="id:stage">
 	<c path="Int"/>
 	<c path="flash.display.Stage"/>
 	<e path="Void"/>

@@ -325,7 +325,7 @@ var p = Stage.prototype = new createjs.Container();
 			this.canvas._ctx._flChange.push([this.id, 'blt']);
 		}else if(this._flAutoClear === false) {
 			this._flAutoClear = true;
-			this.canvas._ctx._flChange.push([this.id, 'clr']);
+			this.canvas._ctx._flChange.push([this.id, 'aclr']);
 		}
 		
 		Stage._snapToPixelEnabled = this.snapToPixelEnabled;
@@ -378,9 +378,14 @@ var p = Stage.prototype = new createjs.Container();
 	p.clear = function() {
 		//this only has usage where autoclear is false or ticker is not auto updating
 		//could potentially clear blit bmp and hide internal stage in flash until next draw...
-		if(Stage.FL_THROW_UNIMPLEMENTED) {
+		/*if(Stage.FL_THROW_UNIMPLEMENTED) {
 			throw 'EaseFL:Stage.clear not yet implemented';
-		}
+		}*/
+
+		if(!(this.canvas && this.canvas._ctx && this.canvas._ctx.flReady)) { return; }
+
+		this.canvas._ctx._flChange.push([this.id, 'clr']);
+		this.canvas._ctx._flFlush();
 	}
 
 	/**
@@ -663,32 +668,14 @@ var p = Stage.prototype = new createjs.Container();
 		}
 	}
 	*/
-	p._updatePointerPosition = function(id, pageX, pageY) {	
-		//-- TODO : finish converting to pointers from mouse
-		var o = this.canvas._ctx._flInstance;
-		if(o){
-		  do {
-			  pageX -= o.offsetLeft;
-			  pageY -= o.offsetTop;
-		  } while (o = o.offsetParent);		  
-		  
-		  this.mouseInBounds = (pageX >= 0 && pageY >= 0 && pageX < this.canvas.width && pageY < this.canvas.height);
-		
-		  if (this.mouseInBounds) {
-			  this.mouseX = pageX;
-			  this.mouseY = pageY;
-		  }
-		}
-	}
-	
 
-	console.log("TODO: implement IE8 Stage._getElementRect");
 
 	/**
 	 * @method _getElementRect
 	 * @protected
 	 * @param {HTMLElement} e
 	 **/
+	/*
 	p._getElementRect = function(e) {
 		var bounds;
 		try { bounds = e.getBoundingClientRect(); } // this can fail on disconnected DOM elements in IE9
@@ -711,6 +698,7 @@ var p = Stage.prototype = new createjs.Container();
 			bottom: bounds.bottom+offY-padB
 		}
 	};
+	*/
 
 
 /**

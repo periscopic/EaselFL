@@ -27,7 +27,7 @@ function init(){
 	document.getElementById('testContainer').appendChild(canvas);
 	
 	var myStage = new createjs.Stage(canvas);
-	createjs.Ticker.addListener(myStage);
+	//createjs.Ticker.addListener(myStage);
 	
 	//-- specific test code
 	
@@ -56,17 +56,33 @@ function init(){
 	
 	myStage.addChild(cont);
 	
-	
-	createjs.Ticker.addListener({
-		tick : function(){
+	function step(){
 			//-- advance the animation
 			shape1.rotation += 2;
 			shape2.rotation -= 2;
 			cont.rotation += 5;
 			cont.scaleX = cont.scaleY += 0.005;
+			myStage.update();
+			
 		}
-	})
+
+	createjs.Ticker.addListener(step);
+
+	setTimeout(function(){
+		myStage.clear();
+		createjs.Ticker.removeListener(step);
+	}, 2000)
+
+	setTimeout(function(){
+		myStage.autoClear = true;
+		createjs.Ticker.addListener(step);
+	}, 4000)
+
+	setTimeout(function(){
+		myStage.autoClear = false;
+	}, 6000)
 }
+
 
 </script>
 </head>
