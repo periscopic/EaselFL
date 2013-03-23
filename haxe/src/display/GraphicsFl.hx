@@ -75,10 +75,13 @@ class GraphicsFl implements IExec{
 	
 	static private function beginBitmapFill(target:GraphicsFl, args:Array<Dynamic>):Void{
 		//TODO : handle repeat-x, repeat-y
-		var img = Control.bitmapDatas.get(args[0]);	
-		target.graphics.beginBitmapFill(img.bitmapData, IDENTITY_MATRIX, args[1]!='no-repeat', false);
+		var img = Control.bitmapDatas.get(args[0]),
+		repeat = args[1],
+		a = args[2],
+		mtx:Matrix = a!=null?new Matrix(a[0],a[1],a[2],a[3],a[4],a[5]): IDENTITY_MATRIX;
+		//fill using matrix, repetition (unless no-repeat) and smoothing if not identity matrix
+		target.graphics.beginBitmapFill(img.bitmapData, mtx, repeat!='no-repeat', mtx!=IDENTITY_MATRIX);
 		watchBitmapData(target, img);
-		
 		target.activePath = false;
 		
 		//-- these are necessary due to difference in winding rules between canvas/flash

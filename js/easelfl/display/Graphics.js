@@ -784,11 +784,21 @@ var p = Graphics.prototype;
 	*/
 
 	p.beginBitmapFill = function(image, repetition, matrix) {
-		if(createjs.Stage.FL_LOG_PART_IMPLEMENTED && ((repetition && repetition==='repeat-x' || repetition==='repeat-y')) || matrix ) createjs.Log.log('EaselFl:Graphics.beginBitmapFill currently does not implement repeat-x or repeat-y; nor does it implement a matrix transformation', null, createjs.Log.WARNING);
+		if(createjs.Stage.FL_LOG_PART_IMPLEMENTED && (repetition && repetition==='repeat-x' || repetition==='repeat-y')) createjs.Log.log('EaselFl:Graphics.beginBitmapFill currently does not implement repeat-x or repeat-y', null, createjs.Log.WARNING);
 
 		createjs.ImageFl.watch(image);
 		this._flImageRequests.push(image.__fl);
-		this._flRecord([this._flId, 'bf', [image.__fl._flId, repetition]])
+		this._flRecord([this._flId, 'bf', [
+			image.__fl._flId, 
+			repetition,
+			!matrix?null:[
+				matrix.a,
+				matrix.b,
+				matrix.c,
+				matrix.d,
+				matrix.tx,
+				matrix.ty
+			]]]);
 		return this;
 	};
 	

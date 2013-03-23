@@ -26,7 +26,6 @@ class StageFl extends ContainerFl {
 		execs.set('clr', clear );
 	}
 	
-	
 	static private function blit(target, ?nada:Dynamic) :Void {
 		target.blitBitmapData.draw(target.display);
 		target.blitBitmap.visible = true;

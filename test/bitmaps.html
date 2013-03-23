@@ -45,8 +45,14 @@ function init(){
 	myStage.addChild(shp);
 
 	img.onload = function() {
-		var g = shp.graphics;
-		g.beginBitmapFill(img);
+
+		var g, mtx;
+		//matrix for rotating the fill
+		mtx = new createjs.Matrix2D();
+		mtx.rotate(Math.PI/8);
+		
+		g = shp.graphics;
+		g.beginBitmapFill(img, 'repeat', mtx);
 		g.drawCircle(0, 0, 100);
 		g.endFill();
 			
