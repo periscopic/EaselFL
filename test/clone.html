@@ -1,4 +1,4 @@
-<!-- Renders bitmaps drawn using various methods -->
+<!-- Draw a variety of shapes -->
 
 <html>
 <head>
@@ -6,6 +6,7 @@
 <script type="text/javascript" src="js/TestUtils.js"></script>
 
 <link rel='stylesheet' type='text/css' href='css/test.css' />
+<link rel='stylesheet' type='text/css' href='css/fonts/fonts.css' />
 
 <script type="text/javascript">
 
@@ -30,19 +31,35 @@ function init(){
 	createjs.Ticker.addListener(myStage);
 	
 	//-- specific test code
+	var g;
+	
+	var cnt = new createjs.Container();
+	var childCnt = new createjs.Container();
+	cnt.y = -75;
+	cnt.addChild(childCnt);
+	myStage.addChild(cnt);
+	
 	var img = new Image();
 	img.src = 'img/testImage.png';
 	
 	var bmp = new createjs.Bitmap(img);
 	bmp.sourceRect = new createjs.Rectangle(0, 30, 78, 38);
-	myStage.addChild(bmp);
-	bmp.x = 110;
+	childCnt.addChild(bmp);
+	bmp.x = 160;
 	bmp.y = 180;
 	
 	var shp = new createjs.Shape();
-	shp.x = 300;
+	shp.x = 350;
 	shp.y = 200;
-	myStage.addChild(shp);
+	childCnt.addChild(shp);
+
+	var text = new createjs.Text('clone', '100px "Roboto Thin Italic"', '#999');
+	text.y = 170;
+	text.x = 0;
+	text.lineWidth = 320;
+	text.lineHeight = 104;
+	text.textBaseline = 'alphabetic';
+	childCnt.addChild(text);
 
 	img.onload = function() {
 
@@ -60,9 +77,16 @@ function init(){
 		g.beginBitmapStroke(img);
 		g.drawCircle(160, 0, 50);
 		g.endFill();
+
+		//clone the container
+		var cnt2 = cnt.clone(true);
+		cnt2.y = 75;
+		myStage.addChild(cnt2);
 	}
 
-	
+	if(createjs.Stage.isEaselFL) {
+		myStage.flEmbedFonts(['RobotoThinItalic'], 'css/fonts/Fonts.swf');
+	}
 }
 
 </script>

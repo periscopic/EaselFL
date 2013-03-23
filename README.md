@@ -32,8 +32,6 @@ It must be loaded prior to a createjs.Stage being constructed.
 * MouseOver, MouseOut, MouseClick (etc) are tested using the shape of a
 displayobject, not alpha of pixel as in EaselJS (partially or fully transparent
 areas may behave differently).
-* Flash will not capture mouse events on areas of its stage
-that are completely transparent.
 * Flash does not receive mouse events through overlayed html objects
 (although the stage.onMouseMove handler will fire, and stage.mouseX, and
 stage.mouseY are updated).
@@ -43,8 +41,11 @@ stage.mouseY are updated).
 
 **Rendering**
 
-* Only system fonts are currently available in Flash; this could
-be remedied by implementing dynamic font loading.
+* When using system fonts with createjs.Text class, rotation hides text - this is 
+how Flash handles system fonts. If you need rotated text consider 
+dynamically loading a font or using DOMElement for text.
+* For all createjs.Text the only reliable vertical alignment method is 'alphabetic'
+(this is true both in EaselJS and EaselFL)
 * Videos and displayobject caches cannot yet be used to render either
 bitmaps or fills.
 * AlphaMask and AlphaMap filters are not yet implemented. BoxBlur filter
@@ -62,13 +63,13 @@ can flip frames for use in BitmapAnimations).
 scaling when only scaling horizontal or vertical, but causes lines not
 to scale proportionately to container transformations, as they would
 in EaselJS.
-* radial gradient fills and strokes do not interpolate identically to EaselJS 
+* Radial gradient fills and strokes do not interpolate identically to EaselJS 
 if the origins of the circular guides are different (x0!==x1 || y0!==y1) 
 and both have radiuses greater than 0 (r0>0 && r1>0).
-* beginBitmapFill implements repeat, no-repeat, but not repeat-x, or repeat-y
-* there is 1/2 pixel difference in the placement of some lines compared
+* Graphics.beginBitmapFill implements repeat, no-repeat, but not repeat-x, or repeat-y
+* There is 1/2 pixel difference in the placement of some lines compared
 to EaselJS
-* drawAsPath is not implemented (the primary use, masking, is implemented)
+* Graphics.drawAsPath is not implemented (the primary use, masking, is implemented)
 
 **Memory Management**
 
@@ -78,5 +79,19 @@ of the JS side sweep can be adjusted using createjs.CanvasFl.FL_GC_INTERVAL
 
 **Miscellaneous**
 
-* Clone methods are not implemented
-* use of multiple stages is untested.
+* Cloning of Shapes are only recursive, since shared graphics are not yet supported.
+* Use of multiple stages although working is not fully tested. Using DisplayObjects
+in one stage and then transitioning them to another will cause issues.
+
+
+##Road Map
+* Complete migration to 0.6
+	Handle Graphics._ignoreScaleStroke (Graphics)
+	Make sure Container.draw lack of matrix issue in 0.6 is addressed (Container)
+	Verify Stage.mouseMoveOutside works (Stage)
+	Verify draw method fired via Stage.update still has correct params (Stage)
+	Verify _oldMtx usage doesn't impact EaselFL (DOMElement)
+	Finish conversion to the new build process
+* Implement canvas cache proxy (allow drawing one display object into another)
+* Implement graphics sharing (allow non-recursive shape cloning)
+* Implement display object abstraction (allow shape masks in combination with alpha masks)

@@ -701,9 +701,9 @@ var p = DisplayObject.prototype;
 	p.cache = function(x, y, width, height, scale) {
 		//-- In EaselFl cache currently only prevents redraw & applies filters
 		this._flCache = true;
-	 	this._flCached = false;
+		this._flCached = false;
 		this._flFiltersDirty = true;
-	}
+	};
 
 	/**
 	 * Redraws the display object to its cache. Calling updateCache without an active cache will throw an error.
@@ -735,7 +735,7 @@ var p = DisplayObject.prototype;
 		this._flCache = true;
 		this._flCached = false;
 		this._flFiltersDirty = true;
-	}
+	};
 
 	/**
 	 * Clears the current cache. See cache() for more information.
@@ -751,7 +751,7 @@ var p = DisplayObject.prototype;
 	*/
 	p.uncache = function() {
 	  this._flCache = this._flCached = false;
-	}
+	};
 	
 	/**
 	* Returns a data URL for the cache, or null if this display object is not cached.
@@ -768,7 +768,7 @@ var p = DisplayObject.prototype;
 	*/
 	p.getCacheDataURL = function() {
 		if(createjs.Stage.FL_THROW_UNIMPLEMENTED) throw "EaselFl::DisplayObject.getCacheDataURL not yet implemented";
-	}
+	};
 	
 	/**
 	 * Returns the stage that this display object will be rendered on, or null if it has not been added to one.
@@ -1096,7 +1096,6 @@ var p = DisplayObject.prototype;
 	};
 	*/
 	
-	console.log("TODO: verify DisplayObject._hasMouseHandler is necessary in EaselFL");
 	/**
 	 * Indicates whether the display object has a listener of the corresponding event types.
 	 * @method _hasMouseHandler
@@ -1105,6 +1104,8 @@ var p = DisplayObject.prototype;
 	 * @return {Boolean}
 	 * @protected
 	 **/
+	/*
+	//-- EaselJS
 	p._hasMouseHandler = function(typeMask) {
 		var ls = this._listeners;
 		return !!(
@@ -1114,7 +1115,8 @@ var p = DisplayObject.prototype;
 				 (typeMask&2 && (this.onMouseOver || this.onMouseOut || this.cursor ||
 				 (ls && (this.hasEventListener("mouseover") || this.hasEventListener("mouseout")))))
 				 );
-	};
+	};*/
+	//-- _hasMouseHandler is currently unused in EaselFL
 
 	
 	/**** Begin EaselFL specific code ****/
