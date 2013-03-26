@@ -25,10 +25,8 @@
 		"/../js/easelfl/display/Shape.js",
 		"/../js/easelfl/display/Text.js",
 		"/../js/easelfl/utils/SpriteSheetUtils.js",
-		//"/../js/easelfl/utils/SpriteSheetBuilder.js",
 		"/../js/easelfl/display/DOMElement.js",
 		"/../js/easelfl/filters/Filter.js",
-		//"/../js/easelfl/ui/Touch.js",
 		"/../js/easelfl/version.js"
         ],
 		"JS_FILE_NAME" : "easelfl-%VERSION%.min.js",

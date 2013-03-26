@@ -23,7 +23,7 @@ function init(){
 	var canvas = document.createElement('canvas');
 	canvas.setAttribute('width', 600);
 	canvas.setAttribute('height', 400);
-	canvas.setAttribute('fl_swf_url', '../haxe/bin/easelfl-cur.swf');
+	canvas.setAttribute('fl_swf_url', '../haxe/bin/easelfl-NEXT.swf');
 	document.getElementById('testContainer').appendChild(canvas);
 
 	var myStage = new createjs.Stage(canvas);
@@ -54,7 +54,7 @@ function init(){
 	
 	var a1 = createNode(100, 300, '#AAA', myStage);
 	var a2 = createNode(400, 300, '#AAA', myStage);
-	var c2 = createNode(0, 0, '#D0D0D0', myStage, null, updateDeltaC2);
+	var c2 = createNode(0, 0, '#D0D0D0', myStage, updateDeltaC2);
 	c2.dx = 100;
 	c2.dy = 0;
 
@@ -103,7 +103,7 @@ function init(){
 	}
 
 	
-	function createNode(x, y, color, container, constraint, postChange) {
+	function createNode(x, y, color, container, constraint) {
 		var shp = new createjs.Shape();
 		shp.graphics.beginFill(color);
 		shp.graphics.drawRect(0, 0, 8, 8);
@@ -123,15 +123,13 @@ function init(){
 			var my = e.stageY;
 			
 			e.onMouseMove = function(e){
-				if(constraint) {
-					constraint(shp);
-				}
 				shp.x = x + e.stageX - mx;
 				shp.y = y + e.stageY - my;
 				
-				if(postChange) {
-					postChange(shp);
+				if(constraint) {
+					constraint(shp);
 				}
+
 				renderCurve();
 			}
 		}

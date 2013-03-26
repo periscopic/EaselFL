@@ -174,13 +174,13 @@ var ScriptLoader = {
                 '../js/easelfl/filters/ColorFilter.js',
                 '../js/easelfl/filters/ColorMatrix.js',
                 '../js/easelfl/filters/ColorMatrixFilter.js',
-                '../js/easelfl/filters/BoxBlurFilter.js',
+                '../js/easelfl/filters/BoxBlurFilter.js'
             ], init);
              
             
             /*ScriptLoader.loadInOrder([
                 '../js/swfobject.js',
-                '../build/output/easelfl-cur.min.js'               
+                '../build/output/easelfl-NEXT.min.js'               
             ], init);*/
         },
         

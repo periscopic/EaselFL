@@ -76,17 +76,17 @@ function init() {
 	//-- end Toolkit exported init method
 
 	//EaselJS/EaselFL agnostic setup
-	myCanvas.setAttribute('fl_swf_url', '../../haxe/bin/easelfl-cur.swf');
+	myCanvas.setAttribute('fl_swf_url', '../../haxe/bin/easelfl-NEXT.swf');
 
 	var options = {
 		preferFlash: true, //normally - false - in production
-		EaselJS_url: 'http://code.createjs.com/easeljs-0.5.0.min.js',
-		EaselFL_url: '../../build/output/easelfl-cur.min.js',
+		EaselJS_url: 'http://code.createjs.com/easeljs-0.6.0.min.js',
+		EaselFL_url: '../../build/output/easelfl-NEXT.min.js',
 		SWFObject_url: '../../js/swfobject.js',
 		//include only if movieclip is necessary for your application.
 		//MC will load after core EaselJS or EaselFL
 		//but before the success callback is executed
-		MovieClip_url: 'http://code.createjs.com/movieclip-0.5.0.min.js' 
+		MovieClip_url: 'http://code.createjs.com/movieclip-0.6.0.min.js' 
 	};
 
 	createjs.FLSetup.run( onEaselSuccess, onEaselFailure, options);

@@ -300,7 +300,6 @@ var p = Graphics.prototype;
 	 **/
 	p._strokeStyleInstructions = null;
 	
-	console.log('TODO: handle Graphics._ignoreScaleStroke');
 	/**
 	 * @property _ignoreScaleStroke
 	 * @protected
@@ -853,7 +852,7 @@ var p = Graphics.prototype;
 	};
 	*/
 	p.setStrokeStyle = function(thickness, caps, joints, miterLimit, ignoreScale) {
-		this._flRecord([this._flId, 'ss',[thickness, caps, joints, miterLimit]]);
+		this._flRecord([this._flId, 'ss',[thickness, caps, joints, miterLimit, !!ignoreScale]]);
 		return this;
 	};
 	

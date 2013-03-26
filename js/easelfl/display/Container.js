@@ -148,14 +148,19 @@ var p = Container.prototype = new createjs.DisplayObject();
 		return true;
 	}
 	*/
-console.log("TODO:: make sure Container.draw lack of matrix issue in 0.6 is addressed");
-	p.draw = function(ctx, ignoreCache, _mtx) {
-		var snap = createjs.Stage._snapToPixelEnabled;
-		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
-		_mtx = _mtx || this._matrix.reinitialize(1,0,0,1,0,0,this.alpha, this.shadow, this.compositeOperation);
 
-		//don't sync children if not visible or if cached
-		if (this._flCached || !this.isVisible()) { return true;}		
+	p.draw = function(ctx, ignoreCache) {
+		//display object draw (sync transforms, etc)
+		this.DisplayObject_draw(ctx, ignoreCache);
+
+		if (
+			//skip updates to children if caching
+			(this._flCached && !ignoreCache) ||
+			//skip updates if not visible
+			!this.isVisible()
+		) { 
+			return true; 
+		}
 		
 		this._flCached = this._flCache;		
 		
@@ -164,16 +169,10 @@ console.log("TODO:: make sure Container.draw lack of matrix issue in 0.6 is addr
 		var list = this.children.slice(0);
 		for (var i=0; i<l; i++) {
 			var child = list[i];
-			var shadow = false;
-			var mtx = child._matrix.reinitialize(_mtx.a,_mtx.b,_mtx.c,_mtx.d,_mtx.tx,_mtx.ty,_mtx.alpha,_mtx.shadow,_mtx.compositeOperation);
-			mtx.appendTransform(child.x, child.y, child.scaleX, child.scaleY, child.rotation, child.skewX, child.skewY,
-									child.regX, child.regY);
-			mtx.appendProperties(child.alpha, child.shadow, child.compositeOperation);		
-			child.draw(ctx, false, mtx);
-			if (shadow) { this.applyShadow(ctx); } //-- TODO : make sure shadow gets applied
+			child.draw(ctx, false);
 		}
 		return true;
-	}
+	};
 	
 	/**
 	 * Adds a child to the top of the display list. You can also add multiple children, such as "addChild(child1, child2, ...);".

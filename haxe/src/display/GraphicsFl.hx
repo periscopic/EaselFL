@@ -1,4 +1,4 @@
-/* TEST */package display;
+package display;
 
 import flash.display.Graphics;
 import flash.display.DisplayObject;
@@ -210,6 +210,7 @@ class GraphicsFl implements IExec{
 		target.activePath = false;
 		target.strokeThickness = args[0];
 		target.miterLimit = Math.isNaN(args[3]) ? 10 : args[3];
+		target.lineScaleMode = args[4] ? LineScaleMode.NONE : LineScaleMode.NORMAL;
 		
 		switch(caps) {
 			case 'round', 1:
@@ -238,9 +239,9 @@ class GraphicsFl implements IExec{
 	inline static private function updateStroke(target:GraphicsFl) {
 		//normal
 		if(target.strokeMethod==null) {
-			target.graphics.lineStyle(target.strokeThickness, target.strokeColor, target.strokeAlpha, false, LineScaleMode.NONE, target.capsStyle, target.jointsStyle, target.miterLimit);
+			target.graphics.lineStyle(target.strokeThickness, target.strokeColor, target.strokeAlpha, false, target.lineScaleMode, target.capsStyle, target.jointsStyle, target.miterLimit);
 		} else {
-			target.graphics.lineStyle(target.strokeThickness, 0, 1, false, LineScaleMode.NONE, target.capsStyle, target.jointsStyle, target.miterLimit);	
+			target.graphics.lineStyle(target.strokeThickness, 0, 1, false, target.lineScaleMode, target.capsStyle, target.jointsStyle, target.miterLimit);	
 			Reflect.callMethod(null, target.strokeMethod, target.strokeArgs);
 		}
 	}
@@ -681,7 +682,7 @@ class GraphicsFl implements IExec{
 	private var fillMethod:Dynamic;
 	private var fillArgs:Dynamic;
 	private var activeFill:Bool;
-	
+	private var lineScaleMode:Dynamic;
 	
 	//-- The current position of the drawing head
 	private var curX:Float;
@@ -714,6 +715,7 @@ class GraphicsFl implements IExec{
 		miterLimit = 10;
 		activePath = activeFill = activeStroke = changing = false;
 		fillMethod = fillArgs = strokeMethod = strokeArgs = null;
+		lineScaleMode = LineScaleMode.NORMAL;
 	}
 	
 	

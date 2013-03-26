@@ -180,7 +180,7 @@ var p = DOMElement.prototype = new createjs.DisplayObject();
 		this.DisplayObject_initialize();
 		this.mouseEnabled = false;
 		this.htmlElement = htmlElement;
-		this._flLastMtx = {a:null, b:null, c:null, d:null, tx:null, ty:null};
+		this._oldMtx = {};
 
 		if (htmlElement) {
             var style = htmlElement.style;
@@ -407,7 +407,6 @@ console.log("TODO: verify _oldMtx usage doesn't impact EaselFL");
     p._flSimpleTransform = true;
     p._flWidth = 0;
     p._flHeight = 0;
-    p._flLastMtx = null;
     p._flBx = 0;
     p._flBy = 0;
     p._flVisible = true;
@@ -470,9 +469,9 @@ console.log("TODO: verify _oldMtx usage doesn't impact EaselFL");
         }       
         
         //-- Update position, rotation based on parent
-        var lmtx = this._flLastMtx;
+        var oldMtx = this._oldMtx;
         
-        if( lmtx.tx!== mtx.tx || lmtx.ty!== mtx.ty || lmtx.a !== mtx.a || lmtx.b !== mtx.b || lmtx.c !== mtx.c || lmtx.d !== mtx.d ){
+        if( oldMtx.tx!== mtx.tx || oldMtx.ty!== mtx.ty || oldMtx.a !== mtx.a || oldMtx.b !== mtx.b || oldMtx.c !== mtx.c || oldMtx.d !== mtx.d ){
             
             var simple = (mtx.a ===1 && mtx.b === 0 && mtx.a === mtx.d && mtx.b===mtx.c);            
             
@@ -489,7 +488,7 @@ console.log("TODO: verify _oldMtx usage doesn't impact EaselFL");
                     }                  
                 }        
             
-            } else if( lmtx.a !== mtx.a || lmtx.b !== mtx.b || lmtx.c !== mtx.c || lmtx.d !== mtx.d ){
+            } else if( oldMtx.a !== mtx.a || oldMtx.b !== mtx.b || oldMtx.c !== mtx.c || oldMtx.d !== mtx.d ){
                 //not identity, complex transform
                 
                 if(transformProp!== 'filter'){
@@ -533,12 +532,12 @@ console.log("TODO: verify _oldMtx usage doesn't impact EaselFL");
             
             this._flSimpleTransform = simple;
             
-            lmtx.a = mtx.a;
-            lmtx.b = mtx.b;
-            lmtx.c = mtx.c;
-            lmtx.d = mtx.d;
-            lmtx.tx = mtx.tx;
-            lmtx.ty = mtx.ty;            
+            oldMtx.a = mtx.a;
+            oldMtx.b = mtx.b;
+            oldMtx.c = mtx.c;
+            oldMtx.d = mtx.d;
+            oldMtx.tx = mtx.tx;
+            oldMtx.ty = mtx.ty;            
             
             if(transformProp === 'filter'){
                 var msCum = this._flMsMtx+' '+this._flMsAlpha;

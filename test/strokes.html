@@ -23,7 +23,7 @@ function init(){
 	var canvas = document.createElement('canvas');
 	canvas.setAttribute('width', 600);
 	canvas.setAttribute('height', 400);
-	canvas.setAttribute('fl_swf_url', '../haxe/bin/easelfl-cur.swf');
+	canvas.setAttribute('fl_swf_url', '../haxe/bin/easelfl-NEXT.swf');
 	document.getElementById('testContainer').appendChild(canvas);
 	
 	var myStage = new createjs.Stage(canvas);
@@ -47,11 +47,26 @@ function init(){
 	g.drawRect(200, 0, 50, 50);
 	g.endStroke();
 
-	img.onload = function() {		
+	img.onload = function() {	
+		g = shp.graphics;	
 		g.beginBitmapStroke(img);
 		g.drawRect(100, 0, 50, 50);
 		g.endStroke();
 	}	
+
+	var sclHz = new createjs.Shape();
+	g = sclHz.graphics;
+	//g.setStrokeStyle(1, null, null, null, true);
+	g.beginStroke('#000');
+	g.drawCircle(0, 0, 10);
+	sclHz.scaleX = 5;
+	sclHz.scaleY = 2;
+	sclHz.y = 200;
+	sclHz.x = 100;
+
+	myStage.addChild(sclHz);
+
+
 }
 
 </script>

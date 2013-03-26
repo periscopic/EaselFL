@@ -516,6 +516,36 @@ var p = Stage.prototype = new createjs.Container();
 	*/
 
 	p.enableDOMEvents = function(enable) {
+		var n, o, ls, t, bind, unbind, ms, _this;
+
+		if (enable == null) { enable = true; }
+
+		ms = Stage.__MS_BINDING;
+
+		if(!enable && ls) {
+			unbind = ms ? 'detachEvent' : 'removeEventListener';
+
+			for (n in ls) {
+				o = ls[n];
+				o.t[unbind](o.native, o.f);
+			}
+		} else if (enable && !ls) {
+			_this = this;
+			bind = ms ? 'attachEvent' : 'addEventListener';
+			t = document[bind] ? document : window; //prefer document since IE8 window has 'attachEvent' but fails to call after binding
+			ls = this._eventListeners = {};
+			//ls["mouseup"] = {t:t, native: ms?'onmouseup':'mouseup', f:function(e) { _this._handleMouseUp(e);} };
+			ls["mousemove"] = {t:t, native: ms?'onmousemove':'mousemove', f:function(e) { _this._handleMouseMove(e);} };
+			//ls["dblclick"] = {t:t, native: ms?'ondblclick':'dblclick', f:function(e) { _this._handleDoubleClick(e);} };
+
+			for (n in ls) {
+				o = ls[n];
+				o.t[bind](o.native, o.f);
+			}
+		}
+	};
+
+	//p.enableDOMEvents = function(enable) {
 		/*var n, o, ls, t, bind, unbind, ms, _this;
 
 		if (enable == null) { enable = true; }
@@ -543,7 +573,7 @@ var p = Stage.prototype = new createjs.Container();
 				o.t[bind](o.native, o.f);
 			}
 		}*/
-	};
+	//};
 
 
 	/**
@@ -572,7 +602,7 @@ var p = Stage.prototype = new createjs.Container();
 	 * @protected
 	 * @param {Number} id
 	 **/
-	/*
+	
 	p._getPointerData = function(id) {
 		var data = this._pointerData[id];
 		if (!data) {
@@ -582,20 +612,18 @@ var p = Stage.prototype = new createjs.Container();
 		}
 		return data;
 	}
-	*/
+	
 	
 	/**
 	 * @method _handleMouseMove
 	 * @protected
 	 * @param {MouseEvent} e
 	 **/
-	/*
-	 //-- EaselJS
 	p._handleMouseMove = function(e) {
 		if(!e){ e = window.event; }
 		this._handlePointerMove(-1, e, e.pageX, e.pageY);
 	}
-	*/	
+		
 
 	/**
 	 * @method _handlePointerMove
@@ -631,6 +659,29 @@ var p = Stage.prototype = new createjs.Container();
 	}
 	*/
 
+	p._handlePointerMove = function(id, e, pageX, pageY) {
+		if (!this.canvas) { return; } // this.mouseX = this.mouseY = null;
+		var evt;
+		var o = this._getPointerData(id);
+
+		var inBounds = o.inBounds;
+		this._updatePointerPosition(id, pageX, pageY);
+		if (!inBounds && !o.inBounds && !this.mouseMoveOutside) { return; }
+		
+		if (this.onMouseMove || this.hasEventListener("stagemousemove"))  {
+			evt = new createjs.MouseEvent("stagemousemove", o.x, o.y, this, e, id, id == this._primaryPointerID, o.rawX, o.rawY);
+			this.onMouseMove&&this.onMouseMove(evt);
+			this.dispatchEvent(evt);
+		}
+		
+		var oEvt = o.event;
+		if (oEvt && (oEvt.onMouseMove || oEvt.hasEventListener("mousemove"))) {
+			evt = new createjs.MouseEvent("mousemove", o.x, o.y, oEvt.target, e, id, id == this._primaryPointerID, o.rawX, o.rawY);
+			oEvt.onMouseMove&&oEvt.onMouseMove(evt);
+			oEvt.dispatchEvent(evt, oEvt.target);
+		}
+	}
+
 	/**
 	 * @method _updatePointerPosition
 	 * @protected
@@ -638,10 +689,11 @@ var p = Stage.prototype = new createjs.Container();
 	 * @param {Number} pageX
 	 * @param {Number} pageY
 	 **/
-	/*
-	 //-- EaselJS
 	p._updatePointerPosition = function(id, pageX, pageY) {
-		var rect = this._getElementRect(this.canvas);
+		if(!this.canvas._ctx._flInstance) {
+			return;
+		}
+		var rect = this._getElementRect(this.canvas._ctx._flInstance);
 		pageX -= rect.left;
 		pageY -= rect.top;
 		
@@ -667,7 +719,7 @@ var p = Stage.prototype = new createjs.Container();
 			this.mouseInBounds = o.inBounds;
 		}
 	}
-	*/
+	
 
 
 	/**
@@ -676,6 +728,7 @@ var p = Stage.prototype = new createjs.Container();
 	 * @param {HTMLElement} e
 	 **/
 	/*
+	//-- EaselJS
 	p._getElementRect = function(e) {
 		var bounds;
 		try { bounds = e.getBoundingClientRect(); } // this can fail on disconnected DOM elements in IE9
@@ -699,6 +752,27 @@ var p = Stage.prototype = new createjs.Container();
 		}
 	};
 	*/
+	p._getElementRect = function(e) {
+		var bounds;
+		try { bounds = e.getBoundingClientRect(); } // this can fail on disconnected DOM elements in IE9
+		catch (err) { bounds = {top: e.offsetTop, left: e.offsetLeft, width:e.offsetWidth, height:e.offsetHeight}; }
+		
+		var offX = (window.pageXOffset || document.scrollLeft || 0) - (document.clientLeft || document.body.clientLeft || 0);
+		var offY = (window.pageYOffset || document.scrollTop || 0) - (document.clientTop  || document.body.clientTop  || 0);
+		var styles = window.getComputedStyle ? getComputedStyle(e) : e.currentStyle; // IE <9 compatibility.
+		var padL = parseInt(styles.paddingLeft)+parseInt(styles.borderLeftWidth);
+		var padT = parseInt(styles.paddingTop)+parseInt(styles.borderTopWidth);
+		var padR = parseInt(styles.paddingRight)+parseInt(styles.borderRightWidth);
+		var padB = parseInt(styles.paddingBottom)+parseInt(styles.borderBottomWidth);
+		
+		// note: in some browsers bounds properties are read only.
+		return {
+			left: bounds.left+offX+padL,
+			right: bounds.right+offX-padR,
+			top: bounds.top+offY+padT,
+			bottom: bounds.bottom+offY-padB
+		}
+	};
 
 
 /**

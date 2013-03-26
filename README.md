@@ -56,13 +56,12 @@ pattern and clear color from EaselJS.
 * SpriteSheetUtils cannot extract a specific frame as an image (although they
 can flip frames for use in BitmapAnimations).
 
-
 **Graphics**
 
-* Flash lineScaleMode is set to 'none' which prevents issue of lines
-scaling when only scaling horizontal or vertical, but causes lines not
-to scale proportionately to container transformations, as they would
-in EaselJS.
+* Strokes scale properly when x and y scale transformations are equal. However, 
+if they are not equal, the greater is used. This is different from EaselJS where
+the horizontal and vertical stroke thicknesses are scaled independently. 
+Graphics.setStrokeStyle parameter ignoreStrokeScale works identically in EaselFL and EaselJS.
 * Radial gradient fills and strokes do not interpolate identically to EaselJS 
 if the origins of the circular guides are different (x0!==x1 || y0!==y1) 
 and both have radiuses greater than 0 (r0>0 && r1>0).
@@ -86,12 +85,7 @@ in one stage and then transitioning them to another will cause issues.
 
 ##Road Map
 * Complete migration to 0.6
-	Handle Graphics._ignoreScaleStroke (Graphics)
-	Make sure Container.draw lack of matrix issue in 0.6 is addressed (Container)
-	Verify Stage.mouseMoveOutside works (Stage)
 	Verify draw method fired via Stage.update still has correct params (Stage)
-	Verify _oldMtx usage doesn't impact EaselFL (DOMElement)
-	Finish conversion to the new build process
 * Implement canvas cache proxy (allow drawing one display object into another)
 * Implement graphics sharing (allow non-recursive shape cloning)
 * Implement display object abstraction (allow shape masks in combination with alpha masks)
