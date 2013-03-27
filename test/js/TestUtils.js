@@ -93,11 +93,12 @@ var ScriptLoader = {
     return {
         useCanvas : window.location.search.toUpperCase().indexOf('CANVAS')>=0,	
     
-        loadWithEaselJS : function(init) {
+        loadWithEaselJS : function(init, extras) {
+            var list;
             usingCanvas = true;
             buildHTML('Canvas + EaselJS', 'view in Flash with EaselFL');
             
-             ScriptLoader.loadInOrder([
+            /*list = [
                 'js/easeljs/utils/UID.js',
                 'js/easeljs/events/EventDispatcher.js',
                 'js/easeljs/utils/Ticker.js',
@@ -121,25 +122,28 @@ var ScriptLoader = {
                 'js/easeljs/display/DOMElement.js',
                 'js/easeljs/filters/Filter.js',
                 'js/easeljs/ui/Touch.js',
-                'js/easeljs/version.js',
+                'js/easeljs/version.js'
+            ];*/
 
-                'js/easeljs/filters/ColorFilter.js',
-                'js/easeljs/filters/ColorMatrix.js',
-                'js/easeljs/filters/ColorMatrixFilter.js',
-                'js/easeljs/filters/BoxBlurFilter.js'
-                ], init);
+            list = [
+                'js/easeljs-0.6.0.min.js'
+            ];
+
+            if(extras) {
+                list = list.concat(extras);
+            }
+
+            ScriptLoader.loadInOrder(list, init);
              
-            //window.createjs = window;
-            //ScriptLoader.load('js/easeljs-0.4.2.min.js', init);
-            //ScriptLoader.load('js/easeljs-0.5.0.min.js', init);
-            //ScriptLoader.load('js/easeljs-0.6.0.min.js', init);
         },
       
-        loadWithEaselFL : function(init) {
+        loadWithEaselFL : function(init, extras) {
+            var list;
+
             usingCanvas = false;
             buildHTML('Flash + EaselFL', 'view in Canvas with EaselJS');            
                         
-            ScriptLoader.loadInOrder([
+            list = [
                 '../js/swfobject.js',
                 '../js/easelfl/utils/ContextConfig.js',
                 '../js/easelfl/utils/Log.js',
@@ -169,23 +173,23 @@ var ScriptLoader = {
                 '../js/easelfl/display/DOMElement.js',
                 '../js/easelfl/filters/Filter.js',
                 //'../js/easelfl/ui/Touch.js',
-                '../js/easelfl/version.js',
+                '../js/easelfl/version.js'
+            ];        
 
-                '../js/easelfl/filters/ColorFilter.js',
-                '../js/easelfl/filters/ColorMatrix.js',
-                '../js/easelfl/filters/ColorMatrixFilter.js',
-                '../js/easelfl/filters/BoxBlurFilter.js'
-            ], init);
-             
-            
-            /*ScriptLoader.loadInOrder([
+            /*list = [
                 '../js/swfobject.js',
-                '../build/output/easelfl-NEXT.min.js'               
-            ], init);*/
+                '../build/output/easelfl-NEXT.min.js'
+            ]; */     
+            
+            if(extras) {
+                list = list.concat(extras);
+            }
+
+            ScriptLoader.loadInOrder(list, init);
         },
         
         swapRenderMethod : function() {
-            window.location = window.location.href.split('?')[0] + (!usingCanvas ? '?canvas' : '')
+            window.location = window.location.href.split('?')[0] + (!usingCanvas ? '?canvas' : '');
         }
       };
 })()

@@ -36,7 +36,10 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function(ns) {
+// namespace
+this.createjs = this.createjs||{};
+
+(function() {
 	var api;
 
 	/**
@@ -227,7 +230,6 @@
 		run: run
 	};
 
-	ns.FLSetup = api;
+	createjs.FLSetup = api;
 	
-}(createjs||(createjs={})));
-var createjs;
+}());

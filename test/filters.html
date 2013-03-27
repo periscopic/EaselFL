@@ -10,10 +10,25 @@
 <script type="text/javascript">
 
 window.onload = function(){
+	var extras;
 	if(TestUtils.useCanvas){
-		TestUtils.loadWithEaselJS(init);
+		extras = [
+			'js/easeljs/filters/ColorFilter.js',
+	        'js/easeljs/filters/ColorMatrix.js',
+	        'js/easeljs/filters/ColorMatrixFilter.js',
+	        'js/easeljs/filters/BoxBlurFilter.js'
+        ];
+
+		TestUtils.loadWithEaselJS(init, extras);
 	}else{
-		TestUtils.loadWithEaselFL(init);
+		extras = [
+			'../js/easelfl/filters/ColorFilter.js',
+            '../js/easelfl/filters/ColorMatrix.js',
+            '../js/easelfl/filters/ColorMatrixFilter.js',
+            '../js/easelfl/filters/BoxBlurFilter.js'
+		];
+		
+		TestUtils.loadWithEaselFL(init, extras);
 	}
 }
 

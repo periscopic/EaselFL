@@ -224,7 +224,6 @@ this.createjs = this.createjs||{};
 	**/
 	p._flOnReady = function() {
 		this._flInstance = ContextFl._flGetInstance( this._flInstanceID );
-		this._flInstance.addEventListener('click', function(){'stage click';});
 		this.flReady = true;
 		this._flFlush();
 

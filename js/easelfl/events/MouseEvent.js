@@ -224,4 +224,3 @@ var p = MouseEvent.prototype;
 createjs.MouseEvent = MouseEvent;
 
 }());
-var createjs;

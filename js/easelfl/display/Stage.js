@@ -587,7 +587,7 @@ var p = Stage.prototype = new createjs.Container();
 	 * @param {MouseEvent} e
 	 **/
 	p._handleMouseMove = function(e) {
-		if(!e){ e = window.event; }
+		e = this._flNormalizeMouseEvent(e);
 		this._handlePointerMove(-1, e, e.pageX, e.pageY);
 	}
 		
@@ -661,6 +661,7 @@ var p = Stage.prototype = new createjs.Container();
 			return;
 		}
 		var rect = this._getElementRect(this.canvas._ctx._flInstance);
+
 		pageX -= rect.left;
 		pageY -= rect.top;
 		
@@ -720,25 +721,31 @@ var p = Stage.prototype = new createjs.Container();
 	};
 	*/
 	p._getElementRect = function(e) {
+		//handle dimensions that include 'px', 'medium', etc
+		function parse(s) {
+			return parseInt(s.replace('px',''), 10) || 0;
+		}
+
 		var bounds;
 		try { bounds = e.getBoundingClientRect(); } // this can fail on disconnected DOM elements in IE9
 		catch (err) { bounds = {top: e.offsetTop, left: e.offsetLeft, width:e.offsetWidth, height:e.offsetHeight}; }
-		
+
 		var offX = (window.pageXOffset || document.scrollLeft || 0) - (document.clientLeft || document.body.clientLeft || 0);
 		var offY = (window.pageYOffset || document.scrollTop || 0) - (document.clientTop  || document.body.clientTop  || 0);
 		var styles = window.getComputedStyle ? getComputedStyle(e) : e.currentStyle; // IE <9 compatibility.
-		var padL = parseInt(styles.paddingLeft)+parseInt(styles.borderLeftWidth);
-		var padT = parseInt(styles.paddingTop)+parseInt(styles.borderTopWidth);
-		var padR = parseInt(styles.paddingRight)+parseInt(styles.borderRightWidth);
-		var padB = parseInt(styles.paddingBottom)+parseInt(styles.borderBottomWidth);
 		
+		var padL = parse(styles.paddingLeft)+parse(styles.borderLeftWidth);
+		var padT = parse(styles.paddingTop)+parse(styles.borderTopWidth);
+		var padR = parse(styles.paddingRight)+parse(styles.borderRightWidth);
+		var padB = parse(styles.paddingBottom)+parse(styles.borderBottomWidth);
+
 		// note: in some browsers bounds properties are read only.
 		return {
 			left: bounds.left+offX+padL,
 			right: bounds.right+offX-padR,
 			top: bounds.top+offY+padT,
 			bottom: bounds.bottom+offY-padB
-		}
+		};
 	};
 
 
@@ -944,6 +951,18 @@ var p = Stage.prototype = new createjs.Container();
 
 	p.flEmbedFonts = function(fontList, fontFileURL) {
 		this.canvas._ctx._flCommands.push(['fnts', [fontList, fontFileURL]]);
+	};
+
+	p._flNormalizeMouseEvent = function(e) {
+		if (!e) {
+			e = window.event;
+		}
+
+		if (e.pageX === void 0)     {
+			e.pageX = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+			e.pageY = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+		}
+		return e;
 	};
 
 	Stage.isEaselFl = Stage.isEaselFL = true;
