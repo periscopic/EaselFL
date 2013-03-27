@@ -195,7 +195,6 @@ var p = Stage.prototype = new createjs.Container();
 	 * @type Boolean
 	 * @default false
 	 **/
-	console.log("TODO: verify Stage.mouseMoveOutside works")
 	p.mouseMoveOutside = false;
 
 	/**
@@ -316,9 +315,8 @@ var p = Stage.prototype = new createjs.Container();
 		ctx.restore();
 	}
 	*/
-	console.log('TODO: verify draw method fired via Stage.update still has correct params');
 	p.update = function() {
-		if(!(this.canvas && this.canvas._ctx && this.canvas._ctx.flReady)) { return; }
+		if(!(this.canvas && this.canvas._ctx)) { return; }
 		
 		if(this.autoClear === false) {
 			this._flAutoClear = this.autoClear;
@@ -335,7 +333,7 @@ var p = Stage.prototype = new createjs.Container();
 		//-- Should anything be passed in place of the canvas, the first parameter?
 		this.draw( this.canvas._ctx, false, this.getConcatenatedMatrix(this._matrix));
 		
-		//-- send commands to Flash movie
+		//-- send commands to Flash movie if its ready
 		this.canvas._ctx._flFlush();
 	};
 
@@ -527,54 +525,23 @@ var p = Stage.prototype = new createjs.Container();
 
 			for (n in ls) {
 				o = ls[n];
-				o.t[unbind](o.native, o.f);
+				o.t[unbind](o.evtString, o.f);
 			}
 		} else if (enable && !ls) {
 			_this = this;
 			bind = ms ? 'attachEvent' : 'addEventListener';
 			t = document[bind] ? document : window; //prefer document since IE8 window has 'attachEvent' but fails to call after binding
 			ls = this._eventListeners = {};
-			//ls["mouseup"] = {t:t, native: ms?'onmouseup':'mouseup', f:function(e) { _this._handleMouseUp(e);} };
-			ls["mousemove"] = {t:t, native: ms?'onmousemove':'mousemove', f:function(e) { _this._handleMouseMove(e);} };
-			//ls["dblclick"] = {t:t, native: ms?'ondblclick':'dblclick', f:function(e) { _this._handleDoubleClick(e);} };
+			//ls["mouseup"] = {t:t, evtString: ms?'onmouseup':'mouseup', f:function(e) { _this._handleMouseUp(e);} };
+			ls["mousemove"] = {t:t, evtString: (ms?'onmousemove':'mousemove'), f:function(e) { _this._handleMouseMove(e);} };
+			//ls["dblclick"] = {t:t, evtString: ms?'ondblclick':'dblclick', f:function(e) { _this._handleDoubleClick(e);} };
 
 			for (n in ls) {
 				o = ls[n];
-				o.t[bind](o.native, o.f);
+				o.t[bind](o.evtString, o.f);
 			}
 		}
 	};
-
-	//p.enableDOMEvents = function(enable) {
-		/*var n, o, ls, t, bind, unbind, ms, _this;
-
-		if (enable == null) { enable = true; }
-
-		ms = Stage.__MS_BINDING;
-
-		if(!enable && ls) {
-			unbind = ms ? 'detachEvent' : 'removeEventListener';
-
-			for (n in ls) {
-				o = ls[n];
-				o.t[unbind](o.native, o.f);
-			}
-		} else if (enable && !ls) {
-			_this = this;
-			bind = ms ? 'attachEvent' : 'addEventListener';
-			t = document[bind] ? document : window; //prefer document since IE8 window has 'attachEvent' but fails to call after binding
-			ls = this._eventListeners = {};
-			ls["mouseup"] = {t:t, native: ms?'onmouseup':'mouseup', f:function(e) { _this._handleMouseUp(e);} };
-			ls["mousemove"] = {t:t, native: ms?'onmousemove':'mousemove', f:function(e) { _this._handleMouseMove(e);} };
-			ls["dblclick"] = {t:t, native: ms?'ondblclick':'dblclick', f:function(e) { _this._handleDoubleClick(e);} };
-
-			for (n in ls) {
-				o = ls[n];
-				o.t[bind](o.native, o.f);
-			}
-		}*/
-	//};
-
 
 	/**
 	 * Returns a clone of this Stage.

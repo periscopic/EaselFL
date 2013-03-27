@@ -250,7 +250,6 @@ var p = DOMElement.prototype = new createjs.DisplayObject();
 		return true;
 	};
 	*/
-console.log("TODO: verify _oldMtx usage doesn't impact EaselFL");
 	p.draw = function(ctx, ignoreCache) {
 
 		if (!this.htmlElement) { return; }

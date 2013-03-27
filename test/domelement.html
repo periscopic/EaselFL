@@ -66,11 +66,9 @@ function init(){
 
 	// move, remove, add back in
 
-	var tickHook = {
-		tick: function() {cont.rotation +=0.5; cont.scaleX -=0.01;}
-	}
+	function step() {cont.rotation +=0.5; cont.scaleX -=0.01; }
 
-	createjs.Ticker.addListener(tickHook);
+	createjs.Ticker.addListener(step);
 
 	setTimeout(function() {myStage.removeChild(cont);}, 2000)
 	setTimeout(function() {myStage.addChild(cont);}, 4000)

@@ -72,8 +72,12 @@ function init(){
 
 	myStage.addEventListener('stagemousedown', onMouse);
 	myStage.addEventListener('stagemouseup', onMouse);
-	//myStage.mouseMoveOutside = true;
-	//myStage.addEventListener('stagemousemove', onMouse);
+	
+	// Listen for stagemousemove in and outside of bounds
+	/*
+	myStage.mouseMoveOutside = true;
+	myStage.addEventListener('stagemousemove', onMouse);
+	*/
 }
 
 </script>
@@ -104,6 +108,6 @@ function init(){
 
 </head>
 <body>
-<div id="trace">Click around</div>
+<div id="trace">Test mouse over, click, drag, double click, and mouse out</div>
 </body>
 </html>

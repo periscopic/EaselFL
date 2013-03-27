@@ -54,17 +54,26 @@ function init(){
 		g.endStroke();
 	}	
 
-	var sclHz = new createjs.Shape();
-	g = sclHz.graphics;
-	//g.setStrokeStyle(1, null, null, null, true);
+	var scl = new createjs.Shape();
+	g = scl.graphics;
 	g.beginStroke('#000');
-	g.drawCircle(0, 0, 10);
-	sclHz.scaleX = 5;
-	sclHz.scaleY = 2;
-	sclHz.y = 200;
-	sclHz.x = 100;
+	g.drawCircle(0, 0, 5);
+	scl.scaleX = scl.scaleY = 5;
+	scl.y = 200;
+	scl.x = 120;
 
-	myStage.addChild(sclHz);
+	myStage.addChild(scl);
+
+	var noScl = new createjs.Shape();
+	g = noScl.graphics;
+	g.setStrokeStyle(1, null, null, null, true); //ignore scale stroke
+	g.beginStroke('#000');
+	g.drawCircle(0, 0, 5);
+	noScl.scaleX = noScl.scaleY = 5;
+	noScl.y = 200;
+	noScl.x = 220;
+
+	myStage.addChild(noScl);
 
 
 }

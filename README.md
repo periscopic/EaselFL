@@ -85,7 +85,7 @@ in one stage and then transitioning them to another will cause issues.
 
 ##Road Map
 * Complete migration to 0.6
-	Verify draw method fired via Stage.update still has correct params (Stage)
+	Testing in IE 8
 * Implement canvas cache proxy (allow drawing one display object into another)
 * Implement graphics sharing (allow non-recursive shape cloning)
 * Implement display object abstraction (allow shape masks in combination with alpha masks)
