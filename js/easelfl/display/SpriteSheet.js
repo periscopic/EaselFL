@@ -257,22 +257,30 @@ var p = SpriteSheet.prototype;
 		if (data.images && (l=data.images.length) > 0) {
 			a = this._images = [];
 			for (i=0; i<l; i++) {
-				var img = data.images[i];
+				var img = data.images[i],
+				src = null;
+
 				if (typeof img == "string") {
-					var src = img;
+					src = img;
 					img = new Image();
-					img.src = src;
 				}
 				a.push(img);
-				if (!img.getContext && !img.complete) {
+
+				if (!img.getContext && !img.complete && img.readyState!=='complete') {
 					this._loadCount++;
 					this.complete = false;
 					(function(o) { img.onload = function() { o._handleImageLoad(); } })(this);
 				}
+
+				if(src) {
+					// must assign source after load in IE8
+					// in case img is already in cache
+					img.src = src;
+				}
 			}
 		}
 		
-		// parse frames:
+		// parse frames://src should be added after onload in ie8 to make sure onload is caught
 		if (data.frames == null) { // nothing
 		} else if (data.frames instanceof Array) {
 			this._frames = [];

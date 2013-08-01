@@ -32,10 +32,6 @@ function init(){
 	createjs.Ticker.addListener(myStage);
 	
 	//-- specific test code
-
-	img = new Image();
-	img.src = "img/testSeq.png";
-	img.onload = handleImageLoad;
 	
 	function handleImageLoad(event) {
 		// create spritesheet and assign the associated data.
@@ -66,6 +62,12 @@ function init(){
 			myStage.addChild(bmpAnim);	
 		}
 	}
+
+	img = new Image();
+	//src should be added after onload in 
+	//ie8 to make sure onload is caught
+	img.onload = handleImageLoad; 
+	img.src = "img/testSeq.png";
 }
 
 </script>
