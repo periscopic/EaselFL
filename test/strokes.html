@@ -30,8 +30,7 @@ function init(){
 	createjs.Ticker.addListener(myStage);
 	
 	//-- specific test code
-	var img = new Image();
-	img.src = 'img/testImage.png';
+	
 	
 	var shp = new createjs.Shape();
 	shp.x = shp.y = 50;
@@ -47,12 +46,23 @@ function init(){
 	g.drawRect(200, 0, 50, 50);
 	g.endStroke();
 
-	img.onload = function() {	
+	function onImgLoad() {	
 		g = shp.graphics;	
 		g.beginBitmapStroke(img);
 		g.drawRect(100, 0, 50, 50);
 		g.endStroke();
 	}	
+
+	// in EaselJS you must wait for image to
+	// load before a texture for bitmap stroke can
+	// be created.
+
+	// In IE8, setting the source before the onload
+	// handler will cause the handler not to fire if
+	// the image is already loaded into cache.
+	var img = new Image();
+	img.onload = onImgLoad;
+	img.src = 'img/testImage.png';
 
 	var scl = new createjs.Shape();
 	g = scl.graphics;

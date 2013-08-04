@@ -51,16 +51,22 @@ function init(){
 
 	myStage.addChild(shp);	
 
-	var img = new Image();
-	img.src = 'img/testImage.png';
-	// in EaselJS you must wait for image to
-	// load before a texture for bitmap fill can
-	// be created.
-	img.onload = function() {
+	function onImgLoad() {
 		g.beginBitmapFill(img);
 		g.drawRect(100, 0, 50, 50);
 		g.endFill();
 	}
+
+	// in EaselJS you must wait for image to
+	// load before a texture for bitmap fill can
+	// be created.
+	
+	// In IE8, setting the source before the onload
+	// handler will cause the handler not to fire if
+	// the image is already loaded into cache.
+	var img = new Image();
+	img.onload = onImgLoad;
+	img.src = 'img/testImage.png';
 	
 }
 

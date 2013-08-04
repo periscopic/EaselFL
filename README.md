@@ -76,6 +76,10 @@ to EaselJS
 of the JS side sweep can be adjusted using createjs.CanvasFl.FL_GC_INTERVAL 
 (in number of frames from sweep to sweep).
 
+**IE8**
+
+* Note that when preloading images (i.e. for use with graphics.bitmapfill) IE8 images will fire onload synchronously when the img.src attribute is set if the image is in cache. The onload handler should be set afterward to prevent issues. This is not an EaselFL issue.
+
 **Miscellaneous**
 
 * Cloning of Shapes are only recursive, since shared graphics are not yet supported.
@@ -85,6 +89,8 @@ in one stage and then transitioning them to another will cause issues.
 
 ##Road Map
 * Complete migration to 0.6
+	- Recieve mousemove while dragging on transparent portions of stage (all browsers)
+	- DOMElement is sometimes hidden (IE8)
 	Testing in IE 8
 * Implement canvas cache proxy (allow drawing one display object into another)
 * Implement graphics sharing (allow non-recursive shape cloning)
