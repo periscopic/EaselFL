@@ -89,7 +89,6 @@ in one stage and then transitioning them to another will cause issues.
 
 ##Road Map
 * Complete migration to 0.6
-	- Recieve mousemove while dragging on transparent portions of stage (all browsers) 
 	- Cloning does not work properly (IE8) 
 	- DOMElement is sometimes hidden (IE8) 
 	- Testing in IE 8
