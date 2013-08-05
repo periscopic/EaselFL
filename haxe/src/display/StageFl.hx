@@ -51,6 +51,7 @@ class StageFl extends ContainerFl {
 		super(id);
 		blitBitmap = new Bitmap();
 		blitBitmap.visible = false;
+		
 		this.stage = stage;
 		stage.addEventListener(Event.RESIZE, handleResize, false, 0, true);
 		stage.addEventListener(flash.events.MouseEvent.MOUSE_UP, handleStageUp, false, 0, true);
@@ -59,7 +60,11 @@ class StageFl extends ContainerFl {
 	}
 	
 	private function handleStageUp(e:MouseEvent):Void {
-		var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'stagemouseup'};
+		var evt:Dynamic = {
+				stageX:Math.max(0, Math.min(this.stage.stageWidth-1, e.stageX)), 
+				stageY:Math.max(0, Math.min(this.stage.stageHeight-1, e.stageY)), 
+				type:'stagemouseup'
+			};
 		Main.dispatch(evt);
 	}
 	

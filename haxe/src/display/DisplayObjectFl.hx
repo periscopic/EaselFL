@@ -7,6 +7,7 @@ import flash.events.MouseEvent;
 import interfaces.IDisplayable;
 import interfaces.IBitmapFilter;
 import flash.filters.BitmapFilter;
+import flash.Lib;
 
 import flash.geom.Matrix;
 import flash.filters.DropShadowFilter;
@@ -191,7 +192,12 @@ class DisplayObjectFl implements IDisplayable {
 	static function handleStageMove(e:MouseEvent):Void{
 		//-- throttling this to 30fps, since constant dispatches seem to be a bottle neck
 		var time:Float = Date.now().getTime();
-		if(time-lastMoveEvtTime>=33) {
+		var stage = Lib.current.stage;
+		
+		if(time-lastMoveEvtTime>=33 
+			&& e.stageX>=0 && e.stageX<stage.stageWidth 
+			&& e.stageY>=0 && e.stageY<stage.stageHeight
+			) {
 			lastMoveEvtTime = time;
 			var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'mousemove'};
 			Main.dispatch(evt);
@@ -199,12 +205,18 @@ class DisplayObjectFl implements IDisplayable {
 	}
 	
 	static function handleStageUp(e:MouseEvent):Void{
+		var stage = Lib.current.stage;
 		//-- unsubscribe to receive mousemove, up events which were assigned via an onPress handler
 		e.target.removeEventListener(MouseEvent.MOUSE_MOVE, handleStageMove, false);
 		e.target.removeEventListener(MouseEvent.MOUSE_UP, handleStageUp, false);
 		
+		
 		//-- dispatch event to js
-		var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'mouseup'};
+		var evt:Dynamic = {
+				stageX:Math.max(0, Math.min(stage.stageWidth-1, e.stageX)),
+				stageY:Math.max(0, Math.min(stage.stageHeight-1, e.stageY)),
+				type:'mouseup'
+			};
 		Main.dispatch(evt);
 	}
 
@@ -258,8 +270,10 @@ class DisplayObjectFl implements IDisplayable {
 	public function handleDown(e:MouseEvent):Void{
 		//-- subscribe stage to receive mousemove, up events
 		var stg = Control.stageFl;
-		stg.display.addEventListener(MouseEvent.MOUSE_MOVE, handleStageMove, false, 0, true);
-		stg.display.addEventListener(MouseEvent.MOUSE_UP, handleStageUp, false, 0, true);
+		//stg.display.addEventListener(MouseEvent.MOUSE_MOVE, handleStageMove, false, 0, true);
+		Lib.current.stage.addEventListener(MouseEvent.MOUSE_MOVE, handleStageMove, false, 0, true);
+		//stg.display.addEventListener(MouseEvent.MOUSE_UP, handleStageUp, false, 0, true);
+		Lib.current.stage.addEventListener(MouseEvent.MOUSE_UP, handleStageUp, false, 0, true);
 		
 		//-- dispatch event
 		var evt:Dynamic = {stageX:e.stageX, stageY:e.stageY, type:'mousedown', id:this.id};

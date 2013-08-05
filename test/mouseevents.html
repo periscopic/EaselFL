@@ -53,6 +53,15 @@ function init(){
 
 	var g, shp;
 	
+	/*shp = new createjs.Shape();
+	g = shp.graphics;
+	shp.alpha = 0;
+	g.beginFill('#000');
+	g.drawRect(0, 0, 1000, 10000);
+	g.endFill();
+	myStage.addChild(shp);*/
+
+
 	shp = new createjs.Shape();
 	g = shp.graphics;
 	g.beginFill('#888');
@@ -74,10 +83,10 @@ function init(){
 	myStage.addEventListener('stagemouseup', onMouse);
 	
 	// Listen for stagemousemove in and outside of bounds
-	/*
-	myStage.mouseMoveOutside = true;
-	myStage.addEventListener('stagemousemove', onMouse);
-	*/
+	
+	// myStage.mouseMoveOutside = true;
+	// myStage.addEventListener('stagemousemove', onMouse);
+	
 }
 
 </script>
