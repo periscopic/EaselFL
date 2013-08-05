@@ -40,7 +40,7 @@ function init(){
 	myStage.addChild(cnt);
 	
 	var img = new Image();
-	img.src = 'img/testImage.png';
+	
 	
 	var bmp = new createjs.Bitmap(img);
 	bmp.sourceRect = new createjs.Rectangle(0, 30, 78, 38);
@@ -61,7 +61,7 @@ function init(){
 	text.textBaseline = 'alphabetic';
 	childCnt.addChild(text);
 
-	img.onload = function() {
+	function onImgLoad() {
 
 		var g, mtx;
 		//matrix for rotating the fill
@@ -83,6 +83,9 @@ function init(){
 		cnt2.y = 75;
 		myStage.addChild(cnt2);
 	}
+
+	img.src = 'img/testImage.png';
+	img.onload = onImgLoad;
 
 	if(createjs.Stage.isEaselFL) {
 		myStage.flEmbedFonts(['RobotoThinItalic'], 'css/fonts/Fonts.swf');

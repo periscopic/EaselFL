@@ -89,7 +89,6 @@ in one stage and then transitioning them to another will cause issues.
 
 ##Road Map
 * Complete migration to 0.6
-	- Cloning does not work properly (IE8) 
 	- DOMElement is sometimes hidden (IE8) 
 	- Testing in IE 8
 * Implement canvas cache proxy (allow drawing one display object into another)
