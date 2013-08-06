@@ -99,6 +99,32 @@ var p = Stage.prototype = new createjs.Container();
 	 * @event stagemouseup
 	 * @since 0.6.0
 	 */
+	 
+	/**
+	 * Dispatched each update immediately before the tick event is propagated through the display list. Does not fire if
+	 * tickOnUpdate is false.
+	 * @event tickstart
+	 * @since 0.7.0
+	 */
+	 
+	/**
+	 * Dispatched each update immediately after the tick event is propagated through the display list. Does not fire if
+	 * tickOnUpdate is false. Precedes the "drawstart" event.
+	 * @event tickend
+	 * @since 0.7.0
+	 */
+	 
+	/**
+	 * Dispatched each update immediately before the canvas is cleared and the display list is drawn to it.
+	 * @event drawstart
+	 * @since 0.7.0
+	 */
+	 
+	/**
+	 * Dispatched each update immediately after the display list is drawn to the canvas and the canvas context is restored.
+	 * @event drawend
+	 * @since 0.7.0
+	 */
 
 // public properties:
 	/**
@@ -328,13 +354,23 @@ var p = Stage.prototype = new createjs.Container();
 		
 		Stage._snapToPixelEnabled = this.snapToPixelEnabled;
 
-		if (this.tickOnUpdate) { this._tick((arguments.length ? arguments : null)); }
-		
+		if (this.tickOnUpdate) { 
+			this.dispatchEvent("tickstart");  // TODO: make cancellable?
+			this._tick((arguments.length ? arguments : null)); 
+			this.dispatchEvent("tickend");
+		}
+
+		//-- notifying drawing beginning
+		this.dispatchEvent("drawstart"); // TODO: make cancellable?
+
 		//-- Should anything be passed in place of the canvas, the first parameter?
 		this.draw( this.canvas._ctx, false, this.getConcatenatedMatrix(this._matrix));
 		
 		//-- send commands to Flash movie if its ready
 		this.canvas._ctx._flFlush();
+
+		//-- notify drawing complete
+		this.dispatchEvent("drawend");
 	};
 
 	/**

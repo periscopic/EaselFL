@@ -38,59 +38,33 @@ this.createjs = this.createjs||{};
 //--EaselFL specific setup
 
 //-- Find transform property for this browser
-var transformProp, transformPropOrigin, transformUnit, isOld;
+var transformProp, transformPropOrigin, transformUnit, isModern;
 
 transformProp = (function(element) {
-        var properties = [
-            'transform',
-            'WebkitTransform',
-            'msTransform',
-            'MozTransform',
-            'OTransform',
-        	'filter'
-        ];
-        
-        var p;
-      
-      do {
-        p = properties.shift();
-        if (typeof element.style[p] != 'undefined') {
-            return p;
-            }
-      }while(properties.length)
-        return false;
-        })(document.createElement("div"));
-        
-isNew = transformProp !== 'filter' && transformProp;
+		var properties = [
+			'transform',
+			'WebkitTransform',
+			'msTransform',
+			'MozTransform',
+			'OTransform',
+			'filter'
+		];
+		
+		var p;
+	  
+	  do {
+		p = properties.shift();
+		if (typeof element.style[p] != 'undefined') {
+			return p;
+			}
+	  }while(properties.length)
+		return false;
+		})(document.createElement("div"));
+		
+// a 'modern' browser?
+isModern = transformProp !== 'filter' && transformProp;
 transformPropOrigin = transformProp+"Origin";
 transformUnit = transformProp==='MozTransform'?'px':'';
- 
-if(isNew){
-    var cumulativeVis = function(parent){
-        var obj = {visible:true, alpha:1};
-        while(parent && obj.visible){
-            obj.visible = parent.visible;
-            obj.alpha *= parent.alpha;
-            parent = parent.parent;
-        }
-        return obj;
-    }
-}else{
-    //force visibility false if alpha less than 50% in IE8, don't use alpha
-    var cumulativeVis = function(parent){
-        var obj = {visible:true, alpha:1};
-        while(parent && obj.visible){
-            obj.visible = parent.visible;
-            obj.alpha *= parent.alpha;
-            parent = parent.parent;
-        }
-        if(obj.alpha<0.5){
-            obj.visible = false;
-        }
-        obj.alpha = 1;
-        return obj;
-    }
-}
 //-- end EaselFL specific setup
 
 // TODO: fix problems with rotation.
@@ -148,11 +122,18 @@ var p = DOMElement.prototype = new createjs.DisplayObject();
 	 */
 	p._oldMtx = null;
 
+	/**
+	 * @property _visible
+	 * @type Boolean
+	 * @protected
+	 */
+	p._visible = false;
+
 // constructor:
 	/**
 	 * @property DisplayObject_initialize
 	 * @type {Function}
-   	 * @private
+	 * @private
 	 */
 	p.DisplayObject_initialize = p.initialize;
 
@@ -180,23 +161,21 @@ var p = DOMElement.prototype = new createjs.DisplayObject();
 		this.DisplayObject_initialize();
 		this.mouseEnabled = false;
 		this.htmlElement = htmlElement;
-		this._oldMtx = {};
 
 		if (htmlElement) {
-            var style = htmlElement.style;
-            style.position = "absolute";
+			var style = htmlElement.style;
+			style.position = "absolute";
 
-            //start invisible   
-            style.visibility = 'hidden';
-            this._flVisible = false;
+			//start invisible   
+			style.visibility = 'hidden';
 
 			//not in EaselJS version, but for this to work both in 
 			//<= IE8, since matrixes aren't usable for translation
 			//in that browser
-			style.top = 0;
+			style.top =
 			style.left = 0;	
 
-			if(isNew) {
+			if(isModern) {
 				// a 'modern' browser
 				style[transformPropOrigin] = "0% 0%";
 			}
@@ -225,54 +204,14 @@ var p = DOMElement.prototype = new createjs.DisplayObject();
 	 * @param {Boolean} ignoreCache Indicates whether the draw operation should ignore any current cache.
 	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
 	 * into itself).
-	 */
-	/*	
-	//-- EaselJS
+	 */	
 	p.draw = function(ctx, ignoreCache) {
-		if (this.htmlElement == null) { return; }
-		var mtx = this.getConcatenatedMatrix(this._matrix);
-		
-		var o = this.htmlElement;
-		var style = o.style;
-		
 		// this relies on the _tick method because draw isn't called if a parent is not visible.
-		if (this.visible) { style.visibility = "visible"; }
-		else { return true; }
-		
-		var oMtx = this._oldMtx||{};
-		if (oMtx.alpha != mtx.alpha) { style.opacity = ""+mtx.alpha; oMtx.alpha = mtx.alpha; }
-		if (oMtx.tx != mtx.tx || oMtx.ty != mtx.ty || oMtx.a != mtx.a || oMtx.b != mtx.b || oMtx.c != mtx.c || oMtx.d != mtx.d) {
-			style.transform = style.WebkitTransform = style.OTransform =  style.msTransform = ["matrix("+mtx.a,mtx.b,mtx.c,mtx.d,(mtx.tx+0.5|0),(mtx.ty+0.5|0)+")"].join(",");
-			style.MozTransform = ["matrix("+mtx.a,mtx.b,mtx.c,mtx.d,(mtx.tx+0.5|0)+"px",(mtx.ty+0.5|0)+"px)"].join(",");
-			this._oldMtx = mtx.clone();
-		}
-		
+		if (this.visible) { this._visible = true; }
+		// the actual update happens in _handleDrawEnd
 		return true;
 	};
-	*/
-	p.draw = function(ctx, ignoreCache) {
-
-		if (!this.htmlElement) { return; }
-
-		var mtx = this.getConcatenatedMatrix(this._matrix);		
-
-		// in IE less than 9, just added, measure the bounds
-		// if rotation, scaling required in IE8 and HTML changes dimensions, 
-		// flUpdateBounds() should be fired again
-		if(!isNew && this.htmlElement.parentNode!==this._flParentNode && this.htmlElement.parentNode){    
-			this._flParentNode = this.htmlElement.parentNode;   
-	        this.flUpdateBounds();
-	    }		
-
-	    this._flCumMtx = mtx;
-
-	    if(this._flVisible){
-	      this._flSyncTransform();
-	    }		
-
-		return true;
-	}
-
+	
 	/**
 	 * Not applicable to DOMElement.
 	 * @method cache
@@ -333,31 +272,31 @@ var p = DOMElement.prototype = new createjs.DisplayObject();
 	}
 
 	/**
-     * Interaction events should be added to `htmlElement`, and not the DOMElement instance, since DOMElement instances
+	 * Interaction events should be added to `htmlElement`, and not the DOMElement instance, since DOMElement instances
 	 * are not full EaselJS display objects and do not participate in EaselJS mouse events.
 	 * @event click
 	 */
-          
-     /**
-     * Interaction events should be added to `htmlElement`, and not the DOMElement instance, since DOMElement instances
- 	 * are not full EaselJS display objects and do not participate in EaselJS mouse events.
+		  
+	 /**
+	 * Interaction events should be added to `htmlElement`, and not the DOMElement instance, since DOMElement instances
+	 * are not full EaselJS display objects and do not participate in EaselJS mouse events.
 	 * @event dblClick
 	 */
-     
-     /**
-      * Interaction events should be added to `htmlElement`, and not the DOMElement instance, since DOMElement instances
- 	  * are not full EaselJS display objects and do not participate in EaselJS mouse events.
+	 
+	 /**
+	  * Interaction events should be added to `htmlElement`, and not the DOMElement instance, since DOMElement instances
+	  * are not full EaselJS display objects and do not participate in EaselJS mouse events.
 	  * @event mousedown
 	  */
-     
-     /**
-      * The HTMLElement can listen for the mouseover event, not the DOMElement instance.
-      * Since DOMElement instances are not full EaselJS display objects and do not participate in EaselJS mouse events.
-      * @event mouseover
+	 
+	 /**
+	  * The HTMLElement can listen for the mouseover event, not the DOMElement instance.
+	  * Since DOMElement instances are not full EaselJS display objects and do not participate in EaselJS mouse events.
+	  * @event mouseover
 	  */ 
-     
-     /**
-      * Not applicable to DOMElement.
+	 
+	 /**
+	  * Not applicable to DOMElement.
 	  * @event tick
 	  */
 
@@ -375,19 +314,48 @@ var p = DOMElement.prototype = new createjs.DisplayObject();
 	 */
 	/*
 	//-- EaselJS
+
 	p._tick = function(params) {
-		// TODO: figure out how to get around this.
-		this.htmlElement.style.visibility = "hidden";
+		var stage = this.getStage();
+		this._visible = false;
+		stage&&stage.on("drawend", this._handleDrawEnd, this, true);
 		this.DisplayObject__tick(params);
 	};
 	*/
-	p._tick = function(params) {
-		if(this._flCumMtx && this._flSyncVisibility() ){
-            this._flSyncTransform();
-        }
 
-        this.DisplayObject__tick(params);
-    }
+	p._tick = function(params) {
+		var stage = this.getStage();
+		this._visible = false;
+		stage&&stage.on("drawend", isModern ? this._handleDrawEnd : this._handleDrawEndOld, this, true);
+		this.DisplayObject__tick(params);
+	};
+
+	/**
+	 * @method _handleDrawEnd
+	 * @param {Event} evt
+	 * @protected
+	 */
+	p._handleDrawEnd = function(evt) {
+		var o = this.htmlElement;
+		if (!o) { return; }
+		var style = o.style;
+		
+		var visibility = this._visible ? "visible" : "hidden";
+		if (visibility != style.visibility) { style.visibility = visibility; }
+		if (!this._visible) { return; }
+		
+		var mtx = this.getConcatenatedMatrix(this._matrix);
+		var oMtx = this._oldMtx;
+		if (!oMtx || oMtx.alpha != mtx.alpha) {
+			style.opacity = ""+mtx.alpha;
+			if (oMtx) { oMtx.alpha = mtx.alpha; }
+		}
+		if (!oMtx || oMtx.tx != mtx.tx || oMtx.ty != mtx.ty || oMtx.a != mtx.a || oMtx.b != mtx.b || oMtx.c != mtx.c || oMtx.d != mtx.d) {
+			style.transform = style.WebkitTransform = style.OTransform = style.msTransform = ["matrix("+mtx.a.toFixed(3),mtx.b.toFixed(3),mtx.c.toFixed(3),mtx.d.toFixed(3),(mtx.tx+0.5|0),(mtx.ty+0.5|0)+")"].join(",");
+			style.MozTransform = ["matrix("+mtx.a.toFixed(3),mtx.b.toFixed(3),mtx.c.toFixed(3),mtx.d.toFixed(3),(mtx.tx+0.5|0)+"px",(mtx.ty+0.5|0)+"px)"].join(",");
+			this._oldMtx = oMtx ? oMtx.copy(mtx) : mtx.clone();
+		}
+	};
 
 	/* Not needed with current setup:
 	p._calculateVisible = function() {
@@ -402,169 +370,113 @@ var p = DOMElement.prototype = new createjs.DisplayObject();
 
 
 	//-- EaselFl specific code
+	p._flWidth = 0;
+	p._flHeight = 0;
+	p._flBx = 0;
+	p._flBy = 0;
+	p._flMsMtx = '';
+	p._flMsAlpha = '';
+	p._flMsCum = ' ';
+	p._flParentNode = null;
+	p._flType = 'dom';
 
-    p._flSimpleTransform = true;
-    p._flWidth = 0;
-    p._flHeight = 0;
-    p._flBx = 0;
-    p._flBy = 0;
-    p._flVisible = true;
-    p._flAlpha = 1;
-    p._flCumMtx = null;
-    p._flMsMtx = '';
-    p._flMsAlpha = '';
-    p._flMsCum = ' ';
-    p._flParentNode = null;
-    p._flCtx = null;
-    p._flType = 'dom';
+	// p._flAlpha = 1;
+	// p._flVisible = true;
+	// p._flCumMtx = null;
+	// p._flCtx = null;
 
-	p._flSyncVisibility = function(){
-        
-        var cumVis = cumulativeVis(this);
-        var style = this.htmlElement.style;      
-        var swapVis = false;
-                
-        //-- Update visibility
-        if(this._flVisible !== ( (this._flCumMtx !== null) && cumVis.visible )){
-            swapVis = true;
-            
-            this._flVisible = !this._flVisible;               
-                        
-            if(this._flVisible){
-                style.visibility = 'visible';                
-            }else{
-                style.visibility = 'hidden';
-            }
-        }
-        
-        //-- Don't need to update any other props if not visible
-        if(this.visible === false){
-            return false;
-        }
-        
-        //-- Update alpha
-        if(cumVis.alpha !== this.__alpha){
-            if(transformProp !== 'filter'){
-                style.opacity = cumVis.alpha<1 ? cumVis.alpha : '';         
-            }else{
-                this._flMsAlpha = cumVis.alpha<1 ? 'progid:DXImageTransform.Microsoft.Alpha(Opacity='+Math.round(100*cumVis.alpha)+')' : '';
-            }
-            
-            this.__alpha = cumVis.alpha;
-        }
-        
-        //-- If swapped and visible, then transform needs to be updated immediately
-        return swapVis && this._flVisible;
-    }
 
-    p._flSyncTransform = function(){
+	// for non-modern browsers
+	p._handleDrawEndOld = function(evt) {
+		var o = this.htmlElement;
+		if (!o) { return; }
+		var style = o.style;
+		
+		var visibility = this._visible ? "visible" : "hidden";
+		if (visibility != style.visibility) { style.visibility = visibility; }
+		if (!this._visible) { return; }
+		
+		var mtx = this.getConcatenatedMatrix(this._matrix);
+		var oMtx = this._oldMtx;
+		
+		// adjust alpha
 
-        //-- From last draw call
-        var mtx = this._flCumMtx;
-        var style = this.htmlElement.style;          
-        
-        if(!mtx){
-            return;
-        }       
-        
-        //-- Update position, rotation based on parent
-        var oldMtx = this._oldMtx;
-        
-        if( oldMtx.tx!== mtx.tx || oldMtx.ty!== mtx.ty || oldMtx.a !== mtx.a || oldMtx.b !== mtx.b || oldMtx.c !== mtx.c || oldMtx.d !== mtx.d ){
-            
-            var simple = (mtx.a ===1 && mtx.b === 0 && mtx.a === mtx.d && mtx.b===mtx.c);            
-            
-            if(simple){
-                style.left= mtx.tx+'px';
-                style.top = mtx.ty+'px';           
-                
-                //overwrite complex transform
-                if(!this._flSimpleTransform){
-                    if(transformProp !== 'filter'){
-                        style[transformProp] = '';
-                    }else{
-                        this._flMsMtx = '';
-                    }                  
-                }        
-            
-            } else if( oldMtx.a !== mtx.a || oldMtx.b !== mtx.b || oldMtx.c !== mtx.c || oldMtx.d !== mtx.d ){
-                //not identity, complex transform
-                
-                if(transformProp!== 'filter'){
-                    style.left= mtx.tx+'px';
-                    style.top = mtx.ty+'px';   
-                    
-                    //modern browser matrix
-                   style[transformProp] = 'matrix('+mtx.a.toFixed(4)+','+mtx.b.toFixed(4)+','+mtx.c.toFixed(4)+','+mtx.d.toFixed(4)+',0,0)';
-                
-                }else{
-                    //legacy browser matrix
-                    this._flMsMtx = 'progid:DXImageTransform.Microsoft.Matrix('+
-                        'M11='+mtx.a.toFixed(4)+', M12='+mtx.c.toFixed(4)+', M21='+mtx.b.toFixed(4)+', M22='+mtx.d.toFixed(4)+', sizingMethod="auto expand")';
-                        
-                    
-                    var wd = this._flWidth;
-                    var ht = this._flHeight;
-                    var hfwd = wd*0.5;
-                    var hfht = ht*0.5;
-                    var ltx = (hfwd*mtx.a+hfht*mtx.c);
-                    var lty = (hfwd*mtx.b+hfht*mtx.d); 
-                    var rtx = (-hfwd*mtx.a+hfht*mtx.c);
-                    var rty = (-hfwd*mtx.b+hfht*mtx.d);
-                    wd = Math.max(Math.abs(ltx),Math.abs(rtx));
-                    ht = Math.max(Math.abs(lty),Math.abs(rty));
-                    var bx = this._flBx = -(wd-ltx);
-                    var by = this._flBy = -(ht-lty);
-                    
-                    //translate                    
-                    style.left=(mtx.tx+bx)+"px";
-                    style.top=(mtx.ty+by)+"px";
-                    //could this be handled better to prevent existing zIndex from being overwritten?
-                    style.zIndex = 0; //prevent child dom elements from shifting outside of rotated box in IE8
-                }
-            }else{
-                //simple transform, but don't wipe out old matrix
-                style.left=(mtx.tx+this._flBx)+"px";
-                style.top=(mtx.ty+this._flBy)+"px";
-            }
+		if (mtx.alpha < 1) {
+			this._flMsAlpha = 'progid:DXImageTransform.Microsoft.Alpha(Opacity='+Math.round(100*mtx.alpha)+')';
+		} else {
+			this._flMsAlpha = "";
+		}
 
-            
-            this._flSimpleTransform = simple;
-            
-            oldMtx.a = mtx.a;
-            oldMtx.b = mtx.b;
-            oldMtx.c = mtx.c;
-            oldMtx.d = mtx.d;
-            oldMtx.tx = mtx.tx;
-            oldMtx.ty = mtx.ty;            
-            
-            if(transformProp === 'filter'){
-                var msCum = this._flMsMtx+' '+this._flMsAlpha;
-                if(msCum!==this._flMsCum){
-                    this._flMsCum = msCum;
-                    style[transformProp] = msCum;
-                }               
-            }           
-        }
-    }
+		// adjust matrix transform
+
+		if(!(oMtx && mtx.a === oMtx.a && mtx.b === oMtx.b && mtx.c === oMtx.c && mtx.d === oMtx.d && mtx.e === oMtx.e && mtx.f === oMtx.f)) {
+			// update the transform if the matrix has changed
+			
+			if(mtx.a ===1 && mtx.b === 0 && mtx.a === mtx.d && mtx.b===mtx.c) {
+				// simple transform without scale, rotation or skew
+				this._flMsMtx = "";
+				style.left= mtx.tx+'px';
+				style.top = mtx.ty+'px';
+			} else {
+
+				if(!(oMtx && oMtx.a === mtx.a && oMtx.b === mtx.b && oMtx.c === mtx.c && oMtx.d === mtx.d)){
+					// complex transform where scale, rotation, or skew changed
+					this._flMsMtx = 'progid:DXImageTransform.Microsoft.Matrix('+
+						'M11='+mtx.a.toFixed(4)+', M12='+mtx.c.toFixed(4)+', M21='+mtx.b.toFixed(4)+', M22='+mtx.d.toFixed(4)+', sizingMethod="auto expand")';
+						
+					var wd = this._flWidth;
+					var ht = this._flHeight;
+					var hfwd = wd*0.5;
+					var hfht = ht*0.5;
+					var ltx = (hfwd*mtx.a+hfht*mtx.c);
+					var lty = (hfwd*mtx.b+hfht*mtx.d); 
+					var rtx = (-hfwd*mtx.a+hfht*mtx.c);
+					var rty = (-hfwd*mtx.b+hfht*mtx.d);
+					wd = Math.max(Math.abs(ltx),Math.abs(rtx));
+					ht = Math.max(Math.abs(lty),Math.abs(rty));
+					this._flBx = -(wd-ltx);
+					this._flBy = -(ht-lty);
+					
+					//could this be handled better to prevent existing zIndex from being overwritten?
+					style.zIndex = 0; //prevent child dom elements from shifting outside of rotated box in IE8
+				} 
+
+				// adjust the translation
+				style.left=(mtx.tx+this._flBx)+"px";
+				style.top=(mtx.ty+this._flBy)+"px";
+			}
+		}  
+
+		// apply the alpha and matrix transform if either have changed
+		var msCum = this._flMsMtx+' '+this._flMsAlpha;
+		
+		if(msCum!==this._flMsCum){
+			this._flMsCum = msCum;
+			style[transformProp] = msCum;
+
+			console.log(msCum);
+			console.log(transformProp);
+		}  
+	};
+
 
 	/**
-     * Must be called when updating anything that will change dimensions
-     * if rotating, in order to be correct in IE.
-     **/
-    p.flUpdateBounds = function() {
-   		var el, style, trans;
+	 * Must be called when updating anything that will change dimensions
+	 * if rotating, in order to be correct in IE.
+	 **/
+	p.flUpdateBounds = function() {
+		var el, style, trans;
 
-        el = this.htmlElement;
-        style = el.style;
-        trans = style[transformProp];
-        style[transformProp] = '';
-        this._flWidth = el.offsetWidth;
-        this._flHeight = el.offsetHeight;
-        style[transformProp] = trans;
-    }
+		el = this.htmlElement;
+		style = el.style;
+		trans = style[transformProp];
+		style[transformProp] = '';
+		this._flWidth = el.offsetWidth;
+		this._flHeight = el.offsetHeight;
+		style[transformProp] = trans;
+	}
 
-    //-- end EaselFl specific code
+	//-- end EaselFl specific code
 
 createjs.DOMElement = DOMElement;
 

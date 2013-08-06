@@ -484,6 +484,16 @@ var p = Matrix2D.prototype;
 	}
 
 	/**
+	 * Copies all properties from the specified matrix to this matrix.
+	 * @method copy
+	 * @param {Matrix2D} matrix The matrix to copy properties from.
+	 * @return {Matrix2D} This matrix. Useful for chaining method calls.
+	*/
+	p.copy = function(matrix) {
+		return this.reinitialize(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty, matrix.alpha, matrix.shadow, matrix.compositeOperation);
+	};
+
+	/**
 	 * Appends the specified visual properties to the current matrix.
 	 * @method appendProperties
 	 * @param {Number} alpha desired alpha value

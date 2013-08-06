@@ -148,6 +148,7 @@ var ScriptLoader = {
                 '../js/easelfl/utils/ContextConfig.js',
                 '../js/easelfl/utils/Log.js',
                 '../js/easelfl/utils/UID.js',
+                '../js/easelfl/events/Event.js',
                 '../js/easelfl/events/EventDispatcher.js',
                 '../js/easelfl/utils/Ticker.js',
                 '../js/easelfl/events/MouseEvent.js',
