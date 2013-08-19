@@ -12,14 +12,14 @@ import flash.events.MouseEvent;
 class StageFl extends ContainerFl {
 
 	
-	static private var execs:Hash<Dynamic>;
+	static private var execs:Map<String,Dynamic>;
 	
 	static public function init(){
-		execs = new Hash();
+		execs = new Map<String,Dynamic>();
 		mapMethods(execs);
 	}
 	
-	static private function mapMethods(excs:Hash<Dynamic>) :Void {
+	static private function mapMethods(excs:Map<String,Dynamic>) :Void {
 		ContainerFl.mapMethods(excs);
 		execs.set('blt', blit );
 		execs.set('aclr', autoClear );

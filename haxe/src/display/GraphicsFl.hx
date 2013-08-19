@@ -25,16 +25,16 @@ typedef Command = {
 
 class GraphicsFl implements IExec{
 	
-	inline static var QUART_PI:Float = Math.PI*0.25;
-	inline static var HALF_PI:Float = Math.PI*0.5;
-	inline static var TWO_PI:Float = Math.PI*2;
+	inline static var QUART_PI:Float = 0.7853981633974483;//Math.PI*0.25;
+	inline static var HALF_PI:Float = 1.5707963267948966;//Math.PI*0.5;
+	inline static var TWO_PI:Float = 6.283185307179586;//Math.PI*2;
 	inline static var CUBIC_PRECISION:Float = 1;
-	inline static var IDENTITY_MATRIX = new flash.geom.Matrix();
+	static var IDENTITY_MATRIX = new flash.geom.Matrix();
 
-	static private var execs:Hash<Dynamic>;
+	static private var execs:Map<String,Dynamic>;
 	
 	static public function init(){
-		execs = new Hash();
+		execs = new Map<String,Dynamic>();
 		execs.set('f', beginFill );		
 		execs.set('bf', beginBitmapFill );		
 		execs.set('rf', beginRadialGradientFill );	

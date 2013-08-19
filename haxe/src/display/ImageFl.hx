@@ -10,16 +10,16 @@ import interfaces.IExec;
 import interfaces.IBitmapData;
 import interfaces.IWatchable;
 
-class ImageFl implements IExec, implements IBitmapData, implements IWatchable{
+class ImageFl implements IExec implements IBitmapData implements IWatchable{
 
 
 	inline static var IMAGE_CHANGE:String = 'imageChange';
 	static var dispatcher:EventDispatcher = new EventDispatcher();
-	static private var execs:Hash<Dynamic>;
+	static private var execs:Map<String,Dynamic>;
 	
 	static public function init(){
 		//-- assign method values for keys
-		execs = new Hash();
+		execs = new Map<String,Dynamic>();
 		execs.set('src', setSource);
 		
 		//-- 1x1 transparent bitmapdata

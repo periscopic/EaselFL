@@ -27,20 +27,20 @@ import utils.FontLib;
 
 class Control {
 	
-	static public var items:IntHash<IExec>;
-	static public var containers:IntHash<ContainerFl>;
-	static public var displays:IntHash<IDisplayable>;
-	static public var bitmapDatas:IntHash<IBitmapData>;
-	static public var bmpAnimations:IntHash<BitmapAnimationFl>;
-	static public var graphicsList:IntHash<GraphicsFl>;
-	static public var rectangles:IntHash<RectangleFl>;
-	static public var frames:IntHash<FrameFl>;
-	static public var texts:IntHash<TextFl>;
-	static public var shadows:IntHash<ShadowFl>;
-	static public var filters:IntHash<IBitmapFilter>;
-	static public var commands:Hash<Dynamic->Void>;
-	static public var makers:Hash<Int->Void>;
-	static public var unmakers:Hash<Int->Void>;
+	static public var items:Map<Int,IExec>;
+	static public var containers:Map<Int,ContainerFl>;
+	static public var displays:Map<Int,IDisplayable>;
+	static public var bitmapDatas:Map<Int,IBitmapData>;
+	static public var bmpAnimations:Map<Int,BitmapAnimationFl>;
+	static public var graphicsList:Map<Int,GraphicsFl>;
+	static public var rectangles:Map<Int,RectangleFl>;
+	static public var frames:Map<Int,FrameFl>;
+	static public var texts:Map<Int,TextFl>;
+	static public var shadows:Map<Int,ShadowFl>;
+	static public var filters:Map<Int,IBitmapFilter>;
+	static public var commands:Map<String,Dynamic->Void>;
+	static public var makers:Map<String,Int->Void>;
+	static public var unmakers:Map<String,Int->Void>;
 	static public var dispatcher:EventDispatcher;
 	
 	static public var stageFl:StageFl;
@@ -48,20 +48,20 @@ class Control {
 	static public function init(){
 		dispatcher = new EventDispatcher();
 		
-		items = new IntHash<IExec>();
-		containers = new IntHash<ContainerFl>();
-		displays = new IntHash<IDisplayable>();
-		bitmapDatas = new IntHash<IBitmapData>();
-		bmpAnimations = new IntHash<BitmapAnimationFl>();
-		graphicsList = new IntHash<GraphicsFl>();
-		rectangles = new IntHash<RectangleFl>();
-		frames = new IntHash<FrameFl>();
-		texts = new IntHash<TextFl>();
-		shadows = new IntHash<ShadowFl>();
-		filters = new IntHash<IBitmapFilter>();
-		commands = new Hash<Dynamic->Void>();
-		makers = new Hash<Int->Void>();
-		unmakers = new Hash<Int->Void>();
+		items = new Map();
+		containers = new Map();
+		displays = new Map();
+		bitmapDatas = new Map();
+		bmpAnimations = new Map();
+		graphicsList = new Map();
+		rectangles = new Map();
+		frames = new Map();
+		texts = new Map();
+		shadows = new Map();
+		filters = new Map();
+		commands = new Map();
+		makers = new Map();
+		unmakers = new Map();
 		
 		makers.set('stg', stage);
 		makers.set('img', image);

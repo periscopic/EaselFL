@@ -8,7 +8,7 @@ package geom;
 	import flash.events.EventDispatcher;
 	import flash.events.Event;
 	
-class RectangleFl implements IExec, implements IWatchable {
+class RectangleFl implements IExec implements IWatchable {
 	
 	inline static var RECT_CHANGE:String = 'rectChange';
 	static var dispatcher:EventDispatcher = new EventDispatcher();
@@ -36,12 +36,13 @@ class RectangleFl implements IExec, implements IWatchable {
 		dispatcher.removeEventListener(eventID, method, false);
 	}
 	
-	private function dimensions(args:Dynamic):Void {
+	private function dimensions(args:Dynamic):Dynamic {
 		rect.x = args[0];
 		rect.y = args[1];
 		rect.width = args[2];
 		rect.height = args[3];
 		dispatcher.dispatchEvent(new Event(eventID));
+		return null;
 	}
 	
 	inline public function exec(method:String, ?arguments:Dynamic=null):Dynamic{

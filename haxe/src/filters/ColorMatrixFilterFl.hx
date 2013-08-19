@@ -9,13 +9,13 @@ import interfaces.IExec;
 import interfaces.IBitmapFilter;
 
 
-class ColorMatrixFilterFl implements IExec, implements IBitmapFilter{
+class ColorMatrixFilterFl implements IExec implements IBitmapFilter{
 
-	static private var execs:Hash<Dynamic>;
+	static private var execs:Map<String,Dynamic>;
 	
 	static public function init(){
 		//-- assign method values for keys
-		execs = new Hash();
+		execs = new Map<String,Dynamic>();
 		execs.set('flt', updateFilter);
 	}
 	

@@ -6,20 +6,20 @@ import flash.display.DisplayObject;
 import interfaces.IExec;
 import interfaces.IDisplayable;
 
-class ContainerFl extends DisplayObjectFl, implements IExec {
+class ContainerFl extends DisplayObjectFl implements IExec {
 	
 /**
  * TODO: handle sortChildren, getObjectsUnderPoint, clone
  **/
 	
-	static private var execs:Hash<Dynamic>;
+	static private var execs:Map<String,Dynamic>;
 	
 	static public function init(){
-		execs = new Hash();
+		execs = new Map<String,Dynamic>();
 		mapMethods(execs);
 	}
 	
-	static public function mapMethods(excs:Hash<Dynamic>) :Void{
+	static public function mapMethods(excs:Map<String,Dynamic>) :Void{
 		DisplayObjectFl.mapMethods(excs);
 		excs.set('dl', syncDisplayList);	 
 	}

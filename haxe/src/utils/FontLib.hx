@@ -23,7 +23,7 @@ package utils;
 			 dispatcher =  new EventDispatcher();
 		}
 
-		static private var _embedded:Hash<Bool> = new Hash<Bool>();
+		static private var _embedded:Map<String,Bool> = new Map<String,Bool>();
 		static public var dispatcher(default, null):EventDispatcher;
 		static private var tf:TextField;
 		static private var fmt:TextFormat;

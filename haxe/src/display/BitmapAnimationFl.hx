@@ -13,18 +13,18 @@ import geom.RectangleFl;
 import display.FrameFl;
 
 
-class BitmapAnimationFl extends DisplayObjectFl, implements IExec {
+class BitmapAnimationFl extends DisplayObjectFl implements IExec {
 
-	static private var execs:Hash<Dynamic>;
+	static private var execs:Map<String,Dynamic>;
 	static private var tmpMtx:Matrix = new Matrix();
 	static private var tmpRect:Rectangle = new Rectangle();
 	
 	static public function init(){
-		execs = new Hash();
+		execs = new Map<String,Dynamic>();
 		mapMethods(execs);
 	}
 	
-	static public function mapMethods(execs:Hash<Dynamic>) :Void{
+	static public function mapMethods(execs:Map<String,Dynamic>) :Void{
 		DisplayObjectFl.mapMethods(execs);
 		execs.set('frm', setFrame);
 		execs.set('smth', setSmoothing);

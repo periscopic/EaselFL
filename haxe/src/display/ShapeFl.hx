@@ -5,17 +5,17 @@ import flash.display.DisplayObject;
 import interfaces.IExec;
 import interfaces.IDisplayable;
 
-class ShapeFl extends DisplayObjectFl, implements IExec {
+class ShapeFl extends DisplayObjectFl implements IExec {
 
 
-	static private var execs:Hash<Dynamic>;
+	static private var execs:Map<String,Dynamic>;
 	
 	static public function init(){
-		execs = new Hash();
+		execs = new Map<String,Dynamic>();
 		mapMethods(execs);
 	}
 	
-	static public function mapMethods(execs:Hash<Dynamic>) :Void{
+	static public function mapMethods(execs:Map<String,Dynamic>) :Void{
 		DisplayObjectFl.mapMethods(execs);
 		execs.set('gfx', linkGraphics);
 	}

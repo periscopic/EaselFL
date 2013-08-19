@@ -43,14 +43,14 @@ package utils;
     class CSSColor
     {
                 
-        inline static var hex3:EReg = ~/^#[0-9a-f]{3}$/;
-        inline static var hex6:EReg = ~/^#[0-9a-f]{6}$/;
-        inline static var rgb1:EReg = ~/^rgb\(\s*[+-]?\d+\s*,\s*[+-]?\d+\s*,\s*[+-]?\d+\s*\)$/;
-        inline static var rgb2:EReg = ~/^rgb\(\s*[+-]?[\d.]+%\s*,\s*[+-]?[\d.]+%\s*,\s*[+-]?[\d.]+%\s*\)$/;
-        inline static var rgba1:EReg = ~/^rgba\(\s*[+-]?\d+\s*,\s*[+-]?\d+\s*,\s*[+-]?\d+\s*,\s*[+-]?[\d.]+\s*\)$/;
-        inline static var rgba2:EReg = ~/^rgba\(\s*[+-]?[\d.]+%\s*,\s*[+-]?[\d.]+%\s*,\s*[+-]?[\d.]+%\s*,\s*[+-]?[\d.]+\s*\)$/;
-        inline static var hsl:EReg = ~/^hsl\(\s*[+-]?[\d.]+\s*,\s*[+-]?[\d.]+%\s*,\s*[+-]?[\d.]+%\s*\)$/;
-        inline static var hsla:EReg = ~/^hsla\(\s*[+-]?[\d.]+\s*,\s*[+-]?[\d.]+%\s*,\s*[+-]?[\d.]+%\s*,\s*[+-]?[\d.]+\s*\)$/;
+        static var hex3:EReg = ~/^#[0-9a-f]{3}$/;
+        static var hex6:EReg = ~/^#[0-9a-f]{6}$/;
+        static var rgb1:EReg = ~/^rgb\(\s*[+-]?\d+\s*,\s*[+-]?\d+\s*,\s*[+-]?\d+\s*\)$/;
+        static var rgb2:EReg = ~/^rgb\(\s*[+-]?[\d.]+%\s*,\s*[+-]?[\d.]+%\s*,\s*[+-]?[\d.]+%\s*\)$/;
+        static var rgba1:EReg = ~/^rgba\(\s*[+-]?\d+\s*,\s*[+-]?\d+\s*,\s*[+-]?\d+\s*,\s*[+-]?[\d.]+\s*\)$/;
+        static var rgba2:EReg = ~/^rgba\(\s*[+-]?[\d.]+%\s*,\s*[+-]?[\d.]+%\s*,\s*[+-]?[\d.]+%\s*,\s*[+-]?[\d.]+\s*\)$/;
+        static var hsl:EReg = ~/^hsl\(\s*[+-]?[\d.]+\s*,\s*[+-]?[\d.]+%\s*,\s*[+-]?[\d.]+%\s*\)$/;
+        static var hsla:EReg = ~/^hsla\(\s*[+-]?[\d.]+\s*,\s*[+-]?[\d.]+%\s*,\s*[+-]?[\d.]+%\s*,\s*[+-]?[\d.]+\s*\)$/;
 
 		public static var color(default, null):Int;
 		public static var alpha(default, null):Float;

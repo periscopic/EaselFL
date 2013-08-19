@@ -8,13 +8,13 @@ import interfaces.IExec;
 import interfaces.IWatchable;
 import utils.CSSColor;
 
-class ShadowFl implements IExec, implements IWatchable{
+class ShadowFl implements IExec implements IWatchable{
 
-	static private var execs:Hash<Dynamic>;
+	static private var execs:Map<String,Dynamic>;
 	
 	static public function init(){
 		//-- assign method values for keys
-		execs = new Hash();
+		execs = new Map<String,Dynamic>();
 		execs.set('shd', updateShadow);
 	}
 	

@@ -18,19 +18,19 @@ import flash.text.engine.ElementFormat;
  
 
 
-class TextFl extends DisplayObjectFl, implements IExec {
+class TextFl extends DisplayObjectFl implements IExec {
 
-	static private var execs:Hash<Dynamic>;
+	static private var execs:Map<String,Dynamic>;
 	
-	inline static var LINE_DELIMITER:EReg = ~/(?:\r\n|\r|\n)/;
-	inline static var WORD_DELIMITER:EReg = ~/(\s)/g;
-	inline static var OUTLINE:GlowFilter = new GlowFilter(0, 1, 2, 2, 8, 1, false, true);
+	static var LINE_DELIMITER:EReg = ~/(?:\r\n|\r|\n)/;
+	static var WORD_DELIMITER:EReg = ~/(\s)/g;
+	static var OUTLINE:GlowFilter = new GlowFilter(0, 1, 2, 2, 8, 1, false, true);
 	
 	static private var _mTf:TextField;
 	
 	
 	static public function init(){
-		execs = new Hash();
+		execs = new Map<String,Dynamic>();
 		mapMethods(execs);
 		_mTf = new TextField();
 		_mTf.embedFonts = true;
@@ -56,7 +56,7 @@ class TextFl extends DisplayObjectFl, implements IExec {
             return ef1.getFontMetrics();
 	}*/
 	
-	static public function mapMethods(execs:Hash<Dynamic>) :Void{
+	static public function mapMethods(execs:Map<String,Dynamic>) :Void{
 		DisplayObjectFl.mapMethods(execs);
 		execs.set('fnt', setFont);
 		execs.set('clr', setColor);

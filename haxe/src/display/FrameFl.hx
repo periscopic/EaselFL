@@ -11,16 +11,16 @@ package display;
 	import interfaces.IExec;
 	import interfaces.IWatchable;
 	
-class FrameFl implements IExec, implements IWatchable {
+class FrameFl implements IExec implements IWatchable {
 	
 	inline static var FRAME_CHANGE:String = 'frameChange';
 	static private var dispatcher:EventDispatcher = new EventDispatcher();
 	static private var tmpMtx:Matrix = new Matrix();
 	static private var tmpRect:Rectangle = new Rectangle();
-	static private var execs:Hash<Dynamic>;
+	static private var execs:Map<String,Dynamic>;
 
 	static public function init() {
-		execs = new Hash();
+		execs = new Map<String,Dynamic>();
 		execs.set('init', sInit);
 		execs.set('flp', sFlip);
 	}

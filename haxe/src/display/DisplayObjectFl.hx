@@ -15,7 +15,7 @@ import utils.CSSColor;
 
 class DisplayObjectFl implements IDisplayable {	
 	
-	static public function mapMethods(execs:Hash<Dynamic>){
+	static public function mapMethods(execs:Map<String,Dynamic>){
 		execs.set('op',opacity);
 		execs.set('vs',visible);
 		execs.set('shd', setShadow);
