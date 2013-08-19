@@ -15,6 +15,11 @@ EaselFL is distributed under the terms of the MIT license.
 
 <http://www.opensource.org/licenses/mit-license.html>
 
+
+##Versions
+
+EaselFL is now at version 0.6 release candidate 1. This version is compatible with EaselJS 0.6. If you discover an issue, please give feedback. If you need a more stable version, consider using EaselFL 0.5 (on v0.5 branch) with EaselJS 0.6.
+
 ##Getting Started
 
 The <a href="https://github.com/periscopic/EaselFL/blob/master/examples/setup.html">example setup</a> uses the FLSetup util to get up and running quickly. If you are interested in using EaselFL with the createjs toolkit, start with <a href ="https://github.com/periscopic/EaselFL/blob/master/examples/toolkit/toolkit_easelFL.html">this example</a>. There are also a series of <a href="https://github.com/periscopic/EaselFL/tree/master/test">tests</a> that demonstrate various features and their consistency with EaselJS.
