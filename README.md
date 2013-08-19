@@ -79,6 +79,7 @@ of the JS side sweep can be adjusted using createjs.CanvasFl.FL_GC_INTERVAL
 **IE8**
 
 * Note that when preloading images (i.e. for use with graphics.bitmapfill) IE8 images will fire onload synchronously when the img.src attribute is set if the image is in cache. The onload handler should be set afterward to prevent issues. This is not an EaselFL issue.
+* DomElements are properly transformed in IE8 but not necessarily in IE8 emulated in IE10.
 
 **Miscellaneous**
 
@@ -89,7 +90,7 @@ in one stage and then transitioning them to another will cause issues.
 
 ##Road Map
 * Complete migration to 0.6
-	- DOMElement is sometimes hidden (IE8) 
+	- StageMouseDown event doesn't fire properly in real IE8 (though it does when emulated in IE10).
 	- Testing in IE 8
 * Implement canvas cache proxy (allow drawing one display object into another)
 * Implement graphics sharing (allow non-recursive shape cloning)

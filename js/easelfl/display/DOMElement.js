@@ -399,6 +399,12 @@ var p = DOMElement.prototype = new createjs.DisplayObject();
 		var mtx = this.getConcatenatedMatrix(this._matrix);
 		var oMtx = this._oldMtx;
 		
+
+		if(o.parentNode!==this._flParentNode && o.parentNode){    
+			this._flParentNode = this.htmlElement.parentNode;   
+			this.flUpdateBounds();
+		}
+
 		// adjust alpha
 
 		if (mtx.alpha < 1) {
@@ -453,9 +459,6 @@ var p = DOMElement.prototype = new createjs.DisplayObject();
 		if(msCum!==this._flMsCum){
 			this._flMsCum = msCum;
 			style[transformProp] = msCum;
-
-			console.log(msCum);
-			console.log(transformProp);
 		}  
 	};
 
@@ -474,10 +477,10 @@ var p = DOMElement.prototype = new createjs.DisplayObject();
 		this._flWidth = el.offsetWidth;
 		this._flHeight = el.offsetHeight;
 		style[transformProp] = trans;
-	}
+	};
 
 	//-- end EaselFl specific code
 
-createjs.DOMElement = DOMElement;
+	createjs.DOMElement = DOMElement;
 
 }());
