@@ -33,13 +33,11 @@ class StageFl extends ContainerFl {
 	
 	static private function autoClear(target, ?nada:Dynamic) :Void {
 		target.blitBitmapData.fillRect(target.blitBitmapData.rect, 0);
-		target.blitBitmap.visible = false;
 		target.display.visible = true;
 	}
 	
 	static private function clear(target, ?nada:Dynamic) :Void {
 		target.blitBitmapData.fillRect(target.blitBitmapData.rect, 0);
-		target.blitBitmap.visible = true;
 		target.display.visible = false;
 	}
 	
@@ -50,8 +48,9 @@ class StageFl extends ContainerFl {
 	public function new(id:Int, stage:Stage){
 		super(id);
 		blitBitmap = new Bitmap();
-		blitBitmap.visible = false;
-		
+		//NOTE: blitBitmap should be visible even when transparent because
+		//in IE8 (real) it must be visible in order to receive stagemousedown
+		//events on areas with no other visible elements.		
 		this.stage = stage;
 		stage.addEventListener(Event.RESIZE, handleResize, false, 0, true);
 		stage.addEventListener(flash.events.MouseEvent.MOUSE_UP, handleStageUp, false, 0, true);

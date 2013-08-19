@@ -89,9 +89,6 @@ in one stage and then transitioning them to another will cause issues.
 
 
 ##Road Map
-* Complete migration to 0.6
-	- StageMouseDown event doesn't fire properly in real IE8 (though it does when emulated in IE10).
-	- Testing in IE 8
 * Implement canvas cache proxy (allow drawing one display object into another)
 * Implement graphics sharing (allow non-recursive shape cloning)
 * Implement display object abstraction (allow shape masks in combination with alpha masks)
