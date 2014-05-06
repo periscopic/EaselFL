@@ -223,13 +223,19 @@ this.createjs = this.createjs||{};
 	* @protected
 	**/
 	p._flOnReady = function() {
+		var s = this._flCanvas._stage;
 		this._flInstance = ContextFl._flGetInstance( this._flInstanceID );
 		this.flReady = true;
 		this._flFlush();
 
-		if(this._flCanvas._stage && this._flCanvas._stage.flOnReady){
-			 this._flCanvas._stage.flReady = true;
-			 this._flCanvas._stage.flOnReady(this._flCanvas._stage);
+		if(s){
+			s.flReady = s.isFlReady = true;
+			
+			if(s.flOnReady) {
+			 	s.flOnReady(s);
+			}
+			
+			s.dispatchEvent(createjs.Stage.FL_ON_READY);
 		}
 	};
 

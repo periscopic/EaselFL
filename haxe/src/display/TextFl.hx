@@ -66,6 +66,9 @@ class TextFl extends DisplayObjectFl implements IExec {
 		execs.set('lht', setLineHeight);
 		execs.set('otl', setOutline);
 		execs.set('aln', setTextAlign);
+		execs.set('gmwd', getMeasuredWidth);
+		execs.set('gmht', getMeasuredHeight);
+		execs.set('gmlht', getMeasuredLineHeight);
 	}
 	
 	inline static private function getOutlineFilter(color:Int) {
@@ -153,6 +156,24 @@ class TextFl extends DisplayObjectFl implements IExec {
 	inline static public function setText(target:TextFl, text:String) {
 		target.text = text;
 		target.updateText();
+	}
+
+	inline static private function getMeasuredWidth(target:TextFl, ?nada:Dynamic): Float {
+		var lineWd = target.lineWidth;
+		setLineWidth(target, Math.NaN);
+		var metrics:TextLineMetrics = target.tf.getLineMetrics(0);
+		//var wd = target.tf.width;
+		setLineWidth(target, lineWd);
+		return metrics.width;//wd;
+	}
+	
+	inline static private function getMeasuredHeight(target:TextFl, ?nada:Dynamic): Float {
+		return target.tf.height;
+	}
+	
+	inline static private function getMeasuredLineHeight(target:TextFl, ?nada:Dynamic): Float {
+		var metrics:TextLineMetrics = target.tf.getLineMetrics(0);
+		return metrics.height;
 	}
 
 	private var tf:TextField;

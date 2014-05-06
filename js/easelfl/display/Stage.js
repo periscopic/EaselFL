@@ -975,6 +975,7 @@ var p = Stage.prototype = new createjs.Container();
 		* to it, and it is prepared for invocation of synchronous methods (such as hitTestPoint).
 		* @event flOnReady
 		* @param Stage The stage instance which is ready.
+		* @deprecated In favor of myStage.on(Stage.FL_ON_READY, callback)
 		**/
 	 p.flOnReady = null;
 
@@ -983,7 +984,7 @@ var p = Stage.prototype = new createjs.Container();
 		* @property
 		* @type {Boolean}
 		**/
-	 p.flReady = false;
+	 p.isFlReady = p.flReady = false;
 
 	p.flEmbedFonts = function(fontList, fontFileURL) {
 		this.canvas._ctx._flCommands.push(['fnts', [fontList, fontFileURL]]);
@@ -1001,9 +1002,16 @@ var p = Stage.prototype = new createjs.Container();
 		return e;
 	};
 
+	/** Events **/
+	Stage.FL_ON_READY ='flOnReady';
+
+	/** Flags **/
 	Stage.isEaselFl = Stage.isEaselFL = true;
 	
+
 	Stage.__MS_BINDING = window.addEventListener || document.addEventListener ? false : true;
+	
+	/** Configuration **/
 	Stage.FL_THROW_UNIMPLEMENTED = true; //--throw error on use of unimplemented features
 	Stage.FL_LOG_PART_IMPLEMENTED = true; //--log warning notes for partial implementations
 	

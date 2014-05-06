@@ -279,10 +279,13 @@ var p = Text.prototype = new createjs.DisplayObject();
 	}
 	*/
 	p.getMeasuredWidth = function() {
-		if(createjs.Stage.FL_THROW_UNIMPLEMENTED) {
-			throw 'EaseFl:Text.getMeasuredWidth not yet implemented';
+		if(this._flCtx){
+			this.draw(this._flCtx, true); //queue any changes to this text
+			this._flCtx._flFlush();
+			return this._flCtx.flInvoke (this.id, 'gmwd', []);
 		}
-		return null;
+		
+		return -1;
 	}
 	
 
@@ -301,10 +304,13 @@ var p = Text.prototype = new createjs.DisplayObject();
 	}
 	*/
 	p.getMeasuredLineHeight = function() {
-		if(createjs.Stage.FL_THROW_UNIMPLEMENTED) {
-			throw 'EaseFl:Text.getMeasuredLineHeight not yet implemented';
+		if(this._flCtx){
+			this.draw(this._flCtx, true); //queue any changes to this text
+			this._flCtx._flFlush();
+			return this._flCtx.flInvoke (this.id, 'gmlht', []);
 		}
-		return null;
+
+		return -1;
 	}
 	
 	/**
@@ -321,10 +327,13 @@ var p = Text.prototype = new createjs.DisplayObject();
 	}
 	*/
 	p.getMeasuredHeight = function() {
-		if(createjs.Stage.FL_THROW_UNIMPLEMENTED) {
-			throw 'EaseFl:Text.getMeasuredHeight not yet implemented';
+		if(this._flCtx){
+			this.draw(this._flCtx, true); //queue any changes to this text
+			this._flCtx._flFlush();
+			return this._flCtx.flInvoke (this.id, 'gmht', []);
 		}
-		return null;
+
+		return -1;
 	}
 	
 	/**

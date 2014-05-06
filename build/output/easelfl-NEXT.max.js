@@ -928,12 +928,16 @@ this.createjs = this.createjs || {};
     return null
   };
   p._flOnReady = function() {
+    var s = this._flCanvas._stage;
     this._flInstance = ContextFl._flGetInstance(this._flInstanceID);
     this.flReady = true;
     this._flFlush();
-    if(this._flCanvas._stage && this._flCanvas._stage.flOnReady) {
-      this._flCanvas._stage.flReady = true;
-      this._flCanvas._stage.flOnReady(this._flCanvas._stage)
+    if(s) {
+      s.flReady = s.isFlReady = true;
+      if(s.flOnReady) {
+        s.flOnReady(s)
+      }
+      s.dispatchEvent(createjs.Stage.FL_ON_READY)
     }
   };
   p.initialize = function(thecanvas) {
@@ -2506,7 +2510,7 @@ this.createjs = this.createjs || {};
   p._flCtx = null;
   p._flAutoClear = true;
   p.flOnReady = null;
-  p.flReady = false;
+  p.isFlReady = p.flReady = false;
   p.flEmbedFonts = function(fontList, fontFileURL) {
     this.canvas._ctx._flCommands.push(["fnts", [fontList, fontFileURL]])
   };
@@ -2520,6 +2524,7 @@ this.createjs = this.createjs || {};
     }
     return e
   };
+  Stage.FL_ON_READY = "flOnReady";
   Stage.isEaselFl = Stage.isEaselFL = true;
   Stage.__MS_BINDING = window.addEventListener || document.addEventListener ? false : true;
   Stage.FL_THROW_UNIMPLEMENTED = true;
@@ -2966,22 +2971,28 @@ this.createjs = this.createjs || {};
     return true
   };
   p.getMeasuredWidth = function() {
-    if(createjs.Stage.FL_THROW_UNIMPLEMENTED) {
-      throw"EaseFl:Text.getMeasuredWidth not yet implemented";
+    if(this._flCtx) {
+      this.draw(this._flCtx, true);
+      this._flCtx._flFlush();
+      return this._flCtx.flInvoke(this.id, "gmwd", [])
     }
-    return null
+    return-1
   };
   p.getMeasuredLineHeight = function() {
-    if(createjs.Stage.FL_THROW_UNIMPLEMENTED) {
-      throw"EaseFl:Text.getMeasuredLineHeight not yet implemented";
+    if(this._flCtx) {
+      this.draw(this._flCtx, true);
+      this._flCtx._flFlush();
+      return this._flCtx.flInvoke(this.id, "gmlht", [])
     }
-    return null
+    return-1
   };
   p.getMeasuredHeight = function() {
-    if(createjs.Stage.FL_THROW_UNIMPLEMENTED) {
-      throw"EaseFl:Text.getMeasuredHeight not yet implemented";
+    if(this._flCtx) {
+      this.draw(this._flCtx, true);
+      this._flCtx._flFlush();
+      return this._flCtx.flInvoke(this.id, "gmht", [])
     }
-    return null
+    return-1
   };
   p.clone = function() {
     var o = new Text(this.text, this.font, this.color);
@@ -3300,6 +3311,6 @@ this.createjs = this.createjs || {};
   var o = this.createjs = this.createjs || {};
   o = o.EaselJS = o.EaselJS || {};
   o.version = "NEXT";
-  o.buildDate = "Fri, 21 Feb 2014 22:11:25 GMT"
+  o.buildDate = "Tue, 06 May 2014 15:34:25 GMT"
 })();
 
